@@ -19,7 +19,7 @@ By: `W10-1`      Since: `Feb 2019`      Licence: `MIT`
 == Introduction
 
 README is for those who *prefer to use a desktop app for managing links*.
-More importantly, README is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). 
+More importantly, README is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI).
 If you can type fast, README can get your link management tasks done faster than traditional GUI apps.
 Interested? Jump to the <<Quick Start>> to get started.
 Enjoy!
@@ -85,12 +85,12 @@ Format: `list [KEYWORD]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY]
 
 Examples:
 
-- `list` Lists all links + 
-- `list Apple r/read t/Tech` Lists links with headlines containing `apple` which are already read and tagged with `Tech` + 
-- `list Trump` Lists links with headlines containing `trump` and `Donald Trump` etc. + 
-- `list r/unread` Lists only unread links + 
-- `list t/Tech` Lists links tagged with “Tech” + 
-- `list t/` Lists untagged links + 
+- `list` Lists all links
+- `list Apple r/read tech` Lists links with headlines containing `apple` which are already read and tagged with `Tech`
+- `list Trump` Lists links with headlines containing `trump` and `Donald Trump` etc.
+- `list r/unread` Lists only unread links
+- `list t/Tech` Lists links tagged with “Tech”
+- `list t/` Lists untagged links
 
 === Searching online for links: `search` (displays link list)
 
@@ -134,7 +134,7 @@ Examples:
 
 Shows a list of feeds being followed.
 
-Format: `feeds [t/TAG]...`  
+Format: `feeds [t/TAG]...`
 
 Examples:
 
@@ -228,7 +228,7 @@ Format: `redownload all`
 Examples:
 
 - `redownload all` Redownload all shown links
-- `redownload 1,3-5` Redownloads the 1st and 3rd to 5th links. 
+- `redownload 1,3-5` Redownloads the 1st and 3rd to 5th links.
 
 === Marking links as read: `read`
 Marks links as read.
