@@ -305,7 +305,7 @@ Examples:
 - `archive 1,2,4-6` Archives the 1st, 2nd and 4th to 6th links
 
 === Clearing all entries : `clear`
-Clears all entries from the manager.
+Clears all saved links from the manager.
 
 Format: `clear`
 
@@ -447,6 +447,11 @@ Examples:
 - `delete all` Deletes all shown feeds
 - `delete 2` Deletes the 2nd feed
 
+=== Clearing all entries : `clear`
+Clears all followed feeds from the manager.
+
+Format: `clear`
+
 == In `searchfeeds` context (displays feed list)
 
 === Adding a feed: `add`
@@ -521,6 +526,11 @@ Format: `delete all`
 Examples:
 
 - `delete 1,2-6` Deletes the 1st, and 2nd to 6th links
+
+=== Clearing all entries : `clear`
+Clears all archived links from the manager.
+
+Format: `clear`
 
 == Non-contextual commands
 These commands can be called from any context.
