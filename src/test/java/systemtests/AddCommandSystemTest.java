@@ -86,8 +86,8 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         command = PersonUtil.getAddCommand(toAdd);
         assertCommandSuccess(command, toAdd);
 
-        /* Case: using alias to add a person without tags to a non-empty address book, command with leading spaces and trailing spaces
-         * -> added
+        /* Case: using alias to add a person without tags to a non-empty address book,
+         * command with leading spaces and trailing spaces -> added
          */
         command = "   " + AddCommand.COMMAND_ALIAS + "  " + NAME_DESC_BOB + "  " + PHONE_DESC_BOB + " "
                 + EMAIL_DESC_BOB + "   " + ADDRESS_DESC_BOB + "   " + TAG_DESC_FRIEND + "   " + TAG_DESC_HUSBAND + " ";
