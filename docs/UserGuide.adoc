@@ -17,7 +17,9 @@ endif::[]
 By: `W10-1`      Since: `Feb 2019`      Licence: `MIT`
 
 == Introduction
-
+README helps you discover, curate and read more content you care about in less time.
+It is a combined bookmark manager and feed reader with features like offline capability, distraction-free reading view, powerful organization options and more.
+It is designed for heavy content consumers with irregular internet access, whether because of having to fly often or internet access being too expensive.
 README is for those who *prefer to use a desktop app for managing links*.
 More importantly, README is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI).
 If you can type fast, README can get your link management tasks done faster than traditional GUI apps.
