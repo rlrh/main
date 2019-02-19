@@ -11,9 +11,11 @@ public class StatusBarFooterHandle extends NodeHandle<Node> {
 
     private static final String SYNC_STATUS_ID = "#syncStatus";
     private static final String SAVE_LOCATION_STATUS_ID = "#saveLocationStatus";
+    private static final String TARGET_COUNT_STATUS_ID = "#targetCountStatus";
 
     private final Labeled syncStatusNode;
     private final Labeled saveLocationNode;
+    private final Labeled targetCountNode;
 
     private String lastRememberedSyncStatus;
     private String lastRememberedSaveLocation;
@@ -23,6 +25,7 @@ public class StatusBarFooterHandle extends NodeHandle<Node> {
 
         syncStatusNode = getChildNode(SYNC_STATUS_ID);
         saveLocationNode = getChildNode(SAVE_LOCATION_STATUS_ID);
+        targetCountNode = getChildNode(TARGET_COUNT_STATUS_ID);
     }
 
     /**
@@ -37,6 +40,13 @@ public class StatusBarFooterHandle extends NodeHandle<Node> {
      */
     public String getSaveLocation() {
         return saveLocationNode.getText();
+    }
+
+    /**
+     * Returns the text of the 'targets counter' section of the status bar.
+     */
+    public String getTargetCount() {
+        return targetCountNode.getText();
     }
 
     /**
