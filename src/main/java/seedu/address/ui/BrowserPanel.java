@@ -50,7 +50,8 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     private void loadPersonPage(Person person) {
-        loadPage(SEARCH_PAGE_URL + person.getName().fullName);
+        // loadPage(SEARCH_PAGE_URL + person.getName().fullName);
+        loadPage(person.getEmail().value);
     }
 
     public void loadPage(String url) {

@@ -36,7 +36,8 @@ public class Email {
      */
     public Email(String email) {
         requireNonNull(email);
-        checkArgument(isValidEmail(email), MESSAGE_CONSTRAINTS);
+        // do not validate so email can become link
+        // checkArgument(isValidEmail(email), MESSAGE_CONSTRAINTS);
         value = email;
     }
 
@@ -44,7 +45,8 @@ public class Email {
      * Returns if a given string is a valid email.
      */
     public static boolean isValidEmail(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return true;
+        //return test.matches(VALIDATION_REGEX);
     }
 
     @Override
