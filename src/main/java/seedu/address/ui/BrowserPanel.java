@@ -60,6 +60,8 @@ public class BrowserPanel extends UiPart<Region> {
 
     private void loadPersonPage(Person person) {
         // loadPage(SEARCH_PAGE_URL + person.getName().fullName);
+        browser.getEngine().setUserStyleSheetLocation(null);
+        System.out.println(browser.getEngine().getUserStyleSheetLocation());
         loadPage(person.getEmail().value);
     }
 
@@ -70,6 +72,8 @@ public class BrowserPanel extends UiPart<Region> {
                 throw new IllegalArgumentException("File doesn't exist");
             }
             URL url = new File("data/files/" + person.getName().fullName + ".html").toURI().toURL();
+            browser.getEngine().setUserStyleSheetLocation(MainApp.class.getResource("/stylesheets/bootstrap.css").toString());
+            System.out.println(browser.getEngine().getUserStyleSheetLocation());
             loadPage(url.toString());
         } catch (Exception e) {
             loadDefaultPage();

@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import org.jsoup.nodes.Document;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -75,14 +76,14 @@ public class AddCommand extends Command {
                     .thenAccept(rawHTML -> {
                         //System.out.println(string);
                         try {
-                            String cleanHTML = ArticleExtractor.with(url, rawHTML)
+                            Document cleanDoc = ArticleExtractor.with(url, rawHTML)
                                     .extractMetadata()
                                     .extractContent()  // If you only need metadata, you can skip `.extractContent()`
                                     .article()
-                                    .document
-                                    .outerHtml();
+                                    .document;
+                            //System.out.println(cleanDoc);
                             File targetFile = new File("data/files/" + filename);
-                            FileUtils.writeStringToFile(targetFile, cleanHTML);
+                            FileUtils.writeStringToFile(targetFile, cleanDoc.outerHtml());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
