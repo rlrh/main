@@ -58,6 +58,8 @@ dependencies {
     String testFxVersion = '4.0.12-alpha'
     String jUnitVersion = '5.1.0'
 
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
     compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.3'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.0'

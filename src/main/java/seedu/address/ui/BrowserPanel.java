@@ -15,6 +15,9 @@ import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
 
+import java.io.*;
+import java.net.*;
+
 /**
  * The Browser Panel of the App.
  */
@@ -61,7 +64,16 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     private void loadPersonReaderPage(Person person) {
-        loadPage("https://cs2103-ay1819s2-w10-1.github.io/main/");
+        try {
+            File file = new File("data/files/" + person.getName().fullName + ".html");
+            if (!file.exists()) {
+                throw new IllegalArgumentException("File doesn't exist");
+            }
+            URL url = new File("data/files/" + person.getName().fullName + ".html").toURI().toURL();
+            loadPage(url.toString());
+        } catch (Exception e) {
+            loadDefaultPage();
+        }
     }
 
     public void loadPage(String url) {
