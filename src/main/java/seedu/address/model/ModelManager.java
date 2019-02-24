@@ -28,6 +28,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final SimpleObjectProperty<Person> selectedPerson = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<Boolean> readerView = new SimpleObjectProperty<>();
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -35,6 +36,8 @@ public class ModelManager implements Model {
     public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs) {
         super();
         requireAllNonNull(addressBook, userPrefs);
+
+        this.setReaderView(false);
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
@@ -211,6 +214,21 @@ public class ModelManager implements Model {
             }
         }
     }
+
+    //=========== ReaderView ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<Boolean> readerViewProperty() {
+        return readerView;
+    }
+
+    @Override
+    public Boolean getReaderView() {
+        return readerView.getValue();
+    }
+
+    @Override
+    public void setReaderView(Boolean bool) { readerView.setValue(bool); }
 
     @Override
     public boolean equals(Object obj) {

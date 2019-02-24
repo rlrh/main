@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import javafx.beans.property.ReadOnlyProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
@@ -30,6 +31,8 @@ public class LogicManager implements Logic {
     private final CommandHistory history;
     private final AddressBookParser addressBookParser;
     private boolean addressBookModified;
+
+
 
     public LogicManager(Model model, Storage storage) {
         this.model = model;
@@ -105,4 +108,12 @@ public class LogicManager implements Logic {
     public void setSelectedPerson(Person person) {
         model.setSelectedPerson(person);
     }
+
+    @Override
+    public ReadOnlyProperty<Boolean> readerViewProperty() {
+        return model.readerViewProperty();
+    }
+
+    @Override
+    public void setReaderView(Boolean bool) { model.setReaderView(bool); }
 }

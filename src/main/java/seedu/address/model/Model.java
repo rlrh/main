@@ -127,4 +127,9 @@ public interface Model {
      * Sets the selected person in the filtered person list.
      */
     void setSelectedPerson(Person person);
+
+    ReadOnlyProperty<Boolean> readerViewProperty();
+    Boolean getReaderView();
+    void setReaderView(Boolean bool);
+
 }

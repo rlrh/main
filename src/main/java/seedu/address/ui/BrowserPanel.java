@@ -28,10 +28,14 @@ public class BrowserPanel extends UiPart<Region> {
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
+    private boolean isReaderView;
+    private Person currentlySelectedPerson;
+
     @FXML
     private WebView browser;
 
-    public BrowserPanel(ObservableValue<Person> selectedPerson) {
+
+    public BrowserPanel(ObservableValue<Person> selectedPerson, ObservableValue<Boolean> readerView) {
         super(FXML);
 
         // To prevent triggering events for typing inside the loaded Web page.
@@ -39,11 +43,13 @@ public class BrowserPanel extends UiPart<Region> {
 
         // Load person page when selected person changes.
         selectedPerson.addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                loadDefaultPage();
-                return;
-            }
-            loadPersonPage(newValue);
+            this.currentlySelectedPerson = newValue;
+            this.reload();
+        });
+
+        readerView.addListener((observable, oldValue, newValue) -> {
+            this.isReaderView = newValue;
+            this.reload();
         });
 
         loadDefaultPage();
@@ -52,6 +58,10 @@ public class BrowserPanel extends UiPart<Region> {
     private void loadPersonPage(Person person) {
         // loadPage(SEARCH_PAGE_URL + person.getName().fullName);
         loadPage(person.getEmail().value);
+    }
+
+    private void loadPersonReaderPage(Person person) {
+        loadPage("https://cs2103-ay1819s2-w10-1.github.io/main/");
     }
 
     public void loadPage(String url) {
@@ -63,6 +73,18 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void loadDefaultPage() {
         loadPage(DEFAULT_PAGE.toExternalForm());
+    }
+
+    private void reload() {
+        if (this.currentlySelectedPerson == null) {
+            loadDefaultPage();
+            return;
+        }
+        if (isReaderView) {
+            loadPersonReaderPage(this.currentlySelectedPerson);
+        } else {
+            loadPersonPage(this.currentlySelectedPerson);
+        }
     }
 
 }
