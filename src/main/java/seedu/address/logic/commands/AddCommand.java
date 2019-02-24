@@ -14,6 +14,7 @@ import seedu.address.model.person.Person;
 
 import seedu.address.network.Network;
 import org.apache.commons.io.*;
+import com.chimbori.crux.articles.*;
 import java.io.*;
 /**
  * Adds a person to the address book.
@@ -70,12 +71,18 @@ public class AddCommand extends Command {
         */
 
         try {
-            Network.makeGetRequestAsStream(url)
-                    .thenAccept(stream -> {
+            Network.makeGetRequestAsString(url)
+                    .thenAccept(rawHTML -> {
                         //System.out.println(string);
                         try {
+                            String cleanHTML = ArticleExtractor.with(url, rawHTML)
+                                    .extractMetadata()
+                                    .extractContent()  // If you only need metadata, you can skip `.extractContent()`
+                                    .article()
+                                    .document
+                                    .outerHtml();
                             File targetFile = new File("data/files/" + filename);
-                            FileUtils.copyInputStreamToFile(stream, targetFile);
+                            FileUtils.writeStringToFile(targetFile, cleanHTML);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

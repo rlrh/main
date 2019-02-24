@@ -36,6 +36,7 @@ targetCompatibility = JavaVersion.VERSION_1_9
 repositories {
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url "https://jitpack.io" }
 }
 
 checkstyle {
@@ -57,6 +58,8 @@ test {
 dependencies {
     String testFxVersion = '4.0.12-alpha'
     String jUnitVersion = '5.1.0'
+
+    compile group: 'com.github.chimbori', name:'crux', version: '2.0.2'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
