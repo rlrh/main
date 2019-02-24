@@ -58,9 +58,13 @@ dependencies {
     String testFxVersion = '4.0.12-alpha'
     String jUnitVersion = '5.1.0'
 
+    compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.3'
+
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.0'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.7.4'
     implementation group: 'com.google.guava', name: 'guava', version: '19.0'
+
+    implementation("com.squareup.okhttp3:okhttp:3.13.1")
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
     testImplementation group: 'org.testfx', name: 'testfx-core', version: testFxVersion, {
