@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import javafx.application.Platform;
 import org.jsoup.nodes.Document;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -17,6 +18,10 @@ import seedu.address.network.Network;
 import org.apache.commons.io.*;
 import com.chimbori.crux.articles.*;
 import java.io.*;
+import javafx.concurrent.Task;
+
+import javax.imageio.plugins.tiff.ExifParentTIFFTagSet;
+
 /**
  * Adds a person to the address book.
  */
@@ -71,33 +76,44 @@ public class AddCommand extends Command {
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
         */
 
-        try {
-            Network.makeGetRequestAsString(url)
-                    .thenAccept(rawHTML -> {
-                        //System.out.println(string);
-                        try {
-                            Document cleanDoc = ArticleExtractor.with(url, rawHTML)
-                                    .extractMetadata()
-                                    .extractContent()  // If you only need metadata, you can skip `.extractContent()`
-                                    .article()
-                                    .document;
-                            //System.out.println(cleanDoc);
-                            File targetFile = new File("data/files/" + filename);
-                            FileUtils.writeStringToFile(targetFile, cleanDoc.outerHtml());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+        Task<Void> task = new Task<>() {
+            @Override
+            public Void call() throws Exception {
+                try {
+                    Network.makeGetRequestAsString(url)
+                            .thenAccept(rawHTML -> {
+                                //System.out.println(string);
+                                try {
+                                    Document cleanDoc = ArticleExtractor.with(url, rawHTML)
+                                            .extractMetadata()
+                                            .extractContent()  // If you only need metadata, you can skip `.extractContent()`
+                                            .article()
+                                            .document;
+                                    //System.out.println(cleanDoc);
+                                    File targetFile = new File("data/files/" + filename);
+                                    FileUtils.writeStringToFile(targetFile, cleanDoc.outerHtml());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
 
-                    })
-                    .exceptionally(e -> {
-                        return null;
+                                }
+
+                            })
+                            .get();
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> {
+                        model.addPerson(toAdd);
+                        model.commitAddressBook();
                     });
-            model.addPerson(toAdd);
-            model.commitAddressBook();
-            return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
-        } catch (Exception e) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
-        }
+                    return null;
+                } catch (Exception e) {
+                    throw e;
+                }
+            }
+        };
+        new Thread(task).start();
+
+        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
+
     }
 
 
