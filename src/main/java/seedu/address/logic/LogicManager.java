@@ -44,7 +44,16 @@ public class LogicManager implements Logic {
             try {
                 storage.saveAddressBook(model.getAddressBook());
             } catch (IOException ioe) {
-                this.model.setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+                model.setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+            }
+        });
+
+        // Set addressBookModified to true whenever the models' address book is modified.
+        model.commandTextProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                model.setCommandResult(this.execute(newValue));
+            } catch (CommandException | ParseException e) {
+                model.setException(e);
             }
         });
     }

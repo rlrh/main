@@ -103,6 +103,7 @@ public class AddCommand extends Command {
                         model.addPerson(toAdd);
                         model.commitAddressBook();
                         model.setCommandResult(new CommandResult(String.format(MESSAGE_SUCCESS, toAdd)));
+                        model.setCommandText("help");
                     });
                     return null;
                 } catch (Exception e) {
