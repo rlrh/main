@@ -35,6 +35,8 @@ public class MainWindow extends UiPart<Stage> {
     private PersonListPanel personListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private CommandBox commandBox;
+    private StatusBarFooter statusBarFooter;
 
     @FXML
     private StackPane browserPlaceholder;
@@ -121,12 +123,20 @@ public class MainWindow extends UiPart<Stage> {
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
-        StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath(), logic.getAddressBook(),
+        statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath(), logic.getAddressBook(),
                 logic.getFilteredPersonList());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
-        CommandBox commandBox = new CommandBox(this::executeCommand, logic.getHistory());
+        commandBox = new CommandBox(this::executeCommand, logic.getHistory());
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+
+        this.logic.commandResultProperty().addListener((observable, oldCommandResult, newCommandResult) -> {
+            processManualSuccess(newCommandResult);
+        });
+
+        this.logic.exceptionProperty().addListener((observable, oldException, newException) -> {
+            processManualFailure(newException);
+        });
     }
 
     /**
@@ -181,22 +191,52 @@ public class MainWindow extends UiPart<Stage> {
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
             CommandResult commandResult = logic.execute(commandText);
-            logger.info("Result: " + commandResult.getFeedbackToUser());
-            resultDisplay.setFeedbackSuccessToUser(commandResult.getFeedbackToUser());
-
-            if (commandResult.isShowHelp()) {
-                handleHelp();
-            }
-
-            if (commandResult.isExit()) {
-                handleExit();
-            }
-
+            processCommandSuccess(commandResult);
             return commandResult;
         } catch (CommandException | ParseException e) {
-            logger.info("Invalid command: " + commandText);
-            resultDisplay.setFeedbackErrorToUser(e.getMessage());
+            processCommandFailure(e, commandText);
             throw e;
         }
+    }
+
+    /**
+     * Processes a successful command entered into the command box.
+     */
+    private void processCommandSuccess(CommandResult commandResult) {
+        logger.info("Result: " + commandResult.getFeedbackToUser());
+        resultDisplay.setFeedbackSuccessToUser(commandResult.getFeedbackToUser());
+
+        if (commandResult.isShowHelp()) {
+            handleHelp();
+        }
+
+        if (commandResult.isExit()) {
+            handleExit();
+        }
+    }
+
+    /**
+     * Processes a successful manually set command result.
+     */
+    private void processManualSuccess(CommandResult commandResult) {
+        processCommandSuccess(commandResult);
+        commandBox.processCommandSuccess();
+    }
+
+    /**
+     * Processes a failed command entered into the command box.
+     */
+    private void processCommandFailure(Exception e, String commandText) {
+        logger.info("Invalid command: " + commandText);
+        resultDisplay.setFeedbackErrorToUser(e.getMessage());
+    }
+
+    /**
+     * Processes a propagated exception.
+     */
+    private void processManualFailure(Exception e) {
+        logger.info("Operation failed: " + e.getMessage());
+        resultDisplay.setFeedbackErrorToUser(e.getMessage());
+        commandBox.processCommandFailure();
     }
 }

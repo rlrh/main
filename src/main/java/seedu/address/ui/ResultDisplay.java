@@ -24,14 +24,14 @@ public class ResultDisplay extends UiPart<Region> {
     }
 
     /**
-     * Sets the command box style to use the default style.
+     * Sets the result display style to use the default style.
      */
     private void setStyleToDefault() {
         resultDisplay.getStyleClass().remove(ERROR_STYLE_CLASS);
     }
 
     /**
-     * Sets the command box style to indicate a failed command.
+     * Sets the result display style to indicate a failed command.
      */
     private void setStyleToIndicateCommandFailure() {
         ObservableList<String> styleClass = resultDisplay.getStyleClass();
