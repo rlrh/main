@@ -83,14 +83,16 @@ public class AddCommand extends Command {
                             .thenAccept(rawHTML -> {
                                 //System.out.println(string);
                                 try {
+                                    /*
                                     Document cleanDoc = ArticleExtractor.with(url, rawHTML)
                                             .extractMetadata()
                                             .extractContent()  // If you only need metadata, you can skip `.extractContent()`
                                             .article()
                                             .document;
                                     //System.out.println(cleanDoc);
+                                    */
                                     File targetFile = new File("data/files/" + filename);
-                                    FileUtils.writeStringToFile(targetFile, cleanDoc.outerHtml());
+                                    FileUtils.writeStringToFile(targetFile, rawHTML);
                                 } catch (IOException e) {
                                     e.printStackTrace();
 
@@ -99,12 +101,12 @@ public class AddCommand extends Command {
                             })
                             .get();
                     Thread.sleep(5000);
-                    Platform.runLater(() -> {
+                    // Platform.runLater(() -> {
                         model.addPerson(toAdd);
                         model.commitAddressBook();
                         model.setCommandResult(new CommandResult(String.format(MESSAGE_SUCCESS, toAdd)));
-                        model.setCommandText("help");
-                    });
+                        // model.setCommandText("help");
+                    //});
                     return null;
                 } catch (Exception e) {
                     throw e;

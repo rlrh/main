@@ -48,7 +48,6 @@ public class LogicManager implements Logic {
             }
         });
 
-        // Set addressBookModified to true whenever the models' address book is modified.
         model.commandTextProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 model.setCommandResult(this.execute(newValue));

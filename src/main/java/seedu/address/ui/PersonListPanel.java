@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -57,14 +58,17 @@ public class PersonListPanel extends UiPart<Region> {
     class PersonListViewCell extends ListCell<Person> {
         @Override
         protected void updateItem(Person person, boolean empty) {
-            super.updateItem(person, empty);
+            Platform.runLater(() -> {
+                super.updateItem(person, empty);
 
-            if (empty || person == null) {
-                setGraphic(null);
-                setText(null);
-            } else {
-                setGraphic(new PersonCard(person, getIndex() + 1).getRoot());
-            }
+                if (empty || person == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    setGraphic(new PersonCard(person, getIndex() + 1).getRoot());
+                }
+            });
+
         }
     }
 
