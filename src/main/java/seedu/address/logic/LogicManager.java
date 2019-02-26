@@ -39,13 +39,20 @@ public class LogicManager implements Logic {
         addressBookParser = new AddressBookParser();
 
         // Set addressBookModified to true whenever the models' address book is modified.
-        model.getAddressBook().addListener(observable -> addressBookModified = true);
+        model.getAddressBook().addListener(observable -> {
+            logger.info("Address book modified, saving to file.");
+            try {
+                storage.saveAddressBook(model.getAddressBook());
+            } catch (IOException ioe) {
+                this.model.setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+            }
+        });
     }
 
     @Override
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
-        addressBookModified = false;
+        // addressBookModified = false;
 
         CommandResult commandResult;
         try {
@@ -55,6 +62,7 @@ public class LogicManager implements Logic {
             history.add(commandText);
         }
 
+        /*
         if (addressBookModified) {
             logger.info("Address book modified, saving to file.");
             try {
@@ -63,6 +71,7 @@ public class LogicManager implements Logic {
                 throw new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe);
             }
         }
+        */
 
         return commandResult;
     }
