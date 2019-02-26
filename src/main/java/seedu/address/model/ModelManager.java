@@ -28,6 +28,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final SimpleObjectProperty<Person> selectedPerson = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -182,6 +183,17 @@ public class ModelManager implements Model {
         }
         selectedPerson.setValue(person);
     }
+
+    //=========== Exception propagation ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<Exception> exceptionProperty() { return exception; }
+
+    @Override
+    public Exception getException() { return exception.getValue(); }
+
+    @Override
+    public void setException(Exception exceptionToBePropagated) { exception.setValue(exceptionToBePropagated); }
 
     /**
      * Ensures {@code selectedPerson} is a valid person in {@code filteredPersons}.

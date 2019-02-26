@@ -127,4 +127,21 @@ public interface Model {
      * Sets the selected person in the filtered person list.
      */
     void setSelectedPerson(Person person);
+
+    /**
+     * Propagated exception.
+     * null if no exception.
+     */
+    ReadOnlyProperty<Exception> exceptionProperty();
+
+    /**
+     * Returns the propagated exception.
+     * null if no exception.
+     */
+    Exception getException();
+
+    /**
+     * Sets the exception to be propagated.
+     */
+    void setException(Exception exceptionToBePropagated);
 }

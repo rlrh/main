@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -69,4 +70,19 @@ public interface Logic {
      * @see seedu.address.model.Model#setSelectedPerson(Person)
      */
     void setSelectedPerson(Person person);
+
+    /**
+     * Propagated exception.
+     * null if no exception.
+     *
+     * @see seedu.address.model.Model#exceptionProperty()
+     */
+    ReadOnlyProperty<Exception> exceptionProperty();
+
+    /**
+     * Sets the exception to be propagated.
+     *
+     * @see seedu.address.model.Model#setException(Exception)
+     */
+    void setException(Exception exception);
 }
