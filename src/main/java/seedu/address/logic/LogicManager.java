@@ -109,4 +109,10 @@ public class LogicManager implements Logic {
     @Override
     public void setException(Exception exception) { model.setException(exception); }
 
+    @Override
+    public ReadOnlyProperty<CommandResult> commandResultProperty() { return model.commandResultProperty(); }
+
+    @Override
+    public void setCommandResult(CommandResult commandResult) { model.setCommandResult(commandResult); }
+
 }

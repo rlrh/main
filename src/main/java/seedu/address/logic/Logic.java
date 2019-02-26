@@ -85,4 +85,20 @@ public interface Logic {
      * @see seedu.address.model.Model#setException(Exception)
      */
     void setException(Exception exception);
+
+    /**
+     * Command result from manual setting.
+     * null if no manually set command result.
+     * FUTURE: Command result from latest command execution or manual setting.
+     *
+     * @see seedu.address.model.Model#commandResultProperty()
+     */
+    ReadOnlyProperty<CommandResult> commandResultProperty();
+
+    /**
+     * Sets the command result manually.
+     *
+     * @see seedu.address.model.Model#setCommandResult(CommandResult)
+     */
+    void setCommandResult(CommandResult commandResult);
 }

@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.person.Person;
 
 /**
@@ -144,4 +145,22 @@ public interface Model {
      * Sets the exception to be propagated.
      */
     void setException(Exception exceptionToBePropagated);
+
+    /**
+     * Command result from manual setting.
+     * null if no manually set command result.
+     * FUTURE: Command result from latest command execution or manual setting.
+     */
+    ReadOnlyProperty<CommandResult> commandResultProperty();
+
+    /**
+     * Returns the manually set command result.
+     * null if no manually set command result.
+     */
+    CommandResult getCommandResult();
+
+    /**
+     * Sets the command result manually.
+     */
+    void setCommandResult(CommandResult result);
 }
