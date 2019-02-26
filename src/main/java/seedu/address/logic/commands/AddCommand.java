@@ -8,7 +8,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import javafx.application.Platform;
-import org.jsoup.nodes.Document;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -19,8 +18,7 @@ import org.apache.commons.io.*;
 import com.chimbori.crux.articles.*;
 import java.io.*;
 import javafx.concurrent.Task;
-
-import javax.imageio.plugins.tiff.ExifParentTIFFTagSet;
+import org.jsoup.nodes.Document;
 
 /**
  * Adds a person to the address book.
@@ -45,6 +43,7 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "friends "
             + PREFIX_TAG + "owesMoney";
 
+    public static final String MESSAGE_IN_PROGRESS = "Adding new person: %1$s ...";
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_FAILURE = "Failed to add person: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
@@ -103,6 +102,7 @@ public class AddCommand extends Command {
                     Platform.runLater(() -> {
                         model.addPerson(toAdd);
                         model.commitAddressBook();
+                        model.setCommandResult(new CommandResult(String.format(MESSAGE_SUCCESS, toAdd)));
                     });
                     return null;
                 } catch (Exception e) {
@@ -112,7 +112,7 @@ public class AddCommand extends Command {
         };
         new Thread(task).start();
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
+        return new CommandResult(String.format(MESSAGE_IN_PROGRESS, toAdd));
 
     }
 

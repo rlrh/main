@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -79,4 +80,13 @@ public interface Logic {
      * Sets the selected view type.
      */
     void setReaderView(Boolean readerView);
+
+    // hax0r
+
+    ReadOnlyProperty<String> commandTextProperty();
+    void setCommandText(String commandText);
+    ReadOnlyProperty<CommandResult> commandResultProperty();
+    void setCommandResult(CommandResult commandResult);
+    ReadOnlyProperty<Exception> exceptionProperty();
+    void setException(Exception exception);
 }

@@ -15,6 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 
@@ -28,7 +30,12 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final SimpleObjectProperty<Person> selectedPerson = new SimpleObjectProperty<>();
+
     private final SimpleObjectProperty<Boolean> readerView = new SimpleObjectProperty<>();
+
+    private final SimpleObjectProperty<String> commandText = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -38,6 +45,7 @@ public class ModelManager implements Model {
         requireAllNonNull(addressBook, userPrefs);
 
         this.setReaderView(false);
+        this.setCommandText("");
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
@@ -229,6 +237,49 @@ public class ModelManager implements Model {
 
     @Override
     public void setReaderView(Boolean bool) { readerView.setValue(bool); }
+
+    //=========== hax0r ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<String> commandTextProperty() {
+        return this.commandText;
+    }
+
+    @Override
+    public String getCommandText() {
+        return this.commandText.getValue();
+    }
+
+    @Override
+    public void setCommandText(String commandText) { this.commandText.setValue(commandText); }
+
+    @Override
+    public ReadOnlyProperty<CommandResult> commandResultProperty() {
+        return this.commandResult;
+    }
+
+    @Override
+    public CommandResult getCommandResult() {
+        return this.commandResult.getValue();
+    }
+
+    @Override
+    public void setCommandResult(CommandResult commandResult) { this.commandResult.setValue(commandResult); }
+
+    @Override
+    public ReadOnlyProperty<Exception> exceptionProperty() {
+        return this.exception;
+    }
+
+    @Override
+    public Exception getException() {
+        return this.exception.getValue();
+    }
+
+    @Override
+    public void setException(Exception exception) { this.exception.setValue(exception); }
+
+    //=========== Original ===========================================================================
 
     @Override
     public boolean equals(Object obj) {

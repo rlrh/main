@@ -32,8 +32,6 @@ public class LogicManager implements Logic {
     private final AddressBookParser addressBookParser;
     private boolean addressBookModified;
 
-
-
     public LogicManager(Model model, Storage storage) {
         this.model = model;
         this.storage = storage;
@@ -116,4 +114,30 @@ public class LogicManager implements Logic {
 
     @Override
     public void setReaderView(Boolean bool) { model.setReaderView(bool); }
+
+    // haX0r
+
+    @Override
+    public ReadOnlyProperty<String> commandTextProperty() {
+        return model.commandTextProperty();
+    }
+
+    @Override
+    public void setCommandText(String commandText) { model.setCommandText(commandText); }
+
+    @Override
+    public ReadOnlyProperty<CommandResult> commandResultProperty() {
+        return model.commandResultProperty();
+    }
+
+    @Override
+    public void setCommandResult(CommandResult commandResult) { model.setCommandResult(commandResult); }
+
+    @Override
+    public ReadOnlyProperty<Exception> exceptionProperty() {
+        return model.exceptionProperty();
+    }
+
+    @Override
+    public void setException(Exception exception) { model.setException(exception); }
 }

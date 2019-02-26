@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.person.Person;
 
 /**
@@ -131,5 +132,19 @@ public interface Model {
     ReadOnlyProperty<Boolean> readerViewProperty();
     Boolean getReaderView();
     void setReaderView(Boolean bool);
+
+    // hax0r
+
+    //=========== hax0r ===========================================================================
+
+    ReadOnlyProperty<String> commandTextProperty();
+    String getCommandText();
+    void setCommandText(String commandText);
+    ReadOnlyProperty<CommandResult> commandResultProperty();
+    CommandResult getCommandResult();
+    void setCommandResult(CommandResult commandResult);
+    ReadOnlyProperty<Exception> exceptionProperty();
+    Exception getException();
+    void setException(Exception exception);
 
 }
