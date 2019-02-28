@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import guitests.guihandles.PersonCardHandle;
-import guitests.guihandles.PersonListPanelHandle;
+import guitests.guihandles.EntryCardHandle;
+import guitests.guihandles.EntryListPanelHandle;
 import guitests.guihandles.ResultDisplayHandle;
-import seedu.address.model.person.Person;
+import seedu.address.model.entry.Entry;
 
 /**
  * A set of assertion methods useful for writing GUI tests.
@@ -21,12 +21,12 @@ public class GuiTestAssert {
     /**
      * Asserts that {@code actualCard} displays the same values as {@code expectedCard}.
      */
-    public static void assertCardEquals(PersonCardHandle expectedCard, PersonCardHandle actualCard) {
+    public static void assertCardEquals(EntryCardHandle expectedCard, EntryCardHandle actualCard) {
         assertEquals(expectedCard.getId(), actualCard.getId());
         assertEquals(expectedCard.getAddress(), actualCard.getAddress());
-        assertEquals(expectedCard.getEmail(), actualCard.getEmail());
-        assertEquals(expectedCard.getName(), actualCard.getName());
-        assertEquals(expectedCard.getPhone(), actualCard.getPhone());
+        assertEquals(expectedCard.getLink(), actualCard.getLink());
+        assertEquals(expectedCard.getTitle(), actualCard.getTitle());
+        assertEquals(expectedCard.getComment(), actualCard.getComment());
         assertEquals(expectedCard.getTags(), actualCard.getTags());
         expectedCard.getTags().forEach(tag ->
                 assertEquals(expectedCard.getTagStyleClasses(tag), actualCard.getTagStyleClasses(tag))
@@ -34,40 +34,40 @@ public class GuiTestAssert {
     }
 
     /**
-     * Asserts that {@code actualCard} displays the details of {@code expectedPerson}.
+     * Asserts that {@code actualCard} displays the details of {@code expectedEntry}.
      */
-    public static void assertCardDisplaysPerson(Person expectedPerson, PersonCardHandle actualCard) {
-        assertEquals(expectedPerson.getName().fullName, actualCard.getName());
-        assertEquals(expectedPerson.getPhone().value, actualCard.getPhone());
-        assertEquals(expectedPerson.getEmail().value, actualCard.getEmail());
-        assertEquals(expectedPerson.getAddress().value, actualCard.getAddress());
-        assertTagsAndTagColorStylesEqual(expectedPerson, actualCard);
+    public static void assertCardDisplaysPerson(Entry expectedEntry, EntryCardHandle actualCard) {
+        assertEquals(expectedEntry.getTitle().fullTitle, actualCard.getTitle());
+        assertEquals(expectedEntry.getComment().value, actualCard.getComment());
+        assertEquals(expectedEntry.getLink().value, actualCard.getLink());
+        assertEquals(expectedEntry.getAddress().value, actualCard.getAddress());
+        assertTagsAndTagColorStylesEqual(expectedEntry, actualCard);
     }
 
     /**
-     * Asserts that the list in {@code personListPanelHandle} displays the details of {@code persons} correctly and
+     * Asserts that the list in {@code entryListPanelHandle} displays the details of {@code entries} correctly and
      * in the correct order.
      */
-    public static void assertListMatching(PersonListPanelHandle personListPanelHandle, Person... persons) {
-        for (int i = 0; i < persons.length; i++) {
-            personListPanelHandle.navigateToCard(i);
-            assertCardDisplaysPerson(persons[i], personListPanelHandle.getPersonCardHandle(i));
+    public static void assertListMatching(EntryListPanelHandle entryListPanelHandle, Entry... entries) {
+        for (int i = 0; i < entries.length; i++) {
+            entryListPanelHandle.navigateToCard(i);
+            assertCardDisplaysPerson(entries[i], entryListPanelHandle.getPersonCardHandle(i));
         }
     }
 
     /**
-     * Asserts that the list in {@code personListPanelHandle} displays the details of {@code persons} correctly and
+     * Asserts that the list in {@code entryListPanelHandle} displays the details of {@code entries} correctly and
      * in the correct order.
      */
-    public static void assertListMatching(PersonListPanelHandle personListPanelHandle, List<Person> persons) {
-        assertListMatching(personListPanelHandle, persons.toArray(new Person[0]));
+    public static void assertListMatching(EntryListPanelHandle entryListPanelHandle, List<Entry> entries) {
+        assertListMatching(entryListPanelHandle, entries.toArray(new Entry[0]));
     }
 
     /**
-     * Asserts the size of the list in {@code personListPanelHandle} equals to {@code size}.
+     * Asserts the size of the list in {@code entryListPanelHandle} equals to {@code size}.
      */
-    public static void assertListSize(PersonListPanelHandle personListPanelHandle, int size) {
-        int numberOfPeople = personListPanelHandle.getListSize();
+    public static void assertListSize(EntryListPanelHandle entryListPanelHandle, int size) {
+        int numberOfPeople = entryListPanelHandle.getListSize();
         assertEquals(size, numberOfPeople);
     }
 
@@ -80,7 +80,7 @@ public class GuiTestAssert {
 
     /**
      * Returns the color style for {@code tagName}'s label. The tag's color is determined by looking up the color
-     * in {@code PersonCard#TAG_COLOR_STYLES}, using an index generated by the hash code of the tag's content.
+     * in {@code EntryCard#TAG_COLOR_STYLES}, using an index generated by the hash code of the tag's content.
      */
     private static String getTagColorStyleFor(String tagName) {
         switch (tagName) {
@@ -109,19 +109,40 @@ public class GuiTestAssert {
         case "husband":
             return "gray";
 
+        case "tech":
+            return "cyan";
+
+        case "science":
+            return "pink";
+
+        case "nus":
+            return "yellow";
+
+        case "soc":
+            return "gray";
+
+        case "engineering":
+            return "amber";
+
+        case "award":
+            return "gray";
+
+        case "amazon":
+            return "gray";
+
         default:
             throw new AssertionError(tagName + " does not have a color assigned.");
         }
     }
 
     /**
-     * Asserts that the tags in {@code actualCard} matches all the tags in {@code expectedPerson} with the correct
+     * Asserts that the tags in {@code actualCard} matches all the tags in {@code expectedEntry} with the correct
      * color.
      */
-    private static void assertTagsAndTagColorStylesEqual(Person expectedPerson, PersonCardHandle actualCard) {
+    private static void assertTagsAndTagColorStylesEqual(Entry expectedEntry, EntryCardHandle actualCard) {
 
         // assert tags equal
-        List<String> expectedTags = expectedPerson
+        List<String> expectedTags = expectedEntry
                 .getTags()
                 .stream()
                 .map(tag -> tag.tagName)
