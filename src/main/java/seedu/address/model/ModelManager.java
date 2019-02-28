@@ -15,8 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.person.Person;
-import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.entry.Entry;
+import seedu.address.model.entry.exceptions.EntryNotFoundException;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -24,28 +24,28 @@ import seedu.address.model.person.exceptions.PersonNotFoundException;
 public class ModelManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private final VersionedAddressBook versionedAddressBook;
+    private final VersionedEntryBook versionedAddressBook;
     private final UserPrefs userPrefs;
-    private final FilteredList<Person> filteredPersons;
-    private final SimpleObjectProperty<Person> selectedPerson = new SimpleObjectProperty<>();
+    private final FilteredList<Entry> filteredEntries;
+    private final SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
      */
-    public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs) {
+    public ModelManager(ReadOnlyEntryBook addressBook, ReadOnlyUserPrefs userPrefs) {
         super();
         requireAllNonNull(addressBook, userPrefs);
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
-        versionedAddressBook = new VersionedAddressBook(addressBook);
+        versionedAddressBook = new VersionedEntryBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredPersons = new FilteredList<>(versionedAddressBook.getPersonList());
-        filteredPersons.addListener(this::ensureSelectedPersonIsValid);
+        filteredEntries = new FilteredList<>(versionedAddressBook.getPersonList());
+        filteredEntries.addListener(this::ensureSelectedPersonIsValid);
     }
 
     public ModelManager() {
-        this(new AddressBook(), new UserPrefs());
+        this(new EntryBook(), new UserPrefs());
     }
 
     //=========== UserPrefs ==================================================================================
@@ -83,57 +83,57 @@ public class ModelManager implements Model {
         userPrefs.setAddressBookFilePath(addressBookFilePath);
     }
 
-    //=========== AddressBook ================================================================================
+    //=========== EntryBook ================================================================================
 
     @Override
-    public void setAddressBook(ReadOnlyAddressBook addressBook) {
+    public void setAddressBook(ReadOnlyEntryBook addressBook) {
         versionedAddressBook.resetData(addressBook);
     }
 
     @Override
-    public ReadOnlyAddressBook getAddressBook() {
+    public ReadOnlyEntryBook getAddressBook() {
         return versionedAddressBook;
     }
 
     @Override
-    public boolean hasPerson(Person person) {
-        requireNonNull(person);
-        return versionedAddressBook.hasPerson(person);
+    public boolean hasPerson(Entry entry) {
+        requireNonNull(entry);
+        return versionedAddressBook.hasPerson(entry);
     }
 
     @Override
-    public void deletePerson(Person target) {
+    public void deletePerson(Entry target) {
         versionedAddressBook.removePerson(target);
     }
 
     @Override
-    public void addPerson(Person person) {
-        versionedAddressBook.addPerson(person);
+    public void addPerson(Entry entry) {
+        versionedAddressBook.addPerson(entry);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override
-    public void setPerson(Person target, Person editedPerson) {
-        requireAllNonNull(target, editedPerson);
+    public void setPerson(Entry target, Entry editedEntry) {
+        requireAllNonNull(target, editedEntry);
 
-        versionedAddressBook.setPerson(target, editedPerson);
+        versionedAddressBook.setPerson(target, editedEntry);
     }
 
-    //=========== Filtered Person List Accessors =============================================================
+    //=========== Filtered Entry List Accessors =============================================================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * Returns an unmodifiable view of the list of {@code Entry} backed by the internal list of
      * {@code versionedAddressBook}
      */
     @Override
-    public ObservableList<Person> getFilteredPersonList() {
-        return filteredPersons;
+    public ObservableList<Entry> getFilteredPersonList() {
+        return filteredEntries;
     }
 
     @Override
-    public void updateFilteredPersonList(Predicate<Person> predicate) {
+    public void updateFilteredPersonList(Predicate<Entry> predicate) {
         requireNonNull(predicate);
-        filteredPersons.setPredicate(predicate);
+        filteredEntries.setPredicate(predicate);
     }
 
     //=========== Undo/Redo =================================================================================
@@ -163,33 +163,33 @@ public class ModelManager implements Model {
         versionedAddressBook.commit();
     }
 
-    //=========== Selected person ===========================================================================
+    //=========== Selected entry ===========================================================================
 
     @Override
-    public ReadOnlyProperty<Person> selectedPersonProperty() {
+    public ReadOnlyProperty<Entry> selectedPersonProperty() {
         return selectedPerson;
     }
 
     @Override
-    public Person getSelectedPerson() {
+    public Entry getSelectedPerson() {
         return selectedPerson.getValue();
     }
 
     @Override
-    public void setSelectedPerson(Person person) {
-        if (person != null && !filteredPersons.contains(person)) {
-            throw new PersonNotFoundException();
+    public void setSelectedPerson(Entry entry) {
+        if (entry != null && !filteredEntries.contains(entry)) {
+            throw new EntryNotFoundException();
         }
-        selectedPerson.setValue(person);
+        selectedPerson.setValue(entry);
     }
 
     /**
-     * Ensures {@code selectedPerson} is a valid person in {@code filteredPersons}.
+     * Ensures {@code selectedPerson} is a valid entry in {@code filteredEntries}.
      */
-    private void ensureSelectedPersonIsValid(ListChangeListener.Change<? extends Person> change) {
+    private void ensureSelectedPersonIsValid(ListChangeListener.Change<? extends Entry> change) {
         while (change.next()) {
             if (selectedPerson.getValue() == null) {
-                // null is always a valid selected person, so we do not need to check that it is valid anymore.
+                // null is always a valid selected entry, so we do not need to check that it is valid anymore.
                 return;
             }
 
@@ -205,8 +205,8 @@ public class ModelManager implements Model {
             boolean wasSelectedPersonRemoved = change.getRemoved().stream()
                     .anyMatch(removedPerson -> selectedPerson.getValue().isSamePerson(removedPerson));
             if (wasSelectedPersonRemoved) {
-                // Select the person that came before it in the list,
-                // or clear the selection if there is no such person.
+                // Select the entry that came before it in the list,
+                // or clear the selection if there is no such entry.
                 selectedPerson.setValue(change.getFrom() > 0 ? change.getList().get(change.getFrom() - 1) : null);
             }
         }
@@ -228,7 +228,7 @@ public class ModelManager implements Model {
         ModelManager other = (ModelManager) obj;
         return versionedAddressBook.equals(other.versionedAddressBook)
                 && userPrefs.equals(other.userPrefs)
-                && filteredPersons.equals(other.filteredPersons)
+                && filteredEntries.equals(other.filteredEntries)
                 && Objects.equals(selectedPerson.get(), other.selectedPerson.get());
     }
 
