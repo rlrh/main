@@ -103,8 +103,24 @@ public class LogicManagerTest {
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
         String expectedFinalMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
-        assertAsyncFailure(CommandException.class, expectedFinalMessage);
+        assertAsyncExceptionPropagated(CommandException.class, expectedFinalMessage);
         assertHistoryCorrect(addCommand);
+    }
+
+    @Test
+    public void execute_asyncCommandResultSet_success() {
+        String expectedMessage = "Asynchronous command result successfully set";
+        CommandResult result = new CommandResult(expectedMessage);
+        model.setCommandResult(result);
+        assertAsyncCommandResultSet(expectedMessage);
+    }
+
+    @Test
+    public void execute_asyncExceptionPropagated_failure() {
+        String expectedMessage = "Asynchronous exception successfully propagated";
+        Exception exception = new Exception(expectedMessage);
+        model.setException(exception);
+        assertAsyncExceptionPropagated(Exception.class, expectedMessage);
     }
 
     @Test
@@ -172,7 +188,7 @@ public class LogicManagerTest {
      * For asynchronous operations, confirms that the result message is correct.
      * Exception can be propagated from previous commands so it cannot be checked.
      */
-    private void assertAsyncSuccess(String expectedMessage) {
+    private void assertAsyncCommandResultSet(String expectedMessage) {
         assertNotNull(model.getCommandResult());
         assertEquals(expectedMessage, model.getCommandResult().getFeedbackToUser());
     }
@@ -181,7 +197,7 @@ public class LogicManagerTest {
      * For asynchronous operations, confirms that the expected exception is propagated.
      * Command result can be propagated from previous commands so it cannot be checked.
      */
-    private void assertAsyncFailure(Class<?> expectedException, String expectedMessage) {
+    private void assertAsyncExceptionPropagated(Class<?> expectedException, String expectedMessage) {
         assertNotNull(model.getException());
         assertEquals(expectedException, model.getException().getClass());
         assertEquals(expectedMessage, model.getException().getMessage());
