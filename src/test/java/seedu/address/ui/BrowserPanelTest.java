@@ -2,8 +2,8 @@ package seedu.address.ui;
 
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
-import static seedu.address.testutil.TypicalEntries.VALID_LINK;
 import static seedu.address.testutil.TypicalEntries.INVALID_LINK;
+import static seedu.address.testutil.TypicalEntries.VALID_LINK;
 
 import java.net.URL;
 

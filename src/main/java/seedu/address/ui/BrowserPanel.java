@@ -10,8 +10,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
-import javafx.scene.web.WebView;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.entry.Entry;
@@ -63,6 +63,8 @@ public class BrowserPanel extends UiPart<Region> {
             case FAILED:
                 logger.warning(String.format("Failed to load %s", location));
                 loadErrorPage();
+                break;
+            default:
                 break;
             }
         });

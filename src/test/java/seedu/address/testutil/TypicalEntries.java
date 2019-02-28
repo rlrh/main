@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import seedu.address.MainApp;
 import seedu.address.model.EntryBook;
 import seedu.address.model.entry.Entry;
-import seedu.address.MainApp;
 
 /**
  * A utility class containing a list of {@code Entry} objects to be used in tests.
@@ -88,7 +88,8 @@ public class TypicalEntries {
     public static final Entry VALID_LINK = new EntryBuilder()
             .withName("Valid Link")
             .withPhone("Valid link")
-            .withEmail("file://" + MainApp.class.getResource("/view/BrowserPanelTest/default.html").toExternalForm().substring(5))
+            .withEmail("file://"
+                    + MainApp.class.getResource("/view/BrowserPanelTest/default.html").toExternalForm().substring(5))
             .withAddress("Valid link")
             .build();
     // Must have invalid link
