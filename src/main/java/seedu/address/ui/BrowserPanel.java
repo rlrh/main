@@ -11,6 +11,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebView;
+import javafx.scene.web.WebEngine;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.entry.Entry;
@@ -22,7 +23,8 @@ public class BrowserPanel extends UiPart<Region> {
 
     public static final URL DEFAULT_PAGE =
             requireNonNull(MainApp.class.getResource(FXML_FILE_FOLDER + "default.html"));
-    public static final String SEARCH_PAGE_URL = "https://se-education.org/dummy-search-page/?name=";
+    public static final URL ERROR_PAGE =
+            requireNonNull(MainApp.class.getResource(FXML_FILE_FOLDER + "error.html"));
 
     private static final String FXML = "BrowserPanel.fxml";
 
@@ -30,6 +32,8 @@ public class BrowserPanel extends UiPart<Region> {
 
     @FXML
     private WebView browser;
+
+    private WebEngine webEngine = browser.getEngine();
 
     public BrowserPanel(ObservableValue<Entry> selectedPerson) {
         super(FXML);
@@ -46,15 +50,32 @@ public class BrowserPanel extends UiPart<Region> {
             loadPersonPage(newValue);
         });
 
+        // Load error page when error occurs.
+        webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+            String location = browser.getEngine().getLocation();
+            switch (newState) {
+            case RUNNING:
+                logger.info(String.format("Loading %s...", location));
+                break;
+            case SUCCEEDED:
+                logger.info(String.format("Successfully loaded %s", location));
+                break;
+            case FAILED:
+                logger.warning(String.format("Failed to load %s", location));
+                loadErrorPage();
+                break;
+            }
+        });
+
         loadDefaultPage();
     }
 
     private void loadPersonPage(Entry entry) {
-        loadPage(SEARCH_PAGE_URL + entry.getTitle().fullTitle);
+        loadPage(entry.getLink().value);
     }
 
     public void loadPage(String url) {
-        Platform.runLater(() -> browser.getEngine().load(url));
+        Platform.runLater(() -> webEngine.load(url));
     }
 
     /**
@@ -62,6 +83,13 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void loadDefaultPage() {
         loadPage(DEFAULT_PAGE.toExternalForm());
+    }
+
+    /**
+     * Loads an error HTML file with a background that matches the general theme.
+     */
+    private void loadErrorPage() {
+        loadPage(ERROR_PAGE.toExternalForm());
     }
 
 }
