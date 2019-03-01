@@ -1,6 +1,7 @@
 package systemtests;
 
 import org.junit.Test;
+
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.Model;
 
