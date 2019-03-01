@@ -2,7 +2,8 @@ package seedu.address.ui;
 
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
-import static seedu.address.testutil.TypicalEntries.ALICE;
+import static seedu.address.testutil.TypicalEntries.INVALID_LINK;
+import static seedu.address.testutil.TypicalEntries.VALID_LINK;
 
 import java.net.URL;
 
@@ -27,16 +28,26 @@ public class BrowserPanelTest extends GuiUnitTest {
     }
 
     @Test
-    public void display() throws Exception {
+    public void displayDefaultPage() {
         // default web page
         assertEquals(BrowserPanel.DEFAULT_PAGE, browserPanelHandle.getLoadedUrl());
+    }
 
-        // associated web page of a entry
-        guiRobot.interact(() -> selectedPerson.set(ALICE));
-        URL expectedPersonUrl = new URL(BrowserPanel.SEARCH_PAGE_URL
-            + ALICE.getTitle().fullTitle.replaceAll(" ", "%20"));
-
+    @Test
+    public void displayCorrectPage() throws Exception {
+        // associated web page of a entry with valid link
+        guiRobot.interact(() -> selectedPerson.set(VALID_LINK));
+        URL expectedPersonUrl = new URL(VALID_LINK.getLink().value);
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedPersonUrl, browserPanelHandle.getLoadedUrl());
     }
+
+    @Test
+    public void displayErrorPage() {
+        // associated web page of a entry with invalid link
+        guiRobot.interact(() -> selectedPerson.set(INVALID_LINK));
+        waitUntilBrowserLoaded(browserPanelHandle);
+        assertEquals(BrowserPanel.ERROR_PAGE, browserPanelHandle.getLoadedUrl());
+    }
+
 }

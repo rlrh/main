@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import seedu.address.MainApp;
 import seedu.address.model.EntryBook;
 import seedu.address.model.entry.Entry;
 
@@ -81,6 +82,22 @@ public class TypicalEntries {
             .withPhone("Comment place-holder")
             .withEmail("https://hans.example.com")
             .withAddress("chicago ave")
+            .build();
+
+    // Must have valid link
+    public static final Entry VALID_LINK = new EntryBuilder()
+            .withName("Valid Link")
+            .withPhone("Valid link")
+            .withEmail("file://"
+                    + MainApp.class.getResource("/view/BrowserPanelTest/default.html").toExternalForm().substring(5))
+            .withAddress("Valid link")
+            .build();
+    // Must have invalid link
+    public static final Entry INVALID_LINK = new EntryBuilder()
+            .withName("Invalid Link")
+            .withPhone("Invalid link")
+            .withEmail("file:///folder/file.type")
+            .withAddress("Invalid link")
             .build();
 
     // Manually added - Entry's details found in {@code CommandTestUtil}
