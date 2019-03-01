@@ -19,6 +19,8 @@ import seedu.address.storage.UserPrefsStorage;
 import seedu.address.testutil.TestUtil;
 import systemtests.ModelHelper;
 
+import seedu.address.logic.commands.CommandResult;
+
 /**
  * This class is meant to override some properties of MainApp so that it will be suited for
  * testing
@@ -95,6 +97,22 @@ public class TestApp extends MainApp {
         Model copy = new ModelManager((model.getAddressBook()), new UserPrefs());
         ModelHelper.setFilteredList(copy, model.getFilteredPersonList());
         return copy;
+    }
+
+    /**
+     * Sets the command result in the app.
+     * @param commandResult command result to set
+     */
+    public void setCommandResult(CommandResult commandResult) {
+        model.setCommandResult(commandResult);
+    }
+
+    /**
+     * Sets the exception in the app.
+     * @param e exception to set
+     */
+    public void setException(Exception e) {
+        model.setException(e);
     }
 
     @Override
