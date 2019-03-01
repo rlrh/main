@@ -232,7 +232,7 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Processes a propagated exception.
+     * Processes a propagated manually set exception.
      */
     private void processManualFailure(Exception e) {
         logger.info("Operation failed: " + e.getMessage());
