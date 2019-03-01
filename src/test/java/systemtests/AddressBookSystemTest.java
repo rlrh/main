@@ -31,6 +31,7 @@ import guitests.guihandles.StatusBarFooterHandle;
 import seedu.address.TestApp;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SelectCommand;
@@ -305,5 +306,21 @@ public abstract class AddressBookSystemTest {
      */
     protected Model getModel() {
         return testApp.getModel();
+    }
+
+    /**
+     * Sets the command result in the app.
+     * @param commandResult command result to set
+     */
+    protected void setCommandResultInApp(CommandResult commandResult) {
+        testApp.setCommandResult(commandResult);
+    }
+
+    /**
+     * Sets the exception in the app.
+     * @param e exception to set
+     */
+    protected void setExceptionInApp(Exception e) {
+        testApp.setException(e);
     }
 }

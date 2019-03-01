@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
@@ -99,9 +100,27 @@ public class LogicManagerTest {
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedEntry);
         expectedModel.commitAddressBook();
-        String expectedMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
-        assertCommandBehavior(CommandException.class, addCommand, expectedMessage, expectedModel);
+        String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
+        String expectedFinalMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
+        assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
+        assertManualExceptionPropagated(CommandException.class, expectedFinalMessage);
         assertHistoryCorrect(addCommand);
+    }
+
+    @Test
+    public void execute_manualCommandResultSet_success() {
+        String expectedMessage = "Command result successfully set manually";
+        CommandResult result = new CommandResult(expectedMessage);
+        logic.setCommandResult(result);
+        assertManualCommandResultSet(expectedMessage);
+    }
+
+    @Test
+    public void execute_manualExceptionPropagated_failure() {
+        String expectedMessage = "Exception successfully set manually";
+        Exception exception = new Exception(expectedMessage);
+        logic.setException(exception);
+        assertManualExceptionPropagated(Exception.class, expectedMessage);
     }
 
     @Test
@@ -163,6 +182,25 @@ public class LogicManagerTest {
         }
 
         assertEquals(expectedModel, model);
+    }
+
+    /**
+     * For manually set command result, confirms that the result message is correct.
+     * Exception can be propagated from previous commands so it cannot be checked.
+     */
+    private void assertManualCommandResultSet(String expectedMessage) {
+        assertNotNull(model.getCommandResult());
+        assertEquals(expectedMessage, model.getCommandResult().getFeedbackToUser());
+    }
+
+    /**
+     * For manually set exception, confirms that the expected exception is propagated.
+     * Command result can be propagated from previous commands so it cannot be checked.
+     */
+    private void assertManualExceptionPropagated(Class<?> expectedException, String expectedMessage) {
+        assertNotNull(model.getException());
+        assertEquals(expectedException, model.getException().getClass());
+        assertEquals(expectedMessage, model.getException().getMessage());
     }
 
     /**

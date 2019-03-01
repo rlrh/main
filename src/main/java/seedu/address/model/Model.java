@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.entry.Entry;
 
 /**
@@ -127,4 +128,39 @@ public interface Model {
      * Sets the selected entry in the filtered entry list.
      */
     void setSelectedPerson(Entry entry);
+
+    /**
+     * Propagated exception.
+     * null if no exception.
+     */
+    ReadOnlyProperty<Exception> exceptionProperty();
+
+    /**
+     * Returns the propagated exception.
+     * null if no exception.
+     */
+    Exception getException();
+
+    /**
+     * Sets the exception to be propagated.
+     */
+    void setException(Exception exceptionToBePropagated);
+
+    /**
+     * Command result from manual setting.
+     * null if no manually set command result.
+     * FUTURE: Command result from latest command execution or manual setting.
+     */
+    ReadOnlyProperty<CommandResult> commandResultProperty();
+
+    /**
+     * Returns the manually set command result.
+     * null if no manually set command result.
+     */
+    CommandResult getCommandResult();
+
+    /**
+     * Sets the command result manually.
+     */
+    void setCommandResult(CommandResult result);
 }

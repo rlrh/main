@@ -29,7 +29,6 @@ public class LogicManager implements Logic {
     private final Storage storage;
     private final CommandHistory history;
     private final EntryBookParser entryBookParser;
-    private boolean addressBookModified;
 
     public LogicManager(Model model, Storage storage) {
         this.model = model;
@@ -37,14 +36,21 @@ public class LogicManager implements Logic {
         history = new CommandHistory();
         entryBookParser = new EntryBookParser();
 
-        // Set addressBookModified to true whenever the models' address book is modified.
-        model.getAddressBook().addListener(observable -> addressBookModified = true);
+        // Save the models' address book to storage whenever it is modified.
+        // In future, this can be moved to Model, but currently Model does not have a reference to Storage.
+        model.getAddressBook().addListener(observable -> {
+            logger.info("Address book modified, saving to file.");
+            try {
+                storage.saveAddressBook(model.getAddressBook());
+            } catch (IOException ioe) {
+                model.setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+            }
+        });
     }
 
     @Override
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
-        addressBookModified = false;
 
         CommandResult commandResult;
         try {
@@ -52,15 +58,6 @@ public class LogicManager implements Logic {
             commandResult = command.execute(model, history);
         } finally {
             history.add(commandText);
-        }
-
-        if (addressBookModified) {
-            logger.info("Address book modified, saving to file.");
-            try {
-                storage.saveAddressBook(model.getAddressBook());
-            } catch (IOException ioe) {
-                throw new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe);
-            }
         }
 
         return commandResult;
@@ -105,4 +102,25 @@ public class LogicManager implements Logic {
     public void setSelectedPerson(Entry entry) {
         model.setSelectedPerson(entry);
     }
+
+    @Override
+    public ReadOnlyProperty<Exception> exceptionProperty() {
+        return model.exceptionProperty();
+    }
+
+    @Override
+    public void setException(Exception exception) {
+        model.setException(exception);
+    }
+
+    @Override
+    public ReadOnlyProperty<CommandResult> commandResultProperty() {
+        return model.commandResultProperty();
+    }
+
+    @Override
+    public void setCommandResult(CommandResult commandResult) {
+        model.setCommandResult(commandResult);
+    }
+
 }

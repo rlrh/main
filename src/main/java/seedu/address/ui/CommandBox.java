@@ -99,13 +99,27 @@ public class CommandBox extends UiPart<Region> {
     private void handleCommandEntered() {
         try {
             commandExecutor.execute(commandTextField.getText());
-            initHistory();
-            historySnapshot.next();
-            commandTextField.setText("");
+            processCommandSuccess();
         } catch (CommandException | ParseException e) {
-            initHistory();
-            setStyleToIndicateCommandFailure();
+            processCommandFailure();
         }
+    }
+
+    /**
+     * Processes a command success.
+     */
+    public void processCommandSuccess() {
+        initHistory();
+        historySnapshot.next();
+        commandTextField.setText("");
+    }
+
+    /**
+     * Processes a command failure.
+     */
+    public void processCommandFailure() {
+        initHistory();
+        setStyleToIndicateCommandFailure();
     }
 
     /**

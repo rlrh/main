@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import seedu.address.commons.core.Config;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.exceptions.DataConversionException;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -95,6 +96,22 @@ public class TestApp extends MainApp {
         Model copy = new ModelManager((model.getAddressBook()), new UserPrefs());
         ModelHelper.setFilteredList(copy, model.getFilteredPersonList());
         return copy;
+    }
+
+    /**
+     * Sets the command result in the app.
+     * @param commandResult command result to set
+     */
+    public void setCommandResult(CommandResult commandResult) {
+        model.setCommandResult(commandResult);
+    }
+
+    /**
+     * Sets the exception in the app.
+     * @param e exception to set
+     */
+    public void setException(Exception e) {
+        model.setException(e);
     }
 
     @Override

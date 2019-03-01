@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 
@@ -27,7 +28,10 @@ public class ModelManager implements Model {
     private final VersionedEntryBook versionedAddressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Entry> filteredEntries;
+
     private final SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -182,6 +186,28 @@ public class ModelManager implements Model {
         }
         selectedPerson.setValue(entry);
     }
+
+    //=========== Exception propagation ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<Exception> exceptionProperty() { return exception; }
+
+    @Override
+    public Exception getException() { return exception.getValue(); }
+
+    @Override
+    public void setException(Exception exceptionToBePropagated) { exception.setValue(exceptionToBePropagated); }
+
+    //=========== Command result ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<CommandResult> commandResultProperty() { return commandResult; }
+
+    @Override
+    public CommandResult getCommandResult() { return commandResult.getValue(); }
+
+    @Override
+    public void setCommandResult(CommandResult result) { commandResult.setValue(result); }
 
     /**
      * Ensures {@code selectedPerson} is a valid entry in {@code filteredEntries}.

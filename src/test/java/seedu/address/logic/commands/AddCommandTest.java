@@ -201,6 +201,36 @@ public class AddCommandTest {
         public void setSelectedPerson(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public ReadOnlyProperty<Exception> exceptionProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Exception getException() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setException(Exception exceptionToBePropagated) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyProperty<CommandResult> commandResultProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public CommandResult getCommandResult() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setCommandResult(CommandResult result) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
