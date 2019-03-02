@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.entry.Entry;
+import seedu.address.storage.Storage;
 
 /**
  * The API of the Model component.
@@ -25,6 +26,11 @@ public interface Model {
      * Returns the user prefs.
      */
     ReadOnlyUserPrefs getUserPrefs();
+
+    /**
+     * Gets the storage backing this model.
+     */
+    Storage getStorage();
 
     /**
      * Returns the user prefs' GUI settings.
@@ -168,4 +174,11 @@ public interface Model {
      * Sets the command result manually.
      */
     void setCommandResult(CommandResult result);
+
+    /**
+     * Makes a copy of the model.
+     *
+     * Mainly created because clone is needed a lot in tests.
+     */
+    Model clone();
 }

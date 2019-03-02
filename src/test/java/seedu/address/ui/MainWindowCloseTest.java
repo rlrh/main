@@ -16,7 +16,9 @@ import guitests.guihandles.StageHandle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import seedu.address.logic.LogicManager;
+import seedu.address.model.EntryBook;
 import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
 import seedu.address.storage.JsonEntryBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
@@ -39,7 +41,8 @@ public class MainWindowCloseTest extends GuiUnitTest {
         StorageManager storageManager = new StorageManager(jsonAddressBookStorage, jsonUserPrefsStorage);
         FxToolkit.setupStage(stage -> {
             this.stage = stage;
-            mainWindow = new MainWindow(stage, new LogicManager(new ModelManager(), storageManager));
+            mainWindow = new MainWindow(stage, new LogicManager(
+                    new ModelManager(new EntryBook(), new UserPrefs(), storageManager)));
             mainWindowHandle = new EmptyMainWindowHandle(stage);
             mainWindowHandle.focus();
         });

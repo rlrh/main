@@ -3,6 +3,7 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -16,13 +17,17 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
+import seedu.address.storage.Storage;
 
 /**
  * Represents the in-memory model of the address book data.
  */
 public class ModelManager implements Model {
+    public static final String FILE_OPS_ERROR_MESSAGE = "Could not save data to file: ";
+
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
     private final VersionedEntryBook versionedAddressBook;
@@ -32,11 +37,12 @@ public class ModelManager implements Model {
     private final SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
+    private final Storage storage;
 
     /**
-     * Initializes a ModelManager with the given addressBook and userPrefs.
+     * Initializes a ModelManager with the given addressBook, userPrefs, and storage
      */
-    public ModelManager(ReadOnlyEntryBook addressBook, ReadOnlyUserPrefs userPrefs) {
+    public ModelManager(ReadOnlyEntryBook addressBook, ReadOnlyUserPrefs userPrefs, Storage storage) {
         super();
         requireAllNonNull(addressBook, userPrefs);
 
@@ -46,10 +52,18 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredEntries = new FilteredList<>(versionedAddressBook.getPersonList());
         filteredEntries.addListener(this::ensureSelectedPersonIsValid);
-    }
 
-    public ModelManager() {
-        this(new EntryBook(), new UserPrefs());
+        this.storage = storage;
+
+        // Save the models' address book to storage whenever it is modified.
+        versionedAddressBook.addListener(observable -> {
+            logger.info("Address book modified, saving to file.");
+            try {
+                storage.saveAddressBook(versionedAddressBook);
+            } catch (IOException ioe) {
+                setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+            }
+        });
     }
 
     //=========== UserPrefs ==================================================================================
@@ -126,6 +140,13 @@ public class ModelManager implements Model {
     @Override
     public void clearEntryBook() {
         versionedAddressBook.clear();
+    }
+
+    //=========== Storage ===================================================================================
+
+    @Override
+    public Storage getStorage() {
+        return storage;
     }
 
     //=========== Filtered Entry List Accessors =============================================================
@@ -273,6 +294,11 @@ public class ModelManager implements Model {
                 && userPrefs.equals(other.userPrefs)
                 && filteredEntries.equals(other.filteredEntries)
                 && Objects.equals(selectedPerson.get(), other.selectedPerson.get());
+    }
+
+    @Override
+    public Model clone() {
+        return new ModelManager(this.versionedAddressBook, this.userPrefs, this.storage);
     }
 
 }

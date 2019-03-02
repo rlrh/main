@@ -24,6 +24,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.entry.Entry;
+import seedu.address.storage.Storage;
 import seedu.address.testutil.EntryBuilder;
 
 public class AddCommandTest {
@@ -103,6 +104,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public Storage getStorage() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public GuiSettings getGuiSettings() {
             throw new AssertionError("This method should not be called.");
         }
@@ -149,6 +155,11 @@ public class AddCommandTest {
 
         @Override
         public void setPerson(Entry target, Entry editedEntry) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearEntryBook() {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -230,6 +241,11 @@ public class AddCommandTest {
         @Override
         public void setCommandResult(CommandResult result) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Model clone() {
+            return this;
         }
     }
 

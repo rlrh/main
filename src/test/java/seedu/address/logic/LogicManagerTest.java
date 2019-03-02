@@ -25,6 +25,8 @@ import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.mocks.StorageStub;
+import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyEntryBook;
@@ -45,7 +47,7 @@ public class LogicManagerTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private Model model = new ModelManager();
+    private Model model;
     private Logic logic;
 
     @Before
@@ -53,7 +55,8 @@ public class LogicManagerTest {
         JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
-        logic = new LogicManager(model, storage);
+        model = new ModelManager(new EntryBook(), new UserPrefs(), storage);
+        logic = new LogicManager(model);
     }
 
     @Test
@@ -91,17 +94,22 @@ public class LogicManagerTest {
                 new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
-        logic = new LogicManager(model, storage);
+        model = new ModelManager(model.getAddressBook(), model.getUserPrefs(), storage);
+        logic = new LogicManager(model);
 
         // Execute add command
         String addCommand = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + LINK_DESC_AMY
                 + ADDRESS_DESC_AMY;
         Entry expectedEntry = new EntryBuilder(AMY).withTags().build();
-        ModelManager expectedModel = new ModelManager();
+        Model expectedModel = new ModelManager(
+                new EntryBook(),
+                new UserPrefs(),
+                new StorageStub()
+        );
         expectedModel.addPerson(expectedEntry);
         expectedModel.commitAddressBook();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
-        String expectedFinalMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
+        String expectedFinalMessage = ModelManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
         assertManualExceptionPropagated(CommandException.class, expectedFinalMessage);
         assertHistoryCorrect(addCommand);
@@ -159,7 +167,7 @@ public class LogicManagerTest {
      * @see #assertCommandBehavior(Class, String, String, Model)
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getAddressBook(), model.getUserPrefs(), model.getStorage());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 

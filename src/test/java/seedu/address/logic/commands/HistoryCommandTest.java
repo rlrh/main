@@ -5,13 +5,24 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import org.junit.Test;
 
 import seedu.address.logic.CommandHistory;
+import seedu.address.mocks.StorageStub;
+import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
 
 public class HistoryCommandTest {
     private CommandHistory history = new CommandHistory();
-    private Model model = new ModelManager();
-    private Model expectedModel = new ModelManager();
+    private Model model = new ModelManager(
+            new EntryBook(),
+            new UserPrefs(),
+            new StorageStub()
+    );
+    private Model expectedModel = new ModelManager(
+            new EntryBook(),
+            new UserPrefs(),
+            new StorageStub()
+    );
 
     @Test
     public void execute() {

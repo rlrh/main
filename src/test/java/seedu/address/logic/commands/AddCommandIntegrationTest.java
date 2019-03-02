@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import seedu.address.logic.CommandHistory;
+import seedu.address.mocks.StorageStub;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -24,14 +25,14 @@ public class AddCommandIntegrationTest {
 
     @Before
     public void setUp() {
-        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new StorageStub());
     }
 
     @Test
     public void execute_newPerson_success() {
         Entry validEntry = new EntryBuilder().build();
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), new StorageStub());
         expectedModel.addPerson(validEntry);
         expectedModel.commitAddressBook();
 
