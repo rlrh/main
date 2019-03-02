@@ -2,8 +2,7 @@ package seedu.address.network;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.http.client.fluent.Request;
+import java.net.URL;
 
 /**
  * Manager of Network component
@@ -16,10 +15,7 @@ public abstract class Network {
      * @throws IOException
      */
     public static InputStream fetchAsStream(String url) throws IOException {
-        return Request.Get(url)
-                .execute()
-                .returnContent()
-                .asStream();
+        return new URL(url).openStream();
     }
 
     /**
@@ -29,9 +25,6 @@ public abstract class Network {
      * @throws IOException
      */
     public static String fetchAsString(String url) throws IOException {
-        return Request.Get(url)
-                .execute()
-                .returnContent()
-                .asString();
+        return new URL(url).openStream().toString();
     }
 }
