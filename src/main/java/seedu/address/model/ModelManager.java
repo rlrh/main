@@ -123,6 +123,11 @@ public class ModelManager implements Model {
         versionedAddressBook.setPerson(target, editedEntry);
     }
 
+    @Override
+    public void clearEntryBook() {
+        versionedAddressBook.clear();
+    }
+
     //=========== Filtered Entry List Accessors =============================================================
 
     /**

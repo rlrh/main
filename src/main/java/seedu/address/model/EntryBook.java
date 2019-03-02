@@ -100,6 +100,15 @@ public class EntryBook implements ReadOnlyEntryBook {
         indicateModified();
     }
 
+    /**
+     * Adds a entry to the address book.
+     * The entry must not already exist in the address book.
+     */
+    public void clear() {
+        resetData(new EntryBook());
+        indicateModified();
+    }
+
     @Override
     public void addListener(InvalidationListener listener) {
         invalidationListenerManager.addListener(listener);

@@ -78,6 +78,11 @@ public interface Model {
      */
     void setPerson(Entry target, Entry editedEntry);
 
+    /**
+     * Clears the entire entry book.
+     */
+    void clearEntryBook();
+
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredPersonList();
 
