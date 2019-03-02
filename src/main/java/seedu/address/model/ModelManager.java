@@ -195,24 +195,36 @@ public class ModelManager implements Model {
     //=========== Exception propagation ===========================================================================
 
     @Override
-    public ReadOnlyProperty<Exception> exceptionProperty() { return exception; }
+    public ReadOnlyProperty<Exception> exceptionProperty() {
+        return exception;
+    }
 
     @Override
-    public Exception getException() { return exception.getValue(); }
+    public Exception getException() {
+        return exception.getValue();
+    }
 
     @Override
-    public void setException(Exception exceptionToBePropagated) { exception.setValue(exceptionToBePropagated); }
+    public void setException(Exception exceptionToBePropagated) {
+        exception.setValue(exceptionToBePropagated);
+    }
 
     //=========== Command result ===========================================================================
 
     @Override
-    public ReadOnlyProperty<CommandResult> commandResultProperty() { return commandResult; }
+    public ReadOnlyProperty<CommandResult> commandResultProperty() {
+        return commandResult;
+    }
 
     @Override
-    public CommandResult getCommandResult() { return commandResult.getValue(); }
+    public CommandResult getCommandResult() {
+        return commandResult.getValue();
+    }
 
     @Override
-    public void setCommandResult(CommandResult result) { commandResult.setValue(result); }
+    public void setCommandResult(CommandResult result) {
+        commandResult.setValue(result);
+    }
 
     /**
      * Ensures {@code selectedPerson} is a valid entry in {@code filteredEntries}.
