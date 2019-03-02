@@ -47,8 +47,6 @@ public class NetworkTest {
     @Test
     public void fetchAsString_success() {
         try {
-            String s = fetchAsString("https://se-education.org/");
-            assertTrue(s.length() > 0);
             String httpsContent = fetchAsString("https://se-education.org/");
             assertTrue(httpsContent.length() > 0);
 

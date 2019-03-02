@@ -25,6 +25,6 @@ public abstract class Network {
      * @throws IOException
      */
     public static String fetchAsString(String url) throws IOException {
-        return new URL(url).openStream().toString();
+        return new String(new URL(url).openStream().readAllBytes(), "utf-8");
     }
 }
