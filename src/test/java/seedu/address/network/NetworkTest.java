@@ -1,5 +1,7 @@
 package seedu.address.network;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static seedu.address.network.Network.fetchAsStream;
@@ -28,8 +30,11 @@ public class NetworkTest {
         assertTrue(httpContent.readAllBytes().length > 0);
 
         InputStream localContent = fetchAsStream(MainApp.class.getResource(
-                "/view/BrowserPanelTest/default.html").toExternalForm());
-        assertTrue(localContent.readAllBytes().length > 0);
+                "/view/NetworkTest/default.html").toExternalForm());
+        byte[] localContentBytes = localContent.readAllBytes();
+        assertTrue(localContentBytes.length > 0);
+
+        assertArrayEquals(localContentBytes, "<!DOCTYPE html>\n<html>\n</html>\n".getBytes());
     }
 
     @Test
@@ -54,8 +59,10 @@ public class NetworkTest {
             assertTrue(httpContent.length() > 0);
 
             String localContent = fetchAsString(
-                    MainApp.class.getResource("/view/BrowserPanelTest/default.html").toExternalForm());
+                    MainApp.class.getResource("/view/NetworkTest/default.html").toExternalForm());
             assertTrue(localContent.length() > 0);
+
+            assertEquals(localContent, "<!DOCTYPE html>\n<html>\n</html>\n");
         } catch (IOException e) {
             fail("Fetching valid URL failed.");
         }
