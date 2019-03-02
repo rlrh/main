@@ -9,6 +9,7 @@ import static seedu.address.network.Network.fetchAsString;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,20 +22,23 @@ public class NetworkTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    private String localTestContents = "<!DOCTYPE html>\n<html>\n</html>\n";
+
     @Test
     public void fetchAsStream_success() throws IOException {
-        InputStream httpsContent = fetchAsStream("https://se-education.org/");
-        assertTrue(httpsContent.readAllBytes().length > 0);
+        InputStream httpsContent = fetchAsStream("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/");
+        byte[] httpsContentBytes = httpsContent.readAllBytes();
+        assertTrue(httpsContentBytes.length > 0);
+        assertTrue(new String(httpsContentBytes, StandardCharsets.UTF_8).contains("<p>It works!</p>"));
 
-        InputStream httpContent = fetchAsStream("http://se-education.org/");
+        InputStream httpContent = fetchAsStream("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/");
         assertTrue(httpContent.readAllBytes().length > 0);
 
         InputStream localContent = fetchAsStream(MainApp.class.getResource(
                 "/view/NetworkTest/default.html").toExternalForm());
         byte[] localContentBytes = localContent.readAllBytes();
         assertTrue(localContentBytes.length > 0);
-
-        assertArrayEquals(localContentBytes, "<!DOCTYPE html>\n<html>\n</html>\n".getBytes());
+        assertArrayEquals(localContentBytes, localTestContents.getBytes());
     }
 
     @Test
@@ -52,17 +56,18 @@ public class NetworkTest {
     @Test
     public void fetchAsString_success() {
         try {
-            String httpsContent = fetchAsString("https://se-education.org/");
+            String httpsContent = fetchAsString("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/");
             assertTrue(httpsContent.length() > 0);
+            assertTrue(httpsContent.contains("<p>It works!</p>"));
 
-            String httpContent = fetchAsString("http://se-education.org/");
+            String httpContent = fetchAsString("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/");
             assertTrue(httpContent.length() > 0);
 
             String localContent = fetchAsString(
                     MainApp.class.getResource("/view/NetworkTest/default.html").toExternalForm());
             assertTrue(localContent.length() > 0);
 
-            assertEquals(localContent, "<!DOCTYPE html>\n<html>\n</html>\n");
+            assertEquals(localContent, localTestContents);
         } catch (IOException e) {
             fail("Fetching valid URL failed.");
         }
