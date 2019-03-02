@@ -24,7 +24,9 @@ public class StorageStub implements Storage {
     }
 
     @Override
-    public void saveUserPrefs(ReadOnlyUserPrefs userPrefs) { }
+    public void saveUserPrefs(ReadOnlyUserPrefs userPrefs) {
+        // Do nothing
+    }
 
     @Override
     public Path getAddressBookFilePath() {
@@ -42,9 +44,13 @@ public class StorageStub implements Storage {
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook) { }
+    public void saveAddressBook(ReadOnlyEntryBook addressBook) {
+        // Do nothing
+    }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) { }
+    public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) {
+        // Do nothing
+    }
 
 }
