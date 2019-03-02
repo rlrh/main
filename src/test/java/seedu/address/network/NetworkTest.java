@@ -27,8 +27,8 @@ public class NetworkTest {
         InputStream httpContent = fetchAsStream("http://se-education.org/");
         assertTrue(httpContent.readAllBytes().length > 0);
 
-        InputStream localContent = fetchAsStream("file://"
-            + MainApp.class.getResource("/view/BrowserPanelTest/default.html").toExternalForm().substring(5));
+        InputStream localContent = fetchAsStream(MainApp.class.getResource(
+                "/view/BrowserPanelTest/default.html").toExternalForm());
         assertTrue(localContent.readAllBytes().length > 0);
     }
 
@@ -55,8 +55,8 @@ public class NetworkTest {
             String httpContent = fetchAsString("http://se-education.org/");
             assertTrue(httpContent.length() > 0);
 
-            String localContent = fetchAsString("file://"
-                + MainApp.class.getResource("/view/BrowserPanelTest/default.html").toExternalForm().substring(5));
+            String localContent = fetchAsString(
+                    MainApp.class.getResource("/view/BrowserPanelTest/default.html").toExternalForm());
             assertTrue(localContent.length() > 0);
         } catch (IOException e) {
             fail("Fetching valid URL failed.");
