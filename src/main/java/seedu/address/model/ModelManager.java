@@ -30,7 +30,7 @@ public class ModelManager implements Model {
 
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private final VersionedEntryBook versionedAddressBook;
+    private final VersionedEntryBook versionedEntryBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Entry> filteredEntries;
 
@@ -48,18 +48,18 @@ public class ModelManager implements Model {
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
-        versionedAddressBook = new VersionedEntryBook(addressBook);
+        versionedEntryBook = new VersionedEntryBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredEntries = new FilteredList<>(versionedAddressBook.getPersonList());
+        filteredEntries = new FilteredList<>(versionedEntryBook.getPersonList());
         filteredEntries.addListener(this::ensureSelectedPersonIsValid);
 
         this.storage = storage;
 
         // Save the models' address book to storage whenever it is modified.
-        versionedAddressBook.addListener(observable -> {
+        versionedEntryBook.addListener(observable -> {
             logger.info("Address book modified, saving to file.");
             try {
-                storage.saveAddressBook(versionedAddressBook);
+                storage.saveAddressBook(versionedEntryBook);
             } catch (IOException ioe) {
                 setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
             }
@@ -105,28 +105,28 @@ public class ModelManager implements Model {
 
     @Override
     public void setAddressBook(ReadOnlyEntryBook addressBook) {
-        versionedAddressBook.resetData(addressBook);
+        versionedEntryBook.resetData(addressBook);
     }
 
     @Override
     public ReadOnlyEntryBook getAddressBook() {
-        return versionedAddressBook;
+        return versionedEntryBook;
     }
 
     @Override
     public boolean hasPerson(Entry entry) {
         requireNonNull(entry);
-        return versionedAddressBook.hasPerson(entry);
+        return versionedEntryBook.hasPerson(entry);
     }
 
     @Override
     public void deletePerson(Entry target) {
-        versionedAddressBook.removePerson(target);
+        versionedEntryBook.removePerson(target);
     }
 
     @Override
     public void addPerson(Entry entry) {
-        versionedAddressBook.addPerson(entry);
+        versionedEntryBook.addPerson(entry);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
@@ -134,12 +134,12 @@ public class ModelManager implements Model {
     public void setPerson(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
-        versionedAddressBook.setPerson(target, editedEntry);
+        versionedEntryBook.setPerson(target, editedEntry);
     }
 
     @Override
     public void clearEntryBook() {
-        versionedAddressBook.clear();
+        versionedEntryBook.clear();
     }
 
     //=========== Storage ===================================================================================
@@ -153,7 +153,7 @@ public class ModelManager implements Model {
 
     /**
      * Returns an unmodifiable view of the list of {@code Entry} backed by the internal list of
-     * {@code versionedAddressBook}
+     * {@code versionedEntryBook}
      */
     @Override
     public ObservableList<Entry> getFilteredPersonList() {
@@ -170,27 +170,27 @@ public class ModelManager implements Model {
 
     @Override
     public boolean canUndoAddressBook() {
-        return versionedAddressBook.canUndo();
+        return versionedEntryBook.canUndo();
     }
 
     @Override
     public boolean canRedoAddressBook() {
-        return versionedAddressBook.canRedo();
+        return versionedEntryBook.canRedo();
     }
 
     @Override
     public void undoAddressBook() {
-        versionedAddressBook.undo();
+        versionedEntryBook.undo();
     }
 
     @Override
     public void redoAddressBook() {
-        versionedAddressBook.redo();
+        versionedEntryBook.redo();
     }
 
     @Override
     public void commitAddressBook() {
-        versionedAddressBook.commit();
+        versionedEntryBook.commit();
     }
 
     //=========== Selected entry ===========================================================================
@@ -290,7 +290,7 @@ public class ModelManager implements Model {
 
         // state check
         ModelManager other = (ModelManager) obj;
-        return versionedAddressBook.equals(other.versionedAddressBook)
+        return versionedEntryBook.equals(other.versionedEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredEntries.equals(other.filteredEntries)
                 && Objects.equals(selectedPerson.get(), other.selectedPerson.get());
@@ -298,7 +298,7 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        return new ModelManager(this.versionedAddressBook, this.userPrefs, this.storage);
+        return new ModelManager(this.versionedEntryBook, this.userPrefs, this.storage);
     }
 
 }
