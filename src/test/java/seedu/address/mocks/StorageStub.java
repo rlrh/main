@@ -53,4 +53,18 @@ public class StorageStub implements Storage {
         // Do nothing
     }
 
+    @Override
+    public Path getArticleDataDirectoryPath() {
+        return null;
+    }
+
+    @Override
+    public void addArticle(String url, byte[] content) {
+        // Do nothing
+    }
+
+    @Override
+    public Path getArticlePath(String url) {
+        return null;
+    }
 }

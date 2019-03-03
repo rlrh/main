@@ -22,6 +22,8 @@ import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
+import seedu.address.storage.ArticleStorage;
+import seedu.address.storage.DataDirectoryArticleStorage;
 import seedu.address.storage.EntryBookStorage;
 import seedu.address.storage.JsonEntryBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
@@ -57,7 +59,8 @@ public class MainApp extends Application {
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         EntryBookStorage entryBookStorage = new JsonEntryBookStorage(userPrefs.getAddressBookFilePath());
-        storage = new StorageManager(entryBookStorage, userPrefsStorage);
+        ArticleStorage articleStorage = new DataDirectoryArticleStorage(userPrefs.getArticleDataDirectoryPath());
+        storage = new StorageManager(entryBookStorage, userPrefsStorage, articleStorage);
 
         initLogging(config);
 
