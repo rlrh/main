@@ -57,7 +57,7 @@ public class ModelManager implements Model {
         this.storage = storage;
 
         // Save the entry book to storage whenever it is modified.
-        versionedEntryBook.addListener(this::ensureStorageSaved);
+        versionedEntryBook.addListener(this::saveToStorageListener);
     }
 
     //=========== UserPrefs ==================================================================================
@@ -273,7 +273,7 @@ public class ModelManager implements Model {
     /**
      * Ensures that storage is updated whenever entry book is modified.
      */
-    private void ensureStorageSaved(Observable observable) {
+    private void saveToStorageListener(Observable observable) {
         logger.info("Address book modified, saving to file.");
         try {
             storage.saveAddressBook(versionedEntryBook);
