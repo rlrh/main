@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.mocks.ModelManagerStub;
 import seedu.address.mocks.StorageStub;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
@@ -31,11 +32,7 @@ public class ModelManagerTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private ModelManager modelManager = new ModelManager(
-            new EntryBook(),
-            new UserPrefs(),
-            new StorageStub()
-    );
+    private ModelManager modelManager = new ModelManagerStub();
 
     @Test
     public void constructor() {

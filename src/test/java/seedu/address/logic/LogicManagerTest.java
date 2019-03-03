@@ -25,7 +25,7 @@ import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.mocks.StorageStub;
+import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -101,11 +101,7 @@ public class LogicManagerTest {
         String addCommand = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + LINK_DESC_AMY
                 + ADDRESS_DESC_AMY;
         Entry expectedEntry = new EntryBuilder(AMY).withTags().build();
-        Model expectedModel = new ModelManager(
-                new EntryBook(),
-                new UserPrefs(),
-                new StorageStub()
-        );
+        Model expectedModel = new ModelManagerStub();
         expectedModel.addPerson(expectedEntry);
         expectedModel.commitAddressBook();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);

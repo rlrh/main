@@ -6,6 +6,7 @@ import static seedu.address.testutil.TypicalEntries.getTypicalAddressBook;
 import org.junit.Test;
 
 import seedu.address.logic.CommandHistory;
+import seedu.address.mocks.ModelManagerStub;
 import seedu.address.mocks.StorageStub;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
@@ -18,16 +19,8 @@ public class ClearCommandTest {
 
     @Test
     public void execute_emptyAddressBook_success() {
-        Model model = new ModelManager(
-                new EntryBook(),
-                new UserPrefs(),
-                new StorageStub()
-        );
-        Model expectedModel = new ModelManager(
-                new EntryBook(),
-                new UserPrefs(),
-                new StorageStub()
-        );
+        Model model = new ModelManagerStub();
+        Model expectedModel = new ModelManagerStub();
         expectedModel.commitAddressBook();
 
         assertCommandSuccess(new ClearCommand(), model, commandHistory, ClearCommand.MESSAGE_SUCCESS, expectedModel);
