@@ -6,12 +6,12 @@ import static seedu.address.logic.commands.HelpCommand.SHOWING_HELP_MESSAGE;
 import org.junit.Test;
 
 import seedu.address.logic.CommandHistory;
+import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
 
 public class HelpCommandTest {
-    private Model model = new ModelManager();
-    private Model expectedModel = new ModelManager();
+    private Model model = new ModelManagerStub();
+    private Model expectedModel = new ModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
 
     @Test

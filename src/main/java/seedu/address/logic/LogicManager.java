@@ -1,6 +1,5 @@
 package seedu.address.logic;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -16,36 +15,21 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.entry.Entry;
-import seedu.address.storage.Storage;
 
 /**
  * The main LogicManager of the app.
  */
 public class LogicManager implements Logic {
-    public static final String FILE_OPS_ERROR_MESSAGE = "Could not save data to file: ";
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     private final Model model;
-    private final Storage storage;
     private final CommandHistory history;
     private final EntryBookParser entryBookParser;
 
-    public LogicManager(Model model, Storage storage) {
+    public LogicManager(Model model) {
         this.model = model;
-        this.storage = storage;
         history = new CommandHistory();
         entryBookParser = new EntryBookParser();
-
-        // Save the models' address book to storage whenever it is modified.
-        // In future, this can be moved to Model, but currently Model does not have a reference to Storage.
-        model.getAddressBook().addListener(observable -> {
-            logger.info("Address book modified, saving to file.");
-            try {
-                storage.saveAddressBook(model.getAddressBook());
-            } catch (IOException ioe) {
-                model.setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
-            }
-        });
     }
 
     @Override

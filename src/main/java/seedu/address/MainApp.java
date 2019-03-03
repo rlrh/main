@@ -63,7 +63,7 @@ public class MainApp extends Application {
 
         model = initModelManager(storage, userPrefs);
 
-        logic = new LogicManager(model, storage);
+        logic = new LogicManager(model);
 
         ui = new UiManager(logic);
     }
@@ -90,7 +90,7 @@ public class MainApp extends Application {
             initialData = new EntryBook();
         }
 
-        return new ModelManager(initialData, userPrefs);
+        return new ModelManager(initialData, userPrefs, storage);
     }
 
     private void initLogging(Config config) {

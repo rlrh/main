@@ -3,11 +3,13 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
@@ -16,40 +18,46 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
+import seedu.address.storage.Storage;
 
 /**
  * Represents the in-memory model of the address book data.
  */
 public class ModelManager implements Model {
+    public static final String FILE_OPS_ERROR_MESSAGE = "Could not save data to file: ";
+
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private final VersionedEntryBook versionedAddressBook;
+    private final VersionedEntryBook versionedEntryBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Entry> filteredEntries;
 
     private final SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
+    private final Storage storage;
 
     /**
-     * Initializes a ModelManager with the given addressBook and userPrefs.
+     * Initializes a ModelManager with the given addressBook, userPrefs, and storage
      */
-    public ModelManager(ReadOnlyEntryBook addressBook, ReadOnlyUserPrefs userPrefs) {
+    public ModelManager(ReadOnlyEntryBook addressBook, ReadOnlyUserPrefs userPrefs, Storage storage) {
         super();
         requireAllNonNull(addressBook, userPrefs);
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
-        versionedAddressBook = new VersionedEntryBook(addressBook);
+        versionedEntryBook = new VersionedEntryBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredEntries = new FilteredList<>(versionedAddressBook.getPersonList());
+        filteredEntries = new FilteredList<>(versionedEntryBook.getPersonList());
         filteredEntries.addListener(this::ensureSelectedPersonIsValid);
-    }
 
-    public ModelManager() {
-        this(new EntryBook(), new UserPrefs());
+        this.storage = storage;
+
+        // Save the entry book to storage whenever it is modified.
+        versionedEntryBook.addListener(this::saveToStorageListener);
     }
 
     //=========== UserPrefs ==================================================================================
@@ -91,28 +99,28 @@ public class ModelManager implements Model {
 
     @Override
     public void setAddressBook(ReadOnlyEntryBook addressBook) {
-        versionedAddressBook.resetData(addressBook);
+        versionedEntryBook.resetData(addressBook);
     }
 
     @Override
     public ReadOnlyEntryBook getAddressBook() {
-        return versionedAddressBook;
+        return versionedEntryBook;
     }
 
     @Override
     public boolean hasPerson(Entry entry) {
         requireNonNull(entry);
-        return versionedAddressBook.hasPerson(entry);
+        return versionedEntryBook.hasPerson(entry);
     }
 
     @Override
     public void deletePerson(Entry target) {
-        versionedAddressBook.removePerson(target);
+        versionedEntryBook.removePerson(target);
     }
 
     @Override
     public void addPerson(Entry entry) {
-        versionedAddressBook.addPerson(entry);
+        versionedEntryBook.addPerson(entry);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
@@ -120,14 +128,26 @@ public class ModelManager implements Model {
     public void setPerson(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
-        versionedAddressBook.setPerson(target, editedEntry);
+        versionedEntryBook.setPerson(target, editedEntry);
+    }
+
+    @Override
+    public void clearEntryBook() {
+        versionedEntryBook.clear();
+    }
+
+    //=========== Storage ===================================================================================
+
+    @Override
+    public Storage getStorage() {
+        return storage;
     }
 
     //=========== Filtered Entry List Accessors =============================================================
 
     /**
      * Returns an unmodifiable view of the list of {@code Entry} backed by the internal list of
-     * {@code versionedAddressBook}
+     * {@code versionedEntryBook}
      */
     @Override
     public ObservableList<Entry> getFilteredPersonList() {
@@ -144,27 +164,27 @@ public class ModelManager implements Model {
 
     @Override
     public boolean canUndoAddressBook() {
-        return versionedAddressBook.canUndo();
+        return versionedEntryBook.canUndo();
     }
 
     @Override
     public boolean canRedoAddressBook() {
-        return versionedAddressBook.canRedo();
+        return versionedEntryBook.canRedo();
     }
 
     @Override
     public void undoAddressBook() {
-        versionedAddressBook.undo();
+        versionedEntryBook.undo();
     }
 
     @Override
     public void redoAddressBook() {
-        versionedAddressBook.redo();
+        versionedEntryBook.redo();
     }
 
     @Override
     public void commitAddressBook() {
-        versionedAddressBook.commit();
+        versionedEntryBook.commit();
     }
 
     //=========== Selected entry ===========================================================================
@@ -190,24 +210,36 @@ public class ModelManager implements Model {
     //=========== Exception propagation ===========================================================================
 
     @Override
-    public ReadOnlyProperty<Exception> exceptionProperty() { return exception; }
+    public ReadOnlyProperty<Exception> exceptionProperty() {
+        return exception;
+    }
 
     @Override
-    public Exception getException() { return exception.getValue(); }
+    public Exception getException() {
+        return exception.getValue();
+    }
 
     @Override
-    public void setException(Exception exceptionToBePropagated) { exception.setValue(exceptionToBePropagated); }
+    public void setException(Exception exceptionToBePropagated) {
+        exception.setValue(exceptionToBePropagated);
+    }
 
     //=========== Command result ===========================================================================
 
     @Override
-    public ReadOnlyProperty<CommandResult> commandResultProperty() { return commandResult; }
+    public ReadOnlyProperty<CommandResult> commandResultProperty() {
+        return commandResult;
+    }
 
     @Override
-    public CommandResult getCommandResult() { return commandResult.getValue(); }
+    public CommandResult getCommandResult() {
+        return commandResult.getValue();
+    }
 
     @Override
-    public void setCommandResult(CommandResult result) { commandResult.setValue(result); }
+    public void setCommandResult(CommandResult result) {
+        commandResult.setValue(result);
+    }
 
     /**
      * Ensures {@code selectedPerson} is a valid entry in {@code filteredEntries}.
@@ -238,6 +270,18 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Ensures that storage is updated whenever entry book is modified.
+     */
+    private void saveToStorageListener(Observable observable) {
+        logger.info("Address book modified, saving to file.");
+        try {
+            storage.saveAddressBook(versionedEntryBook);
+        } catch (IOException ioe) {
+            setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         // short circuit if same object
@@ -252,10 +296,15 @@ public class ModelManager implements Model {
 
         // state check
         ModelManager other = (ModelManager) obj;
-        return versionedAddressBook.equals(other.versionedAddressBook)
+        return versionedEntryBook.equals(other.versionedEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredEntries.equals(other.filteredEntries)
                 && Objects.equals(selectedPerson.get(), other.selectedPerson.get());
+    }
+
+    @Override
+    public Model clone() {
+        return new ModelManager(this.versionedEntryBook, this.userPrefs, this.storage);
     }
 
 }
