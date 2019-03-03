@@ -123,24 +123,20 @@ public class CommandBox extends UiPart<Region> {
      * Sets the command box style to use the default style.
      */
     private void setStyleToDefault() {
-        Platform.runLater(() -> {
-            commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
-        });
+        commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
     }
 
     /**
      * Sets the command box style to indicate a failed command.
      */
     private void setStyleToIndicateCommandFailure() {
-        Platform.runLater(() -> {
-            ObservableList<String> styleClass = commandTextField.getStyleClass();
+        ObservableList<String> styleClass = commandTextField.getStyleClass();
 
-            if (styleClass.contains(ERROR_STYLE_CLASS)) {
-                return;
-            }
+        if (styleClass.contains(ERROR_STYLE_CLASS)) {
+            return;
+        }
 
-            styleClass.add(ERROR_STYLE_CLASS);
-        });
+        styleClass.add(ERROR_STYLE_CLASS);
     }
 
     /**
