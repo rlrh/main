@@ -132,25 +132,21 @@ public class MainWindow extends UiPart<Stage> {
         //hax0r
 
         this.logic.commandResultProperty().addListener((observable, oldCommandResult, newCommandResult) -> {
-            Platform.runLater(() -> {
-                logger.info("Result: " + newCommandResult.getFeedbackToUser());
-                resultDisplay.setFeedbackSuccessToUser(newCommandResult.getFeedbackToUser());
-                if (newCommandResult.isShowHelp()) {
-                    handleHelp();
-                }
-                if (newCommandResult.isExit()) {
-                    handleExit();
-                }
-            });
+            logger.info("Result: " + newCommandResult.getFeedbackToUser());
+            resultDisplay.setFeedbackSuccessToUser(newCommandResult.getFeedbackToUser());
+            if (newCommandResult.isShowHelp()) {
+                handleHelp();
+            }
+            if (newCommandResult.isExit()) {
+                handleExit();
+            }
 
         });
 
         this.logic.exceptionProperty().addListener((observable, oldException, newException) -> {
-            Platform.runLater(() -> {
-                logger.info("Invalid operation: " + newException.getMessage());
-                resultDisplay.setFeedbackErrorToUser(newException.getMessage());
-                // TODO: need to inform CommandBox somehow
-            });
+            logger.info("Invalid operation: " + newException.getMessage());
+            resultDisplay.setFeedbackErrorToUser(newException.getMessage());
+            // TODO: need to inform CommandBox somehow
         });
     }
 
