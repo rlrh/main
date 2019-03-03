@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
@@ -55,15 +56,8 @@ public class ModelManager implements Model {
 
         this.storage = storage;
 
-        // Save the models' address book to storage whenever it is modified.
-        versionedEntryBook.addListener(observable -> {
-            logger.info("Address book modified, saving to file.");
-            try {
-                storage.saveAddressBook(versionedEntryBook);
-            } catch (IOException ioe) {
-                setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
-            }
-        });
+        // Save the entry book to storage whenever it is modified.
+        versionedEntryBook.addListener(this::ensureStorageSaved);
     }
 
     //=========== UserPrefs ==================================================================================
@@ -273,6 +267,18 @@ public class ModelManager implements Model {
                 // or clear the selection if there is no such entry.
                 selectedPerson.setValue(change.getFrom() > 0 ? change.getList().get(change.getFrom() - 1) : null);
             }
+        }
+    }
+
+    /**
+     * Ensures that storage is updated whenever entry book is modified.
+     */
+    private void ensureStorageSaved(Observable observable) {
+        logger.info("Address book modified, saving to file.");
+        try {
+            storage.saveAddressBook(versionedEntryBook);
+        } catch (IOException ioe) {
+            setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
         }
     }
 
