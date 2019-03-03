@@ -45,19 +45,15 @@ public class ResultDisplay extends UiPart<Region> {
     }
 
     public void setFeedbackErrorToUser(String feedbackToUser) {
-        Platform.runLater(() -> {
-            setStyleToIndicateCommandFailure();
-            requireNonNull(feedbackToUser);
-            resultDisplay.setText(feedbackToUser);
-        });
+        setStyleToIndicateCommandFailure();
+        requireNonNull(feedbackToUser);
+        resultDisplay.setText(feedbackToUser);
     }
 
     public void setFeedbackSuccessToUser(String feedbackToUser) {
-        Platform.runLater(() -> {
-            setStyleToDefault();
-            requireNonNull(feedbackToUser);
-            resultDisplay.setText(feedbackToUser);
-        });
+        setStyleToDefault();
+        requireNonNull(feedbackToUser);
+        resultDisplay.setText(feedbackToUser);
     }
 
 }

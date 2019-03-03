@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
@@ -131,20 +132,25 @@ public class MainWindow extends UiPart<Stage> {
         //hax0r
 
         this.logic.commandResultProperty().addListener((observable, oldCommandResult, newCommandResult) -> {
-            logger.info("Result: " + newCommandResult.getFeedbackToUser());
-            resultDisplay.setFeedbackSuccessToUser(newCommandResult.getFeedbackToUser());
-            if (newCommandResult.isShowHelp()) {
-                handleHelp();
-            }
-            if (newCommandResult.isExit()) {
-                handleExit();
-            }
+            Platform.runLater(() -> {
+                logger.info("Result: " + newCommandResult.getFeedbackToUser());
+                resultDisplay.setFeedbackSuccessToUser(newCommandResult.getFeedbackToUser());
+                if (newCommandResult.isShowHelp()) {
+                    handleHelp();
+                }
+                if (newCommandResult.isExit()) {
+                    handleExit();
+                }
+            });
+
         });
 
         this.logic.exceptionProperty().addListener((observable, oldException, newException) -> {
-            logger.info("Invalid operation: " + newException.getMessage());
-            resultDisplay.setFeedbackErrorToUser(newException.getMessage());
-            // TODO: need to inform CommandBox somehow
+            Platform.runLater(() -> {
+                logger.info("Invalid operation: " + newException.getMessage());
+                resultDisplay.setFeedbackErrorToUser(newException.getMessage());
+                // TODO: need to inform CommandBox somehow
+            });
         });
     }
 
