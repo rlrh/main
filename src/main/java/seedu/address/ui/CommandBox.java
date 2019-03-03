@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -122,20 +123,24 @@ public class CommandBox extends UiPart<Region> {
      * Sets the command box style to use the default style.
      */
     private void setStyleToDefault() {
-        commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
+        Platform.runLater(() -> {
+            commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
+        });
     }
 
     /**
      * Sets the command box style to indicate a failed command.
      */
     private void setStyleToIndicateCommandFailure() {
-        ObservableList<String> styleClass = commandTextField.getStyleClass();
+        Platform.runLater(() -> {
+            ObservableList<String> styleClass = commandTextField.getStyleClass();
 
-        if (styleClass.contains(ERROR_STYLE_CLASS)) {
-            return;
-        }
+            if (styleClass.contains(ERROR_STYLE_CLASS)) {
+                return;
+            }
 
-        styleClass.add(ERROR_STYLE_CLASS);
+            styleClass.add(ERROR_STYLE_CLASS);
+        });
     }
 
     /**

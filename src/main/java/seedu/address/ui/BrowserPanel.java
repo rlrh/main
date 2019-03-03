@@ -59,25 +59,29 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     private void loadPersonPage(Person person) {
-        // loadPage(SEARCH_PAGE_URL + person.getName().fullName);
-        browser.getEngine().setUserStyleSheetLocation(null);
-        //System.out.println(browser.getEngine().getUserStyleSheetLocation());
-        loadPage(person.getEmail().value);
+        Platform.runLater(() -> {
+            // loadPage(SEARCH_PAGE_URL + person.getName().fullName);
+            browser.getEngine().setUserStyleSheetLocation(null);
+            //System.out.println(browser.getEngine().getUserStyleSheetLocation());
+            loadPage(person.getEmail().value);
+        });
     }
 
     private void loadPersonReaderPage(Person person) {
-        try {
-            File file = new File("data/files/" + person.getName().fullName + ".html");
-            if (!file.exists()) {
-                throw new IllegalArgumentException("File doesn't exist");
+        Platform.runLater(() -> {
+            try {
+                File file = new File("data/files/" + person.getName().fullName + ".html");
+                if (!file.exists()) {
+                    throw new IllegalArgumentException("File doesn't exist");
+                }
+                URL url = new File("data/files/" + person.getName().fullName + ".html").toURI().toURL();
+                browser.getEngine().setUserStyleSheetLocation(MainApp.class.getResource("/stylesheets/bootstrap.css").toString());
+                //System.out.println(browser.getEngine().getUserStyleSheetLocation());
+                loadPage(url.toString());
+            } catch (Exception e) {
+                loadDefaultPage();
             }
-            URL url = new File("data/files/" + person.getName().fullName + ".html").toURI().toURL();
-            browser.getEngine().setUserStyleSheetLocation(MainApp.class.getResource("/stylesheets/bootstrap.css").toString());
-            //System.out.println(browser.getEngine().getUserStyleSheetLocation());
-            loadPage(url.toString());
-        } catch (Exception e) {
-            loadDefaultPage();
-        }
+        });
     }
 
     public void loadPage(String url) {
@@ -92,15 +96,17 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     private void reload() {
-        if (this.currentlySelectedPerson == null) {
-            loadDefaultPage();
-            return;
-        }
-        if (isReaderView) {
-            loadPersonReaderPage(this.currentlySelectedPerson);
-        } else {
-            loadPersonPage(this.currentlySelectedPerson);
-        }
+        Platform.runLater(() -> {
+            if (this.currentlySelectedPerson == null) {
+                loadDefaultPage();
+                return;
+            }
+            if (isReaderView) {
+                loadPersonReaderPage(this.currentlySelectedPerson);
+            } else {
+                loadPersonPage(this.currentlySelectedPerson);
+            }
+        });
     }
 
 }

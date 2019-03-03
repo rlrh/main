@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import static java.util.Objects.requireNonNull;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -44,15 +45,19 @@ public class ResultDisplay extends UiPart<Region> {
     }
 
     public void setFeedbackErrorToUser(String feedbackToUser) {
-        setStyleToIndicateCommandFailure();
-        requireNonNull(feedbackToUser);
-        resultDisplay.setText(feedbackToUser);
+        Platform.runLater(() -> {
+            setStyleToIndicateCommandFailure();
+            requireNonNull(feedbackToUser);
+            resultDisplay.setText(feedbackToUser);
+        });
     }
 
     public void setFeedbackSuccessToUser(String feedbackToUser) {
-        setStyleToDefault();
-        requireNonNull(feedbackToUser);
-        resultDisplay.setText(feedbackToUser);
+        Platform.runLater(() -> {
+            setStyleToDefault();
+            requireNonNull(feedbackToUser);
+            resultDisplay.setText(feedbackToUser);
+        });
     }
 
 }

@@ -79,9 +79,11 @@ public class StatusBarFooter extends UiPart<Region> {
      * Updates "last updated" status to the current time.
      */
     private void updateSyncStatus() {
-        long now = clock.millis();
-        String lastUpdated = new Date(now).toString();
-        syncStatus.setText(String.format(SYNC_STATUS_UPDATED, lastUpdated));
+        Platform.runLater(() -> {
+            long now = clock.millis();
+            String lastUpdated = new Date(now).toString();
+            syncStatus.setText(String.format(SYNC_STATUS_UPDATED, lastUpdated));
+        });
     }
 
 }
