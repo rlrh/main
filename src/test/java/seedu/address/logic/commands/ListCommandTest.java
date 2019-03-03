@@ -2,32 +2,22 @@ package seedu.address.logic.commands;
 
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
-import static seedu.address.testutil.TypicalEntries.getTypicalAddressBook;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import seedu.address.logic.CommandHistory;
-import seedu.address.mocks.StorageStub;
+import seedu.address.mocks.TypicalModelManagerStub;
 import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
-import seedu.address.model.UserPrefs;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for ListCommand.
  */
 public class ListCommandTest {
 
-    private Model model;
-    private Model expectedModel;
+    private Model model = new TypicalModelManagerStub();
+    private Model expectedModel = new TypicalModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
-
-    @Before
-    public void setUp() {
-        model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new StorageStub());
-        expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), new StorageStub());
-    }
 
     @Test
     public void execute_listIsNotFiltered_showsSameList() {

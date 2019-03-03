@@ -8,7 +8,6 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalEntries.CARL;
 import static seedu.address.testutil.TypicalEntries.ELLE;
 import static seedu.address.testutil.TypicalEntries.FIONA;
-import static seedu.address.testutil.TypicalEntries.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,18 +15,16 @@ import java.util.Collections;
 import org.junit.Test;
 
 import seedu.address.logic.CommandHistory;
-import seedu.address.mocks.StorageStub;
+import seedu.address.mocks.TypicalModelManagerStub;
 import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
-import seedu.address.model.UserPrefs;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
  */
 public class FindCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new StorageStub());
-    private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs(), new StorageStub());
+    private Model model = new TypicalModelManagerStub();
+    private Model expectedModel = new TypicalModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
 
     @Test
