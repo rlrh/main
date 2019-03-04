@@ -9,9 +9,9 @@ import org.junit.Test;
 import seedu.address.logic.commands.FeedCommand;
 
 public class FeedCommandParserTest {
+    private static final String TEST_URL = "https://open.kattis.com/rss/new-problems";
 
     private FeedCommandParser parser = new FeedCommandParser();
-    private static final String TEST_URL = "https://open.kattis.com/rss/new-problems";
 
     @Test
     public void parse_validArgs_returnsFeedCommand() {

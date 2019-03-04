@@ -42,6 +42,7 @@ public class FeedCommand extends Command {
             + ": Opens a link as an RSS feed and adds all its entries.\n"
             + "Parameters: LINK\n"
             + "Example: " + COMMAND_WORD + " https://open.kattis.com/rss/new-problems";
+    public static final String DEFAULT_COMMENT_TEXT = "imported from %s";
 
     private String feedUrl;
     public FeedCommand(String feedUrl) {
@@ -79,11 +80,20 @@ public class FeedCommand extends Command {
     private Entry syndEntryToEntryBookEntry(SyndEntry syndEntry) {
         return new Entry(
                 new Title(syndEntry.getTitle().trim()),
-                new Comment(syndEntry.getDescription().getValue().trim().replace('\n', ' ')),
+                extractComment(syndEntry),
                 new Link(syndEntry.getLink()),
                 new Address("unused"),
                 Collections.emptySet()
         );
+    }
+
+    /** Extracts a useful comment from a SyndEntry. */
+    private Comment extractComment(SyndEntry syndEntry) {
+        String description = syndEntry.getDescription().getValue().replace('\n', ' ').trim();
+        if (description.isEmpty()) {
+            description = String.format(DEFAULT_COMMENT_TEXT, feedUrl);
+        }
+        return new Comment(description);
     }
 
     @Override

@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.FeedCommand.DEFAULT_COMMENT_TEXT;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_SUCCESS;
 
 import java.util.Collections;
@@ -21,12 +22,8 @@ import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 
 public class FeedCommandTest {
-    private Model model = new ModelManagerStub();
-    private Model expectedModel = new ModelManagerStub();
-    private CommandHistory commandHistory = new CommandHistory();
-
-    private final static String TEST_URL = "https://m4th.b0ss.net/temp/rss.xml";
-    private final static List<Entry> TEST_ENTRY_LIST = List.of(
+    private static final String TEST_URL = "https://m4th.b0ss.net/temp/rss.xml";
+    private static final List<Entry> TEST_ENTRY_LIST = List.of(
             makeEntryFromRssTriple("Anime: Mahoujin Guru Guru",
                     "https://blog.GNU.moe/anime/review/mahoujin-guru-guru.html",
                     "Anime review 1"),
@@ -47,7 +44,7 @@ public class FeedCommandTest {
                     "sigh"),
             makeEntryFromRssTriple("Anime: Durarara!!",
                     "https://blog.GNU.moe/anime/review/durarara.html",
-                    "bzzt"),
+                    String.format(DEFAULT_COMMENT_TEXT, TEST_URL)),
             makeEntryFromRssTriple("Anime: Battle Programmer Shirase",
                     "https://blog.GNU.moe/anime/review/bps.html",
                     "lol"),
@@ -59,6 +56,11 @@ public class FeedCommandTest {
                     "I like this reviewer")
             );
 
+    private Model model = new ModelManagerStub();
+    private Model expectedModel = new ModelManagerStub();
+    private CommandHistory commandHistory = new CommandHistory();
+
+    /** Makes an EntryBook entry from the 3 fields that we are harvesting from RSS. */
     private static Entry makeEntryFromRssTriple(String title, String link, String comment) {
         return new Entry(
                 new Title(title),
@@ -96,7 +98,7 @@ public class FeedCommandTest {
     }
 
     @Test
-    public void execute_UrlGiven_updatesEntryBook() {
+    public void execute_urlGiven_updatesEntryBook() {
         String expectedMessage = String.format(MESSAGE_SUCCESS, TEST_URL);
         FeedCommand command = new FeedCommand(TEST_URL);
 
