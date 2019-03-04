@@ -75,14 +75,15 @@ These commands change the context in which commands with shared command words op
 
 Shows your reading list of saved links, optionally finding links with headlines containing any of the given keywords, and filtering by read status, date added and tags.
 
-Format: `list [KEYWORD]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY]`
+Format: `list [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY]`
 
 ****
 - The search is case insensitive. e.g `hans` will match `Hans`
-- The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+- Keywords are comma separated. e.g. `Hello world, foo bar`
+- The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
 - Only the headline is searched.
-- Only full words will be matched e.g. `Han` will not match `Hans`
-- Links matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+- Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
+- Links matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
 
 Examples:
@@ -113,14 +114,15 @@ Examples:
 
 Shows a list of archived links, optionally finding links with headlines containing any of the given keywords, and filtering by read status, date added and tags.
 
-Format: `archives [KEYWORD]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]...`
+Format: `archives [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]...`
 
 ****
 - The search is case insensitive. e.g `hans` will match `Hans`
-- The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+- Keywords are comma separated. e.g. `Hello world, foo bar`
+- The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
 - Only the headline is searched.
-- Only full words will be matched e.g. `Han` will not match `Hans`
-- Links matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+- Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
+- Links matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
 
 Examples:
@@ -211,7 +213,7 @@ Format: `delete all`
 
 Examples:
 
-- `delete 1,2-6` Deletes the 1st, and 2nd to 6th links
+- `delete 1,6-10` Deletes the 1st, and 2nd to 6th links
 
 
 === Redownloading links: `redownload`
@@ -246,7 +248,7 @@ Format: `read all`
 Examples:
 
 - `read all` Marks all shown links as read
-- `read 1,2,4-6` Marks the 1st, 2nd and 4th to 6th links as read
+- `read 1,2,6-10` Marks the 1st, 2nd and 4th to 6th links as read
 
 === Marking links as unread: `unread`
 Marks links as unread.
@@ -262,7 +264,7 @@ Format: `unread all`
 Examples:
 
 - `unread all` Marks all shown links as unread
-- `unread 1,2,4-6` Marks the 1st, 2nd and 4th to 6th links as unread
+- `unread 1,2,6-10` Marks the 1st, 2nd and 4th to 6th links as unread
 
 === Selecting a link: `select`
 
@@ -397,7 +399,7 @@ Examples:
 
 === Updating links from feeds: `update`
 
-Checks feeds for new links and adds them to the manager.
+Refreshes all feeds.
 
 Format: `update INDICES`
 
