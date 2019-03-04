@@ -96,6 +96,18 @@ public class ModelManager implements Model {
         userPrefs.setAddressBookFilePath(addressBookFilePath);
     }
 
+    @Override
+    public Path getArticleDataDirectoryPath() {
+        return userPrefs.getArticleDataDirectoryPath();
+    }
+
+    @Override
+    public void setArticleDataDirectoryPath(Path articleDataDirectoryPath) {
+        requireNonNull(articleDataDirectoryPath);
+        userPrefs.setArticleDataDirectoryPath(articleDataDirectoryPath);
+    }
+
+
     //=========== EntryBook ================================================================================
 
     @Override
