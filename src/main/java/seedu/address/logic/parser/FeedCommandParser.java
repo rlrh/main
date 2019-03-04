@@ -15,6 +15,6 @@ public class FeedCommandParser implements Parser<FeedCommand> {
         if (userInput.trim().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FeedCommand.MESSAGE_USAGE));
         }
-        return new FeedCommand(userInput);
+        return new FeedCommand(userInput.trim());
     }
 }

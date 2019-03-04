@@ -1,6 +1,6 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.commands.FeedCommand.MESSAGE_EMPTY_URL;
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -23,6 +23,6 @@ public class FeedCommandParserTest {
 
     @Test
     public void parse_emptyArgs_throwsParseException() {
-        assertParseFailure(parser, "", MESSAGE_EMPTY_URL);
+        assertParseFailure(parser, " ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FeedCommand.MESSAGE_USAGE));
     }
 }

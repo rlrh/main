@@ -36,7 +36,6 @@ public class FeedCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Opened feed %s";
     public static final String MESSAGE_FAILURE_NET = "Network connection failed:\n%s";
     public static final String MESSAGE_FAILURE_XML = "%s is not a valid RSS/Atom feed!";
-    public static final String MESSAGE_EMPTY_URL = "URL cannot be empty!";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Opens a link as an RSS feed and adds all its entries.\n"
