@@ -19,12 +19,17 @@ public class StorageManager implements Storage {
     private static final Logger logger = LogsCenter.getLogger(StorageManager.class);
     private EntryBookStorage entryBookStorage;
     private UserPrefsStorage userPrefsStorage;
+    private ArticleStorage articleStorage;
 
 
-    public StorageManager(EntryBookStorage entryBookStorage, UserPrefsStorage userPrefsStorage) {
+    public StorageManager(
+            EntryBookStorage entryBookStorage,
+            UserPrefsStorage userPrefsStorage,
+            ArticleStorage articleStorage) {
         super();
         this.entryBookStorage = entryBookStorage;
         this.userPrefsStorage = userPrefsStorage;
+        this.articleStorage = articleStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -74,4 +79,20 @@ public class StorageManager implements Storage {
         entryBookStorage.saveAddressBook(addressBook, filePath);
     }
 
+    // ================ article methods ================================
+
+    @Override
+    public Path getArticleDataDirectoryPath() {
+        return articleStorage.getArticleDataDirectoryPath();
+    }
+
+    @Override
+    public void addArticle(String url, byte[] content) throws IOException {
+        articleStorage.addArticle(url, content);
+    }
+
+    @Override
+    public Path getArticlePath(String url) {
+        return articleStorage.getArticlePath(url);
+    }
 }

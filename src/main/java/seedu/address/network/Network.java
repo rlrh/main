@@ -27,4 +27,14 @@ public abstract class Network {
     public static String fetchAsString(String url) throws IOException {
         return new String(new URL(url).openStream().readAllBytes(), "utf-8");
     }
+
+    /**
+     * Fetches the resource (i.e. webpage) at url, returning it as a byte array
+     * @param url
+     * @return The content fetched.
+     * @throws IOException
+     */
+    public static byte[] fetchAsBytes(String url) throws IOException {
+        return new URL(url).openStream().readAllBytes();
+    }
 }

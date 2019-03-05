@@ -55,6 +55,13 @@ public class FileUtil {
     }
 
     /**
+     * Creates a directory if it does not exist along with its missing parent directories.
+     */
+    public static void createDirectory(Path directory) throws IOException {
+        Files.createDirectories(directory);
+    }
+
+    /**
      * Creates parent directories of file if it has a parent directory
      */
     public static void createParentDirsOfFile(Path file) throws IOException {
@@ -78,6 +85,14 @@ public class FileUtil {
      */
     public static void writeToFile(Path file, String content) throws IOException {
         Files.write(file, content.getBytes(CHARSET));
+    }
+
+    /**
+     * Writes given bytes to a file.
+     * Will create the file if it does not exist yet.
+     */
+    public static void writeToFile(Path file, byte[] content) throws IOException {
+        Files.write(file, content);
     }
 
 }
