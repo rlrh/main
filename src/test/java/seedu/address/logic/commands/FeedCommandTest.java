@@ -36,6 +36,10 @@ public class FeedCommandTest {
     private Model model = new ModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
 
+    /**
+     * Generates a list of entries. Based on how the default command works, it has
+     * to be a function that takes in the url.
+     */
     private static List<Entry> testEntryList(String url) {
         return List.of(
                 makeEntryFromRssTriple("Anime: Mahoujin Guru Guru",
