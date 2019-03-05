@@ -2,8 +2,11 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.FeedCommand.DEFAULT_COMMENT_TEXT;
+import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_NET;
+import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_XML;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_SUCCESS;
 
 import java.util.Collections;
@@ -55,6 +58,8 @@ public class FeedCommandTest {
                     "https://blog.GNU.moe/anime/review/youjo_senki.html",
                     "I like this reviewer")
             );
+    private static final String MALFORMED_URL = "notavalidprotocol://malformed.url/invalid";
+    private static final String NOTAFEED_URL = "https://m4th.b0ss.net/temp/notafeed.notxml";
 
     private Model model = new ModelManagerStub();
     private Model expectedModel = new ModelManagerStub();
@@ -75,7 +80,6 @@ public class FeedCommandTest {
     public void equals() {
         String firstUrl = "https://open.kattis.com/rss/new-problems";
         String secondUrl = "https://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=rss";
-
 
         FeedCommand feedFirstCommand = new FeedCommand(firstUrl);
         FeedCommand feedSecondCommand = new FeedCommand(secondUrl);
@@ -108,5 +112,22 @@ public class FeedCommandTest {
         expectedModel.commitAddressBook();
 
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_malformedUrlGiven_commandFails() {
+        String expectedMessage = String.format(MESSAGE_FAILURE_NET,
+                "java.net.MalformedURLException: unknown protocol: notavalidprotocol");
+        FeedCommand command = new FeedCommand(MALFORMED_URL);
+
+        assertCommandFailure(command, model, commandHistory, expectedMessage);
+    }
+
+    @Test
+    public void execute_urlIsNotAFeed_commandFails() {
+        String expectedMessage = String.format(MESSAGE_FAILURE_XML, NOTAFEED_URL);
+        FeedCommand command = new FeedCommand(NOTAFEED_URL);
+
+        assertCommandFailure(command, model, commandHistory, expectedMessage);
     }
 }
