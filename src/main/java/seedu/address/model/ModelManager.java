@@ -22,6 +22,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 import seedu.address.storage.Storage;
+import seedu.address.ui.ViewMode;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -36,6 +37,7 @@ public class ModelManager implements Model {
     private final FilteredList<Entry> filteredEntries;
 
     private final SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
     private final Storage storage;
@@ -53,6 +55,8 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredEntries = new FilteredList<>(versionedEntryBook.getPersonList());
         filteredEntries.addListener(this::ensureSelectedPersonIsValid);
+
+        currentViewMode.set(ViewMode.BROWSER);
 
         this.storage = storage;
 
@@ -205,6 +209,23 @@ public class ModelManager implements Model {
             throw new EntryNotFoundException();
         }
         selectedPerson.setValue(entry);
+    }
+
+    //=========== View mode ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<ViewMode> viewModeProperty() {
+        return currentViewMode;
+    }
+
+    @Override
+    public ViewMode getViewMode() {
+        return currentViewMode.getValue();
+    }
+
+    @Override
+    public void setViewMode(ViewMode viewMode) {
+        currentViewMode.setValue(viewMode);
     }
 
     //=========== Exception propagation ===========================================================================

@@ -9,6 +9,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.entry.Entry;
 import seedu.address.storage.Storage;
+import seedu.address.ui.ViewMode;
 
 /**
  * The API of the Model component.
@@ -139,6 +140,21 @@ public interface Model {
      * Sets the selected entry in the filtered entry list.
      */
     void setSelectedPerson(Entry entry);
+
+    /**
+     * Current view mode.
+     */
+    ReadOnlyProperty<ViewMode> viewModeProperty();
+
+    /**
+     * Returns the current view mode.
+     */
+    ViewMode getViewMode();
+
+    /**
+     * Sets the view mode.
+     */
+    void setViewMode(ViewMode viewMode);
 
     /**
      * Propagated exception.
