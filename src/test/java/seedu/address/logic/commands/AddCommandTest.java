@@ -26,6 +26,7 @@ import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.entry.Entry;
 import seedu.address.storage.Storage;
 import seedu.address.testutil.EntryBuilder;
+import seedu.address.ui.ViewMode;
 
 public class AddCommandTest {
 
@@ -210,6 +211,21 @@ public class AddCommandTest {
 
         @Override
         public void setSelectedPerson(Entry entry) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyProperty<ViewMode> viewModeProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ViewMode getViewMode() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setViewMode(ViewMode viewMode) {
             throw new AssertionError("This method should not be called.");
         }
 
