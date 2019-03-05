@@ -116,6 +116,28 @@ public class TypicalEntries {
             .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH)
             .build();
 
+    // For testing of networking
+    public static final Entry VALID_HTTPS_LINK = new EntryBuilder()
+            .withName("Valid https Link")
+            .withPhone("Valid https link")
+            .withEmail("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/")
+            .withAddress("Valid https link")
+            .build();
+    public static final Entry VALID_HTTP_LINK = new EntryBuilder()
+            .withName("Valid https Link")
+            .withPhone("Valid https link")
+            .withEmail("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/")
+            .withAddress("Valid https link")
+            .build();
+    public static final Entry VALID_FILE_LINK = new EntryBuilder()
+            .withName("Valid file Link")
+            .withPhone("Valid file link")
+            .withEmail("file://" + MainApp.class.getResource(
+            "/view/NetworkTest/default.html").toExternalForm().substring(5))
+            .withAddress("Valid file link")
+            .build();
+    public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
+
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
 
     private TypicalEntries() {} // prevents instantiation

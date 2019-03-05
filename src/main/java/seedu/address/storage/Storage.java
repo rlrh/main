@@ -12,7 +12,7 @@ import seedu.address.model.UserPrefs;
 /**
  * API of the Storage component
  */
-public interface Storage extends EntryBookStorage, UserPrefsStorage {
+public interface Storage extends EntryBookStorage, UserPrefsStorage, ArticleStorage {
 
     @Override
     Optional<UserPrefs> readUserPrefs() throws DataConversionException, IOException;
@@ -28,5 +28,8 @@ public interface Storage extends EntryBookStorage, UserPrefsStorage {
 
     @Override
     void saveAddressBook(ReadOnlyEntryBook addressBook) throws IOException;
+
+    @Override
+    void addArticle(String url, byte[] articleContent) throws IOException;
 
 }
