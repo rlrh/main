@@ -21,6 +21,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
+import seedu.address.network.Network;
 import seedu.address.storage.Storage;
 
 /**
@@ -95,6 +96,18 @@ public class ModelManager implements Model {
         userPrefs.setAddressBookFilePath(addressBookFilePath);
     }
 
+    @Override
+    public Path getArticleDataDirectoryPath() {
+        return userPrefs.getArticleDataDirectoryPath();
+    }
+
+    @Override
+    public void setArticleDataDirectoryPath(Path articleDataDirectoryPath) {
+        requireNonNull(articleDataDirectoryPath);
+        userPrefs.setArticleDataDirectoryPath(articleDataDirectoryPath);
+    }
+
+
     //=========== EntryBook ================================================================================
 
     @Override
@@ -121,6 +134,12 @@ public class ModelManager implements Model {
     @Override
     public void addPerson(Entry entry) {
         versionedEntryBook.addPerson(entry);
+        try {
+            byte[] articleContent = Network.fetchAsBytes(entry.getLink().value);
+            storage.addArticle(entry.getLink().value, articleContent);
+        } catch (IOException ioe) {
+            // Do nothing if we fail to fetch the page.
+        }
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 

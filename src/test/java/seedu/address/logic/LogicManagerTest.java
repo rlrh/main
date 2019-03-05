@@ -32,6 +32,8 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.entry.Entry;
+import seedu.address.storage.ArticleStorage;
+import seedu.address.storage.DataDirectoryArticleStorage;
 import seedu.address.storage.JsonEntryBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
@@ -54,7 +56,8 @@ public class LogicManagerTest {
     public void setUp() throws Exception {
         JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
         model = new ModelManager(new EntryBook(), new UserPrefs(), storage);
         logic = new LogicManager(model);
     }
@@ -93,7 +96,8 @@ public class LogicManagerTest {
         JsonEntryBookStorage addressBookStorage =
                 new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
         model = new ModelManager(model.getAddressBook(), model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 
