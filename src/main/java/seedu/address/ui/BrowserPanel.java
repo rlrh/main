@@ -35,7 +35,7 @@ public class BrowserPanel extends UiPart<Region> {
 
     private WebEngine webEngine = browser.getEngine();
 
-    public BrowserPanel(ObservableValue<Entry> selectedPerson) {
+    public BrowserPanel(ObservableValue<Entry> selectedPerson, ObservableValue<ViewMode> viewMode) {
         super(FXML);
 
         // To prevent triggering events for typing inside the loaded Web page.
