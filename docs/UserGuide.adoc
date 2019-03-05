@@ -73,7 +73,7 @@ These commands change the context in which commands with shared command words op
 
 === Showing links: `list` (displays link list)
 
-Shows your reading list of saved links, optionally finding links with headlines containing any of the given keywords, and filtering by read status, date added and tags.
+Shows your reading list of saved links, optionally finding links with titles containing any of the given keywords, and filtering by read status, date added and tags.
 
 Format: `list [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY]`
 
@@ -81,7 +81,7 @@ Format: `list [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY
 - The search is case insensitive. e.g `hans` will match `Hans`
 - Keywords are comma separated. e.g. `Hello world, foo bar`
 - The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
-- Only the headline is searched.
+- Only the title is searched.
 - Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
 - Links matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
@@ -89,8 +89,8 @@ Format: `list [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY
 Examples:
 
 - `list` Lists all links
-- `list Apple r/read tech` Lists links with headlines containing `apple` which are already read and tagged with `Tech`
-- `list Trump` Lists links with headlines containing `trump` and `Donald Trump` etc.
+- `list Apple r/read tech` Lists links with titles containing `apple` which are already read and tagged with `Tech`
+- `list Trump` Lists links with titles containing `trump` and `Donald Trump` etc.
 - `list r/unread` Lists only unread links
 - `list t/Tech` Lists links tagged with “Tech”
 - `list t/` Lists untagged links
@@ -112,7 +112,7 @@ Examples:
 
 === Showing archived links: `archives` (displays link list)
 
-Shows a list of archived links, optionally finding links with headlines containing any of the given keywords, and filtering by read status, date added and tags.
+Shows a list of archived links, optionally finding links with titles containing any of the given keywords, and filtering by read status, date added and tags.
 
 Format: `archives [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]...`
 
@@ -120,7 +120,7 @@ Format: `archives [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]...`
 - The search is case insensitive. e.g `hans` will match `Hans`
 - Keywords are comma separated. e.g. `Hello world, foo bar`
 - The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
-- Only the headline is searched.
+- Only the title is searched.
 - Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
 - Links matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
@@ -128,8 +128,8 @@ Format: `archives [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]...`
 Examples:
 
 - `archives` Lists all archived links
-- `archives Apple r/read t/Tech` Lists archived links with headlines containing `apple` which are already read and tagged with `Tech`
-- `archives Trump` Lists archived links with headlines containing `trump` and `Donald Trump` etc.
+- `archives Apple r/read t/Tech` Lists archived links with titles containing `apple` which are already read and tagged with `Tech`
+- `archives Trump` Lists archived links with titles containing `trump` and `Donald Trump` etc.
 - `archives r/unread` Lists only unread archived links
 - `archives t/Tech` Lists archived links tagged with “Tech”
 - `archives t/` Lists untagged archived links
@@ -168,11 +168,11 @@ Format: `stats`
 
 Adds a single link from a URL to the manager. Content is automatically downloaded to disk.
 
-Format: `add URL [h/HEADLINE_OVERRIDE] [c/COMMENT] [t/TAG]...`
+Format: `add URL [ti/TITLE_OVERRIDE] [c/COMMENT] [t/TAG]...`
 
 [TIP]
 A link can have any number of tags (including 0).
-Headline will be automatically filled by parsing the link if you do not provide it.
+Title will be automatically filled by parsing the link if you do not provide it.
 
 Examples:
 
@@ -182,7 +182,7 @@ Examples:
 
 Edits an existing link in the manager.
 
-Format: `edit INDEX [u/URL] [h/HEADLINE_OVERRIDE] [s/STATUS] [c/COMMENT] [t/TAG]...`
+Format: `edit INDEX [u/URL] [ti/TITLE_OVERRIDE] [s/STATUS] [c/COMMENT] [t/TAG]...`
 
 ****
 - Edits the link at the specified `INDEX`. The index refers to the index number shown in the displayed link list. The index *must be a positive integer* 1, 2, 3, ...
@@ -333,7 +333,7 @@ Shares link through connected social media
 
 Adds links from search results to the manager. Content is automatically downloaded to disk.
 
-Format: `add INDEX [h/HEADLINE_OVERRIDE] [c/COMMENT] [t/TAG]...`
+Format: `add INDEX [ti/TITLE_OVERRIDE] [c/COMMENT] [t/TAG]...`
 
 Format: `add INDICES [c/COMMENT] [t/TAG]...`
 
@@ -342,7 +342,7 @@ Format: `add all`
 [TIP]
 ====
 A link can have any number of tags (including 0).
-Headline will be automatically filled by parsing the link if you do not provide it.
+Title will be automatically filled by parsing the link if you do not provide it.
 ====
 
 Examples:
