@@ -37,6 +37,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         requireNonNull(newUserPrefs);
         setGuiSettings(newUserPrefs.getGuiSettings());
         setAddressBookFilePath(newUserPrefs.getAddressBookFilePath());
+        setArticleDataDirectoryPath(newUserPrefs.getArticleDataDirectoryPath());
     }
 
     public GuiSettings getGuiSettings() {
@@ -78,7 +79,8 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         UserPrefs o = (UserPrefs) other;
 
         return guiSettings.equals(o.guiSettings)
-                && addressBookFilePath.equals(o.addressBookFilePath);
+                && addressBookFilePath.equals(o.addressBookFilePath)
+                && articleDataDirectoryPath.equals(o.articleDataDirectoryPath);
     }
 
     @Override
