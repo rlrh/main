@@ -27,7 +27,7 @@ import seedu.address.model.entry.Title;
 
 public class FeedCommandTest {
     private static final String TEST_URL = "https://m4th.b0ss.net/temp/rss.xml";
-    private static final String TEST_URL_LOCAL = MainApp.class.getResource("/view/RssFeedTest/rss.xml")
+    private static final String TEST_URL_LOCAL = MainApp.class.getResource("/RssFeedTest/rss.xml")
             .toExternalForm();
 
     private static final String MALFORMED_URL = "notavalidprotocol://malformed.url/invalid";
