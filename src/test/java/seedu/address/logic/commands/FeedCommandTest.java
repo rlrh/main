@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import seedu.address.MainApp;
 import seedu.address.logic.CommandHistory;
 import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.EntryBook;
@@ -26,44 +27,49 @@ import seedu.address.model.entry.Title;
 
 public class FeedCommandTest {
     private static final String TEST_URL = "https://m4th.b0ss.net/temp/rss.xml";
-    private static final List<Entry> TEST_ENTRY_LIST = List.of(
-            makeEntryFromRssTriple("Anime: Mahoujin Guru Guru",
-                    "https://blog.GNU.moe/anime/review/mahoujin-guru-guru.html",
-                    "Anime review 1"),
-            makeEntryFromRssTriple("Anime: Gamers!",
-                    "https://blog.GNU.moe/anime/review/gamers.html",
-                    "Anime review 2"),
-            makeEntryFromRssTriple("Anime: Made in Abyss",
-                    "https://blog.GNU.moe/anime/review/made-in-abyss.html",
-                    "Anime review n"),
-            makeEntryFromRssTriple("Anime: Mob Psycho 100",
-                    "https://blog.GNU.moe/anime/review/mob-psycho.html",
-                    "Anime review"),
-            makeEntryFromRssTriple("Anime: New Game!!",
-                    "https://blog.GNU.moe/anime/review/new-game-2.html",
-                    "Anime revieww"),
-            makeEntryFromRssTriple("Anime: Saiki Kusuo no Psi-nan",
-                    "https://blog.GNU.moe/anime/review/saiki-kusuo.html",
-                    "sigh"),
-            makeEntryFromRssTriple("Anime: Durarara!!",
-                    "https://blog.GNU.moe/anime/review/durarara.html",
-                    String.format(DEFAULT_COMMENT_TEXT, TEST_URL)),
-            makeEntryFromRssTriple("Anime: Battle Programmer Shirase",
-                    "https://blog.GNU.moe/anime/review/bps.html",
-                    "lol"),
-            makeEntryFromRssTriple("Anime: Re:Zero",
-                    "https://blog.GNU.moe/anime/review/re_zero.html",
-                    "idk"),
-            makeEntryFromRssTriple("Anime: Youjo Senki",
-                    "https://blog.GNU.moe/anime/review/youjo_senki.html",
-                    "I like this reviewer")
-            );
+    private static final String TEST_URL_LOCAL = MainApp.class.getResource("/view/RssFeedTest/rss.xml")
+            .toExternalForm();
+
     private static final String MALFORMED_URL = "notavalidprotocol://malformed.url/invalid";
     private static final String NOTAFEED_URL = "https://m4th.b0ss.net/temp/notafeed.notxml";
 
     private Model model = new ModelManagerStub();
-    private Model expectedModel = new ModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
+
+    private static List<Entry> testEntryList(String url) {
+        return List.of(
+                makeEntryFromRssTriple("Anime: Mahoujin Guru Guru",
+                        "https://blog.GNU.moe/anime/review/mahoujin-guru-guru.html",
+                        "Anime review 1"),
+                makeEntryFromRssTriple("Anime: Gamers!",
+                        "https://blog.GNU.moe/anime/review/gamers.html",
+                        "Anime review 2"),
+                makeEntryFromRssTriple("Anime: Made in Abyss",
+                        "https://blog.GNU.moe/anime/review/made-in-abyss.html",
+                        "Anime review n"),
+                makeEntryFromRssTriple("Anime: Mob Psycho 100",
+                        "https://blog.GNU.moe/anime/review/mob-psycho.html",
+                        "Anime review"),
+                makeEntryFromRssTriple("Anime: New Game!!",
+                        "https://blog.GNU.moe/anime/review/new-game-2.html",
+                        "Anime revieww"),
+                makeEntryFromRssTriple("Anime: Saiki Kusuo no Psi-nan",
+                        "https://blog.GNU.moe/anime/review/saiki-kusuo.html",
+                        "sigh"),
+                makeEntryFromRssTriple("Anime: Durarara!!",
+                        "https://blog.GNU.moe/anime/review/durarara.html",
+                        String.format(DEFAULT_COMMENT_TEXT, url)),
+                makeEntryFromRssTriple("Anime: Battle Programmer Shirase",
+                        "https://blog.GNU.moe/anime/review/bps.html",
+                        "lol"),
+                makeEntryFromRssTriple("Anime: Re:Zero",
+                        "https://blog.GNU.moe/anime/review/re_zero.html",
+                        "idk"),
+                makeEntryFromRssTriple("Anime: Youjo Senki",
+                        "https://blog.GNU.moe/anime/review/youjo_senki.html",
+                        "I like this reviewer")
+        );
+    }
 
     /** Makes an EntryBook entry from the 3 fields that we are harvesting from RSS. */
     private static Entry makeEntryFromRssTriple(String title, String link, String comment) {
@@ -74,6 +80,23 @@ public class FeedCommandTest {
                 new Address("unused"), // this dummy matches that in FeedCommand
                 Collections.emptySet()
         );
+    }
+
+    /** Asserts that executing a FeedCommand with the given url imports the Entry list. */
+    public void assertLoadingUrlImportsEntryList(String url, List<Entry> entriesToBeImported) {
+        Model model = new ModelManagerStub();
+        Model expectedModel = new ModelManagerStub();
+        CommandHistory commandHistory = new CommandHistory();
+
+        String expectedMessage = String.format(MESSAGE_SUCCESS, url);
+        FeedCommand command = new FeedCommand(url);
+
+        EntryBook expectedEntryBook = new EntryBook();
+        expectedEntryBook.setPersons(entriesToBeImported);
+        expectedModel.setAddressBook(expectedEntryBook);
+        expectedModel.commitAddressBook();
+
+        assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
     }
 
     @Test
@@ -102,16 +125,13 @@ public class FeedCommandTest {
     }
 
     @Test
-    public void execute_urlGiven_updatesEntryBook() {
-        String expectedMessage = String.format(MESSAGE_SUCCESS, TEST_URL);
-        FeedCommand command = new FeedCommand(TEST_URL);
+    public void execute_localUrl_success() {
+        assertLoadingUrlImportsEntryList(TEST_URL_LOCAL, testEntryList(TEST_URL_LOCAL));
+    }
 
-        EntryBook expectedEntryBook = new EntryBook();
-        expectedEntryBook.setPersons(TEST_ENTRY_LIST);
-        expectedModel.setAddressBook(expectedEntryBook);
-        expectedModel.commitAddressBook();
-
-        assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
+    @Test
+    public void execute_remoteUrl_success() {
+        assertLoadingUrlImportsEntryList(TEST_URL, testEntryList(TEST_URL));
     }
 
     @Test
