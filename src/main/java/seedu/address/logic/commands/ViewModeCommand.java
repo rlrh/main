@@ -19,7 +19,7 @@ public class ViewModeCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Sets the view mode.\n"
             + "Parameters: VIEW_MODE (browser, reader)\n"
-            + "Example: " + COMMAND_WORD + ViewMode.READER.toString();
+            + "Example: " + COMMAND_WORD + " " + ViewMode.READER.toString().toLowerCase();
 
     public static final String MESSAGE_SET_VIEW_MODE_SUCCESS = "View Mode: %1$s";
 
