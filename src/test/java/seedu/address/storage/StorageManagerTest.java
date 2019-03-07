@@ -2,8 +2,10 @@ package seedu.address.storage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static seedu.address.testutil.TypicalEntries.getTypicalAddressBook;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.Before;
@@ -27,7 +29,8 @@ public class StorageManagerTest {
     public void setUp() {
         JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(getTempFilePath("ab"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
-        storageManager = new StorageManager(addressBookStorage, userPrefsStorage);
+        ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
+        storageManager = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
     }
 
     private Path getTempFilePath(String fileName) {
@@ -63,8 +66,27 @@ public class StorageManagerTest {
     }
 
     @Test
+    public void articleStorageReadSave() throws Exception {
+        /*
+         * Note: This is an integration test that verifies the StorageManager is properly wired to the
+         * {@link DataDirectoryArticleStorage} class.
+         * More extensive testing of article saving/reading is done in {@link DataDirectoryArticleStorageTest} class.
+         */
+        String testUrl = "https://test.url";
+        byte[] testContent = "test content".getBytes();
+        storageManager.addArticle(testUrl, testContent);
+        Path savedArticlePath = storageManager.getArticlePath(testUrl);
+        assertArrayEquals(Files.readAllBytes(savedArticlePath), testContent);
+    }
+
+    @Test
     public void getAddressBookFilePath() {
         assertNotNull(storageManager.getAddressBookFilePath());
+    }
+
+    @Test
+    public void getArticleDataDirectoryPath() {
+        assertNotNull(storageManager.getArticleDataDirectoryPath());
     }
 
 }

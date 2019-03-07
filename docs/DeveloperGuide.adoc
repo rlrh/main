@@ -447,6 +447,9 @@ The SE-EDU team does not provide support for modified template files.
 [[Testing]]
 == Testing
 
+[WARNING]
+Some features require a working internet connection, and as a result some tests will require internet access to pass.
+
 === Running Tests
 
 There are three ways to run tests.

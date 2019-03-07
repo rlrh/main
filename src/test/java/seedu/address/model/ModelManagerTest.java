@@ -8,7 +8,13 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
+import static seedu.address.testutil.TypicalEntries.FILE_TEST_CONTENTS;
+import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
+import static seedu.address.testutil.TypicalEntries.VALID_HTTPS_LINK;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -17,6 +23,7 @@ import java.util.Collections;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.mocks.ModelManagerStub;
@@ -24,13 +31,21 @@ import seedu.address.mocks.StorageStub;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
+import seedu.address.storage.ArticleStorage;
+import seedu.address.storage.DataDirectoryArticleStorage;
+import seedu.address.storage.JsonEntryBookStorage;
+import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
+import seedu.address.storage.StorageManager;
 import seedu.address.testutil.EntryBookBuilder;
 import seedu.address.testutil.EntryBuilder;
 
 public class ModelManagerTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    @Rule
+    public TemporaryFolder testFolder = new TemporaryFolder();
 
     private ModelManager modelManager = new ModelManagerStub();
 
@@ -52,6 +67,7 @@ public class ModelManagerTest {
     public void setUserPrefs_validUserPrefs_copiesUserPrefs() {
         UserPrefs userPrefs = new UserPrefs();
         userPrefs.setAddressBookFilePath(Paths.get("address/book/file/path"));
+        userPrefs.setArticleDataDirectoryPath(Paths.get("article/data/directory/path"));
         userPrefs.setGuiSettings(new GuiSettings(1, 2, 3, 4));
         modelManager.setUserPrefs(userPrefs);
         assertEquals(userPrefs, modelManager.getUserPrefs());
@@ -59,6 +75,7 @@ public class ModelManagerTest {
         // Modifying userPrefs should not modify modelManager's userPrefs
         UserPrefs oldUserPrefs = new UserPrefs(userPrefs);
         userPrefs.setAddressBookFilePath(Paths.get("new/address/book/file/path"));
+        userPrefs.setArticleDataDirectoryPath(Paths.get("new/article/data/directory/path"));
         assertEquals(oldUserPrefs, modelManager.getUserPrefs());
     }
 
@@ -86,6 +103,19 @@ public class ModelManagerTest {
         Path path = Paths.get("address/book/file/path");
         modelManager.setAddressBookFilePath(path);
         assertEquals(path, modelManager.getAddressBookFilePath());
+    }
+
+    @Test
+    public void setArticleDataDirectoryPath_nullPath_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        modelManager.setArticleDataDirectoryPath(null);
+    }
+
+    @Test
+    public void setArticleDataDirectoryPath_validPath_setsAddressBookFilePath() {
+        Path path = Paths.get("article/data/directory/path");
+        modelManager.setArticleDataDirectoryPath(path);
+        assertEquals(path, modelManager.getArticleDataDirectoryPath());
     }
 
     @Test
@@ -188,5 +218,53 @@ public class ModelManagerTest {
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs, storage)));
+
+        UserPrefs differentUserPrefs2 = new UserPrefs();
+        differentUserPrefs2.setArticleDataDirectoryPath(Paths.get("differentFilePath"));
+        assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs, storage)));
+    }
+
+    /**
+     * This is an integration test to see that ModelManager#addPerson is properly hooked up to ArticleStorage.
+     */
+    @Test
+    public void addPerson_networkArticleSavedToDisk() throws IOException {
+        JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(getTempFilePath("ab"));
+        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
+        ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
+        Storage storageManager = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
+        modelManager = new ModelManager(new EntryBook(), new UserPrefs(), storageManager);
+        modelManager.addPerson(VALID_HTTPS_LINK);
+        String content = new String(
+                Files.readAllBytes(
+                        modelManager
+                                .getStorage()
+                                .getArticlePath(VALID_HTTPS_LINK.getLink().value)),
+                StandardCharsets.UTF_8);
+        assertTrue(content.contains("<p>It works!</p>"));
+    }
+
+    /**
+     * This is an integration test to see that ModelManager#addPerson is properly hooked up to ArticleStorage.
+     */
+    @Test
+    public void addPerson_localArticleSavedToDisk() throws IOException {
+        JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(getTempFilePath("ab"));
+        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
+        ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
+        Storage storageManager = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
+        modelManager = new ModelManager(new EntryBook(), new UserPrefs(), storageManager);
+        modelManager.addPerson(VALID_FILE_LINK);
+        String content = new String(
+                Files.readAllBytes(
+                        modelManager
+                                .getStorage()
+                                .getArticlePath(VALID_FILE_LINK.getLink().value)),
+                StandardCharsets.UTF_8);
+        assertEquals(FILE_TEST_CONTENTS, content);
+    }
+
+    private Path getTempFilePath(String fileName) {
+        return testFolder.getRoot().toPath().resolve(fileName);
     }
 }

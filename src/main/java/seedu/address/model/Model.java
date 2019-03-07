@@ -54,6 +54,15 @@ public interface Model {
     void setAddressBookFilePath(Path addressBookFilePath);
 
     /**
+     * Returns the user prefs' article data directory path.
+     */
+    Path getArticleDataDirectoryPath();
+
+    /**
+     * Sets the user prefs' article data directory path.
+     */
+    void setArticleDataDirectoryPath(Path articleDataDirectoryPath);
+    /**
      * Replaces address book data with the data in {@code addressBook}.
      */
     void setAddressBook(ReadOnlyEntryBook addressBook);
