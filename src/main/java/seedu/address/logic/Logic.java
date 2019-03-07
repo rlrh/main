@@ -12,8 +12,6 @@ import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.entry.Entry;
 import seedu.address.ui.ViewMode;
 
-import javax.swing.text.View;
-
 /**
  * API of the Logic component
  */

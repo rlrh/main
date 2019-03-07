@@ -7,6 +7,9 @@ import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
 
+import com.chimbori.crux.articles.Article;
+import com.chimbori.crux.articles.ArticleExtractor;
+
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -14,14 +17,11 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import seedu.address.commons.util.XmlUtil;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.util.XmlUtil;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.entry.Entry;
-
-import com.chimbori.crux.articles.Article;
-import com.chimbori.crux.articles.ArticleExtractor;
 
 /**
  * The Browser Panel of the App.
