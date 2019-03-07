@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.net.URL;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
+
 import javax.xml.transform.TransformerException;
 
 import com.chimbori.crux.articles.Article;

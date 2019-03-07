@@ -16,11 +16,17 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 /**
- * Converts a XML Document to String and vice versa.
+ * Converts between XML Document and String.
  * Code modified from https://www.journaldev.com/1237/java-convert-string-to-xml-document-and-xml-document-to-string
  */
 public class XmlUtil {
 
+    /**
+     * Converts a XML Document to string
+     * @param doc XML Document
+     * @return string from doc
+     * @throws TransformerException
+     */
     public static String convertDocumentToString(Document doc) throws TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
@@ -31,10 +37,16 @@ public class XmlUtil {
         return output;
     }
 
+    /**
+     * Converts a string to XML Document
+     * @param xmlStr string representation of a XML Document
+     * @return XML Document from xmlStr
+     * @throws Exception
+     */
     private static Document convertStringToDocument(String xmlStr) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) );
+        Document doc = builder.parse(new InputSource(new StringReader(xmlStr)));
         return doc;
     }
 
