@@ -38,7 +38,7 @@ public class ModelManager implements Model {
     private final FilteredList<Entry> filteredEntries;
 
     private final SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
     private final Storage storage;
@@ -56,8 +56,6 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredEntries = new FilteredList<>(versionedEntryBook.getPersonList());
         filteredEntries.addListener(this::ensureSelectedPersonIsValid);
-
-        currentViewMode.set(ViewMode.BROWSER);
 
         this.storage = storage;
 
