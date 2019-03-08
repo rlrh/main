@@ -1,14 +1,16 @@
 package seedu.address.logic.commands;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+
 import org.junit.Test;
+
 import seedu.address.logic.CommandHistory;
 import seedu.address.mocks.TypicalModelManagerStub;
 import seedu.address.model.Model;
 import seedu.address.ui.ViewMode;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static seedu.address.logic.commands.CommandTestUtil.*;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code ViewModeCommand}.

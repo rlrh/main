@@ -1,12 +1,13 @@
 package seedu.address.logic.parser;
 
-import org.junit.Test;
-import seedu.address.logic.commands.ViewModeCommand;
-import seedu.address.ui.ViewMode;
-
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+
+import org.junit.Test;
+
+import seedu.address.logic.commands.ViewModeCommand;
+import seedu.address.ui.ViewMode;
 
 public class ViewModeCommandParserTest {
 
@@ -14,7 +15,10 @@ public class ViewModeCommandParserTest {
 
     @Test
     public void parse_emptyArg_throwsParseException() {
-        assertParseFailure(parser, "     ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewModeCommand.MESSAGE_USAGE));
+        assertParseFailure(parser,
+                "     ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewModeCommand.MESSAGE_USAGE)
+        );
     }
 
     @Test
@@ -30,7 +34,10 @@ public class ViewModeCommandParserTest {
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
-        assertParseFailure(parser, "nonsense", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewModeCommand.MESSAGE_USAGE));
+        assertParseFailure(parser,
+                "nonsense",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewModeCommand.MESSAGE_USAGE)
+        );
     }
 
 }
