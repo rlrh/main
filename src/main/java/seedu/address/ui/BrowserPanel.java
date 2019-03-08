@@ -109,11 +109,11 @@ public class BrowserPanel extends UiPart<Region> {
         if (isCurrentlyReaderView) {
             String message = String.format("Loading reader view for %s...", this.currentLocation);
             logger.info(message);
-            onSuccess.accept(new CommandResult(message));
+            // onSuccess.accept(new CommandResult(message));
         } else {
             String message = String.format("Loading %s...", this.currentLocation);
             logger.info(message);
-            onSuccess.accept(new CommandResult(message));
+            // onSuccess.accept(new CommandResult(message));
         }
     }
 
@@ -126,11 +126,11 @@ public class BrowserPanel extends UiPart<Region> {
         if (isCurrentlyReaderView) {
             String message = String.format("Successfully loaded reader view for %s", this.currentLocation);
             logger.info(message);
-            onSuccess.accept(new CommandResult(message));
+            // onSuccess.accept(new CommandResult(message));
         } else {
             String message = String.format("Successfully loaded %s", this.currentLocation);
             logger.info(message);
-            onSuccess.accept(new CommandResult(message));
+            // onSuccess.accept(new CommandResult(message));
         }
 
         // Load reader view if reader view mode is selected but not loaded
@@ -146,7 +146,7 @@ public class BrowserPanel extends UiPart<Region> {
     private void handleFailed() {
         String message = String.format("Failed to load %s", this.currentLocation);
         logger.warning(message);
-        onFailure.accept(new Exception(message));
+        // onFailure.accept(new Exception(message));
         loadErrorPage();
     }
 
@@ -203,7 +203,7 @@ public class BrowserPanel extends UiPart<Region> {
         } catch (TransformerException te) {
             String message = String.format("Failed to load reader view for %s", this.currentLocation);
             logger.warning(message);
-            onFailure.accept(new Exception(message));
+            // onFailure.accept(new Exception(message));
         }
     }
 
