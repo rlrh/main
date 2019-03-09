@@ -10,7 +10,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.tag.Tag;
@@ -51,18 +51,18 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String comment} into a {@code Comment}.
+     * Parses a {@code String description} into a {@code Description}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code comment} is invalid.
+     * @throws ParseException if the given {@code description} is invalid.
      */
-    public static Comment parseComment(String comment) throws ParseException {
-        requireNonNull(comment);
-        String trimmedComment = comment.trim();
-        if (!Comment.isValidComment(trimmedComment)) {
-            throw new ParseException(Comment.MESSAGE_CONSTRAINTS);
+    public static Description parseDescription(String description) throws ParseException {
+        requireNonNull(description);
+        String trimmedComment = description.trim();
+        if (!Description.isValidDescription(trimmedComment)) {
+            throw new ParseException(Description.MESSAGE_CONSTRAINTS);
         }
-        return new Comment(trimmedComment);
+        return new Description(trimmedComment);
     }
 
     /**

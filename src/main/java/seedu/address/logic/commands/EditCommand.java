@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COMMENT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
@@ -20,7 +20,7 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
@@ -39,11 +39,11 @@ public class EditCommand extends Command {
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_TITLE + "TITLE] "
-            + "[" + PREFIX_COMMENT + "COMMENT] "
+            + "[" + PREFIX_DESCRIPTION + "COMMENT] "
             + "[" + PREFIX_LINK + "LINK] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_COMMENT + "New comment "
+            + PREFIX_DESCRIPTION + "New description "
             + PREFIX_LINK + "https://new-link.com";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Entry: %1$s";
@@ -51,18 +51,18 @@ public class EditCommand extends Command {
     public static final String MESSAGE_DUPLICATE_PERSON = "This entry already exists in the entry book.";
 
     private final Index index;
-    private final EditPersonDescriptor editPersonDescriptor;
+    private final EditEntryDescriptor editEntryDescriptor;
 
     /**
      * @param index of the entry in the filtered entry list to edit
-     * @param editPersonDescriptor details to edit the entry with
+     * @param editEntryDescriptor details to edit the entry with
      */
-    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
+    public EditCommand(Index index, EditEntryDescriptor editEntryDescriptor) {
         requireNonNull(index);
-        requireNonNull(editPersonDescriptor);
+        requireNonNull(editEntryDescriptor);
 
         this.index = index;
-        this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
+        this.editEntryDescriptor = new EditEntryDescriptor(editEntryDescriptor);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class EditCommand extends Command {
         }
 
         Entry entryToEdit = lastShownList.get(index.getZeroBased());
-        Entry editedEntry = createEditedPerson(entryToEdit, editPersonDescriptor);
+        Entry editedEntry = createEditedPerson(entryToEdit, editEntryDescriptor);
 
         if (!entryToEdit.isSamePerson(editedEntry) && model.hasPerson(editedEntry)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
@@ -89,18 +89,18 @@ public class EditCommand extends Command {
 
     /**
      * Creates and returns a {@code Entry} with the details of {@code entryToEdit}
-     * edited with {@code editPersonDescriptor}.
+     * edited with {@code editEntryDescriptor}.
      */
-    private static Entry createEditedPerson(Entry entryToEdit, EditPersonDescriptor editPersonDescriptor) {
+    private static Entry createEditedPerson(Entry entryToEdit, EditEntryDescriptor editEntryDescriptor) {
         assert entryToEdit != null;
 
-        Title updatedTitle = editPersonDescriptor.getTitle().orElse(entryToEdit.getTitle());
-        Comment updatedComment = editPersonDescriptor.getComment().orElse(entryToEdit.getComment());
-        Link updatedLink = editPersonDescriptor.getLink().orElse(entryToEdit.getLink());
-        Address updatedAddress = editPersonDescriptor.getAddress().orElse(entryToEdit.getAddress());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(entryToEdit.getTags());
+        Title updatedTitle = editEntryDescriptor.getTitle().orElse(entryToEdit.getTitle());
+        Description updatedDescription = editEntryDescriptor.getDescription().orElse(entryToEdit.getDescription());
+        Link updatedLink = editEntryDescriptor.getLink().orElse(entryToEdit.getLink());
+        Address updatedAddress = editEntryDescriptor.getAddress().orElse(entryToEdit.getAddress());
+        Set<Tag> updatedTags = editEntryDescriptor.getTags().orElse(entryToEdit.getTags());
 
-        return new Entry(updatedTitle, updatedComment, updatedLink, updatedAddress, updatedTags);
+        return new Entry(updatedTitle, updatedDescription, updatedLink, updatedAddress, updatedTags);
     }
 
     @Override
@@ -118,29 +118,29 @@ public class EditCommand extends Command {
         // state check
         EditCommand e = (EditCommand) other;
         return index.equals(e.index)
-                && editPersonDescriptor.equals(e.editPersonDescriptor);
+                && editEntryDescriptor.equals(e.editEntryDescriptor);
     }
 
     /**
      * Stores the details to edit the entry with. Each non-empty field value will replace the
      * corresponding field value of the entry.
      */
-    public static class EditPersonDescriptor {
+    public static class EditEntryDescriptor {
         private Title title;
-        private Comment comment;
+        private Description description;
         private Link link;
         private Address address;
         private Set<Tag> tags;
 
-        public EditPersonDescriptor() {}
+        public EditEntryDescriptor() {}
 
         /**
          * Copy constructor.
          * A defensive copy of {@code tags} is used internally.
          */
-        public EditPersonDescriptor(EditPersonDescriptor toCopy) {
+        public EditEntryDescriptor(EditEntryDescriptor toCopy) {
             setTitle(toCopy.title);
-            setComment(toCopy.comment);
+            setDescription(toCopy.description);
             setLink(toCopy.link);
             setAddress(toCopy.address);
             setTags(toCopy.tags);
@@ -150,7 +150,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(title, comment, link, address, tags);
+            return CollectionUtil.isAnyNonNull(title, description, link, address, tags);
         }
 
         public void setTitle(Title title) {
@@ -161,12 +161,12 @@ public class EditCommand extends Command {
             return Optional.ofNullable(title);
         }
 
-        public void setComment(Comment comment) {
-            this.comment = comment;
+        public void setDescription(Description description) {
+            this.description = description;
         }
 
-        public Optional<Comment> getComment() {
-            return Optional.ofNullable(comment);
+        public Optional<Description> getDescription() {
+            return Optional.ofNullable(description);
         }
 
         public void setLink(Link link) {
@@ -210,15 +210,15 @@ public class EditCommand extends Command {
             }
 
             // instanceof handles nulls
-            if (!(other instanceof EditPersonDescriptor)) {
+            if (!(other instanceof EditEntryDescriptor)) {
                 return false;
             }
 
             // state check
-            EditPersonDescriptor e = (EditPersonDescriptor) other;
+            EditEntryDescriptor e = (EditEntryDescriptor) other;
 
             return getTitle().equals(e.getTitle())
-                    && getComment().equals(e.getComment())
+                    && getDescription().equals(e.getDescription())
                     && getLink().equals(e.getLink())
                     && getAddress().equals(e.getAddress())
                     && getTags().equals(e.getTags());

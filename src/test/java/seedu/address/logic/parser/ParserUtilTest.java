@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import org.junit.rules.ExpectedException;
 import seedu.address.logic.parser.exceptions.ParseException;
 // No longer valid with the optionality of the (invisible) address field
 // import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.tag.Tag;
@@ -59,10 +59,10 @@ public class ParserUtilTest {
     @Test
     public void parseIndex_validInput_success() throws Exception {
         // No whitespaces
-        assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("1"));
+        assertEquals(INDEX_FIRST_ENTRY, ParserUtil.parseIndex("1"));
 
         // Leading and trailing whitespaces
-        assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("  1  "));
+        assertEquals(INDEX_FIRST_ENTRY, ParserUtil.parseIndex("  1  "));
     }
 
     @Test
@@ -90,25 +90,25 @@ public class ParserUtilTest {
 
     @Test
     public void parsePhone_null_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseComment((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseDescription((String) null));
     }
 
     @Test
     public void parsePhone_invalidValue_throwsParseException() {
-        Assert.assertThrows(ParseException.class, () -> ParserUtil.parseComment(INVALID_COMMENT));
+        Assert.assertThrows(ParseException.class, () -> ParserUtil.parseDescription(INVALID_COMMENT));
     }
 
     @Test
     public void parsePhone_validValueWithoutWhitespace_returnsPhone() throws Exception {
-        Comment expectedComment = new Comment(VALID_COMMENT);
-        assertEquals(expectedComment, ParserUtil.parseComment(VALID_COMMENT));
+        Description expectedDescription = new Description(VALID_COMMENT);
+        assertEquals(expectedDescription, ParserUtil.parseDescription(VALID_COMMENT));
     }
 
     @Test
     public void parsePhone_validValueWithWhitespace_returnsTrimmedPhone() throws Exception {
         String phoneWithWhitespace = WHITESPACE + VALID_COMMENT + WHITESPACE;
-        Comment expectedComment = new Comment(VALID_COMMENT);
-        assertEquals(expectedComment, ParserUtil.parseComment(phoneWithWhitespace));
+        Description expectedDescription = new Description(VALID_COMMENT);
+        assertEquals(expectedDescription, ParserUtil.parseDescription(phoneWithWhitespace));
     }
 
     // No longer valid with the optionality of the (invisible) address field

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
@@ -51,7 +51,7 @@ class JsonAdaptedEntry {
      */
     public JsonAdaptedEntry(Entry source) {
         name = source.getTitle().fullTitle;
-        phone = source.getComment().value;
+        phone = source.getDescription().value;
         email = source.getLink().value;
         address = source.getAddress().value;
         tagged.addAll(source.getTags().stream()
@@ -79,12 +79,13 @@ class JsonAdaptedEntry {
         final Title modelTitle = new Title(name);
 
         if (phone == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Comment.class.getSimpleName()));
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                                                          Description.class.getSimpleName()));
         }
-        if (!Comment.isValidComment(phone)) {
-            throw new IllegalValueException(Comment.MESSAGE_CONSTRAINTS);
+        if (!Description.isValidDescription(phone)) {
+            throw new IllegalValueException(Description.MESSAGE_CONSTRAINTS);
         }
-        final Comment modelComment = new Comment(phone);
+        final Description modelDescription = new Description(phone);
 
         if (email == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Link.class.getSimpleName()));
@@ -103,7 +104,7 @@ class JsonAdaptedEntry {
         final Address modelAddress = new Address(address);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Entry(modelTitle, modelComment, modelLink, modelAddress, modelTags);
+        return new Entry(modelTitle, modelDescription, modelLink, modelAddress, modelTags);
     }
 
 }

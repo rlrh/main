@@ -157,7 +157,7 @@ public class ModelManagerTest {
     public void setPerson_personIsSelected_selectedPersonUpdated() {
         modelManager.addPerson(ALICE);
         modelManager.setSelectedPerson(ALICE);
-        Entry updatedAlice = new EntryBuilder(ALICE).withEmail(VALID_LINK_BOB).build();
+        Entry updatedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
         modelManager.setPerson(ALICE, updatedAlice);
         assertEquals(updatedAlice, modelManager.getSelectedPerson());
     }

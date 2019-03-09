@@ -4,43 +4,44 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.logic.commands.EditCommand;
+import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.tag.Tag;
 
 /**
- * A utility class to help with building EditPersonDescriptor objects.
+ * A utility class to help with building EditEntryDescriptor objects.
  */
 public class EditPersonDescriptorBuilder {
 
-    private EditPersonDescriptor descriptor;
+    private EditCommand.EditEntryDescriptor descriptor;
 
     public EditPersonDescriptorBuilder() {
-        descriptor = new EditPersonDescriptor();
+        descriptor = new EditCommand.EditEntryDescriptor();
     }
 
-    public EditPersonDescriptorBuilder(EditPersonDescriptor descriptor) {
-        this.descriptor = new EditPersonDescriptor(descriptor);
+    public EditPersonDescriptorBuilder(EditCommand.EditEntryDescriptor descriptor) {
+        this.descriptor = new EditEntryDescriptor(descriptor);
     }
 
     /**
-     * Returns an {@code EditPersonDescriptor} with fields containing {@code entry}'s details
+     * Returns an {@code EditEntryDescriptor} with fields containing {@code entry}'s details
      */
     public EditPersonDescriptorBuilder(Entry entry) {
-        descriptor = new EditPersonDescriptor();
+        descriptor = new EditCommand.EditEntryDescriptor();
         descriptor.setTitle(entry.getTitle());
-        descriptor.setComment(entry.getComment());
+        descriptor.setDescription(entry.getDescription());
         descriptor.setLink(entry.getLink());
         descriptor.setAddress(entry.getAddress());
         descriptor.setTags(entry.getTags());
     }
 
     /**
-     * Sets the {@code Title} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Title} of the {@code EditEntryDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withName(String name) {
         descriptor.setTitle(new Title(name));
@@ -48,15 +49,15 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Comment} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Description} of the {@code EditEntryDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withPhone(String phone) {
-        descriptor.setComment(new Comment(phone));
+        descriptor.setDescription(new Description(phone));
         return this;
     }
 
     /**
-     * Sets the {@code Link} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Link} of the {@code EditEntryDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withEmail(String email) {
         descriptor.setLink(new Link(email));
@@ -64,7 +65,7 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Address} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Address} of the {@code EditEntryDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withAddress(String address) {
         descriptor.setAddress(new Address(address));
@@ -72,7 +73,7 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code EditPersonDescriptor}
+     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code EditEntryDescriptor}
      * that we are building.
      */
     public EditPersonDescriptorBuilder withTags(String... tags) {
@@ -81,7 +82,7 @@ public class EditPersonDescriptorBuilder {
         return this;
     }
 
-    public EditPersonDescriptor build() {
+    public EditCommand.EditEntryDescriptor build() {
         return descriptor;
     }
 }

@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COMMENT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
@@ -23,12 +23,12 @@ public class AddCommand extends Command {
             + "Parameters: "
             + PREFIX_LINK + "LINK "
             + "[" + PREFIX_TITLE + "TITLE] "
-            + "[" + PREFIX_COMMENT + "COMMENT] "
+            + "[" + PREFIX_DESCRIPTION + "COMMENT] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_LINK + "https://example.com "
             + PREFIX_TITLE + "Title ExampleTitle "
-            + PREFIX_COMMENT + "Comment ExampleComment "
+            + PREFIX_DESCRIPTION + "Description ExampleDescriptioDescriptionn "
             + PREFIX_TAG + "science "
             + PREFIX_TAG + "tech";
 

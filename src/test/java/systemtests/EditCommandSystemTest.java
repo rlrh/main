@@ -5,10 +5,10 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.COMMENT_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.COMMENT_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_COMMENT_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
@@ -18,7 +18,7 @@ import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_COMMENT_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_AMY;
@@ -28,8 +28,8 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.TypicalEntries.AMY;
 import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_ENTRY;
 
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
@@ -59,9 +59,9 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: edit all fields, command with leading spaces, trailing spaces and multiple spaces between each field
          * -> edited
          */
-        Index index = INDEX_FIRST_PERSON;
+        Index index = INDEX_FIRST_ENTRY;
         String command = " " + EditCommand.COMMAND_WORD + "  " + index.getOneBased() + "  " + TITLE_DESC_BOB + "  "
-                + COMMENT_DESC_BOB + " " + LINK_DESC_BOB + "  " + ADDRESS_DESC_BOB + " " + TAG_DESC_SCIENCE + " ";
+                + DESCRIPTION_DESC_BOB + " " + LINK_DESC_BOB + "  " + ADDRESS_DESC_BOB + " " + TAG_DESC_SCIENCE + " ";
         Entry editedEntry = new EntryBuilder(BOB).withTags(VALID_TAG_SCIENCE).build();
         assertCommandSuccess(command, index, editedEntry);
 
@@ -73,37 +73,37 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: redo editing the last entry in the list -> last entry edited again */
         command = RedoCommand.COMMAND_WORD;
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
-        model.setPerson(getModel().getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()), editedEntry);
+        model.setPerson(getModel().getFilteredPersonList().get(INDEX_FIRST_ENTRY.getZeroBased()), editedEntry);
         assertCommandSuccess(command, model, expectedResultMessage);
 
         /* Case: edit a entry with new values same as existing values -> edited */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_BOB + COMMENT_DESC_BOB + LINK_DESC_BOB
+                + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
         assertCommandSuccess(command, index, BOB);
 
         /* Case: edit a entry with new values same as another entry's values but with different name -> edited */
         assertTrue(getModel().getAddressBook().getPersonList().contains(BOB));
-        index = INDEX_SECOND_PERSON;
+        index = INDEX_SECOND_ENTRY;
         assertNotEquals(getModel().getFilteredPersonList().get(index.getZeroBased()), BOB);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_AMY + COMMENT_DESC_BOB + LINK_DESC_BOB
+                + TITLE_DESC_AMY + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
-        editedEntry = new EntryBuilder(BOB).withName(VALID_TITLE_AMY).build();
+        editedEntry = new EntryBuilder(BOB).withTitle(VALID_TITLE_AMY).build();
         assertCommandSuccess(command, index, editedEntry);
 
         /* Case: edit a entry with new values same as another entry's values but with different phone and email
          * -> edited
          */
-        index = INDEX_SECOND_PERSON;
+        index = INDEX_SECOND_ENTRY;
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_BOB + COMMENT_DESC_AMY + LINK_DESC_AMY
+                + TITLE_DESC_BOB + DESCRIPTION_DESC_AMY + LINK_DESC_AMY
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
-        editedEntry = new EntryBuilder(BOB).withPhone(VALID_COMMENT_AMY).withEmail(VALID_LINK_AMY).build();
+        editedEntry = new EntryBuilder(BOB).withDescription(VALID_DESCRIPTION_AMY).withLink(VALID_LINK_AMY).build();
         assertCommandSuccess(command, index, editedEntry);
 
         /* Case: clear tags -> cleared */
-        index = INDEX_FIRST_PERSON;
+        index = INDEX_FIRST_ENTRY;
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + PREFIX_TAG.getPrefix();
         Entry entryToEdit = getModel().getFilteredPersonList().get(index.getZeroBased());
         editedEntry = new EntryBuilder(entryToEdit).withTags().build();
@@ -113,11 +113,11 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: filtered entry list, edit index within bounds of address book and entry list -> edited */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        index = INDEX_FIRST_PERSON;
+        index = INDEX_FIRST_ENTRY;
         assertTrue(index.getZeroBased() < getModel().getFilteredPersonList().size());
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + TITLE_DESC_BOB;
         entryToEdit = getModel().getFilteredPersonList().get(index.getZeroBased());
-        editedEntry = new EntryBuilder(entryToEdit).withName(VALID_TITLE_BOB).build();
+        editedEntry = new EntryBuilder(entryToEdit).withTitle(VALID_TITLE_BOB).build();
         assertCommandSuccess(command, index, editedEntry);
 
         /* Case: filtered entry list, edit index within bounds of address book but out of bounds of entry list
@@ -134,10 +134,10 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
          * browser url changes
          */
         showAllPersons();
-        index = INDEX_FIRST_PERSON;
+        index = INDEX_FIRST_ENTRY;
         selectPerson(index);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_AMY + COMMENT_DESC_AMY + LINK_DESC_AMY
+                + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY
                 + ADDRESS_DESC_AMY + TAG_DESC_TECH;
         // this can be misleading: card selection actually remains unchanged but the
         // browser's url is updated to reflect the new entry's name
@@ -163,65 +163,65 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
 
         /* Case: missing all fields -> rejected */
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased(),
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased(),
                 EditCommand.MESSAGE_NOT_EDITED);
 
         /* Case: invalid name -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + INVALID_TITLE_DESC,
+                + INDEX_FIRST_ENTRY.getOneBased() + INVALID_TITLE_DESC,
                 Title.MESSAGE_CONSTRAINTS);
 
         /* Case: invalid phone -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + INVALID_COMMENT_DESC,
-                Comment.MESSAGE_CONSTRAINTS);
+                + INDEX_FIRST_ENTRY.getOneBased() + INVALID_DESCRIPTION_DESC,
+                Description.MESSAGE_CONSTRAINTS);
 
         /* Case: invalid email -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + INVALID_LINK_DESC,
+                + INDEX_FIRST_ENTRY.getOneBased() + INVALID_LINK_DESC,
                 Link.MESSAGE_CONSTRAINTS);
 
         /* Case: invalid address -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + INVALID_ADDRESS_DESC,
+                + INDEX_FIRST_ENTRY.getOneBased() + INVALID_ADDRESS_DESC,
                 Address.MESSAGE_CONSTRAINTS);
 
         /* Case: invalid tag -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + INVALID_TAG_DESC,
+                + INDEX_FIRST_ENTRY.getOneBased() + INVALID_TAG_DESC,
                 Tag.MESSAGE_CONSTRAINTS);
 
         /* Case: edit a entry with new values same as another entry's values -> rejected */
         executeCommand(EntryUtil.getAddCommand(BOB));
         assertTrue(getModel().getAddressBook().getPersonList().contains(BOB));
-        index = INDEX_FIRST_PERSON;
+        index = INDEX_FIRST_ENTRY;
         assertFalse(getModel().getFilteredPersonList().get(index.getZeroBased()).equals(BOB));
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_BOB + COMMENT_DESC_BOB + LINK_DESC_BOB
+                + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
 
         /* Case: edit a entry with new values same as another entry's values but with different tags -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_BOB + COMMENT_DESC_BOB + LINK_DESC_BOB
+                + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_SCIENCE;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
 
         /* Case: edit a entry with new values same as another entry's values but with different address -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_BOB + COMMENT_DESC_BOB + LINK_DESC_BOB
+                + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_AMY + TAG_DESC_TECH + TAG_DESC_SCIENCE;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
 
         /* Case: edit a entry with new values same as another entry's values but with different phone -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_BOB + COMMENT_DESC_AMY + LINK_DESC_BOB
+                + TITLE_DESC_BOB + DESCRIPTION_DESC_AMY + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
 
         /* Case: edit a entry with new values same as another entry's values but with different email -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
-                + TITLE_DESC_BOB + COMMENT_DESC_BOB + LINK_DESC_AMY
+                + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_AMY
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
     }

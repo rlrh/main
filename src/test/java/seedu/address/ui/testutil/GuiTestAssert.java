@@ -38,7 +38,7 @@ public class GuiTestAssert {
      */
     public static void assertCardDisplaysPerson(Entry expectedEntry, EntryCardHandle actualCard) {
         assertEquals(expectedEntry.getTitle().fullTitle, actualCard.getTitle());
-        assertEquals(expectedEntry.getComment().value, actualCard.getComment());
+        assertEquals(expectedEntry.getDescription().value, actualCard.getComment());
         assertEquals(expectedEntry.getLink().value, actualCard.getLink());
         assertEquals(expectedEntry.getAddress().value, actualCard.getAddress());
         assertTagsAndTagColorStylesEqual(expectedEntry, actualCard);

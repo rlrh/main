@@ -70,8 +70,8 @@ public class AddCommandTest {
 
     @Test
     public void equals() {
-        Entry alice = new EntryBuilder().withName("Alice").build();
-        Entry bob = new EntryBuilder().withName("Bob").build();
+        Entry alice = new EntryBuilder().withTitle("Alice").build();
+        Entry bob = new EntryBuilder().withTitle("Bob").build();
         AddCommand addAliceCommand = new AddCommand(alice);
         AddCommand addBobCommand = new AddCommand(bob);
 

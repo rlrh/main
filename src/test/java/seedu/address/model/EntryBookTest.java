@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.testutil.TypicalEntries.ALICE;
-import static seedu.address.testutil.TypicalEntries.getTypicalAddressBook;
+import static seedu.address.testutil.TypicalEntries.getTypicalEntryBook;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,7 +45,7 @@ public class EntryBookTest {
 
     @Test
     public void resetData_withValidReadOnlyAddressBook_replacesData() {
-        EntryBook newData = getTypicalAddressBook();
+        EntryBook newData = getTypicalEntryBook();
         addressBook.resetData(newData);
         assertEquals(newData, addressBook);
     }

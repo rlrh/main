@@ -8,7 +8,7 @@ import static seedu.address.testutil.TestUtil.getLastIndex;
 import static seedu.address.testutil.TestUtil.getMidIndex;
 import static seedu.address.testutil.TestUtil.getPerson;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import org.junit.Test;
 
@@ -31,8 +31,8 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: delete the first entry in the list, command with leading spaces and trailing spaces -> deleted */
         Model expectedModel = getModel();
-        String command = "     " + DeleteCommand.COMMAND_WORD + "      " + INDEX_FIRST_PERSON.getOneBased() + "       ";
-        Entry deletedEntry = removePerson(expectedModel, INDEX_FIRST_PERSON);
+        String command = "     " + DeleteCommand.COMMAND_WORD + "      " + INDEX_FIRST_ENTRY.getOneBased() + "       ";
+        Entry deletedEntry = removePerson(expectedModel, INDEX_FIRST_ENTRY);
         String expectedResultMessage = String.format(MESSAGE_DELETE_PERSON_SUCCESS, deletedEntry);
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
 
@@ -60,7 +60,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: filtered entry list, delete index within bounds of address book and entry list -> deleted */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        Index index = INDEX_FIRST_PERSON;
+        Index index = INDEX_FIRST_ENTRY;
         assertTrue(index.getZeroBased() < getModel().getFilteredPersonList().size());
         assertCommandSuccess(index);
 

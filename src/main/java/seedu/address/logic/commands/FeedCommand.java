@@ -20,7 +20,7 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
@@ -41,7 +41,7 @@ public class FeedCommand extends Command {
             + ": Opens a link as an RSS feed and adds all its entries.\n"
             + "Parameters: LINK\n"
             + "Example: " + COMMAND_WORD + " https://open.kattis.com/rss/new-problems";
-    public static final String DEFAULT_COMMENT_TEXT = "imported from %s";
+    public static final String DEFAULT_DESCRIPTION_TEXT = "imported from %s";
 
     private String feedUrl;
     public FeedCommand(String feedUrl) {
@@ -79,20 +79,20 @@ public class FeedCommand extends Command {
     private Entry syndEntryToEntryBookEntry(SyndEntry syndEntry) {
         return new Entry(
                 new Title(syndEntry.getTitle().trim()),
-                extractComment(syndEntry),
+                extractDescription(syndEntry),
                 new Link(syndEntry.getLink()),
                 new Address("unused"),
                 Collections.emptySet()
         );
     }
 
-    /** Extracts a useful comment from a SyndEntry. */
-    private Comment extractComment(SyndEntry syndEntry) {
+    /** Extracts a useful description from a SyndEntry. */
+    private Description extractDescription(SyndEntry syndEntry) {
         String description = syndEntry.getDescription().getValue().replace('\n', ' ').trim();
         if (description.isEmpty()) {
-            description = String.format(DEFAULT_COMMENT_TEXT, feedUrl);
+            description = String.format(DEFAULT_DESCRIPTION_TEXT, feedUrl);
         }
-        return new Comment(description);
+        return new Description(description);
     }
 
     @Override

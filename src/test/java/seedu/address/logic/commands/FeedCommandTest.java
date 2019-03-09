@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.FeedCommand.DEFAULT_COMMENT_TEXT;
+import static seedu.address.logic.commands.FeedCommand.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_NET;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_XML;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_SUCCESS;
@@ -20,7 +20,7 @@ import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
@@ -62,7 +62,7 @@ public class FeedCommandTest {
                         "sigh"),
                 makeEntryFromRssTriple("Anime: Durarara!!",
                         "https://blog.GNU.moe/anime/review/durarara.html",
-                        String.format(DEFAULT_COMMENT_TEXT, url)),
+                        String.format(DEFAULT_DESCRIPTION_TEXT, url)),
                 makeEntryFromRssTriple("Anime: Battle Programmer Shirase",
                         "https://blog.GNU.moe/anime/review/bps.html",
                         "lol"),
@@ -76,10 +76,10 @@ public class FeedCommandTest {
     }
 
     /** Makes an EntryBook entry from the 3 fields that we are harvesting from RSS. */
-    private static Entry makeEntryFromRssTriple(String title, String link, String comment) {
+    private static Entry makeEntryFromRssTriple(String title, String link, String description) {
         return new Entry(
                 new Title(title),
-                new Comment(comment),
+                new Description(description),
                 new Link(link),
                 new Address("unused"), // this dummy matches that in FeedCommand
                 Collections.emptySet()
