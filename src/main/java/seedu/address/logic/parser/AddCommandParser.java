@@ -33,14 +33,13 @@ public class AddCommandParser implements Parser<AddCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_TITLE, PREFIX_COMMENT, PREFIX_LINK, PREFIX_ADDRESS, PREFIX_TAG);
 
-        //if (!arePrefixesPresent(argMultimap, PREFIX_TITLE, PREFIX_ADDRESS, PREFIX_COMMENT, PREFIX_LINK)
-        if (!arePrefixesPresent(argMultimap, PREFIX_TITLE, PREFIX_COMMENT, PREFIX_LINK)
+        if (!arePrefixesPresent(argMultimap, PREFIX_LINK)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
-        Title title = ParserUtil.parseTitle(argMultimap.getValue(PREFIX_TITLE).get());
-        Comment comment = ParserUtil.parseComment(argMultimap.getValue(PREFIX_COMMENT).get());
+        Title title = ParserUtil.parseTitle(argMultimap.getValue(PREFIX_TITLE).orElse("Default Title"));
+        Comment comment = ParserUtil.parseComment(argMultimap.getValue(PREFIX_COMMENT).orElse("Default Comment"));
         Link link = ParserUtil.parseLink(argMultimap.getValue(PREFIX_LINK).get());
         // Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
         Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).orElse("Default Address"));
