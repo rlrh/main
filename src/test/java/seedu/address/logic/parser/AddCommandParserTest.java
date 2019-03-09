@@ -86,6 +86,12 @@ public class AddCommandParserTest {
     public void parse_compulsoryFieldMissing_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
 
+        // missing link prefix
+        assertParseFailure(parser, TITLE_DESC_BOB + COMMENT_DESC_BOB + VALID_LINK_BOB,
+                expectedMessage);
+
+        // To be deprecated
+        /*
         // missing name prefix
         assertParseFailure(parser, VALID_TITLE_BOB + COMMENT_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB,
                 expectedMessage);
@@ -94,12 +100,6 @@ public class AddCommandParserTest {
         assertParseFailure(parser, TITLE_DESC_BOB + VALID_COMMENT_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB,
                 expectedMessage);
 
-        // missing email prefix
-        assertParseFailure(parser, TITLE_DESC_BOB + COMMENT_DESC_BOB + VALID_LINK_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
-
-        // No longer valid with the optionality of the (invisible) address field
-        /*
         // missing address prefix
         assertParseFailure(parser, TITLE_DESC_BOB + COMMENT_DESC_BOB + LINK_DESC_BOB + VALID_ADDRESS_BOB,
                 expectedMessage);

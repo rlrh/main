@@ -143,19 +143,21 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         command = EntryUtil.getAddCommand(HOON) + " " + PREFIX_TAG.getPrefix() + "friends";
         assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
 
-        /* Case: missing name -> rejected */
-        command = AddCommand.COMMAND_WORD + COMMENT_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        /* Case: missing phone -> rejected */
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        /* Case: missing email -> rejected */
+        /* Case: missing link -> rejected */
         command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + ADDRESS_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
-        // No longer valid with the optionality of the (invisible) address field
+        // To be deprecated
+        /* Case: missing name -> rejected
+        command = AddCommand.COMMAND_WORD + COMMENT_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
+        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        */
+
+        /* Case: missing phone -> rejected
+        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
+        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        */
+
         /* Case: missing address -> rejected
         command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + LINK_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));

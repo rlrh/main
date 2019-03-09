@@ -65,6 +65,9 @@ public class AddCommandTest {
         addCommand.execute(modelStub, commandHistory);
     }
 
+    // TODO: Add tests for with/without Title/Description
+    // TODO: Add tests for Crux, should return non-null Title/Description
+
     @Test
     public void equals() {
         Entry alice = new EntryBuilder().withName("Alice").build();
