@@ -98,7 +98,7 @@ public class LogicManagerTest {
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        model = new ModelManager(model.getAddressBook(), model.getUserPrefs(), storage);
+        model = new ModelManager(model.getEntryBook(), model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 
         // Execute add command
@@ -106,8 +106,8 @@ public class LogicManagerTest {
                 + ADDRESS_DESC_AMY;
         Entry expectedEntry = new EntryBuilder(AMY).withTags().build();
         Model expectedModel = new ModelManagerStub();
-        expectedModel.addPerson(expectedEntry);
-        expectedModel.commitAddressBook();
+        expectedModel.addEntry(expectedEntry);
+        expectedModel.commitEntryBook();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
         String expectedFinalMessage = ModelManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
@@ -134,7 +134,7 @@ public class LogicManagerTest {
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
-        logic.getFilteredPersonList().remove(0);
+        logic.getFilteredEntryList().remove(0);
     }
 
     /**
@@ -167,7 +167,7 @@ public class LogicManagerTest {
      * @see #assertCommandBehavior(Class, String, String, Model)
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getAddressBook(), model.getUserPrefs(), model.getStorage());
+        Model expectedModel = new ModelManager(model.getEntryBook(), model.getUserPrefs(), model.getStorage());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 

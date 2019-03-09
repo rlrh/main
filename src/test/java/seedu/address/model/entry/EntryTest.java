@@ -30,32 +30,32 @@ public class EntryTest {
     @Test
     public void isSamePerson() {
         // same object -> returns true
-        assertTrue(ALICE.isSamePerson(ALICE));
+        assertTrue(ALICE.isSameEntry(ALICE));
 
         // null -> returns false
-        assertFalse(ALICE.isSamePerson(null));
+        assertFalse(ALICE.isSameEntry(null));
 
         // different phone and email -> returns false
         Entry editedAlice = new EntryBuilder(ALICE).withDescription(VALID_DESCRIPTION_BOB).withLink(VALID_LINK_BOB).build();
-        assertFalse(ALICE.isSamePerson(editedAlice));
+        assertFalse(ALICE.isSameEntry(editedAlice));
 
         // different name -> returns false
         editedAlice = new EntryBuilder(ALICE).withTitle(VALID_TITLE_BOB).build();
-        assertFalse(ALICE.isSamePerson(editedAlice));
+        assertFalse(ALICE.isSameEntry(editedAlice));
 
         // same name, same phone, different attributes -> returns true
         editedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withTags(VALID_TAG_SCIENCE).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
+        assertTrue(ALICE.isSameEntry(editedAlice));
 
         // same name, same email, different attributes -> returns true
         editedAlice = new EntryBuilder(ALICE).withDescription(VALID_DESCRIPTION_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withTags(VALID_TAG_SCIENCE).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
+        assertTrue(ALICE.isSameEntry(editedAlice));
 
         // same name, same phone, same email, different attributes -> returns true
         editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
+        assertTrue(ALICE.isSameEntry(editedAlice));
     }
 
     @Test

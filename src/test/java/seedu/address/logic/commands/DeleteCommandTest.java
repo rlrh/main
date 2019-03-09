@@ -32,21 +32,21 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
-        Entry entryToDelete = model.getFilteredPersonList().get(INDEX_FIRST_ENTRY.getZeroBased());
+        Entry entryToDelete = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_ENTRY);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, entryToDelete);
 
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), new StorageStub());
-        expectedModel.deletePerson(entryToDelete);
-        expectedModel.commitAddressBook();
+        ModelManager expectedModel = new ModelManager(model.getEntryBook(), new UserPrefs(), new StorageStub());
+        expectedModel.deleteEntry(entryToDelete);
+        expectedModel.commitEntryBook();
 
         assertCommandSuccess(deleteCommand, model, commandHistory, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredEntryList().size() + 1);
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 
         assertCommandFailure(deleteCommand, model, commandHistory, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -56,14 +56,14 @@ public class DeleteCommandTest {
     public void execute_validIndexFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_ENTRY);
 
-        Entry entryToDelete = model.getFilteredPersonList().get(INDEX_FIRST_ENTRY.getZeroBased());
+        Entry entryToDelete = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_ENTRY);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, entryToDelete);
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), new StorageStub());
-        expectedModel.deletePerson(entryToDelete);
-        expectedModel.commitAddressBook();
+        Model expectedModel = new ModelManager(model.getEntryBook(), new UserPrefs(), new StorageStub());
+        expectedModel.deleteEntry(entryToDelete);
+        expectedModel.commitEntryBook();
         showNoPerson(expectedModel);
 
         assertCommandSuccess(deleteCommand, model, commandHistory, expectedMessage, expectedModel);
@@ -75,7 +75,7 @@ public class DeleteCommandTest {
 
         Index outOfBoundIndex = INDEX_SECOND_ENTRY;
         // ensures that outOfBoundIndex is still in bounds of address book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
+        assertTrue(outOfBoundIndex.getZeroBased() < model.getEntryBook().getPersonList().size());
 
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 
@@ -84,27 +84,27 @@ public class DeleteCommandTest {
 
     @Test
     public void executeUndoRedo_validIndexUnfilteredList_success() throws Exception {
-        Entry entryToDelete = model.getFilteredPersonList().get(INDEX_FIRST_ENTRY.getZeroBased());
+        Entry entryToDelete = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_ENTRY);
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), new StorageStub());
-        expectedModel.deletePerson(entryToDelete);
-        expectedModel.commitAddressBook();
+        Model expectedModel = new ModelManager(model.getEntryBook(), new UserPrefs(), new StorageStub());
+        expectedModel.deleteEntry(entryToDelete);
+        expectedModel.commitEntryBook();
 
         // delete -> first entry deleted
         deleteCommand.execute(model, commandHistory);
 
         // undo -> reverts addressbook back to previous state and filtered entry list to show all persons
-        expectedModel.undoAddressBook();
+        expectedModel.undoEntryBook();
         assertCommandSuccess(new UndoCommand(), model, commandHistory, UndoCommand.MESSAGE_SUCCESS, expectedModel);
 
         // redo -> same first entry deleted again
-        expectedModel.redoAddressBook();
+        expectedModel.redoEntryBook();
         assertCommandSuccess(new RedoCommand(), model, commandHistory, RedoCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
     @Test
     public void executeUndoRedo_invalidIndexUnfilteredList_failure() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredEntryList().size() + 1);
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 
         // execution failed -> address book state not added into model
@@ -125,23 +125,23 @@ public class DeleteCommandTest {
     @Test
     public void executeUndoRedo_validIndexFilteredList_samePersonDeleted() throws Exception {
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_ENTRY);
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs(), new StorageStub());
+        Model expectedModel = new ModelManager(model.getEntryBook(), new UserPrefs(), new StorageStub());
 
         showPersonAtIndex(model, INDEX_SECOND_ENTRY);
-        Entry entryToDelete = model.getFilteredPersonList().get(INDEX_FIRST_ENTRY.getZeroBased());
-        expectedModel.deletePerson(entryToDelete);
-        expectedModel.commitAddressBook();
+        Entry entryToDelete = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
+        expectedModel.deleteEntry(entryToDelete);
+        expectedModel.commitEntryBook();
 
         // delete -> deletes second entry in unfiltered entry list / first entry in filtered entry list
         deleteCommand.execute(model, commandHistory);
 
         // undo -> reverts addressbook back to previous state and filtered entry list to show all persons
-        expectedModel.undoAddressBook();
+        expectedModel.undoEntryBook();
         assertCommandSuccess(new UndoCommand(), model, commandHistory, UndoCommand.MESSAGE_SUCCESS, expectedModel);
 
-        assertNotEquals(entryToDelete, model.getFilteredPersonList().get(INDEX_FIRST_ENTRY.getZeroBased()));
+        assertNotEquals(entryToDelete, model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased()));
         // redo -> deletes same second entry in unfiltered entry list
-        expectedModel.redoAddressBook();
+        expectedModel.redoEntryBook();
         assertCommandSuccess(new RedoCommand(), model, commandHistory, RedoCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
@@ -171,8 +171,8 @@ public class DeleteCommandTest {
      * Updates {@code model}'s filtered list to show no one.
      */
     private void showNoPerson(Model model) {
-        model.updateFilteredPersonList(p -> false);
+        model.updateFilteredEntryList(p -> false);
 
-        assertTrue(model.getFilteredPersonList().isEmpty());
+        assertTrue(model.getFilteredEntryList().isEmpty());
     }
 }

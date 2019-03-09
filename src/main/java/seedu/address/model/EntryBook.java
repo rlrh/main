@@ -8,15 +8,15 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.InvalidationListenerManager;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.UniquePersonList;
+import seedu.address.model.entry.UniqueEntryList;
 
 /**
  * Wraps all data at the address-book level
- * Duplicates are not allowed (by .isSamePerson comparison)
+ * Duplicates are not allowed (by .isSameEntry comparison)
  */
 public class EntryBook implements ReadOnlyEntryBook {
 
-    private final UniquePersonList persons;
+    private final UniqueEntryList persons;
     private final InvalidationListenerManager invalidationListenerManager = new InvalidationListenerManager();
 
     /*
@@ -27,7 +27,7 @@ public class EntryBook implements ReadOnlyEntryBook {
      *   among constructors.
      */
     {
-        persons = new UniquePersonList();
+        persons = new UniqueEntryList();
     }
 
     public EntryBook() {}

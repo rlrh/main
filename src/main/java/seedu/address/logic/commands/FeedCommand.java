@@ -55,8 +55,8 @@ public class FeedCommand extends Command {
         try {
             InputStream inputStream = Network.fetchAsStream(feedUrl);
             SyndFeed syndFeed = new SyndFeedInput().build(new XmlReader(inputStream));
-            convertToEntryList(syndFeed).forEach(model::addPerson);
-            model.commitAddressBook();
+            convertToEntryList(syndFeed).forEach(model::addEntry);
+            model.commitEntryBook();
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e), e);
         } catch (FeedException e) {
@@ -65,7 +65,7 @@ public class FeedCommand extends Command {
             throw new CommandException("Some other problem: " + StringUtil.getDetails(e), e);
         }
 
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_SUCCESS, feedUrl));
     }
 

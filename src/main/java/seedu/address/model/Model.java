@@ -43,14 +43,14 @@ public interface Model {
     void setGuiSettings(GuiSettings guiSettings);
 
     /**
-     * Returns the user prefs' address book file path.
+     * Returns the user prefs' entry book file path.
      */
-    Path getAddressBookFilePath();
+    Path getEntryBookFilePath();
 
     /**
-     * Sets the user prefs' address book file path.
+     * Sets the user prefs' entry book file path.
      */
-    void setAddressBookFilePath(Path addressBookFilePath);
+    void setEntryBookFilePath(Path entryBookFilePath);
 
     /**
      * Returns the user prefs' article data directory path.
@@ -62,36 +62,36 @@ public interface Model {
      */
     void setArticleDataDirectoryPath(Path articleDataDirectoryPath);
     /**
-     * Replaces address book data with the data in {@code addressBook}.
+     * Replaces entry book data with the data in {@code entryBook}.
      */
-    void setAddressBook(ReadOnlyEntryBook addressBook);
+    void setEntryBook(ReadOnlyEntryBook entryBook);
 
     /** Returns the EntryBook */
-    ReadOnlyEntryBook getAddressBook();
+    ReadOnlyEntryBook getEntryBook();
 
     /**
-     * Returns true if a entry with the same identity as {@code entry} exists in the address book.
+     * Returns true if a entry with the same identity as {@code entry} exists in the entry book.
      */
-    boolean hasPerson(Entry entry);
+    boolean hasEntry(Entry entry);
 
     /**
      * Deletes the given entry.
-     * The entry must exist in the address book.
+     * The entry must exist in the entry book.
      */
-    void deletePerson(Entry target);
+    void deleteEntry(Entry target);
 
     /**
      * Adds the given entry.
-     * {@code entry} must not already exist in the address book.
+     * {@code entry} must not already exist in the entry book.
      */
-    void addPerson(Entry entry);
+    void addEntry(Entry entry);
 
     /**
      * Replaces the given entry {@code target} with {@code editedEntry}.
-     * {@code target} must exist in the address book.
-     * The entry identity of {@code editedEntry} must not be the same as another existing entry in the address book.
+     * {@code target} must exist in the entry book.
+     * The entry identity of {@code editedEntry} must not be the same as another existing entry in the entry book.
      */
-    void setPerson(Entry target, Entry editedEntry);
+    void setEntry(Entry target, Entry editedEntry);
 
     /**
      * Clears the entire entry book.
@@ -99,55 +99,55 @@ public interface Model {
     void clearEntryBook();
 
     /** Returns an unmodifiable view of the filtered entry list */
-    ObservableList<Entry> getFilteredPersonList();
+    ObservableList<Entry> getFilteredEntryList();
 
     /**
      * Updates the filter of the filtered entry list to filter by the given {@code predicate}.
      * @throws NullPointerException if {@code predicate} is null.
      */
-    void updateFilteredPersonList(Predicate<Entry> predicate);
+    void updateFilteredEntryList(Predicate<Entry> predicate);
 
     /**
-     * Returns true if the model has previous address book states to restore.
+     * Returns true if the model has previous entry book states to restore.
      */
-    boolean canUndoAddressBook();
+    boolean canUndoEntryBook();
 
     /**
-     * Returns true if the model has undone address book states to restore.
+     * Returns true if the model has undone entry book states to restore.
      */
-    boolean canRedoAddressBook();
+    boolean canRedoEntryBook();
 
     /**
-     * Restores the model's address book to its previous state.
+     * Restores the model's entry book to its previous state.
      */
-    void undoAddressBook();
+    void undoEntryBook();
 
     /**
-     * Restores the model's address book to its previously undone state.
+     * Restores the model's entry book to its previously undone state.
      */
-    void redoAddressBook();
+    void redoEntryBook();
 
     /**
-     * Saves the current address book state for undo/redo.
+     * Saves the current entry book state for undo/redo.
      */
-    void commitAddressBook();
+    void commitEntryBook();
 
     /**
      * Selected entry in the filtered entry list.
      * null if no entry is selected.
      */
-    ReadOnlyProperty<Entry> selectedPersonProperty();
+    ReadOnlyProperty<Entry> selectedEntryProperty();
 
     /**
      * Returns the selected entry in the filtered entry list.
      * null if no entry is selected.
      */
-    Entry getSelectedPerson();
+    Entry getSelectedEntry();
 
     /**
      * Sets the selected entry in the filtered entry list.
      */
-    void setSelectedPerson(Entry entry);
+    void setSelectedEntry(Entry entry);
 
     /**
      * Propagated exception.

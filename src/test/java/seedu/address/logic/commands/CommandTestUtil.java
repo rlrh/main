@@ -109,9 +109,9 @@ public class CommandTestUtil {
             String expectedMessage) {
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
-        EntryBook expectedAddressBook = new EntryBook(actualModel.getAddressBook());
-        List<Entry> expectedFilteredList = new ArrayList<>(actualModel.getFilteredPersonList());
-        Entry expectedSelectedEntry = actualModel.getSelectedPerson();
+        EntryBook expectedAddressBook = new EntryBook(actualModel.getEntryBook());
+        List<Entry> expectedFilteredList = new ArrayList<>(actualModel.getFilteredEntryList());
+        Entry expectedSelectedEntry = actualModel.getSelectedEntry();
 
         CommandHistory expectedCommandHistory = new CommandHistory(actualCommandHistory);
 
@@ -120,9 +120,9 @@ public class CommandTestUtil {
             throw new AssertionError("The expected CommandException was not thrown.");
         } catch (CommandException e) {
             assertEquals(expectedMessage, e.getMessage());
-            assertEquals(expectedAddressBook, actualModel.getAddressBook());
-            assertEquals(expectedFilteredList, actualModel.getFilteredPersonList());
-            assertEquals(expectedSelectedEntry, actualModel.getSelectedPerson());
+            assertEquals(expectedAddressBook, actualModel.getEntryBook());
+            assertEquals(expectedFilteredList, actualModel.getFilteredEntryList());
+            assertEquals(expectedSelectedEntry, actualModel.getSelectedEntry());
             assertEquals(expectedCommandHistory, actualCommandHistory);
         }
     }
@@ -132,22 +132,22 @@ public class CommandTestUtil {
      * {@code model}'s address book.
      */
     public static void showPersonAtIndex(Model model, Index targetIndex) {
-        assertTrue(targetIndex.getZeroBased() < model.getFilteredPersonList().size());
+        assertTrue(targetIndex.getZeroBased() < model.getFilteredEntryList().size());
 
-        Entry entry = model.getFilteredPersonList().get(targetIndex.getZeroBased());
+        Entry entry = model.getFilteredEntryList().get(targetIndex.getZeroBased());
         final String[] splitName = entry.getTitle().fullTitle.split("\\s+");
-        model.updateFilteredPersonList(new TitleContainsKeywordsPredicate(Arrays.asList(splitName[0])));
+        model.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(splitName[0])));
 
-        assertEquals(1, model.getFilteredPersonList().size());
+        assertEquals(1, model.getFilteredEntryList().size());
     }
 
     /**
      * Deletes the first entry in {@code model}'s filtered list from {@code model}'s address book.
      */
     public static void deleteFirstPerson(Model model) {
-        Entry firstEntry = model.getFilteredPersonList().get(0);
-        model.deletePerson(firstEntry);
-        model.commitAddressBook();
+        Entry firstEntry = model.getFilteredEntryList().get(0);
+        model.deleteEntry(firstEntry);
+        model.commitEntryBook();
     }
 
 }

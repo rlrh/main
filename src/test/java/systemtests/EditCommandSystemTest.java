@@ -73,7 +73,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: redo editing the last entry in the list -> last entry edited again */
         command = RedoCommand.COMMAND_WORD;
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
-        model.setPerson(getModel().getFilteredPersonList().get(INDEX_FIRST_ENTRY.getZeroBased()), editedEntry);
+        model.setEntry(getModel().getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased()), editedEntry);
         assertCommandSuccess(command, model, expectedResultMessage);
 
         /* Case: edit a entry with new values same as existing values -> edited */
@@ -83,9 +83,9 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, index, BOB);
 
         /* Case: edit a entry with new values same as another entry's values but with different name -> edited */
-        assertTrue(getModel().getAddressBook().getPersonList().contains(BOB));
+        assertTrue(getModel().getEntryBook().getPersonList().contains(BOB));
         index = INDEX_SECOND_ENTRY;
-        assertNotEquals(getModel().getFilteredPersonList().get(index.getZeroBased()), BOB);
+        assertNotEquals(getModel().getFilteredEntryList().get(index.getZeroBased()), BOB);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
                 + TITLE_DESC_AMY + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
@@ -105,7 +105,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: clear tags -> cleared */
         index = INDEX_FIRST_ENTRY;
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + PREFIX_TAG.getPrefix();
-        Entry entryToEdit = getModel().getFilteredPersonList().get(index.getZeroBased());
+        Entry entryToEdit = getModel().getFilteredEntryList().get(index.getZeroBased());
         editedEntry = new EntryBuilder(entryToEdit).withTags().build();
         assertCommandSuccess(command, index, editedEntry);
 
@@ -114,9 +114,9 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: filtered entry list, edit index within bounds of address book and entry list -> edited */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
         index = INDEX_FIRST_ENTRY;
-        assertTrue(index.getZeroBased() < getModel().getFilteredPersonList().size());
+        assertTrue(index.getZeroBased() < getModel().getFilteredEntryList().size());
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + TITLE_DESC_BOB;
-        entryToEdit = getModel().getFilteredPersonList().get(index.getZeroBased());
+        entryToEdit = getModel().getFilteredEntryList().get(index.getZeroBased());
         editedEntry = new EntryBuilder(entryToEdit).withTitle(VALID_TITLE_BOB).build();
         assertCommandSuccess(command, index, editedEntry);
 
@@ -124,7 +124,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
          * -> rejected
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        int invalidIndex = getModel().getAddressBook().getPersonList().size();
+        int invalidIndex = getModel().getEntryBook().getPersonList().size();
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + TITLE_DESC_BOB,
                 Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
@@ -154,7 +154,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
 
         /* Case: invalid index (size + 1) -> rejected */
-        invalidIndex = getModel().getFilteredPersonList().size() + 1;
+        invalidIndex = getModel().getFilteredEntryList().size() + 1;
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + TITLE_DESC_BOB,
                 Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
@@ -193,9 +193,9 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: edit a entry with new values same as another entry's values -> rejected */
         executeCommand(EntryUtil.getAddCommand(BOB));
-        assertTrue(getModel().getAddressBook().getPersonList().contains(BOB));
+        assertTrue(getModel().getEntryBook().getPersonList().contains(BOB));
         index = INDEX_FIRST_ENTRY;
-        assertFalse(getModel().getFilteredPersonList().get(index.getZeroBased()).equals(BOB));
+        assertFalse(getModel().getFilteredEntryList().get(index.getZeroBased()).equals(BOB));
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
                 + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
@@ -247,8 +247,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
     private void assertCommandSuccess(String command, Index toEdit, Entry editedEntry,
             Index expectedSelectedCardIndex) {
         Model expectedModel = getModel();
-        expectedModel.setPerson(expectedModel.getFilteredPersonList().get(toEdit.getZeroBased()), editedEntry);
-        expectedModel.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        expectedModel.setEntry(expectedModel.getFilteredEntryList().get(toEdit.getZeroBased()), editedEntry);
+        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
 
         assertCommandSuccess(command, expectedModel,
                 String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry), expectedSelectedCardIndex);
@@ -279,7 +279,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
     private void assertCommandSuccess(String command, Model expectedModel, String expectedResultMessage,
             Index expectedSelectedCardIndex) {
         executeCommand(command);
-        expectedModel.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
         assertCommandBoxShowsDefaultStyle();
         assertResultDisplayShowsDefaultStyle();

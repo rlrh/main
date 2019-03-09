@@ -13,16 +13,16 @@ import seedu.address.model.entry.exceptions.EntryNotFoundException;
 
 /**
  * A list of persons that enforces uniqueness between its elements and does not allow nulls.
- * A entry is considered unique by comparing using {@code Entry#isSamePerson(Entry)}. As such, adding and updating of
- * persons uses Entry#isSamePerson(Entry) for equality so as to ensure that the entry being added or updated is
- * unique in terms of identity in the UniquePersonList. However, the removal of a entry uses Entry#equals(Object) so
+ * A entry is considered unique by comparing using {@code Entry#isSameEntry(Entry)}. As such, adding and updating of
+ * persons uses Entry#isSameEntry(Entry) for equality so as to ensure that the entry being added or updated is
+ * unique in terms of identity in the UniqueEntryList. However, the removal of a entry uses Entry#equals(Object) so
  * as to ensure that the entry with exactly the same fields will be removed.
  *
  * Supports a minimal set of list operations.
  *
- * @see Entry#isSamePerson(Entry)
+ * @see Entry#isSameEntry(Entry)
  */
-public class UniquePersonList implements Iterable<Entry> {
+public class UniqueEntryList implements Iterable<Entry> {
 
     private final ObservableList<Entry> internalList = FXCollections.observableArrayList();
     private final ObservableList<Entry> internalUnmodifiableList =
@@ -33,7 +33,7 @@ public class UniquePersonList implements Iterable<Entry> {
      */
     public boolean contains(Entry toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().anyMatch(toCheck::isSamePerson);
+        return internalList.stream().anyMatch(toCheck::isSameEntry);
     }
 
     /**
@@ -61,7 +61,7 @@ public class UniquePersonList implements Iterable<Entry> {
             throw new EntryNotFoundException();
         }
 
-        if (!target.isSamePerson(editedEntry) && contains(editedEntry)) {
+        if (!target.isSameEntry(editedEntry) && contains(editedEntry)) {
             throw new DuplicateEntryException();
         }
 
@@ -79,7 +79,7 @@ public class UniquePersonList implements Iterable<Entry> {
         }
     }
 
-    public void setPersons(UniquePersonList replacement) {
+    public void setPersons(UniqueEntryList replacement) {
         requireNonNull(replacement);
         internalList.setAll(replacement.internalList);
     }
@@ -112,8 +112,8 @@ public class UniquePersonList implements Iterable<Entry> {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof UniquePersonList // instanceof handles nulls
-                        && internalList.equals(((UniquePersonList) other).internalList));
+                || (other instanceof UniqueEntryList // instanceof handles nulls
+                        && internalList.equals(((UniqueEntryList) other).internalList));
     }
 
     @Override
@@ -127,7 +127,7 @@ public class UniquePersonList implements Iterable<Entry> {
     private boolean personsAreUnique(List<Entry> entries) {
         for (int i = 0; i < entries.size() - 1; i++) {
             for (int j = i + 1; j < entries.size(); j++) {
-                if (entries.get(i).isSamePerson(entries.get(j))) {
+                if (entries.get(i).isSameEntry(entries.get(j))) {
                     return false;
                 }
             }
