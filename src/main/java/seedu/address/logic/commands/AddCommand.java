@@ -21,14 +21,14 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a entry to the entry book. "
             + "Parameters: "
-            + PREFIX_TITLE + "TITLE "
-            + PREFIX_COMMENT + "COMMENT "
             + PREFIX_LINK + "LINK "
+            + "[" + PREFIX_TITLE + "TITLE] "
+            + "[" + PREFIX_COMMENT + "COMMENT] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_TITLE + "Title example "
-            + PREFIX_COMMENT + "Comment example "
             + PREFIX_LINK + "https://example.com "
+            + PREFIX_TITLE + "Title ExampleTitle "
+            + PREFIX_COMMENT + "Comment ExampleComment "
             + PREFIX_TAG + "science "
             + PREFIX_TAG + "tech";
 
