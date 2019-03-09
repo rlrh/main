@@ -28,33 +28,31 @@ public class EntryTest {
     }
 
     @Test
-    public void isSamePerson() {
+    public void isSameEntry() {
         // same object -> returns true
         assertTrue(ALICE.isSameEntry(ALICE));
 
         // null -> returns false
         assertFalse(ALICE.isSameEntry(null));
 
-        // different phone and email -> returns false
-        Entry editedAlice = new EntryBuilder(ALICE).withDescription(VALID_DESCRIPTION_BOB).withLink(VALID_LINK_BOB).build();
+        // different link -> returns false
+        Entry editedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
         assertFalse(ALICE.isSameEntry(editedAlice));
 
-        // different name -> returns false
+        // same link, different description -> returns true
+        editedAlice = new EntryBuilder(ALICE).withDescription(VALID_DESCRIPTION_BOB).build();
+        assertTrue(ALICE.isSameEntry(editedAlice));
+
+        // same link, different title -> returns true
         editedAlice = new EntryBuilder(ALICE).withTitle(VALID_TITLE_BOB).build();
-        assertFalse(ALICE.isSameEntry(editedAlice));
-
-        // same name, same phone, different attributes -> returns true
-        editedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).withAddress(VALID_ADDRESS_BOB)
-                .withTags(VALID_TAG_SCIENCE).build();
         assertTrue(ALICE.isSameEntry(editedAlice));
 
-        // same name, same email, different attributes -> returns true
-        editedAlice = new EntryBuilder(ALICE).withDescription(VALID_DESCRIPTION_BOB).withAddress(VALID_ADDRESS_BOB)
-                .withTags(VALID_TAG_SCIENCE).build();
+        // same link, different description and title -> returns true
+        editedAlice = new EntryBuilder(ALICE).withTitle(VALID_TITLE_BOB).withDescription(VALID_DESCRIPTION_BOB).build();
         assertTrue(ALICE.isSameEntry(editedAlice));
 
-        // same name, same phone, same email, different attributes -> returns true
-        editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE).build();
+        // same link, different tags -> returns true
+        editedAlice = new EntryBuilder(ALICE).withTags(VALID_TAG_SCIENCE).build();
         assertTrue(ALICE.isSameEntry(editedAlice));
     }
 

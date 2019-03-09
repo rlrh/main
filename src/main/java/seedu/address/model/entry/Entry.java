@@ -70,8 +70,7 @@ public class Entry {
         }
 
         return otherEntry != null
-                && otherEntry.getTitle().equals(getTitle())
-                && (otherEntry.getDescription().equals(getDescription()) || otherEntry.getLink().equals(getLink()));
+                && otherEntry.getLink().equals(getLink());
     }
 
     /**
