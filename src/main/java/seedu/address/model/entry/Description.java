@@ -5,14 +5,16 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Entry's description in the entry book.
- * Guarantees: immutable; is valid as declared in {@link #isValidDescription(String)}
+ * Guarantees: immutable; is valid as declared in {@link #isValidUserInputDescription(String)}
  */
 public class Description {
 
 
     public static final String MESSAGE_CONSTRAINTS =
             "Descriptions can take any values, and it should not be blank";
-    public static final String VALIDATION_REGEX = "[^\\s].*";
+    public static final String DEFAULT_DESCRIPTION = "";
+    public static final String USER_INPUT_VALIDATION_REGEX = "[^\\s].*";
+    public static final String CONSTRUCTION_VALIDATION_REGEX = "^.*";
     public final String value;
 
     /**
@@ -22,15 +24,22 @@ public class Description {
      */
     public Description(String description) {
         requireNonNull(description);
-        checkArgument(isValidDescription(description), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidConstructionDescription(description), MESSAGE_CONSTRAINTS);
         value = description;
     }
 
     /**
-     * Returns true if a given string is a valid description.
+     * Returns true if a given string is a valid user-input description.
      */
-    public static boolean isValidDescription(String test) {
-        return test.matches(VALIDATION_REGEX);
+    public static boolean isValidUserInputDescription(String test) {
+        return test.matches(USER_INPUT_VALIDATION_REGEX);
+    }
+
+    /**
+     * Returns true if a given string is a valid description for construction.
+     */
+    public static boolean isValidConstructionDescription(String test) {
+        return test.matches(CONSTRUCTION_VALIDATION_REGEX);
     }
 
     @Override

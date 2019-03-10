@@ -5,24 +5,16 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Entry's link in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidLink(String)}
+ * Guarantees: immutable; is valid as declared in {@link #isValidConstructionLink(String)}
  */
 public class Link {
 
     public static final String MESSAGE_CONSTRAINTS = "Links should be of the format protocol://domain/filename.";
+    public static final String DEFAULT_LINK = "https://cs2103-ay1819s2-w10-1.github.io/main/";
 
-    /*
-    private static final String SPECIAL_CHARACTERS = "!#$%&'*+/=?`{|}~^.-";
-    // alphanumeric and special characters
-    private static final String LOCAL_PART_REGEX = "^[\\w" + SPECIAL_CHARACTERS + "]+";
-    private static final String DOMAIN_FIRST_CHARACTER_REGEX = "[^\\W_]"; // alphanumeric characters except underscore
-    private static final String DOMAIN_MIDDLE_REGEX = "[a-zA-Z0-9.-]*"; // alphanumeric, period and hyphen
-    private static final String DOMAIN_LAST_CHARACTER_REGEX = "[^\\W_]$";
-    public static final String VALIDATION_REGEX = LOCAL_PART_REGEX + "@"
-            + DOMAIN_FIRST_CHARACTER_REGEX + DOMAIN_MIDDLE_REGEX + DOMAIN_LAST_CHARACTER_REGEX;
-            */
     private static final String PATH = "[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-    public static final String VALIDATION_REGEX = "^(https?|ftp|file)://" + PATH;
+    public static final String USER_INPUT_VALIDATION_REGEX = "^(https?|ftp|file)://" + PATH;
+    public static final String CONSTRUCTION_VALIDATION_REGEX = USER_INPUT_VALIDATION_REGEX;
 
     public final String value;
 
@@ -33,16 +25,24 @@ public class Link {
      */
     public Link(String link) {
         requireNonNull(link);
-        checkArgument(isValidLink(link), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidConstructionLink(link), MESSAGE_CONSTRAINTS);
         value = link;
     }
 
     /**
-     * Returns if a given string is a valid link.
+     * Returns if a given string is a valid user-input link.
      */
-    public static boolean isValidLink(String test) {
-        return test.matches(VALIDATION_REGEX);
+    public static boolean isValidUserInputLink(String test) {
+        return test.matches(USER_INPUT_VALIDATION_REGEX);
     }
+
+    /**
+     * Returns if a given string is a valid link for construction.
+     */
+    public static boolean isValidConstructionLink(String test) {
+        return test.matches(CONSTRUCTION_VALIDATION_REGEX);
+    }
+
 
     @Override
     public String toString() {

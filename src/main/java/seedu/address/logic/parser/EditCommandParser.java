@@ -44,19 +44,16 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         EditEntryDescriptor editEntryDescriptor = new EditCommand.EditEntryDescriptor();
         if (argMultimap.getValue(PREFIX_TITLE).isPresent()) {
-            editEntryDescriptor.setTitle(ParserUtil.parseTitle(argMultimap.getValue(PREFIX_TITLE).get()));
+            editEntryDescriptor.setTitle(ParserUtil.parseTitle(argMultimap.getValue(PREFIX_TITLE)));
         }
         if (argMultimap.getValue(PREFIX_DESCRIPTION).isPresent()) {
-            editEntryDescriptor.setDescription(ParserUtil.parseDescription(
-                                                                argMultimap.getValue(PREFIX_DESCRIPTION).get()));
+            editEntryDescriptor.setDescription(ParserUtil.parseDescription(argMultimap.getValue(PREFIX_DESCRIPTION)));
         }
         if (argMultimap.getValue(PREFIX_LINK).isPresent()) {
-            editEntryDescriptor.setLink(ParserUtil.parseLink(argMultimap.getValue(PREFIX_LINK).get()));
+            editEntryDescriptor.setLink(ParserUtil.parseLink(argMultimap.getValue(PREFIX_LINK)));
         }
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
-            editEntryDescriptor.setAddress(ParserUtil.parseAddress(argMultimap
-                                                                    .getValue(PREFIX_ADDRESS)
-                                                                    .orElse("Default Address")));
+            editEntryDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS)));
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editEntryDescriptor::setTags);
 

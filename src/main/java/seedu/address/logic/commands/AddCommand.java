@@ -27,8 +27,8 @@ public class AddCommand extends Command {
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_LINK + "https://example.com "
-            + PREFIX_TITLE + "Title ExampleTitle "
-            + PREFIX_DESCRIPTION + "Description ExampleDescriptioDescriptionn "
+            + PREFIX_TITLE + "Example Title "
+            + PREFIX_DESCRIPTION + "Example Description "
             + PREFIX_TAG + "science "
             + PREFIX_TAG + "tech";
 

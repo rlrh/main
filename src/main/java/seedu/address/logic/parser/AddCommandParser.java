@@ -31,18 +31,18 @@ public class AddCommandParser implements Parser<AddCommand> {
      */
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_TITLE, PREFIX_DESCRIPTION, PREFIX_LINK, PREFIX_ADDRESS, PREFIX_TAG);
+                ArgumentTokenizer.tokenize(args,
+                                            PREFIX_TITLE, PREFIX_DESCRIPTION, PREFIX_LINK, PREFIX_ADDRESS, PREFIX_TAG);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_LINK)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
-        Title title = ParserUtil.parseTitle(argMultimap.getValue(PREFIX_TITLE).orElse("Default Title"));
-        Description description = ParserUtil.parseDescription(argMultimap.getValue(PREFIX_DESCRIPTION).orElse("Default Description"));
-        Link link = ParserUtil.parseLink(argMultimap.getValue(PREFIX_LINK).get());
-        // Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
-        Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).orElse("Default Address"));
+        Title title = ParserUtil.parseTitle(argMultimap.getValue(PREFIX_TITLE));
+        Description description = ParserUtil.parseDescription(argMultimap.getValue(PREFIX_DESCRIPTION));
+        Link link = ParserUtil.parseLink(argMultimap.getValue(PREFIX_LINK));
+        Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS));
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
         Entry entry = new Entry(title, description, link, address, tagList);

@@ -14,32 +14,59 @@ public class DescriptionTest {
         Assert.assertThrows(NullPointerException.class, () -> new Description(null));
     }
 
+    // All strings are valid descriptions for construction
+    /*
     @Test
     public void constructor_invalidPhone_throwsIllegalArgumentException() {
-        String invalidPhone = "";
-        Assert.assertThrows(IllegalArgumentException.class, () -> new Description(invalidPhone));
+        String invalidDescription = "";
+        Assert.assertThrows(IllegalArgumentException.class, () -> new Description(invalidDescription));
+    }
+    */
+
+    @Test
+    public void isValidUserInputDescription() {
+        // null description
+        Assert.assertThrows(NullPointerException.class, () -> Description.isValidUserInputDescription(null));
+
+        // invalid description
+        assertFalse(Description.isValidUserInputDescription("")); // empty string
+        assertFalse(Description.isValidUserInputDescription(" ")); // spaces only
+
+        // valid description
+        assertTrue(Description.isValidUserInputDescription("comment")); // non-numeric
+        assertTrue(Description.isValidUserInputDescription("comment comment")); // non-numeric with spaces
+        assertTrue(Description.isValidUserInputDescription("comment?")); // non-numeric with symbols
+        assertTrue(Description.isValidUserInputDescription("comment@")); // non-numeric with symbols
+        assertTrue(Description.isValidUserInputDescription("comment!")); // non-numeric with symbols
+        assertTrue(Description.isValidUserInputDescription("comment-comment")); // non-numeric with spaces
+        assertTrue(Description.isValidUserInputDescription("93121534")); // numeric
+        assertTrue(Description.isValidUserInputDescription("9312153asd4asd219")); // alphanumeric
+        assertTrue(Description.isValidUserInputDescription("9312153asd4 asd219")); // alphanumeric
+        assertTrue(Description.isValidUserInputDescription("Five reasons why your best-friend is eating grass. 3# will shock you!"));
+
     }
 
     @Test
-    public void isValidPhone() {
-        // null phone number
-        Assert.assertThrows(NullPointerException.class, () -> Description.isValidDescription(null));
+    public void isValidConstructionDescription() {
+        // null description
+        Assert.assertThrows(NullPointerException.class, () -> Description.isValidConstructionDescription(null));
 
-        // invalid phone numbers
-        assertFalse(Description.isValidDescription("")); // empty string
-        assertFalse(Description.isValidDescription(" ")); // spaces only
+        // invalid description
 
-        // valid phone numbers
-        assertTrue(Description.isValidDescription("comment")); // non-numeric
-        assertTrue(Description.isValidDescription("comment comment")); // non-numeric with spaces
-        assertTrue(Description.isValidDescription("comment?")); // non-numeric with symbols
-        assertTrue(Description.isValidDescription("comment@")); // non-numeric with symbols
-        assertTrue(Description.isValidDescription("comment!")); // non-numeric with symbols
-        assertTrue(Description.isValidDescription("comment-comment")); // non-numeric with spaces
-        assertTrue(Description.isValidDescription("93121534")); // numeric
-        assertTrue(Description.isValidDescription("9312153asd4asd219")); // alphanumeric
-        assertTrue(Description.isValidDescription("9312153asd4 asd219")); // alphanumeric
-        assertTrue(Description.isValidDescription("Five reasons why your best-friend is eating grass. 3# will shock you!"));
+        // valid description
+        assertTrue(Description.isValidConstructionDescription("")); // empty string
+        assertTrue(Description.isValidConstructionDescription(" ")); // spaces only
+
+        assertTrue(Description.isValidConstructionDescription("comment")); // non-numeric
+        assertTrue(Description.isValidConstructionDescription("comment comment")); // non-numeric with spaces
+        assertTrue(Description.isValidConstructionDescription("comment?")); // non-numeric with symbols
+        assertTrue(Description.isValidConstructionDescription("comment@")); // non-numeric with symbols
+        assertTrue(Description.isValidConstructionDescription("comment!")); // non-numeric with symbols
+        assertTrue(Description.isValidConstructionDescription("comment-comment")); // non-numeric with spaces
+        assertTrue(Description.isValidConstructionDescription("93121534")); // numeric
+        assertTrue(Description.isValidConstructionDescription("9312153asd4asd219")); // alphanumeric
+        assertTrue(Description.isValidConstructionDescription("9312153asd4 asd219")); // alphanumeric
+        assertTrue(Description.isValidConstructionDescription("Five reasons why your best-friend is eating grass. 3# will shock you!"));
 
     }
 }

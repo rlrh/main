@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -36,64 +37,83 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String title} into a {@code Title}.
+     * Parses a {@code Optional<String> title} into a {@code Title}.
      * Leading and trailing whitespaces will be trimmed.
+     * If title is empty, default title used.
      *
-     * @throws ParseException if the given {@code title} is invalid.
+     * @throws ParseException if the given {@code title}'s value is invalid.
      */
-    public static Title parseTitle(String title) throws ParseException {
+    public static Title parseTitle(Optional<String> title) throws ParseException {
         requireNonNull(title);
-        String trimmedTitle = title.trim();
-        if (!Title.isValidTitle(trimmedTitle)) {
-            throw new ParseException(Title.MESSAGE_CONSTRAINTS);
+        if (title.isPresent()) {
+            String trimmedTitle = title.get().trim();
+            if (!Title.isValidUserInputTitle(trimmedTitle)) {
+                throw new ParseException(Title.MESSAGE_CONSTRAINTS);
+            }
+            return new Title(trimmedTitle);
+        } else {
+            return new Title(Title.DEFAULT_TITLE);
         }
-        return new Title(trimmedTitle);
     }
 
     /**
-     * Parses a {@code String description} into a {@code Description}.
+     * Parses a {@code Optional<String> description} into a {@code Description}.
      * Leading and trailing whitespaces will be trimmed.
+     * If description is empty, default description used.
      *
-     * @throws ParseException if the given {@code description} is invalid.
+     * @throws ParseException if the given {@code description}'s value is invalid.
      */
-    public static Description parseDescription(String description) throws ParseException {
+    public static Description parseDescription(Optional<String> description) throws ParseException {
         requireNonNull(description);
-        String trimmedComment = description.trim();
-        if (!Description.isValidDescription(trimmedComment)) {
-            throw new ParseException(Description.MESSAGE_CONSTRAINTS);
+        if (description.isPresent()) {
+            String trimmedDescription = description.get().trim();
+            if (!Description.isValidUserInputDescription(trimmedDescription)) {
+                throw new ParseException(Description.MESSAGE_CONSTRAINTS);
+            }
+            return new Description(trimmedDescription);
+        } else {
+            return new Description(Description.DEFAULT_DESCRIPTION);
         }
-        return new Description(trimmedComment);
     }
 
     /**
      * Parses a {@code Optional<String> address} into an {@code Address}.
      * Modified from original as address is now optional (and invisible) field.
      * Leading and trailing whitespaces will be trimmed.
+     * If address is empty, default address used.
      *
      * @throws ParseException if the given {@code address} is invalid.
      */
-    public static Address parseAddress(String address) throws ParseException {
+    public static Address parseAddress(Optional<String> address) throws ParseException {
         requireNonNull(address);
-        String trimmedAddress = address.trim();
-        if (!Address.isValidAddress(trimmedAddress)) {
-            throw new ParseException(Address.MESSAGE_CONSTRAINTS);
+        if (address.isPresent()) {
+            String trimmedAddress = address.get().trim();
+            if (!Address.isValidUserInputAddress(trimmedAddress)) {
+                throw new ParseException(Address.MESSAGE_CONSTRAINTS);
+            }
+            return new Address(trimmedAddress);
+        } else {
+            return new Address(Address.DEFAULT_ADDRESS);
         }
-        return new Address(trimmedAddress);
     }
 
     /**
      * Parses a {@code String link} into an {@code Link}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code link} is invalid.
+     * @throws ParseException if the given {@code link} is empty or {@code link}'s value is invalid.
      */
-    public static Link parseLink(String link) throws ParseException {
+    public static Link parseLink(Optional<String> link) throws ParseException {
         requireNonNull(link);
-        String trimmedLink = link.trim();
-        if (!Link.isValidLink(trimmedLink)) {
+        if (link.isPresent()) {
+            String trimmedLink = link.get().trim();
+            if (!Link.isValidUserInputLink(trimmedLink)) {
+                throw new ParseException(Link.MESSAGE_CONSTRAINTS);
+            }
+            return new Link(trimmedLink);
+        } else {
             throw new ParseException(Link.MESSAGE_CONSTRAINTS);
         }
-        return new Link(trimmedLink);
     }
 
     /**
