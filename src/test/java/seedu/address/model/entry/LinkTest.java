@@ -69,10 +69,13 @@ public class LinkTest {
         assertTrue(Link.isValidUserInputLink("https://208.67.222.222/path/to/file.txt")); // IP Address with path
 
         assertTrue(Link.isValidUserInputLink("https://test.localhost")); // alphabets only
-        assertTrue(Link.isValidUserInputLink("https://a1+be!.example1.com")); // mixture of alphanumeric and special characters
+        assertTrue(Link.isValidUserInputLink(
+            "https://a1+be!.example1.com")); // mixture of alphanumeric and special characters
 
-        assertTrue(Link.isValidUserInputLink("https://peter_jack-very-very-very-long-example.com")); // long domain name
-        assertTrue(Link.isValidUserInputLink("https://if.you.dream.it_you.can.do.it.example.com")); // multiple sub-domains
+        assertTrue(Link.isValidUserInputLink(
+            "https://peter_jack-very-very-very-long-example.com")); // long domain name
+        assertTrue(Link.isValidUserInputLink(
+            "https://if.you.dream.it_you.can.do.it.example.com")); // multiple sub-domains
     }
 
     @Test
@@ -111,7 +114,8 @@ public class LinkTest {
         assertTrue(Link.isValidConstructionLink("http://peterJack_1190.example.com")); // https protocol
         assertTrue(Link.isValidConstructionLink("https://peterJack_1190.example.com")); // https protocol
         assertTrue(Link.isValidConstructionLink("https://peterJack_1190.example.com:443")); // with port
-        assertTrue(Link.isValidConstructionLink("https://peterJack_1190.example.com/folder/to/file")); // with path to file
+        assertTrue(Link.isValidConstructionLink(
+            "https://peterJack_1190.example.com/folder/to/file")); // with path to file
         assertTrue(Link.isValidConstructionLink("https://www.peterJack_1190.example.com")); // with www
 
         assertTrue(Link.isValidConstructionLink("file:///c/Desktop/file.txt")); // file protocol
@@ -124,9 +128,12 @@ public class LinkTest {
         assertTrue(Link.isValidConstructionLink("https://208.67.222.222/path/to/file.txt")); // IP Address with path
 
         assertTrue(Link.isValidConstructionLink("https://test.localhost")); // alphabets only
-        assertTrue(Link.isValidConstructionLink("https://a1+be!.example1.com")); // mixture of alphanumeric and special characters
+        assertTrue(Link.isValidConstructionLink(
+            "https://a1+be!.example1.com")); // mixture of alphanumeric and special characters
 
-        assertTrue(Link.isValidConstructionLink("https://peter_jack-very-very-very-long-example.com")); // long domain name
-        assertTrue(Link.isValidConstructionLink("https://if.you.dream.it_you.can.do.it.example.com")); // multiple sub-domains
+        assertTrue(Link.isValidConstructionLink(
+            "https://peter_jack-very-very-very-long-example.com")); // long domain name
+        assertTrue(Link.isValidConstructionLink(
+            "https://if.you.dream.it_you.can.do.it.example.com")); // multiple sub-domains
     }
 }

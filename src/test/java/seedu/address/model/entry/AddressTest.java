@@ -35,7 +35,8 @@ public class AddressTest {
         // valid addresses
         assertTrue(Address.isValidUserInputAddress("Blk 456, Den Road, #01-355"));
         assertTrue(Address.isValidUserInputAddress("-")); // one character
-        assertTrue(Address.isValidUserInputAddress("Leng Inc; 1234 Market St; San Francisco CA 2349879; USA")); // long address
+        assertTrue(Address.isValidUserInputAddress(
+            "Leng Inc; 1234 Market St; San Francisco CA 2349879; USA")); // long address
     }
 
     @Test
@@ -51,6 +52,7 @@ public class AddressTest {
 
         assertTrue(Address.isValidConstructionAddress("Blk 456, Den Road, #01-355"));
         assertTrue(Address.isValidConstructionAddress("-")); // one character
-        assertTrue(Address.isValidConstructionAddress("Leng Inc; 1234 Market St; San Francisco CA 2349879; USA")); // long address
+        assertTrue(Address.isValidConstructionAddress(
+            "Leng Inc; 1234 Market St; San Francisco CA 2349879; USA")); // long address
     }
 }

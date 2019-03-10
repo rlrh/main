@@ -42,7 +42,8 @@ public class DescriptionTest {
         assertTrue(Description.isValidUserInputDescription("93121534")); // numeric
         assertTrue(Description.isValidUserInputDescription("9312153asd4asd219")); // alphanumeric
         assertTrue(Description.isValidUserInputDescription("9312153asd4 asd219")); // alphanumeric
-        assertTrue(Description.isValidUserInputDescription("Five reasons why your best-friend is eating grass. 3# will shock you!"));
+        assertTrue(Description.isValidUserInputDescription(
+            "Five reasons why your best-friend is eating grass. 3# will shock you!"));
 
     }
 
@@ -66,7 +67,8 @@ public class DescriptionTest {
         assertTrue(Description.isValidConstructionDescription("93121534")); // numeric
         assertTrue(Description.isValidConstructionDescription("9312153asd4asd219")); // alphanumeric
         assertTrue(Description.isValidConstructionDescription("9312153asd4 asd219")); // alphanumeric
-        assertTrue(Description.isValidConstructionDescription("Five reasons why your best-friend is eating grass. 3# will shock you!"));
+        assertTrue(Description.isValidConstructionDescription(
+            "Five reasons why your best-friend is eating grass. 3# will shock you!"));
 
     }
 }

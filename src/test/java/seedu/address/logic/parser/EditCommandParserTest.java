@@ -92,7 +92,8 @@ public class EditCommandParserTest {
 
         // valid phone followed by invalid phone. The test case for invalid phone followed by valid phone
         // is tested at {@code parse_invalidValueFollowedByValidValue_success()}
-        assertParseFailure(parser, "1" + DESCRIPTION_DESC_BOB + INVALID_DESCRIPTION_DESC, Description.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser,
+            "1" + DESCRIPTION_DESC_BOB + INVALID_DESCRIPTION_DESC, Description.MESSAGE_CONSTRAINTS);
 
         // while parsing {@code PREFIX_TAG} alone will reset the tags of the {@code Entry} being edited,
         // parsing it together with a valid tag results in error
@@ -101,7 +102,8 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1" + TAG_EMPTY + TAG_DESC_TECH + TAG_DESC_SCIENCE, Tag.MESSAGE_CONSTRAINTS);
 
         // multiple invalid values, but only the first invalid value is captured
-        assertParseFailure(parser, "1" + INVALID_TITLE_DESC + INVALID_LINK_DESC + VALID_ADDRESS_AMY + VALID_DESCRIPTION_AMY,
+        assertParseFailure(parser,
+            "1" + INVALID_TITLE_DESC + INVALID_LINK_DESC + VALID_ADDRESS_AMY + VALID_DESCRIPTION_AMY,
                 Title.MESSAGE_CONSTRAINTS);
     }
 
@@ -185,7 +187,9 @@ public class EditCommandParserTest {
         // no other valid values specified
         Index targetIndex = INDEX_FIRST_ENTRY;
         String userInput = targetIndex.getOneBased() + INVALID_DESCRIPTION_DESC + DESCRIPTION_DESC_BOB;
-        EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withDescription(VALID_DESCRIPTION_BOB).build();
+        EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder()
+                                                            .withDescription(VALID_DESCRIPTION_BOB)
+                                                            .build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
