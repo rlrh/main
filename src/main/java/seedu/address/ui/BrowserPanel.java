@@ -26,10 +26,14 @@ import seedu.address.model.entry.Entry;
  */
 public class BrowserPanel extends UiPart<Region> {
 
+    private static final String BROWSER_FILE_FOLDER = "/browser/";
+
     public static final URL DEFAULT_PAGE =
-            requireNonNull(MainApp.class.getResource(FXML_FILE_FOLDER + "default.html"));
+            requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "default.html"));
     public static final URL ERROR_PAGE =
-            requireNonNull(MainApp.class.getResource(FXML_FILE_FOLDER + "error.html"));
+            requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "error.html"));
+    public static final URL STYLESHEET =
+            requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "litera.css"));
 
     private static final String FXML = "BrowserPanel.fxml";
 
@@ -171,7 +175,9 @@ public class BrowserPanel extends UiPart<Region> {
         isCurrentlyReaderView = false;
         currentLocation = url;
 
-        Platform.runLater(() -> getWebEngine().load(url));
+        webEngine.setUserStyleSheetLocation(null);
+
+        Platform.runLater(() -> webEngine.load(url));
 
     }
 
@@ -189,6 +195,15 @@ public class BrowserPanel extends UiPart<Region> {
             return;
         }
 
+        // set stylesheet for reader view
+        try {
+            System.out.println(STYLESHEET.toExternalForm());
+            webEngine.setUserStyleSheetLocation(STYLESHEET.toExternalForm());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            String message = "Failed to set user style sheet location";
+            logger.warning(message);
+        }
+
         // process loaded content through Crux, then load processed content
         try {
             String rawHtml = XmlUtil.convertDocumentToString(getWebEngine().getDocument());
@@ -196,8 +211,8 @@ public class BrowserPanel extends UiPart<Region> {
                     .extractMetadata()
                     .extractContent()
                     .article();
-            String cleanHtml = article.document.outerHtml();
-            Platform.runLater(() -> getWebEngine().loadContent(cleanHtml));
+            String cleanHtml = "<body class='container py-4'>\n" + article.document.outerHtml() + "</body>";
+            Platform.runLater(() -> webEngine.loadContent(cleanHtml));
         } catch (TransformerException te) {
             String message = String.format("Failed to load reader view for %s", this.currentLocation);
             logger.warning(message);
