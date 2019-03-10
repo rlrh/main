@@ -28,8 +28,7 @@ public class XmlUtil {
      * @throws TransformerException
      */
     public static String convertDocumentToString(Document doc) throws TransformerException {
-        TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer transformer = tf.newTransformer();
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(doc), new StreamResult(writer));
@@ -43,9 +42,8 @@ public class XmlUtil {
      * @return XML Document from xmlStr
      * @throws Exception
      */
-    private static Document convertStringToDocument(String xmlStr) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
+    public static Document convertStringToDocument(String xmlStr) throws Exception {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(xmlStr)));
         return doc;
     }
