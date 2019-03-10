@@ -334,13 +334,18 @@ public class ModelManager implements Model {
 
         // state check
         ModelManager other = (ModelManager) obj;
-        return versionedEntryBook.equals(other.versionedEntryBook)
+        boolean stateCheck = versionedEntryBook.equals(other.versionedEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredEntries.equals(other.filteredEntries)
                 && Objects.equals(selectedPerson.get(), other.selectedPerson.get())
                 && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
-                && Objects.equals(commandResult.get(), other.commandResult.get())
-                && exception.get().getMessage().equals(other.exception.get().getMessage());
+                && Objects.equals(commandResult.get(), other.commandResult.get());
+        if (exception.get() == null && other.exception.get() == null) {
+            return stateCheck;
+        } else {
+            return stateCheck && exception.get().getMessage().equals(other.exception.get().getMessage());
+        }
+
     }
 
     @Override
