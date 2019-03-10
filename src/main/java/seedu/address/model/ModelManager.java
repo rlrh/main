@@ -52,7 +52,7 @@ public class ModelManager implements Model {
 
         versionedEntryBook = new VersionedEntryBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredEntries = new FilteredList<>(versionedEntryBook.getPersonList());
+        filteredEntries = new FilteredList<>(versionedEntryBook.getEntryList());
         filteredEntries.addListener(this::ensureSelectedPersonIsValid);
 
         this.storage = storage;

@@ -57,7 +57,7 @@ public class EntryCardHandle extends NodeHandle<Node> {
         return addressLabel.getText();
     }
 
-    public String getComment() {
+    public String getDescription() {
         return descriptionLabel.getText();
     }
 
@@ -87,7 +87,7 @@ public class EntryCardHandle extends NodeHandle<Node> {
     public boolean equals(Entry entry) {
         return getTitle().equals(entry.getTitle().fullTitle)
                 && getAddress().equals(entry.getAddress().value)
-                && getComment().equals(entry.getDescription().value)
+                && getDescription().equals(entry.getDescription().value)
                 && getLink().equals(entry.getLink().value)
                 && ImmutableMultiset.copyOf(getTags()).equals(ImmutableMultiset.copyOf(entry.getTags().stream()
                         .map(tag -> tag.tagName)

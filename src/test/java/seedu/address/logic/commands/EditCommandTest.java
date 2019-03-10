@@ -23,7 +23,7 @@ import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
 import seedu.address.mocks.TypicalModelManagerStub;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
-import seedu.address.testutil.EditPersonDescriptorBuilder;
+import seedu.address.testutil.EditEntryDescriptorBuilder;
 import seedu.address.testutil.EntryBuilder;
 
 /**
@@ -37,7 +37,7 @@ public class EditCommandTest {
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
         Entry editedEntry = new EntryBuilder().build();
-        EditCommand.EditEntryDescriptor descriptor = new EditPersonDescriptorBuilder(editedEntry).build();
+        EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(editedEntry).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
@@ -58,8 +58,8 @@ public class EditCommandTest {
         Entry editedEntry = personInList.withTitle(VALID_TITLE_BOB).withDescription(VALID_DESCRIPTION_BOB)
                 .withTags(VALID_TAG_SCIENCE).build();
 
-        EditEntryDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_TITLE_BOB)
-                .withPhone(VALID_DESCRIPTION_BOB).withTags(VALID_TAG_SCIENCE).build();
+        EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB)
+                .withDescription(VALID_DESCRIPTION_BOB).withTags(VALID_TAG_SCIENCE).build();
         EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
@@ -91,7 +91,7 @@ public class EditCommandTest {
         Entry entryInFilteredList = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
         Entry editedEntry = new EntryBuilder(entryInFilteredList).withTitle(VALID_TITLE_BOB).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY,
-                new EditPersonDescriptorBuilder().withName(VALID_TITLE_BOB).build());
+                new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB).build());
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
 
@@ -105,7 +105,7 @@ public class EditCommandTest {
     @Test
     public void execute_duplicatePersonUnfilteredList_failure() {
         Entry firstEntry = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
-        EditCommand.EditEntryDescriptor descriptor = new EditPersonDescriptorBuilder(firstEntry).build();
+        EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(firstEntry).build();
         EditCommand editCommand = new EditCommand(INDEX_SECOND_ENTRY, descriptor);
 
         assertCommandFailure(editCommand, model, commandHistory, EditCommand.MESSAGE_DUPLICATE_PERSON);
@@ -116,9 +116,9 @@ public class EditCommandTest {
         showPersonAtIndex(model, INDEX_FIRST_ENTRY);
 
         // edit entry in filtered list into a duplicate in address book
-        Entry entryInList = model.getEntryBook().getPersonList().get(INDEX_SECOND_ENTRY.getZeroBased());
+        Entry entryInList = model.getEntryBook().getEntryList().get(INDEX_SECOND_ENTRY.getZeroBased());
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY,
-                new EditPersonDescriptorBuilder(entryInList).build());
+                new EditEntryDescriptorBuilder(entryInList).build());
 
         assertCommandFailure(editCommand, model, commandHistory, EditCommand.MESSAGE_DUPLICATE_PERSON);
     }
@@ -126,7 +126,7 @@ public class EditCommandTest {
     @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredEntryList().size() + 1);
-        EditCommand.EditEntryDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_TITLE_BOB).build();
+        EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB).build();
         EditCommand editCommand = new EditCommand(outOfBoundIndex, descriptor);
 
         assertCommandFailure(editCommand, model, commandHistory, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -141,10 +141,10 @@ public class EditCommandTest {
         showPersonAtIndex(model, INDEX_FIRST_ENTRY);
         Index outOfBoundIndex = INDEX_SECOND_ENTRY;
         // ensures that outOfBoundIndex is still in bounds of address book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getEntryBook().getPersonList().size());
+        assertTrue(outOfBoundIndex.getZeroBased() < model.getEntryBook().getEntryList().size());
 
         EditCommand editCommand = new EditCommand(outOfBoundIndex,
-                new EditPersonDescriptorBuilder().withName(VALID_TITLE_BOB).build());
+                new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB).build());
 
         assertCommandFailure(editCommand, model, commandHistory, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
@@ -153,7 +153,7 @@ public class EditCommandTest {
     public void executeUndoRedo_validIndexUnfilteredList_success() throws Exception {
         Entry editedEntry = new EntryBuilder().build();
         Entry entryToEdit = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
-        EditEntryDescriptor descriptor = new EditPersonDescriptorBuilder(editedEntry).build();
+        EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(editedEntry).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY, descriptor);
         Model expectedModel = model.clone();
         expectedModel.setEntry(entryToEdit, editedEntry);
@@ -174,7 +174,7 @@ public class EditCommandTest {
     @Test
     public void executeUndoRedo_invalidIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredEntryList().size() + 1);
-        EditCommand.EditEntryDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_TITLE_BOB).build();
+        EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB).build();
         EditCommand editCommand = new EditCommand(outOfBoundIndex, descriptor);
 
         // execution failed -> address book state not added into model
@@ -195,7 +195,7 @@ public class EditCommandTest {
     @Test
     public void executeUndoRedo_validIndexFilteredList_samePersonEdited() throws Exception {
         Entry editedEntry = new EntryBuilder().build();
-        EditEntryDescriptor descriptor = new EditPersonDescriptorBuilder(editedEntry).build();
+        EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(editedEntry).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY, descriptor);
         Model expectedModel = model.clone();
 

@@ -39,7 +39,7 @@ public class EntryListPanelTest extends GuiUnitTest {
         for (int i = 0; i < TYPICAL_ENTRIES.size(); i++) {
             entryListPanelHandle.navigateToCard(TYPICAL_ENTRIES.get(i));
             Entry expectedEntry = TYPICAL_ENTRIES.get(i);
-            EntryCardHandle actualCard = entryListPanelHandle.getPersonCardHandle(i);
+            EntryCardHandle actualCard = entryListPanelHandle.getEntryCardHandle(i);
 
             assertCardDisplaysPerson(expectedEntry, actualCard);
             assertEquals(Integer.toString(i + 1) + ". ", actualCard.getId());
@@ -53,7 +53,7 @@ public class EntryListPanelTest extends GuiUnitTest {
         guiRobot.interact(() -> selectedPerson.set(secondEntry));
         guiRobot.pauseForHuman();
 
-        EntryCardHandle expectedPerson = entryListPanelHandle.getPersonCardHandle(INDEX_SECOND_ENTRY.getZeroBased());
+        EntryCardHandle expectedPerson = entryListPanelHandle.getEntryCardHandle(INDEX_SECOND_ENTRY.getZeroBased());
         EntryCardHandle selectedPerson = entryListPanelHandle.getHandleToSelectedCard();
         assertCardEquals(expectedPerson, selectedPerson);
     }

@@ -19,7 +19,7 @@ import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
-import seedu.address.testutil.EditPersonDescriptorBuilder;
+import seedu.address.testutil.EditEntryDescriptorBuilder;
 
 /**
  * Contains helper methods for testing commands.
@@ -61,11 +61,11 @@ public class CommandTestUtil {
     public static final EditCommand.EditEntryDescriptor DESC_BOB;
 
     static {
-        DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_TITLE_AMY)
-                .withPhone(VALID_DESCRIPTION_AMY).withEmail(VALID_LINK_AMY).withAddress(VALID_ADDRESS_AMY)
+        DESC_AMY = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_AMY)
+                .withDescription(VALID_DESCRIPTION_AMY).withLink(VALID_LINK_AMY).withAddress(VALID_ADDRESS_AMY)
                 .withTags(VALID_TAG_TECH).build();
-        DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_TITLE_BOB)
-                .withPhone(VALID_DESCRIPTION_BOB).withEmail(VALID_LINK_BOB).withAddress(VALID_ADDRESS_BOB)
+        DESC_BOB = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB)
+                .withDescription(VALID_DESCRIPTION_BOB).withLink(VALID_LINK_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH).build();
     }
 

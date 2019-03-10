@@ -3,11 +3,9 @@ package systemtests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
@@ -18,19 +16,15 @@ import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
-import static seedu.address.testutil.TypicalEntries.AMY;
 import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_ENTRY;
-import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_ENTRY;
 
 import org.junit.Test;
 
@@ -40,7 +34,6 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -84,7 +77,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, index, BOB);
 
         /* Case: edit a entry with new values same as another entry's values but with different link -> edited */
-        assertTrue(getModel().getEntryBook().getPersonList().contains(BOB));
+        assertTrue(getModel().getEntryBook().getEntryList().contains(BOB));
         index = INDEX_SECOND_ENTRY;
         assertNotEquals(getModel().getFilteredEntryList().get(index.getZeroBased()), BOB);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
@@ -115,7 +108,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
          * -> rejected
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        int invalidIndex = getModel().getEntryBook().getPersonList().size();
+        int invalidIndex = getModel().getEntryBook().getEntryList().size();
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + TITLE_DESC_BOB,
                 Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
@@ -187,7 +180,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: edit a entry with new values same as another entry's values -> rejected */
         executeCommand(EntryUtil.getAddCommand(BOB));
-        assertTrue(getModel().getEntryBook().getPersonList().contains(BOB));
+        assertTrue(getModel().getEntryBook().getEntryList().contains(BOB));
         index = INDEX_SECOND_ENTRY;
         assertFalse(getModel().getFilteredEntryList().get(index.getZeroBased()).equals(BOB));
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()

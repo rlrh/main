@@ -31,7 +31,7 @@ import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
-import seedu.address.testutil.EditPersonDescriptorBuilder;
+import seedu.address.testutil.EditEntryDescriptorBuilder;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
 
@@ -66,7 +66,7 @@ public class EntryBookParserTest {
     @Test
     public void parseCommand_edit() throws Exception {
         Entry entry = new EntryBuilder().build();
-        EditEntryDescriptor descriptor = new EditPersonDescriptorBuilder(entry).build();
+        EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(entry).build();
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + " " + EntryUtil.getEditEntryDescriptorDetails(descriptor));
         assertEquals(new EditCommand(INDEX_FIRST_ENTRY, descriptor), command);

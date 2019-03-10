@@ -146,7 +146,7 @@ public abstract class AddressBookSystemTest {
      */
     protected void showAllPersons() {
         executeCommand(ListCommand.COMMAND_WORD);
-        assertEquals(getModel().getEntryBook().getPersonList().size(), getModel().getFilteredEntryList().size());
+        assertEquals(getModel().getEntryBook().getEntryList().size(), getModel().getFilteredEntryList().size());
     }
 
     /**
@@ -154,7 +154,7 @@ public abstract class AddressBookSystemTest {
      */
     protected void showPersonsWithName(String keyword) {
         executeCommand(FindCommand.COMMAND_WORD + " " + keyword);
-        assertTrue(getModel().getFilteredEntryList().size() < getModel().getEntryBook().getPersonList().size());
+        assertTrue(getModel().getFilteredEntryList().size() < getModel().getEntryBook().getEntryList().size());
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class AddressBookSystemTest {
      */
     protected void deleteAllPersons() {
         executeCommand(ClearCommand.COMMAND_WORD);
-        assertEquals(0, getModel().getEntryBook().getPersonList().size());
+        assertEquals(0, getModel().getEntryBook().getEntryList().size());
     }
 
     /**
@@ -195,7 +195,7 @@ public abstract class AddressBookSystemTest {
         getBrowserPanel().rememberUrl();
         statusBarFooterHandle.rememberSaveLocation();
         statusBarFooterHandle.rememberSyncStatus();
-        getPersonListPanel().rememberSelectedPersonCard();
+        getPersonListPanel().rememberSelectedEntryCard();
     }
 
     /**
@@ -212,7 +212,7 @@ public abstract class AddressBookSystemTest {
      * Asserts that the browser's url is changed to display the details of the entry in the entry list panel at
      * {@code expectedSelectedCardIndex}, and only the card at {@code expectedSelectedCardIndex} is selected.
      * @see BrowserPanelHandle#isUrlChanged()
-     * @see EntryListPanelHandle#isSelectedPersonCardChanged()
+     * @see EntryListPanelHandle#isSelectedEntryCardChanged()
      */
     protected void assertSelectedCardChanged(Index expectedSelectedCardIndex) {
         getPersonListPanel().navigateToCard(getPersonListPanel().getSelectedCardIndex());
@@ -232,11 +232,11 @@ public abstract class AddressBookSystemTest {
     /**
      * Asserts that the browser's url and the selected card in the entry list panel remain unchanged.
      * @see BrowserPanelHandle#isUrlChanged()
-     * @see EntryListPanelHandle#isSelectedPersonCardChanged()
+     * @see EntryListPanelHandle#isSelectedEntryCardChanged()
      */
     protected void assertSelectedCardUnchanged() {
         assertFalse(getBrowserPanel().isUrlChanged());
-        assertFalse(getPersonListPanel().isSelectedPersonCardChanged());
+        assertFalse(getPersonListPanel().isSelectedEntryCardChanged());
     }
 
     /**

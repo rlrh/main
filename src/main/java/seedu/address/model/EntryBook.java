@@ -57,7 +57,7 @@ public class EntryBook implements ReadOnlyEntryBook {
     public void resetData(ReadOnlyEntryBook newData) {
         requireNonNull(newData);
 
-        setPersons(newData.getPersonList());
+        setPersons(newData.getEntryList());
     }
 
     //// entry-level operations
@@ -135,7 +135,7 @@ public class EntryBook implements ReadOnlyEntryBook {
     }
 
     @Override
-    public ObservableList<Entry> getPersonList() {
+    public ObservableList<Entry> getEntryList() {
         return persons.asUnmodifiableObservableList();
     }
 

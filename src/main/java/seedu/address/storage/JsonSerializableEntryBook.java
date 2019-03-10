@@ -37,7 +37,7 @@ class JsonSerializableEntryBook {
      * @param source future changes to this will not affect the created {@code JsonSerializableEntryBook}.
      */
     public JsonSerializableEntryBook(ReadOnlyEntryBook source) {
-        persons.addAll(source.getPersonList().stream().map(JsonAdaptedEntry::new).collect(Collectors.toList()));
+        persons.addAll(source.getEntryList().stream().map(JsonAdaptedEntry::new).collect(Collectors.toList()));
     }
 
     /**

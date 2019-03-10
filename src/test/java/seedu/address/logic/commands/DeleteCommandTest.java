@@ -75,7 +75,7 @@ public class DeleteCommandTest {
 
         Index outOfBoundIndex = INDEX_SECOND_ENTRY;
         // ensures that outOfBoundIndex is still in bounds of address book list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getEntryBook().getPersonList().size());
+        assertTrue(outOfBoundIndex.getZeroBased() < model.getEntryBook().getEntryList().size());
 
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 

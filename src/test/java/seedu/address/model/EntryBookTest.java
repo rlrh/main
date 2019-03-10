@@ -34,7 +34,7 @@ public class EntryBookTest {
 
     @Test
     public void constructor() {
-        assertEquals(Collections.emptyList(), addressBook.getPersonList());
+        assertEquals(Collections.emptyList(), addressBook.getEntryList());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class EntryBookTest {
     @Test
     public void getPersonList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
-        addressBook.getPersonList().remove(0);
+        addressBook.getEntryList().remove(0);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class EntryBookTest {
         }
 
         @Override
-        public ObservableList<Entry> getPersonList() {
+        public ObservableList<Entry> getEntryList() {
             return entries;
         }
 

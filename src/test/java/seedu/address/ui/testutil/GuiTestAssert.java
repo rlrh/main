@@ -26,7 +26,7 @@ public class GuiTestAssert {
         assertEquals(expectedCard.getAddress(), actualCard.getAddress());
         assertEquals(expectedCard.getLink(), actualCard.getLink());
         assertEquals(expectedCard.getTitle(), actualCard.getTitle());
-        assertEquals(expectedCard.getComment(), actualCard.getComment());
+        assertEquals(expectedCard.getDescription(), actualCard.getDescription());
         assertEquals(expectedCard.getTags(), actualCard.getTags());
         expectedCard.getTags().forEach(tag ->
                 assertEquals(expectedCard.getTagStyleClasses(tag), actualCard.getTagStyleClasses(tag))
@@ -38,7 +38,7 @@ public class GuiTestAssert {
      */
     public static void assertCardDisplaysPerson(Entry expectedEntry, EntryCardHandle actualCard) {
         assertEquals(expectedEntry.getTitle().fullTitle, actualCard.getTitle());
-        assertEquals(expectedEntry.getDescription().value, actualCard.getComment());
+        assertEquals(expectedEntry.getDescription().value, actualCard.getDescription());
         assertEquals(expectedEntry.getLink().value, actualCard.getLink());
         assertEquals(expectedEntry.getAddress().value, actualCard.getAddress());
         assertTagsAndTagColorStylesEqual(expectedEntry, actualCard);
@@ -51,7 +51,7 @@ public class GuiTestAssert {
     public static void assertListMatching(EntryListPanelHandle entryListPanelHandle, Entry... entries) {
         for (int i = 0; i < entries.length; i++) {
             entryListPanelHandle.navigateToCard(i);
-            assertCardDisplaysPerson(entries[i], entryListPanelHandle.getPersonCardHandle(i));
+            assertCardDisplaysPerson(entries[i], entryListPanelHandle.getEntryCardHandle(i));
         }
     }
 

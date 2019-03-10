@@ -13,7 +13,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
 import org.junit.Test;
 
 import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
-import seedu.address.testutil.EditPersonDescriptorBuilder;
+import seedu.address.testutil.EditEntryDescriptorBuilder;
 
 public class EditEntryDescriptorTest {
 
@@ -36,23 +36,23 @@ public class EditEntryDescriptorTest {
         assertFalse(DESC_AMY.equals(DESC_BOB));
 
         // different name -> returns false
-        EditEntryDescriptor editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withName(VALID_TITLE_BOB).build();
+        EditEntryDescriptor editedAmy = new EditEntryDescriptorBuilder(DESC_AMY).withTitle(VALID_TITLE_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different phone -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withPhone(VALID_DESCRIPTION_BOB).build();
+        editedAmy = new EditEntryDescriptorBuilder(DESC_AMY).withDescription(VALID_DESCRIPTION_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different email -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withEmail(VALID_LINK_BOB).build();
+        editedAmy = new EditEntryDescriptorBuilder(DESC_AMY).withLink(VALID_LINK_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different address -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withAddress(VALID_ADDRESS_BOB).build();
+        editedAmy = new EditEntryDescriptorBuilder(DESC_AMY).withAddress(VALID_ADDRESS_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different tags -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withTags(VALID_TAG_SCIENCE).build();
+        editedAmy = new EditEntryDescriptorBuilder(DESC_AMY).withTags(VALID_TAG_SCIENCE).build();
         assertFalse(DESC_AMY.equals(editedAmy));
     }
 }

@@ -47,7 +47,7 @@ public class StatusBarFooterTest extends GuiUnitTest {
     @Before
     public void setUp() {
         StatusBarFooter statusBarFooter = new StatusBarFooter(STUB_SAVE_LOCATION, addressBook,
-                addressBook.getPersonList());
+                addressBook.getEntryList());
         uiPartRule.setUiPart(statusBarFooter);
 
         statusBarFooterHandle = new StatusBarFooterHandle(statusBarFooter.getRoot());
@@ -56,7 +56,7 @@ public class StatusBarFooterTest extends GuiUnitTest {
     @Test
     public void display() {
         // initial state
-        int initialTargetCount = addressBook.getPersonList().size();
+        int initialTargetCount = addressBook.getEntryList().size();
         assertStatusBarContent(RELATIVE_PATH.resolve(STUB_SAVE_LOCATION).toString(), SYNC_STATUS_INITIAL,
                 String.format(TARGET_COUNT_STATUS, initialTargetCount));
 
