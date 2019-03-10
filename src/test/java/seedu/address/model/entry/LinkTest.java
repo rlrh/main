@@ -119,6 +119,7 @@ public class LinkTest {
         assertTrue(Link.isValidConstructionLink("https://www.peterJack_1190.example.com")); // with www
 
         assertTrue(Link.isValidConstructionLink("file:///c/Desktop/file.txt")); // file protocol
+        assertTrue(Link.isValidConstructionLink("file:/c/Desktop/file.txt")); // file protocol no 2 forward slash
 
         assertTrue(Link.isValidConstructionLink("http://localhost")); // localhost
         assertTrue(Link.isValidConstructionLink("http://localhost/path/to/file.txt")); // localhost

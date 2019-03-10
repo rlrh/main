@@ -13,7 +13,7 @@ public class Link {
     public static final String DEFAULT_LINK = "https://cs2103-ay1819s2-w10-1.github.io/main/";
 
     private static final String PATH = "[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-    public static final String USER_INPUT_VALIDATION_REGEX = "^(https?|ftp|file)://" + PATH;
+    public static final String USER_INPUT_VALIDATION_REGEX = "^(https?://|file:/(//)?)" + PATH;
     public static final String CONSTRUCTION_VALIDATION_REGEX = USER_INPUT_VALIDATION_REGEX;
 
     public final String value;
