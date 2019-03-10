@@ -3,9 +3,7 @@ package seedu.address.ui;
 import static java.util.Objects.requireNonNull;
 
 import java.net.URL;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
-
 import javax.xml.transform.TransformerException;
 
 import com.chimbori.crux.articles.Article;
@@ -21,7 +19,6 @@ import javafx.scene.web.WebView;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.XmlUtil;
-import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.entry.Entry;
 
 /**
@@ -41,7 +38,7 @@ public class BrowserPanel extends UiPart<Region> {
     @FXML
     private WebView browser;
 
-    WebEngine webEngine = browser.getEngine();
+    private WebEngine webEngine = browser.getEngine();
 
     private String currentLocation;
     private boolean isCurrentlyReaderView;
@@ -174,7 +171,7 @@ public class BrowserPanel extends UiPart<Region> {
         isCurrentlyReaderView = false;
         currentLocation = url;
 
-        Platform.runLater(() -> webEngine.load(url));
+        Platform.runLater(() -> getWebEngine().load(url));
 
     }
 
@@ -194,13 +191,13 @@ public class BrowserPanel extends UiPart<Region> {
 
         // process loaded content through Crux, then load processed content
         try {
-            String rawHtml = XmlUtil.convertDocumentToString(webEngine.getDocument());
+            String rawHtml = XmlUtil.convertDocumentToString(getWebEngine().getDocument());
             Article article = ArticleExtractor.with(url, rawHtml)
                     .extractMetadata()
                     .extractContent()
                     .article();
             String cleanHtml = article.document.outerHtml();
-            Platform.runLater(() -> webEngine.loadContent(cleanHtml));
+            Platform.runLater(() -> getWebEngine().loadContent(cleanHtml));
         } catch (TransformerException te) {
             String message = String.format("Failed to load reader view for %s", this.currentLocation);
             logger.warning(message);
@@ -224,4 +221,11 @@ public class BrowserPanel extends UiPart<Region> {
         }
     }
 
+    /**
+     * Gets browser's web engine.
+     * @return browser's web engine
+     */
+    WebEngine getWebEngine() {
+        return webEngine;
+    }
 }

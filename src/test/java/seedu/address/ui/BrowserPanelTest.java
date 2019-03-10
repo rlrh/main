@@ -10,8 +10,7 @@ import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK_BASE_URL;
 
 import java.net.URL;
-
-import com.chimbori.crux.articles.ArticleExtractor;
+import javax.xml.transform.TransformerException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -19,12 +18,12 @@ import org.jsoup.nodes.Element;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.chimbori.crux.articles.ArticleExtractor;
+
 import guitests.guihandles.BrowserPanelHandle;
 import javafx.beans.property.SimpleObjectProperty;
 import seedu.address.commons.util.XmlUtil;
 import seedu.address.model.entry.Entry;
-
-import javax.xml.transform.TransformerException;
 
 public class BrowserPanelTest extends GuiUnitTest {
     private SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
@@ -75,7 +74,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         // process loaded content through Crux
         String originalHtml = "";
         try {
-            originalHtml = XmlUtil.convertDocumentToString(browserPanel.webEngine.getDocument());
+            originalHtml = XmlUtil.convertDocumentToString(browserPanel.getWebEngine().getDocument());
         } catch (TransformerException te) {
             fail();
         }
@@ -94,7 +93,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         // extract loaded content
         String readerHtml = "";
         try {
-            readerHtml = XmlUtil.convertDocumentToString(browserPanel.webEngine.getDocument());
+            readerHtml = XmlUtil.convertDocumentToString(browserPanel.getWebEngine().getDocument());
         } catch (TransformerException te) {
             fail();
         }
