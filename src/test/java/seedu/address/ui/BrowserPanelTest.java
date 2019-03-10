@@ -2,7 +2,6 @@ package seedu.address.ui;
 
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static seedu.address.testutil.TypicalEntries.INVALID_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_LINK;
@@ -13,12 +12,10 @@ import java.net.URL;
 import javax.xml.transform.TransformerException;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Document;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.chimbori.crux.articles.ArticleExtractor;
 
 import guitests.guihandles.BrowserPanelHandle;
 import javafx.beans.property.SimpleObjectProperty;
@@ -78,13 +75,8 @@ public class BrowserPanelTest extends GuiUnitTest {
         } catch (TransformerException te) {
             fail();
         }
-        String processedHtml = ArticleExtractor.with(WIKIPEDIA_LINK_BASE_URL, originalHtml)
-                .extractMetadata()
-                .extractContent()
-                .article()
-                .document
-                .outerHtml();
-        Element expectedBody = Jsoup.parse(processedHtml).body(); // Get body from Jsoup parse to maintain consistency
+        Document doc = browserPanel.getReaderDocumentFrom(WIKIPEDIA_LINK_BASE_URL, originalHtml);
+        String expectedBody = doc.body().outerHtml();
 
         // set reader mode and reload
         guiRobot.interact(() -> viewMode.set(ViewMode.READER));
@@ -97,10 +89,11 @@ public class BrowserPanelTest extends GuiUnitTest {
         } catch (TransformerException te) {
             fail();
         }
-        Element actualBody = Jsoup.parse(readerHtml).body(); // Get body from Jsoup parse to maintain consistency
+        String actualBody = Jsoup.parse(readerHtml).body().outerHtml();
 
         // check actual loaded content is the same as expected processed content
-        assertTrue(actualBody.hasSameValue(expectedBody));
+        assertEquals(actualBody.replace(" ", ""), expectedBody.replace(" ", ""));
+
     }
 
 }

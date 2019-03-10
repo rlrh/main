@@ -6,6 +6,11 @@ import java.net.URL;
 import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
+
 import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.ArticleExtractor;
 
@@ -16,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.XmlUtil;
@@ -127,7 +133,7 @@ public class BrowserPanel extends UiPart<Region> {
 
         // Load reader view if reader view mode is selected but not loaded
         if (viewMode.equals(ViewMode.READER) && !isCurrentlyReaderView) {
-            loadReader(this.currentLocation);
+            loadReader(currentLocation);
         }
 
     }
@@ -175,9 +181,10 @@ public class BrowserPanel extends UiPart<Region> {
         isCurrentlyReaderView = false;
         currentLocation = url;
 
-        webEngine.setUserStyleSheetLocation(null);
-
-        Platform.runLater(() -> webEngine.load(url));
+        Platform.runLater(() -> {
+            webEngine.setUserStyleSheetLocation(null);
+            webEngine.load(url);
+        });
 
     }
 
@@ -197,22 +204,18 @@ public class BrowserPanel extends UiPart<Region> {
 
         // set stylesheet for reader view
         try {
-            System.out.println(STYLESHEET.toExternalForm());
-            webEngine.setUserStyleSheetLocation(STYLESHEET.toExternalForm());
+            Platform.runLater(() -> webEngine.setUserStyleSheetLocation(STYLESHEET.toExternalForm()));
         } catch (IllegalArgumentException | NullPointerException e) {
             String message = "Failed to set user style sheet location";
             logger.warning(message);
         }
 
-        // process loaded content through Crux, then load processed content
+        // process loaded content, then load processed content
         try {
-            String rawHtml = XmlUtil.convertDocumentToString(getWebEngine().getDocument());
-            Article article = ArticleExtractor.with(url, rawHtml)
-                    .extractMetadata()
-                    .extractContent()
-                    .article();
-            String cleanHtml = "<body class='container py-4'>\n" + article.document.outerHtml() + "</body>";
-            Platform.runLater(() -> webEngine.loadContent(cleanHtml));
+            String rawHtml = XmlUtil.convertDocumentToString(webEngine.getDocument());
+            Document readerDocument = getReaderDocumentFrom(url, rawHtml);
+            String processedHtml = readerDocument.outerHtml();
+            Platform.runLater(() -> webEngine.loadContent(processedHtml));
         } catch (TransformerException te) {
             String message = String.format("Failed to load reader view for %s", this.currentLocation);
             logger.warning(message);
@@ -240,7 +243,44 @@ public class BrowserPanel extends UiPart<Region> {
      * Gets browser's web engine.
      * @return browser's web engine
      */
-    WebEngine getWebEngine() {
+    protected WebEngine getWebEngine() {
         return webEngine;
+    }
+
+    /**
+     * Gets a document representing the reader view of the given HTML.
+     * @param baseUrl base URL
+     * @param rawHtml raw HTML to process
+     * @return clean document
+     */
+    protected Document getReaderDocumentFrom(String baseUrl, String rawHtml) {
+
+        // extract article metadata and content using Crux
+        Article article = ArticleExtractor.with(baseUrl, rawHtml)
+                .extractMetadata()
+                .extractContent()
+                .article();
+
+        // reparse using Jsoup
+        String processedHtml = article.document.outerHtml();
+        Document document = Jsoup.parse(processedHtml);
+
+        // wrap body in container
+        document.body().addClass("container py-5");
+
+        // add title
+        if (!article.title.isEmpty()) {
+            Element title = new Element(Tag.valueOf("h1"), "").text(article.title).addClass("pb-3");
+            document.body().prependChild(title);
+        }
+
+        // add site name
+        if (!article.siteName.isEmpty()) {
+            Element siteNameElement = new Element(Tag.valueOf("p"), "").text(article.siteName).addClass("lead");
+            document.body().prependChild(siteNameElement);
+        }
+
+        return document;
+
     }
 }
