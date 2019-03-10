@@ -337,7 +337,10 @@ public class ModelManager implements Model {
         return versionedEntryBook.equals(other.versionedEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredEntries.equals(other.filteredEntries)
-                && Objects.equals(selectedPerson.get(), other.selectedPerson.get());
+                && Objects.equals(selectedPerson.get(), other.selectedPerson.get())
+                && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
+                && Objects.equals(commandResult.get(), other.commandResult.get())
+                && exception.get().getMessage().equals(other.exception.get().getMessage());
     }
 
     @Override
