@@ -259,6 +259,7 @@ public class BrowserPanel extends UiPart<Region> {
         Article article = ArticleExtractor.with(baseUrl, rawHtml)
                 .extractMetadata()
                 .extractContent()
+                .estimateReadingTime()
                 .article();
 
         // reparse using Jsoup
@@ -268,10 +269,16 @@ public class BrowserPanel extends UiPart<Region> {
         // wrap body in container
         document.body().addClass("container py-5");
 
+        // add estimated reading time
+        Element timeElement = new Element(Tag.valueOf("small"), "")
+                .text(article.estimatedReadingTimeMinutes + " minutes");
+        Element timeWrapperElement = new Element(Tag.valueOf("p"), "").appendChild(timeElement);
+        document.body().prependChild(timeWrapperElement);
+
         // add title
         if (!article.title.isEmpty()) {
-            Element title = new Element(Tag.valueOf("h1"), "").text(article.title).addClass("pb-3");
-            document.body().prependChild(title);
+            Element titleElement = new Element(Tag.valueOf("h1"), "").text(article.title).addClass("pb-3");
+            document.body().prependChild(titleElement);
         }
 
         // add site name
