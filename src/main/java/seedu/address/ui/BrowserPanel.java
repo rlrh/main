@@ -251,7 +251,7 @@ public class BrowserPanel extends UiPart<Region> {
      * Gets a document representing the reader view of the given HTML.
      * @param baseUrl base URL
      * @param rawHtml raw HTML to process
-     * @return clean document
+     * @return document representing the reader view of rawHtml
      */
     protected Document getReaderDocumentFrom(String baseUrl, String rawHtml) {
 
