@@ -46,21 +46,14 @@ public class BrowserPanel extends UiPart<Region> {
     private String currentLocation;
     private boolean isCurrentlyReaderView;
     private ViewMode viewMode;
-    private Consumer<CommandResult> onSuccess;
-    private Consumer<Exception> onFailure;
 
-    public BrowserPanel(ObservableValue<Entry> selectedEntry,
-                        ObservableValue<ViewMode> viewMode,
-                        Consumer<CommandResult> onSuccess,
-                        Consumer<Exception> onFailure) {
+    public BrowserPanel(ObservableValue<Entry> selectedEntry, ObservableValue<ViewMode> viewMode) {
 
         super(FXML);
 
         this.currentLocation = "";
         this.isCurrentlyReaderView = false;
         this.viewMode = viewMode.getValue();
-        this.onSuccess = onSuccess;
-        this.onFailure = onFailure;
 
         // To prevent triggering events for typing inside the loaded Web page.
         getRoot().setOnKeyPressed(Event::consume);
@@ -106,15 +99,15 @@ public class BrowserPanel extends UiPart<Region> {
      * Displays loading message.
      */
     private void handleRunning() {
+
         if (isCurrentlyReaderView) {
             String message = String.format("Loading reader view for %s...", this.currentLocation);
             logger.info(message);
-            // onSuccess.accept(new CommandResult(message));
         } else {
             String message = String.format("Loading %s...", this.currentLocation);
             logger.info(message);
-            // onSuccess.accept(new CommandResult(message));
         }
+
     }
 
     /**
@@ -126,11 +119,9 @@ public class BrowserPanel extends UiPart<Region> {
         if (isCurrentlyReaderView) {
             String message = String.format("Successfully loaded reader view for %s", this.currentLocation);
             logger.info(message);
-            // onSuccess.accept(new CommandResult(message));
         } else {
             String message = String.format("Successfully loaded %s", this.currentLocation);
             logger.info(message);
-            // onSuccess.accept(new CommandResult(message));
         }
 
         // Load reader view if reader view mode is selected but not loaded
@@ -144,10 +135,12 @@ public class BrowserPanel extends UiPart<Region> {
      * Displays failed to load message, and loads error page.
      */
     private void handleFailed() {
+
         String message = String.format("Failed to load %s", this.currentLocation);
         logger.warning(message);
-        // onFailure.accept(new Exception(message));
+
         loadErrorPage();
+
     }
 
     /**
@@ -177,9 +170,12 @@ public class BrowserPanel extends UiPart<Region> {
      * @param url URL of the Web page to load
      */
     private void loadPage(String url) {
+
         isCurrentlyReaderView = false;
         currentLocation = url;
+
         Platform.runLater(() -> webEngine.load(url));
+
     }
 
     /**
@@ -188,10 +184,15 @@ public class BrowserPanel extends UiPart<Region> {
      * @param url base URL
      */
     private void loadReader(String url) {
+
         isCurrentlyReaderView = true;
+
+        // don't load reader view of default and error pages
         if (url.equals(DEFAULT_PAGE.toExternalForm()) || url.equals(ERROR_PAGE.toExternalForm())) {
             return;
         }
+
+        // process loaded content through Crux, then load processed content
         try {
             String rawHtml = XmlUtil.convertDocumentToString(webEngine.getDocument());
             Article article = ArticleExtractor.with(url, rawHtml)
@@ -203,7 +204,6 @@ public class BrowserPanel extends UiPart<Region> {
         } catch (TransformerException te) {
             String message = String.format("Failed to load reader view for %s", this.currentLocation);
             logger.warning(message);
-            // onFailure.accept(new Exception(message));
         }
     }
 

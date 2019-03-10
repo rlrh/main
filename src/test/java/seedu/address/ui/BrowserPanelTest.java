@@ -11,7 +11,6 @@ import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK_BASE_URL;
 
 import java.net.URL;
 
-import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.ArticleExtractor;
 
 import org.jsoup.Jsoup;
@@ -36,7 +35,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Before
     public void setUp() {
         guiRobot.interact(() -> {
-            browserPanel = new BrowserPanel(selectedPerson, viewMode, success -> {}, failure -> {});
+            browserPanel = new BrowserPanel(selectedPerson, viewMode);
         });
         uiPartRule.setUiPart(browserPanel);
 
