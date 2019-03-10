@@ -41,7 +41,7 @@ public class BrowserPanel extends UiPart<Region> {
     @FXML
     private WebView browser;
 
-    private WebEngine webEngine = browser.getEngine();
+    WebEngine webEngine = browser.getEngine();
 
     private String currentLocation;
     private boolean isCurrentlyReaderView;
