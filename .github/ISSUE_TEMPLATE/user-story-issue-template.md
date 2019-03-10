@@ -9,13 +9,13 @@ assignees: ''
 
 so that I can _
 
-#####Part of epics:
+### Part of epics:
 - #24 Entry management
 - #25 RSS feed support
 - #27 Reader view
 - #28 Offline mode
 <remove as needed>
 
-#####Sub-tasks:
+### Sub-tasks:
 
-#####Related to:
+### Related to:
