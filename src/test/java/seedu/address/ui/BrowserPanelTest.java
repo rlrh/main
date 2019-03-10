@@ -76,7 +76,7 @@ public class BrowserPanelTest extends GuiUnitTest {
             fail();
         }
         Document doc = browserPanel.getReaderDocumentFrom(WIKIPEDIA_LINK_BASE_URL, originalHtml);
-        String expectedBody = doc.body().outerHtml();
+        String expectedText = doc.text();
 
         // set reader mode and reload
         guiRobot.interact(() -> viewMode.set(ViewMode.READER));
@@ -89,10 +89,10 @@ public class BrowserPanelTest extends GuiUnitTest {
         } catch (TransformerException te) {
             fail();
         }
-        String actualBody = Jsoup.parse(readerHtml).body().outerHtml();
+        String actualText = Jsoup.parse(readerHtml).text();
 
         // check actual loaded content is the same as expected processed content
-        assertEquals(actualBody.replace(" ", ""), expectedBody.replace(" ", ""));
+        assertEquals(actualText, expectedText);
 
     }
 
