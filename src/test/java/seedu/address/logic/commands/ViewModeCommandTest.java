@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 
 import org.junit.Test;
@@ -61,12 +60,15 @@ public class ViewModeCommandTest {
         assertCommandSuccess(viewModeCommand, model, commandHistory, expectedMessage, expectedModel);
     }
 
+    /* code snippet for future use
     /**
      * Executes a {@code ViewModeCommand} with the given {@code viewMode}, and checks that a {@code CommandException}
      * is thrown with the {@code expectedMessage}.
      */
+    /*
     private void assertExecutionFailure(ViewMode viewMode, String expectedMessage) {
         ViewModeCommand viewModeCommand = new ViewModeCommand(viewMode);
         assertCommandFailure(viewModeCommand, model, commandHistory, expectedMessage);
     }
+    */
 }
