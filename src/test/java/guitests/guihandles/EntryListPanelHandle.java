@@ -16,10 +16,10 @@ public class EntryListPanelHandle extends NodeHandle<ListView<Entry>> {
 
     private static final String CARD_PANE_ID = "#cardPane";
 
-    private Optional<Entry> lastRememberedSelectedPersonCard;
+    private Optional<Entry> lastRememberedSelectedEntryCard;
 
-    public EntryListPanelHandle(ListView<Entry> personListPanelNode) {
-        super(personListPanelNode);
+    public EntryListPanelHandle(ListView<Entry> entryListPanelNode) {
+        super(entryListPanelNode);
     }
 
     /**
@@ -101,15 +101,15 @@ public class EntryListPanelHandle extends NodeHandle<ListView<Entry>> {
      * Returns the entry card handle of a entry associated with the {@code index} in the list.
      * @throws IllegalStateException if the selected card is currently not in the scene graph.
      */
-    public EntryCardHandle getPersonCardHandle(int index) {
+    public EntryCardHandle getEntryCardHandle(int index) {
         return getAllCardNodes().stream()
                 .map(EntryCardHandle::new)
-                .filter(handle -> handle.equals(getPerson(index)))
+                .filter(handle -> handle.equals(getEntry(index)))
                 .findFirst()
                 .orElseThrow(IllegalStateException::new);
     }
 
-    private Entry getPerson(int index) {
+    private Entry getEntry(int index) {
         return getRootNode().getItems().get(index);
     }
 
@@ -125,28 +125,28 @@ public class EntryListPanelHandle extends NodeHandle<ListView<Entry>> {
     /**
      * Remembers the selected {@code EntryCard} in the list.
      */
-    public void rememberSelectedPersonCard() {
+    public void rememberSelectedEntryCard() {
         List<Entry> selectedItems = getRootNode().getSelectionModel().getSelectedItems();
 
         if (selectedItems.size() == 0) {
-            lastRememberedSelectedPersonCard = Optional.empty();
+            lastRememberedSelectedEntryCard = Optional.empty();
         } else {
-            lastRememberedSelectedPersonCard = Optional.of(selectedItems.get(0));
+            lastRememberedSelectedEntryCard = Optional.of(selectedItems.get(0));
         }
     }
 
     /**
      * Returns true if the selected {@code EntryCard} is different from the value remembered by the most recent
-     * {@code rememberSelectedPersonCard()} call.
+     * {@code rememberSelectedEntryCard()} call.
      */
-    public boolean isSelectedPersonCardChanged() {
+    public boolean isSelectedEntryCardChanged() {
         List<Entry> selectedItems = getRootNode().getSelectionModel().getSelectedItems();
 
         if (selectedItems.size() == 0) {
-            return lastRememberedSelectedPersonCard.isPresent();
+            return lastRememberedSelectedEntryCard.isPresent();
         } else {
-            return !lastRememberedSelectedPersonCard.isPresent()
-                    || !lastRememberedSelectedPersonCard.get().equals(selectedItems.get(0));
+            return !lastRememberedSelectedEntryCard.isPresent()
+                    || !lastRememberedSelectedEntryCard.get().equals(selectedItems.get(0));
         }
     }
 

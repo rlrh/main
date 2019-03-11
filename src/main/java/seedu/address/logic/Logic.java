@@ -28,12 +28,12 @@ public interface Logic {
     /**
      * Returns the EntryBook.
      *
-     * @see seedu.address.model.Model#getAddressBook()
+     * @see seedu.address.model.Model#getEntryBook()
      */
-    ReadOnlyEntryBook getAddressBook();
+    ReadOnlyEntryBook getEntryBook();
 
-    /** Returns an unmodifiable view of the filtered list of persons */
-    ObservableList<Entry> getFilteredPersonList();
+    /** Returns an unmodifiable view of the filtered list of entries */
+    ObservableList<Entry> getFilteredEntryList();
 
     /**
      * Returns an unmodifiable view of the list of commands entered by the user.
@@ -42,9 +42,9 @@ public interface Logic {
     ObservableList<String> getHistory();
 
     /**
-     * Returns the user prefs' address book file path.
+     * Returns the user prefs' entry book file path.
      */
-    Path getAddressBookFilePath();
+    Path getEntryBookFilePath();
 
     /**
      * Returns the user prefs' GUI settings.
@@ -60,16 +60,16 @@ public interface Logic {
      * Selected entry in the filtered entry list.
      * null if no entry is selected.
      *
-     * @see seedu.address.model.Model#selectedPersonProperty()
+     * @see seedu.address.model.Model#selectedEntryProperty()
      */
-    ReadOnlyProperty<Entry> selectedPersonProperty();
+    ReadOnlyProperty<Entry> selectedEntryProperty();
 
     /**
      * Sets the selected entry in the filtered entry list.
      *
-     * @see seedu.address.model.Model#setSelectedPerson(Entry)
+     * @see seedu.address.model.Model#setSelectedEntry(Entry)
      */
-    void setSelectedPerson(Entry entry);
+    void setSelectedEntry(Entry entry);
 
     /**
      * Current view mode.

@@ -36,7 +36,7 @@ public class EntryCard extends UiPart<Region> {
     @FXML
     private Label id;
     @FXML
-    private Label comment;
+    private Label description;
     @FXML
     private Label address;
     @FXML
@@ -49,7 +49,7 @@ public class EntryCard extends UiPart<Region> {
         this.entry = entry;
         id.setText(displayedIndex + ". ");
         title.setText(entry.getTitle().fullTitle);
-        comment.setText(entry.getComment().value);
+        description.setText(entry.getDescription().value);
         address.setText(entry.getAddress().value);
         address.setManaged(false); // Makes address label invisible, graphic pipeline will not manage it.
         link.setText(entry.getLink().value);

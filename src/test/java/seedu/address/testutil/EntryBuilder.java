@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
@@ -16,21 +16,21 @@ import seedu.address.model.util.SampleDataUtil;
  */
 public class EntryBuilder {
 
-    public static final String DEFAULT_NAME = "Alice Pauline";
-    public static final String DEFAULT_PHONE = "85355255";
-    public static final String DEFAULT_EMAIL = "https://alice.gmail.com";
+    public static final String DEFAULT_TITLE = "Alice Pauline";
+    public static final String DEFAULT_DESCRIPTION = "85355255";
+    public static final String DEFAULT_LINK = "https://alice.gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
 
     private Title title;
-    private Comment comment;
+    private Description description;
     private Link link;
     private Address address;
     private Set<Tag> tags;
 
     public EntryBuilder() {
-        title = new Title(DEFAULT_NAME);
-        comment = new Comment(DEFAULT_PHONE);
-        link = new Link(DEFAULT_EMAIL);
+        title = new Title(DEFAULT_TITLE);
+        description = new Description(DEFAULT_DESCRIPTION);
+        link = new Link(DEFAULT_LINK);
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
     }
@@ -40,7 +40,7 @@ public class EntryBuilder {
      */
     public EntryBuilder(Entry entryToCopy) {
         title = entryToCopy.getTitle();
-        comment = entryToCopy.getComment();
+        description = entryToCopy.getDescription();
         link = entryToCopy.getLink();
         address = entryToCopy.getAddress();
         tags = new HashSet<>(entryToCopy.getTags());
@@ -49,8 +49,8 @@ public class EntryBuilder {
     /**
      * Sets the {@code Title} of the {@code Entry} that we are building.
      */
-    public EntryBuilder withName(String name) {
-        this.title = new Title(name);
+    public EntryBuilder withTitle(String title) {
+        this.title = new Title(title);
         return this;
     }
 
@@ -71,23 +71,23 @@ public class EntryBuilder {
     }
 
     /**
-     * Sets the {@code Comment} of the {@code Entry} that we are building.
+     * Sets the {@code Description} of the {@code Entry} that we are building.
      */
-    public EntryBuilder withPhone(String phone) {
-        this.comment = new Comment(phone);
+    public EntryBuilder withDescription(String description) {
+        this.description = new Description(description);
         return this;
     }
 
     /**
      * Sets the {@code Link} of the {@code Entry} that we are building.
      */
-    public EntryBuilder withEmail(String email) {
-        this.link = new Link(email);
+    public EntryBuilder withLink(String link) {
+        this.link = new Link(link);
         return this;
     }
 
     public Entry build() {
-        return new Entry(title, comment, link, address, tags);
+        return new Entry(title, description, link, address, tags);
     }
 
 }

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.COMMENT_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_AMY;
 import static seedu.address.testutil.TypicalEntries.AMY;
@@ -98,18 +98,18 @@ public class LogicManagerTest {
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        model = new ModelManager(model.getAddressBook(), model.getUserPrefs(), storage);
+        model = new ModelManager(model.getEntryBook(), model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 
         // Execute add command
-        String addCommand = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + LINK_DESC_AMY
+        String addCommand = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY
                 + ADDRESS_DESC_AMY;
         Entry expectedEntry = new EntryBuilder(AMY).withTags().build();
         Model expectedModel = new ModelManagerStub();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
         String expectedFinalMessage = ModelManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
-        expectedModel.addPerson(expectedEntry);
-        expectedModel.commitAddressBook();
+        expectedModel.addEntry(expectedEntry);
+        expectedModel.commitEntryBook();
         expectedModel.setException(new CommandException(expectedFinalMessage));
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
         assertManualExceptionPropagated(CommandException.class, expectedFinalMessage);
@@ -135,7 +135,7 @@ public class LogicManagerTest {
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
-        logic.getFilteredPersonList().remove(0);
+        logic.getFilteredEntryList().remove(0);
     }
 
     /**
@@ -168,7 +168,7 @@ public class LogicManagerTest {
      * @see #assertCommandBehavior(Class, String, String, Model)
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getAddressBook(), model.getUserPrefs(), model.getStorage());
+        Model expectedModel = new ModelManager(model.getEntryBook(), model.getUserPrefs(), model.getStorage());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 

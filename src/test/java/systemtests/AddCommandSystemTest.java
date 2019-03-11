@@ -3,10 +3,9 @@ package systemtests;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.COMMENT_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.COMMENT_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_COMMENT_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
@@ -16,8 +15,7 @@ import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_COMMENT_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -37,8 +35,7 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
-import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
@@ -54,11 +51,11 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         /* ------------------------ Perform add operations on the shown unfiltered list ----------------------------- */
 
-        /* Case: add a entry without tags to a non-empty address book, command with leading spaces and trailing spaces
+        /* Case: add a entry without tags to a non-empty entry book, command with leading spaces and trailing spaces
          * -> added
          */
         Entry toAdd = AMY;
-        String command = "   " + AddCommand.COMMAND_WORD + "  " + TITLE_DESC_AMY + "  " + COMMENT_DESC_AMY + " "
+        String command = "   " + AddCommand.COMMAND_WORD + "  " + TITLE_DESC_AMY + "  " + DESCRIPTION_DESC_AMY + " "
                 + LINK_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TAG_DESC_TECH + " ";
         assertCommandSuccess(command, toAdd);
 
@@ -69,37 +66,33 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: redo adding Amy to the list -> Amy added again */
         command = RedoCommand.COMMAND_WORD;
-        model.addPerson(toAdd);
+        model.addEntry(toAdd);
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, model, expectedResultMessage);
 
-        /* Case: add a entry with all fields same as another entry in the address book except name -> added */
-        toAdd = new EntryBuilder(AMY).withName(VALID_TITLE_BOB).build();
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_BOB + COMMENT_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY
+        /* Case: add a entry with all fields same as another entry in the entry book except link -> added */
+        toAdd = new EntryBuilder(AMY).withLink(VALID_LINK_BOB).build();
+        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_BOB + ADDRESS_DESC_AMY
                 + TAG_DESC_TECH;
         assertCommandSuccess(command, toAdd);
 
-        /* Case: add a entry with all fields same as another entry in the address book except phone and email
+        // Deprecated
+        /* Case: add a entry with all fields same as another entry in the entry book except description and link
          * -> added
          */
-        toAdd = new EntryBuilder(AMY).withPhone(VALID_COMMENT_BOB).withEmail(VALID_LINK_BOB).build();
+        /*
+        toAdd = new EntryBuilder(AMY).withDescription(VALID_DESCRIPTION_BOB).withLink(VALID_LINK_BOB).build();
         command = EntryUtil.getAddCommand(toAdd);
         assertCommandSuccess(command, toAdd);
+        */
 
-        /* Case: using alias to add a entry without tags to a non-empty address book,
-         * command with leading spaces and trailing spaces -> added
-         */
-        command = "   " + AddCommand.COMMAND_ALIAS + "  " + TITLE_DESC_BOB + "  " + COMMENT_DESC_BOB + " "
-                + LINK_DESC_BOB + "   " + ADDRESS_DESC_BOB + "   " + TAG_DESC_TECH + "   " + TAG_DESC_SCIENCE + " ";
-        assertCommandSuccess(command, BOB);
-
-        /* Case: add to empty address book -> added */
+        /* Case: add to empty entry book -> added */
         deleteAllPersons();
         assertCommandSuccess(ALICE);
 
         /* Case: add a entry with tags, command with parameters in random order -> added */
         toAdd = BOB;
-        command = AddCommand.COMMAND_WORD + TAG_DESC_TECH + COMMENT_DESC_BOB + ADDRESS_DESC_BOB + TITLE_DESC_BOB
+        command = AddCommand.COMMAND_WORD + TAG_DESC_TECH + DESCRIPTION_DESC_BOB + ADDRESS_DESC_BOB + TITLE_DESC_BOB
                 + TAG_DESC_SCIENCE + LINK_DESC_BOB;
         assertCommandSuccess(command, toAdd);
 
@@ -124,18 +117,13 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         command = EntryUtil.getAddCommand(HOON);
         assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
 
-        /* Case: add a duplicate entry except with different phone -> rejected */
-        toAdd = new EntryBuilder(HOON).withPhone(VALID_COMMENT_BOB).build();
+        /* Case: add a duplicate entry except with different description -> rejected */
+        toAdd = new EntryBuilder(HOON).withDescription(VALID_DESCRIPTION_BOB).build();
         command = EntryUtil.getAddCommand(toAdd);
         assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
 
-        /* Case: add a duplicate entry except with different email -> rejected */
-        toAdd = new EntryBuilder(HOON).withEmail(VALID_LINK_BOB).build();
-        command = EntryUtil.getAddCommand(toAdd);
-        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
-
-        /* Case: add a duplicate entry except with different address -> rejected */
-        toAdd = new EntryBuilder(HOON).withAddress(VALID_ADDRESS_BOB).build();
+        /* Case: add a duplicate entry except with different title -> rejected */
+        toAdd = new EntryBuilder(HOON).withTitle(VALID_TITLE_BOB).build();
         command = EntryUtil.getAddCommand(toAdd);
         assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
 
@@ -143,48 +131,70 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         command = EntryUtil.getAddCommand(HOON) + " " + PREFIX_TAG.getPrefix() + "friends";
         assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
 
-        /* Case: missing name -> rejected */
-        command = AddCommand.COMMAND_WORD + COMMENT_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
+        /* Case: missing link -> rejected */
+        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
-        /* Case: missing phone -> rejected */
+        // To be deprecated
+        /* Case: missing name -> rejected
+        command = AddCommand.COMMAND_WORD + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
+        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        */
+
+        /* Case: missing phone -> rejected
         command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        */
 
-        /* Case: missing email -> rejected */
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        // No longer valid with the optionality of the (invisible) address field
         /* Case: missing address -> rejected
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + LINK_DESC_AMY;
+        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         */
 
         /* Case: invalid keyword -> rejected */
-        command = "adds " + EntryUtil.getPersonDetails(toAdd);
+        command = "adds " + EntryUtil.getEntryDetails(toAdd);
         assertCommandFailure(command, Messages.MESSAGE_UNKNOWN_COMMAND);
 
-        /* Case: invalid name -> rejected */
-        command = AddCommand.COMMAND_WORD + INVALID_TITLE_DESC + COMMENT_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
+        /* Case: invalid title -> rejected */
+        command = AddCommand.COMMAND_WORD + INVALID_TITLE_DESC
+            + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
         assertCommandFailure(command, Title.MESSAGE_CONSTRAINTS);
 
-        /* Case: invalid phone -> rejected */
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + INVALID_COMMENT_DESC + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, Comment.MESSAGE_CONSTRAINTS);
+        /* Case: invalid description -> rejected */
+        command = AddCommand.COMMAND_WORD + INVALID_DESCRIPTION_DESC
+            + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
+        assertCommandFailure(command, Description.MESSAGE_CONSTRAINTS);
 
-        /* Case: invalid email -> rejected */
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + INVALID_LINK_DESC + ADDRESS_DESC_AMY;
+        /* Case: invalid link -> rejected */
+        command = AddCommand.COMMAND_WORD + INVALID_LINK_DESC
+             + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
         assertCommandFailure(command, Link.MESSAGE_CONSTRAINTS);
 
-        /* Case: invalid address -> rejected */
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + LINK_DESC_AMY + INVALID_ADDRESS_DESC;
+        // Deprecated
+        /* Case: invalid address -> rejected
+        command = AddCommand.COMMAND_WORD + INVALID_ADDRESS_DESC
+             + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
         assertCommandFailure(command, Address.MESSAGE_CONSTRAINTS);
+        */
 
         /* Case: invalid tag -> rejected */
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + COMMENT_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY
+        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY
                 + INVALID_TAG_DESC;
         assertCommandFailure(command, Tag.MESSAGE_CONSTRAINTS);
+
+        /* ----------------------------------- Perform invalid add operations --------------------------------------- */
+
+        deleteAllPersons();
+
+        /* Case: using alias to add a entry without tags to a non-empty entry book -> added */
+        command = "   " + AddCommand.COMMAND_ALIAS + "  " + TITLE_DESC_AMY + "  " + DESCRIPTION_DESC_AMY + " "
+            + LINK_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TAG_DESC_TECH + " ";
+        assertCommandSuccess(command, AMY);
+
+        /* Case: command with leading spaces and trailing spaces -> added */
+        command = "   " + AddCommand.COMMAND_WORD + "  " + TITLE_DESC_BOB + "  " + DESCRIPTION_DESC_BOB + " "
+            + LINK_DESC_BOB + "   " + ADDRESS_DESC_BOB + "   " + TAG_DESC_TECH + "   " + TAG_DESC_SCIENCE + " ";
+        assertCommandSuccess(command, BOB);
     }
 
     /**
@@ -212,7 +222,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
      */
     private void assertCommandSuccess(String command, Entry toAdd) {
         Model expectedModel = getModel();
-        expectedModel.addPerson(toAdd);
+        expectedModel.addEntry(toAdd);
         String expectedResultMessage = String.format(AddCommand.MESSAGE_SUCCESS, toAdd);
 
         assertCommandSuccess(command, expectedModel, expectedResultMessage);

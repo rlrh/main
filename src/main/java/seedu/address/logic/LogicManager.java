@@ -49,13 +49,13 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public ReadOnlyEntryBook getAddressBook() {
-        return model.getAddressBook();
+    public ReadOnlyEntryBook getEntryBook() {
+        return model.getEntryBook();
     }
 
     @Override
-    public ObservableList<Entry> getFilteredPersonList() {
-        return model.getFilteredPersonList();
+    public ObservableList<Entry> getFilteredEntryList() {
+        return model.getFilteredEntryList();
     }
 
     @Override
@@ -64,8 +64,8 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public Path getAddressBookFilePath() {
-        return model.getAddressBookFilePath();
+    public Path getEntryBookFilePath() {
+        return model.getEntryBookFilePath();
     }
 
     @Override
@@ -79,13 +79,13 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public ReadOnlyProperty<Entry> selectedPersonProperty() {
-        return model.selectedPersonProperty();
+    public ReadOnlyProperty<Entry> selectedEntryProperty() {
+        return model.selectedEntryProperty();
     }
 
     @Override
-    public void setSelectedPerson(Entry entry) {
-        model.setSelectedPerson(entry);
+    public void setSelectedEntry(Entry entry) {
+        model.setSelectedEntry(entry);
     }
 
     @Override

@@ -3,8 +3,8 @@ package seedu.address.ui;
 import static java.time.Duration.ofMillis;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
-import static seedu.address.testutil.TypicalEntries.getTypicalPersons;
-import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalEntries.getTypicalEntries;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_ENTRY;
 import static seedu.address.ui.testutil.GuiTestAssert.assertCardDisplaysPerson;
 import static seedu.address.ui.testutil.GuiTestAssert.assertCardEquals;
 
@@ -18,14 +18,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 
 public class EntryListPanelTest extends GuiUnitTest {
     private static final ObservableList<Entry> TYPICAL_ENTRIES =
-            FXCollections.observableList(getTypicalPersons());
+            FXCollections.observableList(getTypicalEntries());
 
     private static final long CARD_CREATION_AND_DELETION_TIMEOUT = 2500;
 
@@ -39,7 +39,7 @@ public class EntryListPanelTest extends GuiUnitTest {
         for (int i = 0; i < TYPICAL_ENTRIES.size(); i++) {
             entryListPanelHandle.navigateToCard(TYPICAL_ENTRIES.get(i));
             Entry expectedEntry = TYPICAL_ENTRIES.get(i);
-            EntryCardHandle actualCard = entryListPanelHandle.getPersonCardHandle(i);
+            EntryCardHandle actualCard = entryListPanelHandle.getEntryCardHandle(i);
 
             assertCardDisplaysPerson(expectedEntry, actualCard);
             assertEquals(Integer.toString(i + 1) + ". ", actualCard.getId());
@@ -49,11 +49,11 @@ public class EntryListPanelTest extends GuiUnitTest {
     @Test
     public void selection_modelSelectedPersonChanged_selectionChanges() {
         initUi(TYPICAL_ENTRIES);
-        Entry secondEntry = TYPICAL_ENTRIES.get(INDEX_SECOND_PERSON.getZeroBased());
+        Entry secondEntry = TYPICAL_ENTRIES.get(INDEX_SECOND_ENTRY.getZeroBased());
         guiRobot.interact(() -> selectedPerson.set(secondEntry));
         guiRobot.pauseForHuman();
 
-        EntryCardHandle expectedPerson = entryListPanelHandle.getPersonCardHandle(INDEX_SECOND_PERSON.getZeroBased());
+        EntryCardHandle expectedPerson = entryListPanelHandle.getEntryCardHandle(INDEX_SECOND_ENTRY.getZeroBased());
         EntryCardHandle selectedPerson = entryListPanelHandle.getHandleToSelectedCard();
         assertCardEquals(expectedPerson, selectedPerson);
     }
@@ -80,10 +80,10 @@ public class EntryListPanelTest extends GuiUnitTest {
         ObservableList<Entry> backingList = FXCollections.observableArrayList();
         for (int i = 0; i < personCount; i++) {
             Title title = new Title(i + "a");
-            Comment comment = new Comment("000");
+            Description description = new Description("000");
             Link link = new Link("https://a.aa");
             Address address = new Address("a");
-            Entry entry = new Entry(title, comment, link, address, Collections.emptySet());
+            Entry entry = new Entry(title, description, link, address, Collections.emptySet());
             backingList.add(entry);
         }
         return backingList;

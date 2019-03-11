@@ -3,7 +3,7 @@ package seedu.address.model.entry;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_COMMENT_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
@@ -28,34 +28,32 @@ public class EntryTest {
     }
 
     @Test
-    public void isSamePerson() {
+    public void isSameEntry() {
         // same object -> returns true
-        assertTrue(ALICE.isSamePerson(ALICE));
+        assertTrue(ALICE.isSameEntry(ALICE));
 
         // null -> returns false
-        assertFalse(ALICE.isSamePerson(null));
+        assertFalse(ALICE.isSameEntry(null));
 
-        // different phone and email -> returns false
-        Entry editedAlice = new EntryBuilder(ALICE).withPhone(VALID_COMMENT_BOB).withEmail(VALID_LINK_BOB).build();
-        assertFalse(ALICE.isSamePerson(editedAlice));
+        // different link -> returns false
+        Entry editedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
+        assertFalse(ALICE.isSameEntry(editedAlice));
 
-        // different name -> returns false
-        editedAlice = new EntryBuilder(ALICE).withName(VALID_TITLE_BOB).build();
-        assertFalse(ALICE.isSamePerson(editedAlice));
+        // same link, different description -> returns true
+        editedAlice = new EntryBuilder(ALICE).withDescription(VALID_DESCRIPTION_BOB).build();
+        assertTrue(ALICE.isSameEntry(editedAlice));
 
-        // same name, same phone, different attributes -> returns true
-        editedAlice = new EntryBuilder(ALICE).withEmail(VALID_LINK_BOB).withAddress(VALID_ADDRESS_BOB)
-                .withTags(VALID_TAG_SCIENCE).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
+        // same link, different title -> returns true
+        editedAlice = new EntryBuilder(ALICE).withTitle(VALID_TITLE_BOB).build();
+        assertTrue(ALICE.isSameEntry(editedAlice));
 
-        // same name, same email, different attributes -> returns true
-        editedAlice = new EntryBuilder(ALICE).withPhone(VALID_COMMENT_BOB).withAddress(VALID_ADDRESS_BOB)
-                .withTags(VALID_TAG_SCIENCE).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
+        // same link, different description and title -> returns true
+        editedAlice = new EntryBuilder(ALICE).withTitle(VALID_TITLE_BOB).withDescription(VALID_DESCRIPTION_BOB).build();
+        assertTrue(ALICE.isSameEntry(editedAlice));
 
-        // same name, same phone, same email, different attributes -> returns true
-        editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
+        // same link, different tags -> returns true
+        editedAlice = new EntryBuilder(ALICE).withTags(VALID_TAG_SCIENCE).build();
+        assertTrue(ALICE.isSameEntry(editedAlice));
     }
 
     @Test
@@ -77,15 +75,15 @@ public class EntryTest {
         assertFalse(ALICE.equals(BOB));
 
         // different name -> returns false
-        Entry editedAlice = new EntryBuilder(ALICE).withName(VALID_TITLE_BOB).build();
+        Entry editedAlice = new EntryBuilder(ALICE).withTitle(VALID_TITLE_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different phone -> returns false
-        editedAlice = new EntryBuilder(ALICE).withPhone(VALID_COMMENT_BOB).build();
+        editedAlice = new EntryBuilder(ALICE).withDescription(VALID_DESCRIPTION_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different email -> returns false
-        editedAlice = new EntryBuilder(ALICE).withEmail(VALID_LINK_BOB).build();
+        editedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different address -> returns false
