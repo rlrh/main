@@ -92,7 +92,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         String actualText = Jsoup.parse(readerHtml).text();
 
         // check actual loaded content is the same as expected processed content
-        assertEquals(actualText, expectedText);
+        assertEquals(expectedText, actualText);
 
     }
 

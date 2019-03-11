@@ -39,7 +39,7 @@ public class BrowserPanel extends UiPart<Region> {
     public static final URL ERROR_PAGE =
             requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "error.html"));
     public static final URL STYLESHEET =
-            requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "litera.css"));
+            requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "default.css"));
 
     private static final String FXML = "BrowserPanel.fxml";
 
@@ -216,7 +216,7 @@ public class BrowserPanel extends UiPart<Region> {
             Document readerDocument = getReaderDocumentFrom(url, rawHtml);
             String processedHtml = readerDocument.outerHtml();
             Platform.runLater(() -> webEngine.loadContent(processedHtml));
-        } catch (TransformerException te) {
+        } catch (TransformerException | IllegalArgumentException e) {
             String message = String.format("Failed to load reader view for %s", this.currentLocation);
             logger.warning(message);
         }
@@ -253,7 +253,7 @@ public class BrowserPanel extends UiPart<Region> {
      * @param rawHtml raw HTML to process
      * @return document representing the reader view of rawHtml
      */
-    protected Document getReaderDocumentFrom(String baseUrl, String rawHtml) {
+    protected Document getReaderDocumentFrom(String baseUrl, String rawHtml) throws IllegalArgumentException {
 
         // extract article metadata and content using Crux
         Article article = ArticleExtractor.with(baseUrl, rawHtml)
