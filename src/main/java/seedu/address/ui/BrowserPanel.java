@@ -77,7 +77,7 @@ public class BrowserPanel extends UiPart<Region> {
         // Reload when view mode changes.
         viewMode.addListener((observable, oldViewMode, newViewMode) -> {
             this.viewMode = newViewMode;
-            reload();
+            loadPage(currentLocation);
         });
 
         // Respond to browser state events.
@@ -219,23 +219,6 @@ public class BrowserPanel extends UiPart<Region> {
         } catch (TransformerException | IllegalArgumentException e) {
             String message = String.format("Failed to load reader view for %s", this.currentLocation);
             logger.warning(message);
-        }
-    }
-
-    /**
-     * Reloads the current content.
-     * Assumes original Web page is already loaded.
-     */
-    private void reload() {
-        switch (viewMode) {
-        case BROWSER:
-            loadPage(currentLocation);
-            break;
-        case READER:
-            loadReader(currentLocation);
-            break;
-        default:
-            break;
         }
     }
 
