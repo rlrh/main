@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,7 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FeedCommand;
 import seedu.address.logic.commands.FindCommand;
@@ -28,12 +28,14 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.UndoCommand;
+import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
-import seedu.address.testutil.EditPersonDescriptorBuilder;
+import seedu.address.testutil.EditEntryDescriptorBuilder;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
+import seedu.address.ui.ViewMode;
 
 public class EntryBookParserTest {
     @Rule
@@ -59,20 +61,20 @@ public class EntryBookParserTest {
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new DeleteCommand(INDEX_FIRST_PERSON), command);
+                DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
+        assertEquals(new DeleteCommand(INDEX_FIRST_ENTRY), command);
     }
 
     @Test
     public void parseCommand_edit() throws Exception {
         Entry entry = new EntryBuilder().build();
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(entry).build();
+        EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(entry).build();
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + EntryUtil.getEditPersonDescriptorDetails(descriptor));
-        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
+                + INDEX_FIRST_ENTRY.getOneBased() + " " + EntryUtil.getEditEntryDescriptorDetails(descriptor));
+        assertEquals(new EditCommand(INDEX_FIRST_ENTRY, descriptor), command);
         EditCommand aliasCommand = (EditCommand) parser.parseCommand(EditCommand.COMMAND_ALIAS + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + EntryUtil.getEditPersonDescriptorDetails(descriptor));
-        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), aliasCommand);
+                + INDEX_FIRST_ENTRY.getOneBased() + " " + EntryUtil.getEditEntryDescriptorDetails(descriptor));
+        assertEquals(new EditCommand(INDEX_FIRST_ENTRY, descriptor), aliasCommand);
     }
 
     @Test
@@ -131,11 +133,11 @@ public class EntryBookParserTest {
     @Test
     public void parseCommand_select() throws Exception {
         SelectCommand command = (SelectCommand) parser.parseCommand(
-                SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new SelectCommand(INDEX_FIRST_PERSON), command);
+                SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
+        assertEquals(new SelectCommand(INDEX_FIRST_ENTRY), command);
         SelectCommand aliasCommand = (SelectCommand) parser.parseCommand(
-                SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new SelectCommand(INDEX_FIRST_PERSON), aliasCommand);
+                SelectCommand.COMMAND_ALIAS + " " + INDEX_FIRST_ENTRY.getOneBased());
+        assertEquals(new SelectCommand(INDEX_FIRST_ENTRY), aliasCommand);
     }
 
     @Test
@@ -152,6 +154,16 @@ public class EntryBookParserTest {
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD + " 3") instanceof UndoCommand);
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_ALIAS) instanceof UndoCommand);
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_ALIAS + " 3") instanceof UndoCommand);
+    }
+
+    @Test
+    public void parseCommand_view() throws Exception {
+        ViewModeCommand command = (ViewModeCommand) parser.parseCommand(
+                ViewModeCommand.COMMAND_WORD + " " + ViewMode.values()[0].toString());
+        assertEquals(new ViewModeCommand(ViewMode.values()[0]), command);
+        ViewModeCommand aliasCommand = (ViewModeCommand) parser.parseCommand(
+                ViewModeCommand.COMMAND_ALIAS + " " + ViewMode.values()[1].toString());
+        assertEquals(new ViewModeCommand(ViewMode.values()[1]), aliasCommand);
     }
 
     @Test

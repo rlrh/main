@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.testutil.TypicalEntries.ALICE;
-import static seedu.address.testutil.TypicalEntries.getTypicalAddressBook;
+import static seedu.address.testutil.TypicalEntries.getTypicalEntryBook;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,7 +34,7 @@ public class EntryBookTest {
 
     @Test
     public void constructor() {
-        assertEquals(Collections.emptyList(), addressBook.getPersonList());
+        assertEquals(Collections.emptyList(), addressBook.getEntryList());
     }
 
     @Test
@@ -45,7 +45,7 @@ public class EntryBookTest {
 
     @Test
     public void resetData_withValidReadOnlyAddressBook_replacesData() {
-        EntryBook newData = getTypicalAddressBook();
+        EntryBook newData = getTypicalEntryBook();
         addressBook.resetData(newData);
         assertEquals(newData, addressBook);
     }
@@ -90,7 +90,7 @@ public class EntryBookTest {
     @Test
     public void getPersonList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
-        addressBook.getPersonList().remove(0);
+        addressBook.getEntryList().remove(0);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class EntryBookTest {
         }
 
         @Override
-        public ObservableList<Entry> getPersonList() {
+        public ObservableList<Entry> getEntryList() {
             return entries;
         }
 

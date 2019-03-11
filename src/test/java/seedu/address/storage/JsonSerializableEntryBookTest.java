@@ -29,7 +29,7 @@ public class JsonSerializableEntryBookTest {
         JsonSerializableEntryBook dataFromFile = JsonUtil.readJsonFile(TYPICAL_PERSONS_FILE,
                 JsonSerializableEntryBook.class).get();
         EntryBook addressBookFromFile = dataFromFile.toModelType();
-        EntryBook typicalPersonsAddressBook = TypicalEntries.getTypicalAddressBook();
+        EntryBook typicalPersonsAddressBook = TypicalEntries.getTypicalEntryBook();
         assertEquals(addressBookFromFile, typicalPersonsAddressBook);
     }
 

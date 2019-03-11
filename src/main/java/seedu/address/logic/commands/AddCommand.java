@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COMMENT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
@@ -21,14 +21,14 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a entry to the entry book. "
             + "Parameters: "
-            + PREFIX_TITLE + "TITLE "
-            + PREFIX_COMMENT + "COMMENT "
             + PREFIX_LINK + "LINK "
+            + "[" + PREFIX_TITLE + "TITLE] "
+            + "[" + PREFIX_DESCRIPTION + "COMMENT] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_TITLE + "Title example "
-            + PREFIX_COMMENT + "Comment example "
             + PREFIX_LINK + "https://example.com "
+            + PREFIX_TITLE + "Example Title "
+            + PREFIX_DESCRIPTION + "Example Description "
             + PREFIX_TAG + "science "
             + PREFIX_TAG + "tech";
 
@@ -49,12 +49,12 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
-        if (model.hasPerson(toAdd)) {
+        if (model.hasEntry(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.addPerson(toAdd);
-        model.commitAddressBook();
+        model.addEntry(toAdd);
+        model.commitEntryBook();
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }
 

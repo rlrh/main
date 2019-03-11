@@ -23,6 +23,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 import seedu.address.network.Network;
 import seedu.address.storage.Storage;
+import seedu.address.ui.ViewMode;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -36,7 +37,8 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Entry> filteredEntries;
 
-    private final SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
     private final Storage storage;
@@ -52,7 +54,7 @@ public class ModelManager implements Model {
 
         versionedEntryBook = new VersionedEntryBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredEntries = new FilteredList<>(versionedEntryBook.getPersonList());
+        filteredEntries = new FilteredList<>(versionedEntryBook.getEntryList());
         filteredEntries.addListener(this::ensureSelectedPersonIsValid);
 
         this.storage = storage;
@@ -86,14 +88,14 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public Path getAddressBookFilePath() {
+    public Path getEntryBookFilePath() {
         return userPrefs.getAddressBookFilePath();
     }
 
     @Override
-    public void setAddressBookFilePath(Path addressBookFilePath) {
-        requireNonNull(addressBookFilePath);
-        userPrefs.setAddressBookFilePath(addressBookFilePath);
+    public void setEntryBookFilePath(Path entryBookFilePath) {
+        requireNonNull(entryBookFilePath);
+        userPrefs.setAddressBookFilePath(entryBookFilePath);
     }
 
     @Override
@@ -111,28 +113,28 @@ public class ModelManager implements Model {
     //=========== EntryBook ================================================================================
 
     @Override
-    public void setAddressBook(ReadOnlyEntryBook addressBook) {
-        versionedEntryBook.resetData(addressBook);
+    public void setEntryBook(ReadOnlyEntryBook entryBook) {
+        versionedEntryBook.resetData(entryBook);
     }
 
     @Override
-    public ReadOnlyEntryBook getAddressBook() {
+    public ReadOnlyEntryBook getEntryBook() {
         return versionedEntryBook;
     }
 
     @Override
-    public boolean hasPerson(Entry entry) {
+    public boolean hasEntry(Entry entry) {
         requireNonNull(entry);
         return versionedEntryBook.hasPerson(entry);
     }
 
     @Override
-    public void deletePerson(Entry target) {
+    public void deleteEntry(Entry target) {
         versionedEntryBook.removePerson(target);
     }
 
     @Override
-    public void addPerson(Entry entry) {
+    public void addEntry(Entry entry) {
         versionedEntryBook.addPerson(entry);
         try {
             byte[] articleContent = Network.fetchAsBytes(entry.getLink().value);
@@ -140,11 +142,11 @@ public class ModelManager implements Model {
         } catch (IOException ioe) {
             // Do nothing if we fail to fetch the page.
         }
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override
-    public void setPerson(Entry target, Entry editedEntry) {
+    public void setEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
         versionedEntryBook.setPerson(target, editedEntry);
@@ -169,12 +171,12 @@ public class ModelManager implements Model {
      * {@code versionedEntryBook}
      */
     @Override
-    public ObservableList<Entry> getFilteredPersonList() {
+    public ObservableList<Entry> getFilteredEntryList() {
         return filteredEntries;
     }
 
     @Override
-    public void updateFilteredPersonList(Predicate<Entry> predicate) {
+    public void updateFilteredEntryList(Predicate<Entry> predicate) {
         requireNonNull(predicate);
         filteredEntries.setPredicate(predicate);
     }
@@ -182,48 +184,65 @@ public class ModelManager implements Model {
     //=========== Undo/Redo =================================================================================
 
     @Override
-    public boolean canUndoAddressBook() {
+    public boolean canUndoEntryBook() {
         return versionedEntryBook.canUndo();
     }
 
     @Override
-    public boolean canRedoAddressBook() {
+    public boolean canRedoEntryBook() {
         return versionedEntryBook.canRedo();
     }
 
     @Override
-    public void undoAddressBook() {
+    public void undoEntryBook() {
         versionedEntryBook.undo();
     }
 
     @Override
-    public void redoAddressBook() {
+    public void redoEntryBook() {
         versionedEntryBook.redo();
     }
 
     @Override
-    public void commitAddressBook() {
+    public void commitEntryBook() {
         versionedEntryBook.commit();
     }
 
     //=========== Selected entry ===========================================================================
 
     @Override
-    public ReadOnlyProperty<Entry> selectedPersonProperty() {
-        return selectedPerson;
+    public ReadOnlyProperty<Entry> selectedEntryProperty() {
+        return selectedEntry;
     }
 
     @Override
-    public Entry getSelectedPerson() {
-        return selectedPerson.getValue();
+    public Entry getSelectedEntry() {
+        return selectedEntry.getValue();
     }
 
     @Override
-    public void setSelectedPerson(Entry entry) {
+    public void setSelectedEntry(Entry entry) {
         if (entry != null && !filteredEntries.contains(entry)) {
             throw new EntryNotFoundException();
         }
-        selectedPerson.setValue(entry);
+        selectedEntry.setValue(entry);
+    }
+
+    //=========== View mode ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<ViewMode> viewModeProperty() {
+        return currentViewMode;
+    }
+
+    @Override
+    public ViewMode getViewMode() {
+        return currentViewMode.getValue();
+    }
+
+    @Override
+    public void setViewMode(ViewMode viewMode) {
+        currentViewMode.setValue(viewMode);
     }
 
     //=========== Exception propagation ===========================================================================
@@ -261,30 +280,30 @@ public class ModelManager implements Model {
     }
 
     /**
-     * Ensures {@code selectedPerson} is a valid entry in {@code filteredEntries}.
+     * Ensures {@code selectedEntry} is a valid entry in {@code filteredEntries}.
      */
     private void ensureSelectedPersonIsValid(ListChangeListener.Change<? extends Entry> change) {
         while (change.next()) {
-            if (selectedPerson.getValue() == null) {
+            if (selectedEntry.getValue() == null) {
                 // null is always a valid selected entry, so we do not need to check that it is valid anymore.
                 return;
             }
 
             boolean wasSelectedPersonReplaced = change.wasReplaced() && change.getAddedSize() == change.getRemovedSize()
-                    && change.getRemoved().contains(selectedPerson.getValue());
+                    && change.getRemoved().contains(selectedEntry.getValue());
             if (wasSelectedPersonReplaced) {
-                // Update selectedPerson to its new value.
-                int index = change.getRemoved().indexOf(selectedPerson.getValue());
-                selectedPerson.setValue(change.getAddedSubList().get(index));
+                // Update selectedEntry to its new value.
+                int index = change.getRemoved().indexOf(selectedEntry.getValue());
+                selectedEntry.setValue(change.getAddedSubList().get(index));
                 continue;
             }
 
             boolean wasSelectedPersonRemoved = change.getRemoved().stream()
-                    .anyMatch(removedPerson -> selectedPerson.getValue().isSamePerson(removedPerson));
+                    .anyMatch(removedPerson -> selectedEntry.getValue().isSameEntry(removedPerson));
             if (wasSelectedPersonRemoved) {
                 // Select the entry that came before it in the list,
                 // or clear the selection if there is no such entry.
-                selectedPerson.setValue(change.getFrom() > 0 ? change.getList().get(change.getFrom() - 1) : null);
+                selectedEntry.setValue(change.getFrom() > 0 ? change.getList().get(change.getFrom() - 1) : null);
             }
         }
     }
@@ -315,10 +334,23 @@ public class ModelManager implements Model {
 
         // state check
         ModelManager other = (ModelManager) obj;
-        return versionedEntryBook.equals(other.versionedEntryBook)
+
+        boolean stateCheck = versionedEntryBook.equals(other.versionedEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredEntries.equals(other.filteredEntries)
-                && Objects.equals(selectedPerson.get(), other.selectedPerson.get());
+                && Objects.equals(selectedEntry.get(), other.selectedEntry.get())
+                && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
+                && Objects.equals(commandResult.get(), other.commandResult.get());
+
+        if (exception.get() == null && other.exception.get() == null) { // both don't have exceptions set
+            return stateCheck;
+        } else if (exception.get() != null && other.exception.get() != null) { // both have exceptions set
+            return stateCheck
+                    && exception.get().getClass().equals(other.exception.get().getClass())
+                    && exception.get().getMessage().equals(other.exception.get().getMessage());
+        } else { // not equal as one has exception set and the other does not
+            return false;
+        }
     }
 
     @Override

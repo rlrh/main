@@ -5,14 +5,16 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Entry's title in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidTitle(String)}
+ * Guarantees: immutable; is valid as declared in {@link #isValidConstructionTitle(String)}
  */
 public class Title {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Titles can take any values, and it should not be blank";
+    public static final String DEFAULT_TITLE = "";
 
-    public static final String VALIDATION_REGEX = "[^\\s].*";
+    public static final String USER_INPUT_VALIDATION_REGEX = "[^\\s].*";
+    public static final String CONSTRUCTION_VALIDATION_REGEX = "^.*";
 
     public final String fullTitle;
 
@@ -23,15 +25,22 @@ public class Title {
      */
     public Title(String title) {
         requireNonNull(title);
-        checkArgument(isValidTitle(title), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidConstructionTitle(title), MESSAGE_CONSTRAINTS);
         fullTitle = title;
     }
 
     /**
-     * Returns true if a given string is a valid title.
+     * Returns true if a given string is a valid user-input title.
      */
-    public static boolean isValidTitle(String test) {
-        return test.matches(VALIDATION_REGEX);
+    public static boolean isValidUserInputTitle(String test) {
+        return test.matches(USER_INPUT_VALIDATION_REGEX);
+    }
+
+    /**
+     * Returns true if a given string is a valid title for construction.
+     */
+    public static boolean isValidConstructionTitle(String test) {
+        return test.matches(CONSTRUCTION_VALIDATION_REGEX);
     }
 
 
