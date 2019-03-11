@@ -1,0 +1,61 @@
+= Thomas Tan - Project Portfolio
+:site-section: AboutUs
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== PROJECT: README
+
+---
+
+== Overview
+
+README is a desktop bookmark manager/rss feed reader application.
+
+== Summary of contributions
+
+* *Major enhancement*: added *support for offline mode*
+** What it does: allows the user to continue using the application even while offline.
+** Justification: This feature improves the product significantly because being able to read articles offline allows users to read more seamlessly while also being a selling point that other competing products do not support.
+** Highlights: This enhancement needed to support saving many possibly large articles on the disk without keeping them in memory. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands as well as a large scale refactor of the architecture itself.
+** Credits: .
+
+* *Minor enhancement*:
+
+* *Code contributed*:
+
+* *Other contributions*:
+
+** Project management:
+*** Set up issue tracker
+*** Set up Travis, AppVeyor, Codacy, and Coveralls status checks.
+*** Set up Branch Protection on `master`
+** Enhancements to existing features:
+*** .
+** Documentation:
+*** .
+** Community:
+*** PRs reviewed (with non-trivial review comments): https://github.com/CS2103-AY1819S2-W10-1/main/pull/9[#9]
+*** Contributed to forum discussions (examples: )
+*** Reported bugs and suggestions for other teams in the class (examples: https://github.com/nus-cs2103-AY1819S2/forum/issues/49#issuecomment-471154226[1])
+** Tools:
+*** Integrated a third party tool (PlantUML) to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/18[#18])
+
+== Contributions to the User Guide
+
+|===
+|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|===
+
+// include::../UserGuide.adoc[tag=undoredo]
+
+// include::../UserGuide.adoc[tag=dataencryption]
+
+== Contributions to the Developer Guide
+
+|===
+|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|===
+
+// include::../DeveloperGuide.adoc[tag=undoredo]
+
+// include::../DeveloperGuide.adoc[tag=dataencryption]

@@ -21,7 +21,7 @@ Responsibilities:
 
 === Thomas Tan
 image::thomastanck.png[width="150", align="left"]
-{empty}[https://github.com/thomastanck[github]]
+{empty}[https://github.com/thomastanck[github]] [<<thomastanck#, portfolio>>]
 
 Role: Software Architect, Developer +
 Responsibilities:
