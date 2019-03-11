@@ -138,9 +138,9 @@ public class TypicalEntries {
             .build();
 
     public static final Entry WIKIPEDIA_LINK = new EntryBuilder()
-            .withName("Wikipedia Test Web Page")
-            .withPhone("Wikipedia test web page")
-            .withEmail("file://" + MainApp.class.getResource(
+            .withTitle("Wikipedia Test Web Page")
+            .withDescription("Wikipedia test web page")
+            .withLink("file://" + MainApp.class.getResource(
                     "/view/BrowserPanelTest/wikipedia.html").toExternalForm().substring(5))
             .withAddress("Wikipedia test web page")
             .build();
