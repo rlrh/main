@@ -39,6 +39,7 @@ targetCompatibility = JavaVersion.VERSION_1_9
 repositories {
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url "https://jitpack.io" }
 }
 
 checkstyle {
@@ -60,6 +61,8 @@ test {
 dependencies {
     String testFxVersion = '4.0.12-alpha'
     String jUnitVersion = '5.1.0'
+
+    compile group: 'com.github.chimbori', name:'crux', version: '2.0.2'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.0'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.7.4'
@@ -211,9 +214,8 @@ asciidoctor {
         idprefix: '',  // for compatibility with GitHub preview
         idseparator: '-',
         'site-root': "${sourceDir}",  // must be the same as sourceDir, do not modify
-        'site-name': 'AddressBook-Level4',
-        'site-githuburl': 'https://github.com/se-edu/addressbook-level4',
-        'site-seedu': true,  // delete this line if your project is not a fork (not a SE-EDU project)
+        'site-name': 'README',
+        'site-githuburl': 'https://github.com/CS2103-AY1819S2-W10-1/main',
     ]
 
     options['template_dirs'].each {

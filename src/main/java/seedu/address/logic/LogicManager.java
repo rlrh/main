@@ -15,6 +15,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.entry.Entry;
+import seedu.address.ui.ViewMode;
 
 /**
  * The main LogicManager of the app.
@@ -85,6 +86,16 @@ public class LogicManager implements Logic {
     @Override
     public void setSelectedEntry(Entry entry) {
         model.setSelectedEntry(entry);
+    }
+
+    @Override
+    public ReadOnlyProperty<ViewMode> viewModeProperty() {
+        return model.viewModeProperty();
+    }
+
+    @Override
+    public void setViewMode(ViewMode viewMode) {
+        model.setViewMode(viewMode);
     }
 
     @Override

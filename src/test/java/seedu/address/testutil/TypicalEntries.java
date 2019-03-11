@@ -136,6 +136,16 @@ public class TypicalEntries {
             "/view/NetworkTest/default.html").toExternalForm().substring(5))
             .withAddress("Valid file link")
             .build();
+
+    public static final Entry WIKIPEDIA_LINK = new EntryBuilder()
+            .withName("Wikipedia Test Web Page")
+            .withPhone("Wikipedia test web page")
+            .withEmail("file://" + MainApp.class.getResource(
+                    "/view/BrowserPanelTest/wikipedia.html").toExternalForm().substring(5))
+            .withAddress("Wikipedia test web page")
+            .build();
+    public static final String WIKIPEDIA_LINK_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
+
     public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER

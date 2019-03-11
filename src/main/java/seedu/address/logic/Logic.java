@@ -10,6 +10,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.entry.Entry;
+import seedu.address.ui.ViewMode;
 
 /**
  * API of the Logic component
@@ -69,6 +70,20 @@ public interface Logic {
      * @see seedu.address.model.Model#setSelectedEntry(Entry)
      */
     void setSelectedEntry(Entry entry);
+
+    /**
+     * Current view mode.
+     *
+     * @see seedu.address.model.Model#viewModeProperty()
+     */
+    ReadOnlyProperty<ViewMode> viewModeProperty();
+
+    /**
+     * Sets the view mode.
+     *
+     * @see seedu.address.model.Model#setViewMode(ViewMode)
+     */
+    void setViewMode(ViewMode viewMode);
 
     /**
      * Propagated exception.
