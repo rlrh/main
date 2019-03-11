@@ -28,12 +28,14 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.UndoCommand;
+import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
+import seedu.address.ui.ViewMode;
 
 public class EntryBookParserTest {
     @Rule
@@ -134,7 +136,7 @@ public class EntryBookParserTest {
                 SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new SelectCommand(INDEX_FIRST_PERSON), command);
         SelectCommand aliasCommand = (SelectCommand) parser.parseCommand(
-                SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+                SelectCommand.COMMAND_ALIAS + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new SelectCommand(INDEX_FIRST_PERSON), aliasCommand);
     }
 
@@ -152,6 +154,16 @@ public class EntryBookParserTest {
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD + " 3") instanceof UndoCommand);
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_ALIAS) instanceof UndoCommand);
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_ALIAS + " 3") instanceof UndoCommand);
+    }
+
+    @Test
+    public void parseCommand_view() throws Exception {
+        ViewModeCommand command = (ViewModeCommand) parser.parseCommand(
+                ViewModeCommand.COMMAND_WORD + " " + ViewMode.values()[0].toString());
+        assertEquals(new ViewModeCommand(ViewMode.values()[0]), command);
+        ViewModeCommand aliasCommand = (ViewModeCommand) parser.parseCommand(
+                ViewModeCommand.COMMAND_ALIAS + " " + ViewMode.values()[1].toString());
+        assertEquals(new ViewModeCommand(ViewMode.values()[1]), aliasCommand);
     }
 
     @Test

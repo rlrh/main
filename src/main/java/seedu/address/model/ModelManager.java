@@ -23,6 +23,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 import seedu.address.network.Network;
 import seedu.address.storage.Storage;
+import seedu.address.ui.ViewMode;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -37,6 +38,7 @@ public class ModelManager implements Model {
     private final FilteredList<Entry> filteredEntries;
 
     private final SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
     private final Storage storage;
@@ -226,6 +228,23 @@ public class ModelManager implements Model {
         selectedPerson.setValue(entry);
     }
 
+    //=========== View mode ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<ViewMode> viewModeProperty() {
+        return currentViewMode;
+    }
+
+    @Override
+    public ViewMode getViewMode() {
+        return currentViewMode.getValue();
+    }
+
+    @Override
+    public void setViewMode(ViewMode viewMode) {
+        currentViewMode.setValue(viewMode);
+    }
+
     //=========== Exception propagation ===========================================================================
 
     @Override
@@ -315,10 +334,23 @@ public class ModelManager implements Model {
 
         // state check
         ModelManager other = (ModelManager) obj;
-        return versionedEntryBook.equals(other.versionedEntryBook)
+
+        boolean stateCheck = versionedEntryBook.equals(other.versionedEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredEntries.equals(other.filteredEntries)
-                && Objects.equals(selectedPerson.get(), other.selectedPerson.get());
+                && Objects.equals(selectedPerson.get(), other.selectedPerson.get())
+                && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
+                && Objects.equals(commandResult.get(), other.commandResult.get());
+
+        if (exception.get() == null && other.exception.get() == null) { // both don't have exceptions set
+            return stateCheck;
+        } else if (exception.get() != null && other.exception.get() != null) { // both have exceptions set
+            return stateCheck
+                    && exception.get().getClass().equals(other.exception.get().getClass())
+                    && exception.get().getMessage().equals(other.exception.get().getMessage());
+        } else { // not equal as one has exception set and the other does not
+            return false;
+        }
     }
 
     @Override

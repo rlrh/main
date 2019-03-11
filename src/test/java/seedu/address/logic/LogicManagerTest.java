@@ -106,10 +106,11 @@ public class LogicManagerTest {
                 + ADDRESS_DESC_AMY;
         Entry expectedEntry = new EntryBuilder(AMY).withTags().build();
         Model expectedModel = new ModelManagerStub();
-        expectedModel.addPerson(expectedEntry);
-        expectedModel.commitAddressBook();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
         String expectedFinalMessage = ModelManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
+        expectedModel.addPerson(expectedEntry);
+        expectedModel.commitAddressBook();
+        expectedModel.setException(new CommandException(expectedFinalMessage));
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
         assertManualExceptionPropagated(CommandException.class, expectedFinalMessage);
         assertHistoryCorrect(addCommand);
