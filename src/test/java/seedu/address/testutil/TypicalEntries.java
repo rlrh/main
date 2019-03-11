@@ -84,22 +84,6 @@ public class TypicalEntries {
             .withAddress("chicago ave")
             .build();
 
-    // Must have valid link
-    public static final Entry VALID_LINK = new EntryBuilder()
-            .withTitle("Valid Link")
-            .withDescription("Valid link")
-            .withLink("file://"
-                    + MainApp.class.getResource("/view/BrowserPanelTest/default.html").toExternalForm().substring(5))
-            .withAddress("Valid link")
-            .build();
-    // Must have invalid link
-    public static final Entry INVALID_LINK = new EntryBuilder()
-            .withTitle("Invalid Link")
-            .withDescription("Invalid link")
-            .withLink("file:///folder/file.type")
-            .withAddress("Invalid link")
-            .build();
-
     // Manually added - Entry's details found in {@code CommandTestUtil}
     public static final Entry AMY = new EntryBuilder()
             .withTitle(VALID_TITLE_AMY)
@@ -118,23 +102,29 @@ public class TypicalEntries {
 
     // For testing of networking
     public static final Entry VALID_HTTPS_LINK = new EntryBuilder()
-            .withTitle("Valid https Link")
+            .withTitle("Valid HTTPS Link")
             .withDescription("Valid https link")
             .withLink("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/")
             .withAddress("Valid https link")
             .build();
     public static final Entry VALID_HTTP_LINK = new EntryBuilder()
-            .withTitle("Valid https Link")
-            .withDescription("Valid https link")
+            .withTitle("Valid HTTP Link")
+            .withDescription("Valid http link")
             .withLink("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/")
-            .withAddress("Valid https link")
+            .withAddress("Valid http link")
             .build();
     public static final Entry VALID_FILE_LINK = new EntryBuilder()
-            .withTitle("Valid file Link")
+            .withTitle("Valid File Link")
             .withDescription("Valid file link")
             .withLink("file://" + MainApp.class.getResource(
-            "/view/NetworkTest/default.html").toExternalForm().substring(5))
+                    "/NetworkTest/default.html").toExternalForm().substring(5))
             .withAddress("Valid file link")
+            .build();
+    public static final Entry INVALID_FILE_LINK = new EntryBuilder()
+            .withTitle("Invalid File Link")
+            .withDescription("Invalid file link")
+            .withLink("file:///folder/file.type")
+            .withAddress("Invalid file link")
             .build();
 
     public static final Entry WIKIPEDIA_LINK = new EntryBuilder()

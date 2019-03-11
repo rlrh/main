@@ -68,7 +68,7 @@ public class NetworkTest {
             assertTrue(httpContent.length() > 0);
 
             String localContent = fetchAsString(
-                    MainApp.class.getResource("/view/NetworkTest/default.html").toExternalForm());
+                    MainApp.class.getResource("/NetworkTest/default.html").toExternalForm());
             assertTrue(localContent.length() > 0);
 
             assertEquals(localContent, FILE_TEST_CONTENTS);

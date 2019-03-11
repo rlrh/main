@@ -3,8 +3,8 @@ package seedu.address.ui;
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static seedu.address.testutil.TypicalEntries.INVALID_LINK;
-import static seedu.address.testutil.TypicalEntries.VALID_LINK;
+import static seedu.address.testutil.TypicalEntries.INVALID_FILE_LINK;
+import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK_BASE_URL;
 
@@ -47,8 +47,8 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Test
     public void displayCorrectPage() throws Exception {
         // associated web page of a entry with valid link
-        guiRobot.interact(() -> selectedPerson.set(VALID_LINK));
-        URL expectedPersonUrl = new URL(VALID_LINK.getLink().value);
+        guiRobot.interact(() -> selectedPerson.set(VALID_FILE_LINK));
+        URL expectedPersonUrl = new URL(VALID_FILE_LINK.getLink().value);
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedPersonUrl, browserPanelHandle.getLoadedUrl());
     }
@@ -56,7 +56,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Test
     public void displayErrorPage() {
         // associated web page of a entry with invalid link
-        guiRobot.interact(() -> selectedPerson.set(INVALID_LINK));
+        guiRobot.interact(() -> selectedPerson.set(INVALID_FILE_LINK));
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(BrowserPanel.ERROR_PAGE, browserPanelHandle.getLoadedUrl());
     }
