@@ -1,7 +1,7 @@
 package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COMMENT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
@@ -9,7 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 import java.util.Set;
 
 import seedu.address.logic.commands.AddCommand;
-import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.tag.Tag;
 
@@ -22,23 +22,23 @@ public class EntryUtil {
      * Returns an add command string for adding the {@code entry}.
      */
     public static String getAddCommand(Entry entry) {
-        return AddCommand.COMMAND_WORD + " " + getPersonDetails(entry);
+        return AddCommand.COMMAND_WORD + " " + getEntryDetails(entry);
     }
 
     /**
      * Returns an add command string using alias for adding the {@code entry}.
      */
     public static String getAddAliasCommand(Entry entry) {
-        return AddCommand.COMMAND_ALIAS + " " + getPersonDetails(entry);
+        return AddCommand.COMMAND_ALIAS + " " + getEntryDetails(entry);
     }
 
     /**
      * Returns the part of command string for the given {@code entry}'s details.
      */
-    public static String getPersonDetails(Entry entry) {
+    public static String getEntryDetails(Entry entry) {
         StringBuilder sb = new StringBuilder();
         sb.append(PREFIX_TITLE + entry.getTitle().fullTitle + " ");
-        sb.append(PREFIX_COMMENT + entry.getComment().value + " ");
+        sb.append(PREFIX_DESCRIPTION + entry.getDescription().value + " ");
         sb.append(PREFIX_LINK + entry.getLink().value + " ");
         sb.append(PREFIX_ADDRESS + entry.getAddress().value + " ");
         entry.getTags().stream().forEach(
@@ -48,12 +48,12 @@ public class EntryUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code EditPersonDescriptor}'s details.
+     * Returns the part of command string for the given {@code EditEntryDescriptor}'s details.
      */
-    public static String getEditPersonDescriptorDetails(EditPersonDescriptor descriptor) {
+    public static String getEditEntryDescriptorDetails(EditEntryDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         descriptor.getTitle().ifPresent(name -> sb.append(PREFIX_TITLE).append(name.fullTitle).append(" "));
-        descriptor.getComment().ifPresent(phone -> sb.append(PREFIX_COMMENT).append(phone.value).append(" "));
+        descriptor.getDescription().ifPresent(phone -> sb.append(PREFIX_DESCRIPTION).append(phone.value).append(" "));
         descriptor.getLink().ifPresent(email -> sb.append(PREFIX_LINK).append(email.value).append(" "));
         descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
         if (descriptor.getTags().isPresent()) {

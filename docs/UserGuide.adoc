@@ -176,7 +176,7 @@ Title will be automatically filled by parsing the link if you do not provide it.
 
 Examples:
 
-- `add https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ c/explains why UX is important t/Business` Adds a single link with a comment and tagged with “Business”
+- `add https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ c/explains why UX is important t/Business` Adds a single link with a description and tagged with “Business”
 
 === Editing a link: `edit`
 
@@ -194,7 +194,7 @@ Format: `edit INDEX [u/URL] [ti/TITLE_OVERRIDE] [s/STATUS] [c/COMMENT] [t/TAG]..
 
 Examples:
 
-- `edit 1 c/need to read again` Edits the comment attached to the 1st link
+- `edit 1 c/need to read again` Edits the description attached to the 1st link
 - `edit 2 t/` Clears all existing tags from the 2nd link
 
 === Deleting a link: `delete`
@@ -347,8 +347,8 @@ Title will be automatically filled by parsing the link if you do not provide it.
 
 Examples:
 
-- `add 1 c/explains why UX is important t/Business` Adds the 1st link with a comment and tagged with “Business”
-- `add 4-6 c/read by Monday t/School` Adds the 4th to 6th links with the same comment and tagged with “School"
+- `add 1 c/explains why UX is important t/Business` Adds the 1st link with a description and tagged with “Business”
+- `add 4-6 c/read by Monday t/School` Adds the 4th to 6th links with the same description and tagged with “School"
 
 === Selecting a link: `select`
 

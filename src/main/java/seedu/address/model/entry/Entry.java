@@ -17,7 +17,7 @@ public class Entry {
 
     // Identity fields
     private final Title title;
-    private final Comment comment;
+    private final Description description;
     private final Link link;
 
     // Data fields
@@ -27,10 +27,10 @@ public class Entry {
     /**
      * Every field must be present and not null.
      */
-    public Entry(Title title, Comment comment, Link link, Address address, Set<Tag> tags) {
-        requireAllNonNull(title, comment, link, address, tags);
+    public Entry(Title title, Description description, Link link, Address address, Set<Tag> tags) {
+        requireAllNonNull(title, description, link, address, tags);
         this.title = title;
-        this.comment = comment;
+        this.description = description;
         this.link = link;
         this.address = address;
         this.tags.addAll(tags);
@@ -40,8 +40,8 @@ public class Entry {
         return title;
     }
 
-    public Comment getComment() {
-        return comment;
+    public Description getDescription() {
+        return description;
     }
 
     public Link getLink() {
@@ -61,22 +61,21 @@ public class Entry {
     }
 
     /**
-     * Returns true if both persons of the same title have at least one other identity field that is the same.
-     * This defines a weaker notion of equality between two persons.
+     * Returns true if both entries have the same link
+     * This defines a weaker notion of equality between two entries.
      */
-    public boolean isSamePerson(Entry otherEntry) {
+    public boolean isSameEntry(Entry otherEntry) {
         if (otherEntry == this) {
             return true;
         }
 
         return otherEntry != null
-                && otherEntry.getTitle().equals(getTitle())
-                && (otherEntry.getComment().equals(getComment()) || otherEntry.getLink().equals(getLink()));
+                && otherEntry.getLink().equals(getLink());
     }
 
     /**
-     * Returns true if both persons have the same identity and data fields.
-     * This defines a stronger notion of equality between two persons.
+     * Returns true if both entries have the same link and data fields.
+     * This defines a stronger notion of equality between two entries.
      */
     @Override
     public boolean equals(Object other) {
@@ -90,7 +89,7 @@ public class Entry {
 
         Entry otherEntry = (Entry) other;
         return otherEntry.getTitle().equals(getTitle())
-                && otherEntry.getComment().equals(getComment())
+                && otherEntry.getDescription().equals(getDescription())
                 && otherEntry.getLink().equals(getLink())
                 && otherEntry.getAddress().equals(getAddress())
                 && otherEntry.getTags().equals(getTags());
@@ -99,15 +98,15 @@ public class Entry {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(title, comment, link, address, tags);
+        return Objects.hash(title, description, link, address, tags);
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         builder.append(getTitle())
-                .append(" Comment: ")
-                .append(getComment())
+                .append(" Description: ")
+                .append(getDescription())
                 .append(" Link: ")
                 .append(getLink())
                 .append(" Address: ")

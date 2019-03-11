@@ -4,11 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Rule;
@@ -18,7 +19,7 @@ import org.junit.rules.ExpectedException;
 import seedu.address.logic.parser.exceptions.ParseException;
 // No longer valid with the optionality of the (invisible) address field
 // import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Comment;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.tag.Tag;
@@ -59,56 +60,56 @@ public class ParserUtilTest {
     @Test
     public void parseIndex_validInput_success() throws Exception {
         // No whitespaces
-        assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("1"));
+        assertEquals(INDEX_FIRST_ENTRY, ParserUtil.parseIndex("1"));
 
         // Leading and trailing whitespaces
-        assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("  1  "));
+        assertEquals(INDEX_FIRST_ENTRY, ParserUtil.parseIndex("  1  "));
     }
 
     @Test
     public void parseName_null_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseTitle((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseTitle((Optional) null));
     }
 
     @Test
     public void parseName_invalidValue_throwsParseException() {
-        Assert.assertThrows(ParseException.class, () -> ParserUtil.parseTitle(INVALID_TITLE));
+        Assert.assertThrows(ParseException.class, () -> ParserUtil.parseTitle(Optional.of(INVALID_TITLE)));
     }
 
     @Test
     public void parseName_validValueWithoutWhitespace_returnsName() throws Exception {
         Title expectedTitle = new Title(VALID_TITLE);
-        assertEquals(expectedTitle, ParserUtil.parseTitle(VALID_TITLE));
+        assertEquals(expectedTitle, ParserUtil.parseTitle(Optional.of(VALID_TITLE)));
     }
 
     @Test
     public void parseName_validValueWithWhitespace_returnsTrimmedName() throws Exception {
         String nameWithWhitespace = WHITESPACE + VALID_TITLE + WHITESPACE;
         Title expectedTitle = new Title(VALID_TITLE);
-        assertEquals(expectedTitle, ParserUtil.parseTitle(nameWithWhitespace));
+        assertEquals(expectedTitle, ParserUtil.parseTitle(Optional.of(nameWithWhitespace)));
     }
 
     @Test
     public void parsePhone_null_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseComment((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseDescription((Optional) null));
     }
 
     @Test
     public void parsePhone_invalidValue_throwsParseException() {
-        Assert.assertThrows(ParseException.class, () -> ParserUtil.parseComment(INVALID_COMMENT));
+        Assert.assertThrows(ParseException.class, () -> ParserUtil.parseDescription(Optional.of(INVALID_COMMENT)));
     }
 
     @Test
     public void parsePhone_validValueWithoutWhitespace_returnsPhone() throws Exception {
-        Comment expectedComment = new Comment(VALID_COMMENT);
-        assertEquals(expectedComment, ParserUtil.parseComment(VALID_COMMENT));
+        Description expectedDescription = new Description(VALID_COMMENT);
+        assertEquals(expectedDescription, ParserUtil.parseDescription(Optional.of(VALID_COMMENT)));
     }
 
     @Test
     public void parsePhone_validValueWithWhitespace_returnsTrimmedPhone() throws Exception {
         String phoneWithWhitespace = WHITESPACE + VALID_COMMENT + WHITESPACE;
-        Comment expectedComment = new Comment(VALID_COMMENT);
-        assertEquals(expectedComment, ParserUtil.parseComment(phoneWithWhitespace));
+        Description expectedDescription = new Description(VALID_COMMENT);
+        assertEquals(expectedDescription, ParserUtil.parseDescription(Optional.of(phoneWithWhitespace)));
     }
 
     // No longer valid with the optionality of the (invisible) address field
@@ -139,25 +140,25 @@ public class ParserUtilTest {
 
     @Test
     public void parseEmail_null_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseLink((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseLink((Optional) null));
     }
 
     @Test
     public void parseEmail_invalidValue_throwsParseException() {
-        Assert.assertThrows(ParseException.class, () -> ParserUtil.parseLink(INVALID_LINK));
+        Assert.assertThrows(ParseException.class, () -> ParserUtil.parseLink(Optional.of(INVALID_LINK)));
     }
 
     @Test
     public void parseEmail_validValueWithoutWhitespace_returnsEmail() throws Exception {
         Link expectedLink = new Link(VALID_LINK);
-        assertEquals(expectedLink, ParserUtil.parseLink(VALID_LINK));
+        assertEquals(expectedLink, ParserUtil.parseLink(Optional.of(VALID_LINK)));
     }
 
     @Test
     public void parseEmail_validValueWithWhitespace_returnsTrimmedEmail() throws Exception {
         String emailWithWhitespace = WHITESPACE + VALID_LINK + WHITESPACE;
         Link expectedLink = new Link(VALID_LINK);
-        assertEquals(expectedLink, ParserUtil.parseLink(emailWithWhitespace));
+        assertEquals(expectedLink, ParserUtil.parseLink(Optional.of(emailWithWhitespace)));
     }
 
     @Test

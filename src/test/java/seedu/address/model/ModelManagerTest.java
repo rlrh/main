@@ -53,8 +53,8 @@ public class ModelManagerTest {
     public void constructor() {
         assertEquals(new UserPrefs(), modelManager.getUserPrefs());
         assertEquals(new GuiSettings(), modelManager.getGuiSettings());
-        assertEquals(new EntryBook(), new EntryBook(modelManager.getAddressBook()));
-        assertEquals(null, modelManager.getSelectedPerson());
+        assertEquals(new EntryBook(), new EntryBook(modelManager.getEntryBook()));
+        assertEquals(null, modelManager.getSelectedEntry());
     }
 
     @Test
@@ -95,14 +95,14 @@ public class ModelManagerTest {
     @Test
     public void setAddressBookFilePath_nullPath_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        modelManager.setAddressBookFilePath(null);
+        modelManager.setEntryBookFilePath(null);
     }
 
     @Test
     public void setAddressBookFilePath_validPath_setsAddressBookFilePath() {
         Path path = Paths.get("address/book/file/path");
-        modelManager.setAddressBookFilePath(path);
-        assertEquals(path, modelManager.getAddressBookFilePath());
+        modelManager.setEntryBookFilePath(path);
+        assertEquals(path, modelManager.getEntryBookFilePath());
     }
 
     @Test
@@ -121,65 +121,65 @@ public class ModelManagerTest {
     @Test
     public void hasPerson_nullPerson_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        modelManager.hasPerson(null);
+        modelManager.hasEntry(null);
     }
 
     @Test
     public void hasPerson_personNotInAddressBook_returnsFalse() {
-        assertFalse(modelManager.hasPerson(ALICE));
+        assertFalse(modelManager.hasEntry(ALICE));
     }
 
     @Test
     public void hasPerson_personInAddressBook_returnsTrue() {
-        modelManager.addPerson(ALICE);
-        assertTrue(modelManager.hasPerson(ALICE));
+        modelManager.addEntry(ALICE);
+        assertTrue(modelManager.hasEntry(ALICE));
     }
 
     @Test
     public void deletePerson_personIsSelectedAndFirstPersonInFilteredPersonList_selectionCleared() {
-        modelManager.addPerson(ALICE);
-        modelManager.setSelectedPerson(ALICE);
-        modelManager.deletePerson(ALICE);
-        assertEquals(null, modelManager.getSelectedPerson());
+        modelManager.addEntry(ALICE);
+        modelManager.setSelectedEntry(ALICE);
+        modelManager.deleteEntry(ALICE);
+        assertEquals(null, modelManager.getSelectedEntry());
     }
 
     @Test
     public void deletePerson_personIsSelectedAndSecondPersonInFilteredPersonList_firstPersonSelected() {
-        modelManager.addPerson(ALICE);
-        modelManager.addPerson(BOB);
-        assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredPersonList());
-        modelManager.setSelectedPerson(BOB);
-        modelManager.deletePerson(BOB);
-        assertEquals(ALICE, modelManager.getSelectedPerson());
+        modelManager.addEntry(ALICE);
+        modelManager.addEntry(BOB);
+        assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
+        modelManager.setSelectedEntry(BOB);
+        modelManager.deleteEntry(BOB);
+        assertEquals(ALICE, modelManager.getSelectedEntry());
     }
 
     @Test
     public void setPerson_personIsSelected_selectedPersonUpdated() {
-        modelManager.addPerson(ALICE);
-        modelManager.setSelectedPerson(ALICE);
-        Entry updatedAlice = new EntryBuilder(ALICE).withEmail(VALID_LINK_BOB).build();
-        modelManager.setPerson(ALICE, updatedAlice);
-        assertEquals(updatedAlice, modelManager.getSelectedPerson());
+        modelManager.addEntry(ALICE);
+        modelManager.setSelectedEntry(ALICE);
+        Entry updatedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
+        modelManager.setEntry(ALICE, updatedAlice);
+        assertEquals(updatedAlice, modelManager.getSelectedEntry());
     }
 
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
-        modelManager.getFilteredPersonList().remove(0);
+        modelManager.getFilteredEntryList().remove(0);
     }
 
     @Test
     public void setSelectedPerson_personNotInFilteredPersonList_throwsPersonNotFoundException() {
         thrown.expect(EntryNotFoundException.class);
-        modelManager.setSelectedPerson(ALICE);
+        modelManager.setSelectedEntry(ALICE);
     }
 
     @Test
     public void setSelectedPerson_personInFilteredPersonList_setsSelectedPerson() {
-        modelManager.addPerson(ALICE);
-        assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredPersonList());
-        modelManager.setSelectedPerson(ALICE);
-        assertEquals(ALICE, modelManager.getSelectedPerson());
+        modelManager.addEntry(ALICE);
+        assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
+        modelManager.setSelectedEntry(ALICE);
+        assertEquals(ALICE, modelManager.getSelectedEntry());
     }
 
     @Test
@@ -208,11 +208,11 @@ public class ModelManagerTest {
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getTitle().fullTitle.split("\\s+");
-        modelManager.updateFilteredPersonList(new TitleContainsKeywordsPredicate(Arrays.asList(keywords)));
+        modelManager.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(keywords)));
         assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs, storage)));
 
         // resets modelManager to initial state for upcoming tests
-        modelManager.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        modelManager.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();
@@ -225,7 +225,7 @@ public class ModelManagerTest {
     }
 
     /**
-     * This is an integration test to see that ModelManager#addPerson is properly hooked up to ArticleStorage.
+     * This is an integration test to see that ModelManager#addEntry is properly hooked up to ArticleStorage.
      */
     @Test
     public void addPerson_networkArticleSavedToDisk() throws IOException {
@@ -234,7 +234,7 @@ public class ModelManagerTest {
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
         Storage storageManager = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
         modelManager = new ModelManager(new EntryBook(), new UserPrefs(), storageManager);
-        modelManager.addPerson(VALID_HTTPS_LINK);
+        modelManager.addEntry(VALID_HTTPS_LINK);
         String content = new String(
                 Files.readAllBytes(
                         modelManager
@@ -245,7 +245,7 @@ public class ModelManagerTest {
     }
 
     /**
-     * This is an integration test to see that ModelManager#addPerson is properly hooked up to ArticleStorage.
+     * This is an integration test to see that ModelManager#addEntry is properly hooked up to ArticleStorage.
      */
     @Test
     public void addPerson_localArticleSavedToDisk() throws IOException {
@@ -254,7 +254,7 @@ public class ModelManagerTest {
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
         Storage storageManager = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
         modelManager = new ModelManager(new EntryBook(), new UserPrefs(), storageManager);
-        modelManager.addPerson(VALID_FILE_LINK);
+        modelManager.addEntry(VALID_FILE_LINK);
         String content = new String(
                 Files.readAllBytes(
                         modelManager
