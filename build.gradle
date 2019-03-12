@@ -232,6 +232,15 @@ task copyStylesheets(type: Copy) {
 }
 asciidoctor.dependsOn copyStylesheets
 
+// Copies files needed for network tests into the generated HTML files to
+// use github pages for network testing.
+// This is needed as asciidoctor does not deploy non-asciidoc blobs.
+task copyNetworktestFiles(type: Copy) {
+    from "${asciidoctor.sourceDir}/networktests"
+    into "${asciidoctor.outputDir}/html5/networktests"
+}
+asciidoctor.dependsOn copyNetworktestFiles
+
 task deployOfflineDocs(type: Copy) {
     into('src/main/resources/docs')
 
