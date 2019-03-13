@@ -14,14 +14,11 @@ public class DescriptionTest {
         Assert.assertThrows(NullPointerException.class, () -> new Description(null));
     }
 
-    // All strings are valid descriptions for construction
-    /*
     @Test
     public void constructor_invalidPhone_throwsIllegalArgumentException() {
-        String invalidDescription = "";
+        String invalidDescription = " ";
         Assert.assertThrows(IllegalArgumentException.class, () -> new Description(invalidDescription));
     }
-    */
 
     @Test
     public void isValidUserInputDescription() {
@@ -53,10 +50,10 @@ public class DescriptionTest {
         Assert.assertThrows(NullPointerException.class, () -> Description.isValidConstructionDescription(null));
 
         // invalid description
+        assertFalse(Description.isValidConstructionDescription(" ")); // spaces only
 
         // valid description
         assertTrue(Description.isValidConstructionDescription("")); // empty string
-        assertTrue(Description.isValidConstructionDescription(" ")); // spaces only
 
         assertTrue(Description.isValidConstructionDescription("comment")); // non-numeric
         assertTrue(Description.isValidConstructionDescription("comment comment")); // non-numeric with spaces

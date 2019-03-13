@@ -14,7 +14,7 @@ public class Description {
             "Descriptions can take any values, and it should not be blank";
     public static final String DEFAULT_DESCRIPTION = "";
     public static final String USER_INPUT_VALIDATION_REGEX = "[^\\s].*";
-    public static final String CONSTRUCTION_VALIDATION_REGEX = "^.*";
+    public static final String CONSTRUCTION_VALIDATION_REGEX = "([^\\s].*)|(^$)";
     public final String value;
 
     /**

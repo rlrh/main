@@ -38,8 +38,6 @@ public class JsonAdaptedEntryTest {
         assertEquals(BENSON, entry.toModelType());
     }
 
-    // Any string is a valid title
-    /*
     @Test
     public void toModelType_invalidTitle_throwsIllegalValueException() {
         JsonAdaptedEntry entry =
@@ -47,7 +45,6 @@ public class JsonAdaptedEntryTest {
         String expectedMessage = Title.MESSAGE_CONSTRAINTS;
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
-    */
 
     @Test
     public void toModelType_nullTitle_throwsIllegalValueException() {
@@ -56,8 +53,6 @@ public class JsonAdaptedEntryTest {
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
 
-    // Any string is a valid description
-    /*
     @Test
     public void toModelType_invalidDescription_throwsIllegalValueException() {
         JsonAdaptedEntry entry =
@@ -65,7 +60,6 @@ public class JsonAdaptedEntryTest {
         String expectedMessage = Description.MESSAGE_CONSTRAINTS;
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
-    */
 
     @Test
     public void toModelType_nullDescription_throwsIllegalValueException() {
@@ -89,8 +83,6 @@ public class JsonAdaptedEntryTest {
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
 
-    // Any string is a valid address
-    /*
     @Test
     public void toModelType_invalidAddress_throwsIllegalValueException() {
         JsonAdaptedEntry entry =
@@ -98,7 +90,6 @@ public class JsonAdaptedEntryTest {
         String expectedMessage = Address.MESSAGE_CONSTRAINTS;
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
-    */
 
     @Test
     public void toModelType_nullAddress_throwsIllegalValueException() {

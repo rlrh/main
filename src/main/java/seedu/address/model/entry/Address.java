@@ -17,7 +17,7 @@ public class Address {
      * otherwise " " (a blank string) becomes a valid input.
      */
     public static final String USER_INPUT_VALIDATION_REGEX = "[^\\s].*";
-    public static final String CONSTRUCTION_VALIDATION_REGEX = "^.*";
+    public static final String CONSTRUCTION_VALIDATION_REGEX = "([^\\s].*)|(^$)";
 
     public final String value;
 

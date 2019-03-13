@@ -14,7 +14,7 @@ public class Title {
     public static final String DEFAULT_TITLE = "";
 
     public static final String USER_INPUT_VALIDATION_REGEX = "[^\\s].*";
-    public static final String CONSTRUCTION_VALIDATION_REGEX = "^.*";
+    public static final String CONSTRUCTION_VALIDATION_REGEX = "([^\\s].*)|(^$)";
 
     public final String fullTitle;
 

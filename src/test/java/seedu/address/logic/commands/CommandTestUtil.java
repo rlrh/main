@@ -48,11 +48,16 @@ public class CommandTestUtil {
     public static final String TAG_DESC_TECH = " " + PREFIX_TAG + VALID_TAG_TECH;
     public static final String TAG_DESC_SCIENCE = " " + PREFIX_TAG + VALID_TAG_SCIENCE;
 
-    public static final String INVALID_TITLE_DESC = " " + PREFIX_TITLE + " "; // string starting with space not allowed
-    public static final String INVALID_DESCRIPTION_DESC = " " + PREFIX_DESCRIPTION; // empty string not allowed
-    public static final String INVALID_LINK_DESC = " " + PREFIX_LINK + "bob.yahoo.com"; // missing protocol
-    public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
-    public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "tech*"; // '*' not allowed in tags
+    // string starting with space not allowed
+    public static final String INVALID_TITLE_DESC = " " + PREFIX_TITLE + " ";
+    // string starting with space not allowed
+    public static final String INVALID_DESCRIPTION_DESC = " " + PREFIX_DESCRIPTION + " ";
+    // missing protocol
+    public static final String INVALID_LINK_DESC = " " + PREFIX_LINK + "bob.yahoo.com";
+    // string starting with space not allowed
+    public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS + " ";
+    // '*' not allowed in tags
+    public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "tech*";
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";

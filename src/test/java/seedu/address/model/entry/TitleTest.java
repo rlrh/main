@@ -14,14 +14,11 @@ public class TitleTest {
         Assert.assertThrows(NullPointerException.class, () -> new Title(null));
     }
 
-    // All strings are valid titles for construction
-    /*
     @Test
     public void constructor_invalidTitle_throwsIllegalArgumentException() {
-        String invalidTitle = "";
+        String invalidTitle = " ";
         Assert.assertThrows(IllegalArgumentException.class, () -> new Title(invalidTitle));
     }
-    */
 
     @Test
     public void isValidUserInputTitle() {
@@ -47,10 +44,10 @@ public class TitleTest {
         Assert.assertThrows(NullPointerException.class, () -> Title.isValidConstructionTitle(null));
 
         // invalid title
+        assertFalse(Title.isValidConstructionTitle(" ")); // spaces only
 
         // valid title
         assertTrue(Title.isValidConstructionTitle("")); // empty string
-        assertTrue(Title.isValidConstructionTitle(" ")); // spaces only
 
         assertTrue(Title.isValidConstructionTitle("peter*")); // contains non-alphanumeric characters
         assertTrue(Title.isValidConstructionTitle("peter jack")); // alphabets only

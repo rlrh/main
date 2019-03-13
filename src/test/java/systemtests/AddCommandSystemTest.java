@@ -170,7 +170,6 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
              + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
         assertCommandFailure(command, Link.MESSAGE_CONSTRAINTS);
 
-        // Deprecated
         /* Case: invalid address -> rejected
         command = AddCommand.COMMAND_WORD + INVALID_ADDRESS_DESC
              + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
