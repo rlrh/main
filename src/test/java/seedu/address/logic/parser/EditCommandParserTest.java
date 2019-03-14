@@ -5,10 +5,15 @@ import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_BOB;
@@ -45,7 +50,7 @@ import seedu.address.testutil.EditEntryDescriptorBuilder;
 
 public class EditCommandParserTest {
 
-    private static final String TAG_EMPTY = " " + PREFIX_TAG;
+    private static final String TAG_EMPTY_DESC = " " + PREFIX_TAG + "";
 
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
@@ -81,30 +86,41 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_invalidValue_failure() {
-        assertParseFailure(parser, "1" + INVALID_TITLE_DESC, Title.MESSAGE_CONSTRAINTS); // invalid name
-        assertParseFailure(parser, "1" + INVALID_DESCRIPTION_DESC, Description.MESSAGE_CONSTRAINTS); // invalid phone
-        assertParseFailure(parser, "1" + INVALID_LINK_DESC, Link.MESSAGE_CONSTRAINTS); // invalid email
-        assertParseFailure(parser, "1" + INVALID_ADDRESS_DESC, Address.MESSAGE_CONSTRAINTS); // invalid address
-        assertParseFailure(parser, "1" + INVALID_TAG_DESC, Tag.MESSAGE_CONSTRAINTS); // invalid tag
+        assertParseFailure(parser, "1"
+            + INVALID_TITLE_DESC, Title.formExceptionMessage(INVALID_TITLE.trim())); // invalid title
+        assertParseFailure(parser, "1"
+            + INVALID_DESCRIPTION_DESC, Description.formExceptionMessage(INVALID_DESCRIPTION.trim())); // invalid desc
+        assertParseFailure(parser, "1"
+            + INVALID_LINK_DESC, Link.formExceptionMessage(INVALID_LINK.trim())); // invalid link
+        assertParseFailure(parser, "1"
+            + INVALID_ADDRESS_DESC, Address.formExceptionMessage(INVALID_ADDRESS.trim())); // invalid address
+        assertParseFailure(parser, "1"
+            + INVALID_TAG_DESC, Tag.formExceptionMessage(INVALID_TAG.trim())); // invalid tag
 
-        // invalid phone followed by valid email
-        assertParseFailure(parser, "1" + INVALID_DESCRIPTION_DESC + LINK_DESC_AMY, Description.MESSAGE_CONSTRAINTS);
+        // invalid description followed by valid link
+        assertParseFailure(parser, "1"
+            + INVALID_DESCRIPTION_DESC + LINK_DESC_AMY, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
-        // valid phone followed by invalid phone. The test case for invalid phone followed by valid phone
+        // valid description followed by invalid description.
+        // The test case for invalid description followed by valid description
         // is tested at {@code parse_invalidValueFollowedByValidValue_success()}
-        assertParseFailure(parser,
-            "1" + DESCRIPTION_DESC_BOB + INVALID_DESCRIPTION_DESC, Description.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1"
+            + DESCRIPTION_DESC_BOB + INVALID_DESCRIPTION_DESC,
+            Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         // while parsing {@code PREFIX_TAG} alone will reset the tags of the {@code Entry} being edited,
         // parsing it together with a valid tag results in error
-        assertParseFailure(parser, "1" + TAG_DESC_TECH + TAG_DESC_SCIENCE + TAG_EMPTY, Tag.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + TAG_DESC_TECH + TAG_EMPTY + TAG_DESC_SCIENCE, Tag.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + TAG_EMPTY + TAG_DESC_TECH + TAG_DESC_SCIENCE, Tag.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1"
+            + TAG_DESC_TECH + TAG_DESC_SCIENCE + TAG_EMPTY_DESC, Tag.formExceptionMessage(""));
+        assertParseFailure(parser, "1"
+            + TAG_DESC_TECH + TAG_EMPTY_DESC + TAG_DESC_SCIENCE, Tag.formExceptionMessage(""));
+        assertParseFailure(parser, "1"
+            + TAG_EMPTY_DESC + TAG_DESC_TECH + TAG_DESC_SCIENCE, Tag.formExceptionMessage(""));
 
         // multiple invalid values, but only the first invalid value is captured
         assertParseFailure(parser,
             "1" + INVALID_TITLE_DESC + INVALID_LINK_DESC + VALID_ADDRESS_AMY + VALID_DESCRIPTION_AMY,
-                Title.MESSAGE_CONSTRAINTS);
+                Title.formExceptionMessage(INVALID_TITLE.trim()));
     }
 
     @Test
@@ -205,7 +221,7 @@ public class EditCommandParserTest {
     @Test
     public void parse_resetTags_success() {
         Index targetIndex = INDEX_THIRD_ENTRY;
-        String userInput = targetIndex.getOneBased() + TAG_EMPTY;
+        String userInput = targetIndex.getOneBased() + TAG_EMPTY_DESC;
 
         EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withTags().build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);

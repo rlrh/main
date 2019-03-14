@@ -5,9 +5,13 @@ import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_BOB;
@@ -158,17 +162,17 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid title -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_TITLE_DESC
             + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, Title.MESSAGE_CONSTRAINTS);
+        assertCommandFailure(command, Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         /* Case: invalid description -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_DESCRIPTION_DESC
             + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, Description.MESSAGE_CONSTRAINTS);
+        assertCommandFailure(command, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         /* Case: invalid link -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_LINK_DESC
              + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, Link.MESSAGE_CONSTRAINTS);
+        assertCommandFailure(command, Link.formExceptionMessage(INVALID_LINK.trim()));
 
         /* Case: invalid address -> rejected
         command = AddCommand.COMMAND_WORD + INVALID_ADDRESS_DESC
@@ -179,7 +183,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid tag -> rejected */
         command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY
                 + INVALID_TAG_DESC;
-        assertCommandFailure(command, Tag.MESSAGE_CONSTRAINTS);
+        assertCommandFailure(command, Tag.formExceptionMessage(INVALID_TAG.trim()));
 
         /* ----------------------------------- Perform invalid add operations --------------------------------------- */
 

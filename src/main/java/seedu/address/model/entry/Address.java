@@ -9,7 +9,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Address {
 
-    public static final String MESSAGE_CONSTRAINTS = "Addresses can take any values, and it should not be blank";
+    public static final String MESSAGE_CONSTRAINTS = "Addresses can take any values, and it should not be blank.";
     public static final String DEFAULT_ADDRESS = "";
 
     /*
@@ -44,6 +44,14 @@ public class Address {
      */
     public static boolean isValidConstructionAddress(String test) {
         return test.matches(CONSTRUCTION_VALIDATION_REGEX);
+    }
+
+    public static String formExceptionMessage() {
+        return MESSAGE_CONSTRAINTS;
+    }
+
+    public static String formExceptionMessage(String invalidInput) {
+        return MESSAGE_CONSTRAINTS + " Entered: [" + invalidInput + "].";
     }
 
     @Override
