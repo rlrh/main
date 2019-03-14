@@ -152,7 +152,6 @@ public class CommandTestUtil {
     public static void deleteFirstPerson(Model model) {
         Entry firstEntry = model.getFilteredEntryList().get(0);
         model.deleteEntry(firstEntry);
-        model.commitEntryBook();
     }
 
 }
