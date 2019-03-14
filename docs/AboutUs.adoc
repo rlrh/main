@@ -15,7 +15,7 @@ image::rlrh.png[width="150", align="left"]
 {empty}[https://github.com/rlrh[github]]
 
 Role: Team Lead, Developer +
-Responsibilities:
+Responsibilities: View modes feature, UI
 
 '''
 
@@ -24,7 +24,7 @@ image::thomastanck.png[width="150", align="left"]
 {empty}[https://github.com/thomastanck[github]] [<<thomastanck#, portfolio>>]
 
 Role: Software Architect, Developer +
-Responsibilities:
+Responsibilities: Offline support feature, Storage
 
 '''
 
@@ -33,7 +33,7 @@ image::qjqqyy.png[width="150", align="left"]
 {empty}[https://github.com/qjqqyy[github]]
 
 Role: Quality Assurance Lead, Developer +
-Responsibilities:
+Responsibilities: Web feed subscription feature, Model
 
 '''
 
@@ -42,6 +42,6 @@ image::epicfailname.png[width="150", align="left"]
 {empty}[https://github.com/epicfailname[github]]
 
 Role: Technical Lead, Developer +
-Responsibilities:
+Responsibilities: Entry management feature, Logic
 
 '''
