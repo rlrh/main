@@ -31,7 +31,8 @@ public class ParserUtil {
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
         String trimmedIndex = oneBasedIndex.trim();
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
-            throw new ParseException(MESSAGE_INVALID_INDEX);
+            throw new ParseException(MESSAGE_INVALID_INDEX
+                + " Given trimmed index: [" + trimmedIndex + "]");
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
     }
@@ -48,7 +49,8 @@ public class ParserUtil {
         if (title.isPresent()) {
             String trimmedTitle = title.get().trim();
             if (!Title.isValidUserInputTitle(trimmedTitle)) {
-                throw new ParseException(Title.MESSAGE_CONSTRAINTS);
+                throw new ParseException(Title.MESSAGE_CONSTRAINTS
+                    + " Given trimmed title: [" + trimmedTitle + "]");
             }
             return new Title(trimmedTitle);
         } else {
@@ -68,7 +70,8 @@ public class ParserUtil {
         if (description.isPresent()) {
             String trimmedDescription = description.get().trim();
             if (!Description.isValidUserInputDescription(trimmedDescription)) {
-                throw new ParseException(Description.MESSAGE_CONSTRAINTS);
+                throw new ParseException(Description.MESSAGE_CONSTRAINTS
+                    + " Given trimmed description: [" + trimmedDescription + "]");
             }
             return new Description(trimmedDescription);
         } else {
@@ -89,7 +92,8 @@ public class ParserUtil {
         if (address.isPresent()) {
             String trimmedAddress = address.get().trim();
             if (!Address.isValidUserInputAddress(trimmedAddress)) {
-                throw new ParseException(Address.MESSAGE_CONSTRAINTS);
+                throw new ParseException(Address.MESSAGE_CONSTRAINTS
+                    + " Given trimmed address: [" + trimmedAddress + "]");
             }
             return new Address(trimmedAddress);
         } else {
@@ -108,7 +112,8 @@ public class ParserUtil {
         if (link.isPresent()) {
             String trimmedLink = link.get().trim();
             if (!Link.isValidUserInputLink(trimmedLink)) {
-                throw new ParseException(Link.MESSAGE_CONSTRAINTS);
+                throw new ParseException(Link.MESSAGE_CONSTRAINTS
+                    + " Given trimmed link: [" + trimmedLink + "]");
             }
             return new Link(trimmedLink);
         } else {
@@ -126,7 +131,8 @@ public class ParserUtil {
         requireNonNull(tag);
         String trimmedTag = tag.trim();
         if (!Tag.isValidTagName(trimmedTag)) {
-            throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
+            throw new ParseException(Tag.MESSAGE_CONSTRAINTS
+                + " Given trimmed tag: [" + trimmedTag + "]");
         }
         return new Tag(trimmedTag);
     }
