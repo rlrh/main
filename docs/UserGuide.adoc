@@ -14,22 +14,23 @@ ifdef::env-github[]
 endif::[]
 :repoURL: https://github.com/CS2103-AY1819S2-W10-1/main
 
-By: `W10-1`      Since: `Feb 2019`      Licence: `MIT`
+By: `CS2103-AY1819S2-W10-1`      Since: `Jan 2019`      Licence: `MIT`
 
 == Introduction
-README helps you discover, curate and read more content you care about in less time.
-It is an integrated bookmark manager and feed reader desktop application for saving web pages and feeds to read later on your personal computer.
-You’ll love README if you’re a heavy consumer of web content but don’t have regular internet access, whether because you often head off on long flights or you love working in cafes, and refuse to pay exorbitant prices for Internet access anywhere.
-README is for those who *prefer to use a desktop app for managing links*.
+README is an integrated bookmark manager and feed reader desktop application
+that helps you read more content you care about anywhere you go.
+You'll love README if you consume a lot of web content and want to keep up to date with your favourite websites but you're a road warrior who doesn't have regular Internet access.
+Whether you're heading off on a long flight or working in a cafe, README has you covered with all the content you care about in one place.
+README is for those who *prefer to use a desktop app for subscribing to web feeds and saving web pages to read later on their personal computer*.
 More importantly, README is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI).
-If you can type fast, README can get your link management tasks done faster than traditional GUI apps.
+If you can type fast, README can make you more efficient at consuming content than traditional GUI apps.
 Interested? Jump to the <<Quick Start>> to get started.
 Enjoy!
 
 == Quick Start
 
 .  Ensure you have Java version `9` or later installed in your Computer.
-.  Download the latest `README.jar` link:{repoURL}/releases[here].
+.  Download the latest `README.jar` entry:{repoURL}/releases[here].
 .  Copy the file to the folder you want to use as the home folder for your README.
 .  Double-click the file to start the app. The GUI should appear in a few seconds.
 +
@@ -39,17 +40,14 @@ image::Ui.png[width="790"]
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 .  Try these commands in order!
 
-* *`list`* : lists all saved links
-* **`select`**`1` : select the first link displayed for reading
-* **`read`**`1` : marks the 1st link as read
-* **`delete`**`2` : deletes the 2nd link
-* *`exit`* : exits the app
-
-.  Or these commands, if you have internet access!
-
-* **`search`**`Trump` : searches online for links related to keyword 'Trump'.
-* **`add`**`1` : adds the first link displayed to the reading list
-* *`list`* : lists all saved links, including the newly added one
+* *`list`* : shows your reading list of all saved links
+* **`select`**`1` : selects the first entry for reading
+* **`add`**`l/https://en.wikipedia.org/wiki/Special:Random` : adds a random Wikipedia page to your reading list
+* **`select`**`7` : selects the Wikipedia page for reading
+* **`feed`**`http://rss.nytimes.com/services/xml/rss/nyt/World.xml` : adds all the latest articles from the New York Times world news feed
+* **`select`**`8` : selects the first NYT article for reading
+* **`view`**`reader` : switches to a more comfortable reading experience
+* **`delete`**`8` : deletes the first NYT article entry
 * *`exit`* : exits the app
 
 .  Refer to below for details of each command.
@@ -64,504 +62,11 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * Parameters can be in any order.
 ====
 
-== Viewing help : `help`
-
-Format: `help`
-
-== Context-switching commands
-These commands change the context in which commands with shared command words operate (e.g. `add`, `edit`, `delete`).
-
-=== Showing links: `list` (displays link list)
-
-Shows your reading list of saved links, optionally finding links with titles containing any of the given keywords, and filtering by read status, date added and tags.
-
-Format: `list [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY]`
-
-****
-- The search is case insensitive. e.g `hans` will match `Hans`
-- Keywords are comma separated. e.g. `Hello world, foo bar`
-- The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
-- Only the title is searched.
-- Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
-- Links matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
-****
-
-Examples:
-
-- `list` Lists all links
-- `list Apple r/read tech` Lists links with titles containing `apple` which are already read and tagged with `Tech`
-- `list Trump` Lists links with titles containing `trump` and `Donald Trump` etc.
-- `list r/unread` Lists only unread links
-- `list t/Tech` Lists links tagged with “Tech”
-- `list t/` Lists untagged links
-
-=== Searching online for links: `search` (displays link list)
-
-Searches online for links that you can subsequently add.
-
-Format: `search [KEYWORD]...`
-Format: `search FEED_URL`
-Format: `search ARTICLE_URL`
-
-Examples:
-
-- `search` Returns top headlines
-- `search Trump` Returns links containing the `Trump` keyword
-- `search https://live.engadget.com/rss.xml` Returns links from this feed
-- `search https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Returns all links from this article
-
-=== Showing archived links: `archives` (displays link list)
-
-Shows a list of archived links, optionally finding links with titles containing any of the given keywords, and filtering by read status, date added and tags.
-
-Format: `archives [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]...`
-
-****
-- The search is case insensitive. e.g `hans` will match `Hans`
-- Keywords are comma separated. e.g. `Hello world, foo bar`
-- The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
-- Only the title is searched.
-- Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
-- Links matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
-****
-
-Examples:
-
-- `archives` Lists all archived links
-- `archives Apple r/read t/Tech` Lists archived links with titles containing `apple` which are already read and tagged with `Tech`
-- `archives Trump` Lists archived links with titles containing `trump` and `Donald Trump` etc.
-- `archives r/unread` Lists only unread archived links
-- `archives t/Tech` Lists archived links tagged with “Tech”
-- `archives t/` Lists untagged archived links
-
-=== Showing feeds: `feeds` (displays feed list)
-
-Shows a list of feeds being followed.
-
-Format: `feeds [t/TAG]...`
-
-Examples:
-
-- `feeds` Lists all feeds
-- `feeds t/Business` Lists all feeds tagged with “Business”
-
-=== Searching online for feeds: `searchfeeds` (displays feed list)
-
-Searches online for feeds that you can subsequently follow.
-
-Format: `searchfeeds [KEYWORD]...`
-
-Examples:
-
-- `searchfeeds` Shows some starter feeds you can add
-- `searchfeeds Tech Business` Searches for `Tech` or `Business` feeds
-
-=== Showing reading statistics: `stats` `[coming in v2.0]`
-
-Shows helpful and fun statistics about your reading progress and habits.
-
-Format: `stats`
-
-== In `list` context (displays link list)
-
-=== Adding links: `add`
-
-Adds a single link from a URL to the manager. Content is automatically downloaded to disk.
-
-Format: `add URL [ti/TITLE_OVERRIDE] [c/COMMENT] [t/TAG]...`
-
-[TIP]
-A link can have any number of tags (including 0).
-Title will be automatically filled by parsing the link if you do not provide it.
-
-Examples:
-
-- `add https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ c/explains why UX is important t/Business` Adds a single link with a description and tagged with “Business”
-
-=== Editing a link: `edit`
-
-Edits an existing link in the manager.
-
-Format: `edit INDEX [u/URL] [ti/TITLE_OVERRIDE] [s/STATUS] [c/COMMENT] [t/TAG]...`
-
-****
-- Edits the link at the specified `INDEX`. The index refers to the index number shown in the displayed link list. The index *must be a positive integer* 1, 2, 3, ...
-- At least one of the optional fields must be provided.
-- Existing values will be updated to the input values.
-- When editing tags, the existing tags of the link will be removed i.e adding of tags is not cumulative.
-- You can remove all the link's tags by typing `t/` without specifying any tags after it.
-****
-
-Examples:
-
-- `edit 1 c/need to read again` Edits the description attached to the 1st link
-- `edit 2 t/` Clears all existing tags from the 2nd link
-
-=== Deleting a link: `delete`
-
-Deletes specified links from the manager.
-
-Format: `delete INDICES`
-
-- Deletes the links at the specified `INDICES`.
-- The index refers to the index number shown in the displayed link list.
-- The index *must be a positive integer* 1, 2, 3, ...
-
-Format: `delete all`
-
-- Deletes all shown links
-
-Examples:
-
-- `delete 1,6-10` Deletes the 1st, and 2nd to 6th links
-
-
-=== Redownloading links: `redownload`
-
-Redownload the specified links to get the latest version of their content.
-
-Format: `redownload INDICES`
-
-- Refreshes the links at the specified `INDICES`.
-- The index refers to the index number shown in the displayed link list.
-- The index *must be a positive integer* 1, 2, 3, ...
-
-Format: `redownload all`
-
-
-Examples:
-
-- `redownload all` Redownload all shown links
-- `redownload 1,3-5` Redownloads the 1st and 3rd to 5th links.
-
-=== Marking links as read: `read`
-Marks links as read.
-
-Format: `read INDICES`
-
-Format: `read all`
-
-****
-- Equivalent to `edit INDEX r/read` on multiple indices
-****
-
-Examples:
-
-- `read all` Marks all shown links as read
-- `read 1,2,6-10` Marks the 1st, 2nd and 4th to 6th links as read
-
-=== Marking links as unread: `unread`
-Marks links as unread.
-
-Format: `unread INDICES`
-
-Format: `unread all`
-
-****
-- Equivalent to `edit INDEX r/unread` on multiple indices
-****
-
-Examples:
-
-- `unread all` Marks all shown links as unread
-- `unread 1,2,6-10` Marks the 1st, 2nd and 4th to 6th links as unread
-
-=== Selecting a link: `select`
-
-Selects the link identified by the index number used in the displayed link list for viewing.
-
-Format: `select INDEX`
-
-****
-- Selects the link and loads the content of the link at the specified `INDEX`.
-- The index refers to the index number shown in the displayed link list.
-- The index *must be a positive integer* 1`, 2, 3, ...`
-****
-
-Examples:
-
-- `select 2` Selects the 2nd link in the manager
-
-=== Changing the viewing mode: `view`
-
-Changes the viewing mode between reader view and original view.
-
-Format: `view MODE [s/style] [o/options]`
-
-Examples:
-
-- `view browser` Use browser view
-- `view reader` Use reader view
-- `view reader s/dark` Use reader view with dark style
-- `view reader o/fullscreen` Use reader view with maximised window
-- `view reader s/solarized o/fullscreen` Use reader view with "Solarized" style and maximised window
-
-=== Archiving links: `archive`
-Moves the links to the archive and remove downloaded content for those links.
-
-Format: `archive INDICES`
-
-Format: `archive all`
-
-Examples:
-
-- `archive all` Archives all shown links
-- `archive 1,2,4-6` Archives the 1st, 2nd and 4th to 6th links
-
-=== Clearing all entries : `clear`
-Clears all saved links from the manager.
-
-Format: `clear`
-
-=== List links in reader: `readerlist` `[coming in v2.0]`
-
-Lists all the hyperlinks in the reader.
-
-Format: `readerlist`
-
-Examples:
-
-- `readerlist` Lists all the hyperlinks in the reader.
-
-=== Share link: `share` `[coming in v2.0]`
-
-Shares link through connected social media
-
-== In `search` context (displays link list)
-
-=== Adding links: `add`
-
-Adds links from search results to the manager. Content is automatically downloaded to disk.
-
-Format: `add INDEX [ti/TITLE_OVERRIDE] [c/COMMENT] [t/TAG]...`
-
-Format: `add INDICES [c/COMMENT] [t/TAG]...`
-
-Format: `add all`
-
-[TIP]
-====
-A link can have any number of tags (including 0).
-Title will be automatically filled by parsing the link if you do not provide it.
-====
-
-Examples:
-
-- `add 1 c/explains why UX is important t/Business` Adds the 1st link with a description and tagged with “Business”
-- `add 4-6 c/read by Monday t/School` Adds the 4th to 6th links with the same description and tagged with “School"
-
-=== Selecting a link: `select`
-
-Selects the link identified by the index number used in the displayed link list for viewing.
-
-Format: `select INDEX`
-
-****
-- Selects the link and loads the content of the link at the specified `INDEX`.
-- The index refers to the index number shown in the displayed link list.
-- The index *must be a positive integer* 1`, 2, 3, ...`
-****
-
-Examples:
-
-- `select 2` Selects the 2nd link in the manager
-
-=== Changing the viewing mode: `view`
-
-Changes the viewing mode between reader view and original view.
-
-Format: `view MODE [s/style] [o/options]`
-
-Examples:
-
-- `view browser` Use browser view
-- `view reader` Use reader view
-- `view reader s/dark` Use reader view with dark style
-- `view reader o/fullscreen` Use reader view with maximised window
-- `view reader s/solarized o/fullscreen` Use reader view with "Solarized" style and maximised window
-
-== In `feeds` context (displays feed list)
-
-=== Adding a feed: `add`
-
-Adds a feed to the manager and subscribes to updates.
-
-Format: `add URL [n/NAME] [t/TAG]...`
-
-[TIP]
-====
-A feed can have any number of tags (including 0)
-====
-
-Examples:
-
-- `add https://www.engadget.com/rss.xml n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose links will be tagged with “Tech”
-
-=== Updating links from feeds: `update`
-
-Refreshes all feeds.
-
-Format: `update INDICES`
-
-Format: `update all`
-
-Examples:
-
-- `update all` Updates links from all feeds
-- `update 2` Updates links from the 2nd feed
-
-=== Selecting a feed: `select`
-
-Selects the feed identified by the index number used in the displayed feed list and displays its links.
-
-Format: `select INDEX`
-
-****
-- Selects the feed and displays its links.
-- Equivalent to `search [URL_OF_INDEXED_FEED]`
-- The index refers to the index number shown in the displayed feed list.
-- The index *must be a positive integer* 1`, 2, 3, ...`
-****
-
-Examples:
-
-- `select 2` Selects the 2nd feed in the manager and displays its links
-
-=== Editing a feed: `edit`
-
-Edits an existing feed in the manager.
-
-Format: `edit INDEX [u/URL] [n/NAME] [t/TAG]...`
-
-****
-- Edits the feed at the specified `INDEX`. The index refers to the index number shown in the displayed feed list. The index *must be a positive integer* 1, 2, 3, ...
-- At least one of the optional fields must be provided.
-- Existing values will be updated to the input values.
-- When editing tags, the existing tags of the feed will be removed i.e adding of tags is not cumulative.
-- You can remove all the feed’s tags by typing `t/` without specifying any tags after it.
-****
-
-Examples:
-
-- `edit 1 n/HackerNews` Edits the name of the 1st feed
-- `edit 2 t/` Clears all existing tags from the 2nd feed
-
-=== Deleting a feed: `delete`
-
-Deletes the specified feeds from the manager and unsubscribes from them, but existing links obtained from that feed will not be deleted.
-
-Format: `delete INDICES`
-
-****
-- Deletes the feeds at the specified indices.
-- The index refers to the index number shown in the displayed feed list.
-- The index *must be a positive integer* 1, 2, 3, ...
-****
-
-Format: `delete all`
-
-Examples:
-
-- `delete all` Deletes all shown feeds
-- `delete 2` Deletes the 2nd feed
-
-=== Clearing all entries : `clear`
-Clears all followed feeds from the manager.
-
-Format: `clear`
-
-== In `searchfeeds` context (displays feed list)
-
-=== Adding a feed: `add`
-
-Adds a feed from the search results to the manager and subscribes to updates.
-
-Format: `add INDEX [n/NAME] [t/TAG]...`
-
-Format: `add INDICES [t/TAG]...`
-
-Format: `add all`
-
-[TIP]
-====
-A feed can have any number of tags (including 0)
-====
-
-Examples:
-
-- `add all` Adds all shown feeds
-- `add 1 n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose links will be tagged with `Tech`
-- `add 5-9 t/Work` Adds the 5th to 9th feeds whose links will be tagged with `Work`
-
-=== Selecting a feed: `select`
-
-Selects the feed identified by the index number used in the displayed feed list and displays its links.
-
-Format: `select INDEX`
-
-****
-- Selects the feed and displays its links.
-- Equivalent to `search [URL_OF_INDEXED_FEED]`
-- The index refers to the index number shown in the displayed feed list.
-- The index *must be a positive integer* 1`, 2, 3, ...`
-****
-
-Examples:
-
-- `select 2` Selects the 2nd feed in the manager and displays its links
-
-=== Show recommended feeds: `recommend` `[coming in v2.0]`
-
-Based on user's current preferences, display a list of recommended feeds.
-
-Format: `recommend`
-
-Examples:
-
-- `recommend` A list of recommended feeds will be displayed, similar to searching a feed.
-
-== In `archives` context (displays link list)
-
-=== Unarchiving links: `unarchive`
-Adds the links back to the link list and downloads their content onto disk.
-
-Format: `unarchive INDICES`
-
-Format: `unarchive all`
-
-Examples:
-
-- `unarchive all` Unarchives all shown links
-- `unarchive 1,2,4-6` Unarchives the 1st, 2nd and 4th to 6th links
-
-=== Deleting an archived link: `delete`
-Deletes specified archived links from the manager.
-
-Format: `delete INDICES`
-
-****
-- Deletes the links at the specified `INDICES`.
-- The index refers to the index number shown in the displayed link list.
-- The index *must be a positive integer* 1, 2, 3, ...
-****
-
-Format: `delete all`
-
-****
-- Deletes all shown links
-****
-
-Examples:
-
-- `delete 1,2-6` Deletes the 1st, and 2nd to 6th links
-
-=== Clearing all entries : `clear`
-Clears all archived links from the manager.
-
-Format: `clear`
-
 == Non-contextual commands
-These commands can be called from any context.
+
+====
+These commands can be used from any context.
+====
 
 === Custom user command macro: `macro` `[coming in v2.0]`
 Creates macros that compose commands together.
@@ -572,7 +77,7 @@ Examples:
 
 - `macro archive-tags-which-are-old 1 find t/$1 d/3 days ago; archive all`
 
-=== Export settings and data to an export file : `export`
+=== Export settings and data to an export file : `export` `[coming in v2.0]`
 
 Exports the feeds, saved data, history, and other preferences to an export file.
 
@@ -589,7 +94,7 @@ Examples:
 - `export /home/tt/Desktop` Saves an export file to desktop
 - `export C:\Users\Name\Desktop` Saves an export file to desktop
 
-=== Import settings and data from an export file : `import`
+=== Import settings and data from an export file : `import` `[coming in v2.0]`
 
 Imports the feeds, saved data, history, and other preferences from an export file.
 
@@ -616,55 +121,9 @@ Format: `history`
 Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
 ====
 
-// tag::undoredo[]
-=== Undoing previous command : `undo`
+=== Viewing help : `help`
 
-Restores the README to the state before the previous _undoable_ command was executed. +
-Format: `undo`
-
-[NOTE]
-====
-Undoable commands: those commands that modify the README's content (`add`, `delete`, `edit` and `clear`).
-====
-
-Examples:
-
-- `delete 1` +
-`list` +
-`undo` (reverses the `delete 1` command) +
-
-- `select 1` +
-`list` +
-`undo` +
-The `undo` command fails as there are no undoable commands executed previously.
-
-- `delete 1` +
-`clear` +
-`undo` (reverses the `clear` command) +
-`undo` (reverses the `delete 1` command) +
-
-=== Redoing the previously undone command : `redo`
-
-Reverses the most recent `undo` command. +
-Format: `redo`
-
-Examples:
-
-* `delete 1` +
-`undo` (reverses the `delete 1` command) +
-`redo` (reapplies the `delete 1` command) +
-
-* `delete 1` +
-`redo` +
-The `redo` command fails as there are no `undo` commands executed previously.
-
-* `delete 1` +
-`clear` +
-`undo` (reverses the `clear` command) +
-`undo` (reverses the `delete 1` command) +
-`redo` (reapplies the `delete 1` command) +
-`redo` (reapplies the `clear` command) +
-// end::undoredo[]
+Format: `help`
 
 === Exiting the program : `exit`
 
@@ -672,13 +131,557 @@ Exits the program.
 
 Format: `exit`
 
-////
-// tag::dataencryption[]
-=== Encrypting data files `[coming in v2.0]`
+== Context-switching commands
 
-_{explain how the user can enable/disable data encryption}_
-// end::dataencryption[]
+====
+These commands can be used from any context but change the context in which commands with shared command words operate (e.g. `add`, `edit`, `delete`).
+====
+
+=== Showing entries: `list`
+
+Shows your reading list of all saved entries.
+
+Format: `list`
+
 ////
+Shows your reading list of saved entries, optionally finding entries with titles containing any of the given keywords, and filtering by read status, date added and tags.
+
+Format: `list [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY]`
+
+****
+- The search is case insensitive. e.g `hans` will match `Hans`
+- Keywords are comma separated. e.g. `Hello world, foo bar`
+- The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
+- Only the title is searched.
+- Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
+- entries matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
+****
+
+Examples:
+
+- `list` Lists all entries
+- `list Apple r/read tech` Lists entries with titles containing `apple` which are already read and tagged with `Tech`
+- `list Trump` Lists entries with titles containing `trump` and `Donald Trump` etc.
+- `list r/unread` Lists only unread entries
+- `list t/Tech` Lists entries tagged with “Tech”
+- `list t/` Lists untagged entries
+////
+
+=== Showing archived entries: `archives` `[coming in v2.0]`
+
+Shows a list of archived entries, optionally finding entries with titles containing any of the given keywords, and filtering by read status, date added and tags.
+
+Format: `archives [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]...`
+
+****
+- The search is case insensitive. e.g `hans` will match `Hans`
+- Keywords are comma separated. e.g. `Hello world, foo bar`
+- The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
+- Only the title is searched.
+- Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
+- entries matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
+****
+
+Examples:
+
+- `archives` Lists all archived entries
+- `archives Apple r/read t/Tech` Lists archived entries with titles containing `apple` which are already read and tagged with `Tech`
+- `archives Trump` Lists archived entries with titles containing `trump` and `Donald Trump` etc.
+- `archives r/unread` Lists only unread archived entries
+- `archives t/Tech` Lists archived entries tagged with “Tech”
+- `archives t/` Lists untagged archived entries
+
+=== Searching online for entries: `search` `[coming in v2.0]`
+
+Searches online for entries that you can subsequently add.
+
+Format: `search [KEYWORD]...`
+Format: `search FEED_URL`
+Format: `search ARTICLE_URL`
+
+Examples:
+
+- `search` Returns top headlines
+- `search Trump` Returns entries containing the `Trump` keyword
+- `search https://live.engadget.com/rss.xml` Returns entries from this feed
+- `search https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Returns all entries from this article
+
+=== Showing feeds: `feeds` `[coming in v2.0]`
+
+Shows a list of feeds being followed.
+
+Format: `feeds [t/TAG]...`
+
+Examples:
+
+- `feeds` Lists all feeds
+- `feeds t/Business` Lists all feeds tagged with “Business”
+
+=== Searching online for feeds: `searchfeeds` `[coming in v2.0]`
+
+Searches online for feeds that you can subsequently follow.
+
+Format: `searchfeeds [KEYWORD]...`
+
+Examples:
+
+- `searchfeeds` Shows some starter feeds you can add
+- `searchfeeds Tech Business` Searches for `Tech` or `Business` feeds
+
+=== Showing reading statistics: `stats` `[coming in v2.0]`
+
+Shows helpful and fun statistics about your reading progress and habits.
+
+Format: `stats`
+
+== In `list` context (displays entry list)
+
+=== Adding a single entry: `add` `[updated v1.2]`
+
+Adds a single entry from a link URL to your reading list.
+Content is automatically downloaded onto your personal computer.
+
+Format: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+
+[TIP]
+The `Title` and `Description` fields are automatically filled if you do not provide them.
+[TIP]
+A entry can have any number of tags (including 0).
+
+Examples:
+
+- `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
+Adds a single entry with a description and tagged with “Business”
+
+=== Adding entries from a web feed: `feed` `[since v1.2]`
+
+Adds all entries from a web feed to your reading list. 
+Content is automatically downloaded onto your personal computer.
+
+Format: `feed FEED_URL`
+
+[WARNING]
+The application may freeze for a short time as it downloads content onto disk.
+
+Examples:
+
+- `feed http://rss.nytimes.com/services/xml/rss/nyt/World.xml` +
+Adds all the entries from the New York Times world news feed to your reading list.
+
+=== Editing an entry: `edit`
+
+Edits an existing entry in the reading list.
+
+Format: `edit INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [s/STATUS]  [t/TAG]...`
+
+****
+- Edits the entry at the specified `INDEX`. The index refers to the index number shown in the displayed entry list. The index *must be a positive integer* 1, 2, 3, ...
+- At least one of the optional fields must be provided.
+- Existing values will be updated to the input values.
+- When editing tags, the existing tags of the entry will be removed i.e adding of tags is not cumulative.
+- You can remove all the entry's tags by typing `t/` without specifying any tags after it.
+****
+
+Examples:
+
+* `edit 1 ti/Software Design Patterns d/Useful for software engineering project.` +
+Edits the title and description of the 1st entry to be `Software Design Patterns` and `Useful for software engineering project.` respectively.
+* `edit 2 t/` +
+Clears all existing tags from the 2nd entry.
+
+=== Finding entries by title: `find`
+
+Finds entries whose titles contain any of the given keywords. +
+
+Format: `find KEYWORD [MORE_KEYWORDS]`
+
+****
+* The search is case insensitive. e.g `hans` will match `Hans`
+* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* Only the name is searched.
+* Only full words will be matched e.g. `Han` will not match `Hans`
+* Entries matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+****
+
+Examples:
+
+* `find Trump` +
+Returns entries with titles containing `trump` and `Donald Trump` etc.
+* `find Boeing FAA` +
+Returns any entry having titles `Boeing` or `FAA`
+
+=== Selecting an entry: `select`
+
+Selects the entry identified by the index number used in the displayed entry list for reading.
+
+Format: `select INDEX`
+
+****
+- Selects the entry at the specified `INDEX` for reading.
+- The index refers to the index number shown in the displayed entry list.
+- The index *must be a positive integer* 1`, 2, 3, ...`
+****
+
+Examples:
+
+* `list` +
+`select 2` +
+Selects the 2nd entry in the reading list for reading.
+* `find Trump` +
+`select 1` +
+Selects the 1st entry in the results of the `find` command for reading.
+
+=== Changing the view mode: `view` `[since v1.2]`
+
+Changes the view mode between the original browser or a more comfortable reading experience.
+
+Format: `view MODE(browser, reader)`
+// Format: `view MODE [s/style] [o/options]`
+
+Examples:
+
+* `view browser` +
+Switches to browser view mode
+* `view reader` +
+Switches to a clean and clutter-free reader view mode for a more comfortable reading experience
+// - `view reader s/dark` Use reader view with dark style
+// - `view reader o/fullscreen` Use reader view with maximised window
+// - `view reader s/solarized o/fullscreen` Use reader view with "Solarized" style and maximised window
+
+=== Listing links in current web page: `links` `[coming in v2.0]`
+
+Lists all the links in the current web page and switches context to `search`. +
+Equivalent to `search CURRENT_WEB_PAGE`.
+
+Format: `links`
+
+=== Redownloading an entry: `redownload` `[coming in v2.0]`
+
+Redownload the specified entry to get the latest version of its content.
+
+Format: `redownload INDEX`
+
+****
+* Refreshes the content of the entry at the specified `INDEX`.
+* The index refers to the index number shown in the displayed entry list.
+* The index *must be a positive integer* 1, 2, 3, ...
+****
+
+Examples:
+
+* `list` +
+`redownload 2` +
+Refreshes the content of the 2nd entry in the reading list.
+
+=== Marking an entry as read: `read` `[coming in v2.0]`
+
+Marks the specified entry as read.
+
+Format: `read INDEX`
+
+****
+* Marks as read the entry at the specified `INDEX`.
+* The index refers to the index number shown in the displayed entry list.
+* The index *must be a positive integer* 1, 2, 3, ...
+****
+
+Examples:
+
+* `list` +
+`read 2` +
+Marks as read the 2nd entry in the reading list.
+
+=== Marking an entry as unread: `unread` `[coming in v2.0]`
+
+Marks the specified entry as unread.
+
+Format: `unread INDEX`
+
+****
+* Marks as unread the entry at the specified `INDEX`.
+* The index refers to the index number shown in the displayed entry list.
+* The index *must be a positive integer* 1, 2, 3, ...
+****
+
+Examples:
+
+* `list` +
+`unread 2` +
+Marks as unread the 2nd entry in the reading list.
+
+=== Sharing an entry: `share` `[coming in v2.0]`
+
+Shares the specified entry through connected social media.
+
+Format: `share INDEX`
+
+=== Archiving an entry: `archive` `[coming in v2.0]`
+
+Moves the specified entry to the archive and removes its downloaded content.
+
+Format: `archive INDEX`
+
+****
+* Archives the entry at the specified `INDEX`.
+* The index refers to the index number shown in the displayed entry list.
+* The index *must be a positive integer* 1, 2, 3, ...
+****
+
+Examples:
+
+* `list` +
+`archive 2` +
+Moves the 2nd entry in the reading list to the archive and removes its downloaded content.
+
+=== Deleting an entry: `delete`
+
+Deletes the specified entry from the reading list.
+
+Format: `delete INDEX`
+
+****
+* Deletes the entry at the specified `INDEX`.
+* The index refers to the index number shown in the displayed entry list.
+* The index *must be a positive integer* 1, 2, 3, ...
+****
+
+Examples:
+
+* `list` +
+`delete 2` +
+Deletes the 2nd entry in the reading list.
+* `find Trump` +
+`delete 1` +
+Deletes the 1st entry in the results of the `find` command.
+
+=== Clearing all entries : `clear`
+
+Clears all saved entries from the manager.
+
+Format: `clear`
+
+== In `archives` context (displays entry list) `[all coming in v2.0]`
+
+=== Unarchiving entries: `unarchive`
+Adds the entries back to the entry list and downloads their content onto disk.
+
+Format: `unarchive INDICES`
+
+Format: `unarchive all`
+
+Examples:
+
+- `unarchive all` Unarchives all shown entries
+- `unarchive 1,2,4-6` Unarchives the 1st, 2nd and 4th to 6th entries
+
+=== Deleting an archived entry: `delete`
+Deletes specified archived entries from the manager.
+
+Format: `delete INDICES`
+
+****
+- Deletes the entries at the specified `INDICES`.
+- The index refers to the index number shown in the displayed entry list.
+- The index *must be a positive integer* 1, 2, 3, ...
+****
+
+Format: `delete all`
+
+****
+- Deletes all shown entries
+****
+
+Examples:
+
+- `delete 1,2-6` Deletes the 1st, and 2nd to 6th entries
+
+=== Clearing all entries : `clear`
+Clears all archived entries from the manager.
+
+Format: `clear`
+
+== In `search` context (displays entry list) `[all coming in v2.0]`
+
+=== Adding entries: `add`
+
+Adds entries from search results to the manager. Content is automatically downloaded to disk.
+
+Format: `add INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+
+Format: `add INDICES [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+
+Format: `add all`
+
+[TIP]
+====
+A entry can have any number of tags (including 0).
+Title will be automatically filled by parsing the entry if you do not provide it.
+====
+
+Examples:
+
+- `add 1 c/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business”
+- `add 4-6 c/read by Monday t/School` Adds the 4th to 6th entries with the same description and tagged with “School"
+
+=== Selecting a entry: `select`
+
+Selects the entry identified by the index number used in the displayed entry list for viewing.
+
+Format: `select INDEX`
+
+****
+- Selects the entry and loads the content of the entry at the specified `INDEX`.
+- The index refers to the index number shown in the displayed entry list.
+- The index *must be a positive integer* 1`, 2, 3, ...`
+****
+
+Examples:
+
+- `select 2` Selects the 2nd entry in the manager
+
+=== Changing the viewing mode: `view`
+
+Changes the viewing mode between the original browser view or a more comfortable reading experience.
+
+Format: `view MODE [s/style] [o/options]`
+
+Examples:
+
+- `view browser` Use browser view
+- `view reader` Use reader view
+- `view reader s/dark` Use reader view with dark style
+- `view reader o/fullscreen` Use reader view with maximised window
+- `view reader s/solarized o/fullscreen` Use reader view with "Solarized" style and maximised window
+
+== In `feeds` context (displays feed list) `[all coming in v2.0]`
+
+=== Adding a feed: `add`
+
+Adds a feed to the manager and subscribes to updates.
+
+Format: `add URL [n/NAME] [t/TAG]...`
+
+[TIP]
+====
+A feed can have any number of tags (including 0)
+====
+
+Examples:
+
+- `add https://www.engadget.com/rss.xml n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with “Tech”
+
+=== Updating entries from feeds: `update`
+
+Refreshes all feeds.
+
+Format: `update INDICES`
+
+Format: `update all`
+
+Examples:
+
+- `update all` Updates entries from all feeds
+- `update 2` Updates entries from the 2nd feed
+
+=== Selecting a feed: `select`
+
+Selects the feed identified by the index number used in the displayed feed list and displays its entries.
+
+Format: `select INDEX`
+
+****
+- Selects the feed and displays its entries.
+- Equivalent to `search [URL_OF_INDEXED_FEED]`
+- The index refers to the index number shown in the displayed feed list.
+- The index *must be a positive integer* 1`, 2, 3, ...`
+****
+
+Examples:
+
+- `select 2` Selects the 2nd feed in the manager and displays its entries
+
+=== Editing a feed: `edit`
+
+Edits an existing feed in the manager.
+
+Format: `edit INDEX [u/URL] [n/NAME] [t/TAG]...`
+
+****
+- Edits the feed at the specified `INDEX`. The index refers to the index number shown in the displayed feed list. The index *must be a positive integer* 1, 2, 3, ...
+- At least one of the optional fields must be provided.
+- Existing values will be updated to the input values.
+- When editing tags, the existing tags of the feed will be removed i.e adding of tags is not cumulative.
+- You can remove all the feed’s tags by typing `t/` without specifying any tags after it.
+****
+
+Examples:
+
+- `edit 1 n/HackerNews` Edits the name of the 1st feed
+- `edit 2 t/` Clears all existing tags from the 2nd feed
+
+=== Deleting a feed: `delete`
+
+Deletes the specified feeds from the manager and unsubscribes from them, but existing entries obtained from that feed will not be deleted.
+
+Format: `delete INDICES`
+
+****
+- Deletes the feeds at the specified indices.
+- The index refers to the index number shown in the displayed feed list.
+- The index *must be a positive integer* 1, 2, 3, ...
+****
+
+Format: `delete all`
+
+Examples:
+
+- `delete all` Deletes all shown feeds
+- `delete 2` Deletes the 2nd feed
+
+=== Clearing all feeds : `clear`
+Clears all followed feeds from the manager.
+
+Format: `clear`
+
+== In `searchfeeds` context (displays feed list) `[all coming in v2.0]`
+
+=== Adding a feed: `add`
+
+Adds a feed from the search results to the manager and subscribes to updates.
+
+Format: `add INDEX [n/NAME] [t/TAG]...`
+
+Format: `add INDICES [t/TAG]...`
+
+Format: `add all`
+
+[TIP]
+====
+A feed can have any number of tags (including 0)
+====
+
+Examples:
+
+- `add all` Adds all shown feeds
+- `add 1 n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with `Tech`
+- `add 5-9 t/Work` Adds the 5th to 9th feeds whose entries will be tagged with `Work`
+
+=== Selecting a feed: `select`
+
+Selects the feed identified by the index number used in the displayed feed list and displays its entries.
+
+Format: `select INDEX`
+
+****
+- Selects the feed and displays its entries.
+- Equivalent to `search [URL_OF_INDEXED_FEED]`
+- The index refers to the index number shown in the displayed feed list.
+- The index *must be a positive integer* 1`, 2, 3, ...`
+****
+
+Examples:
+
+- `select 2` Selects the 2nd feed in the manager and displays its entries
 
 == FAQ
 
