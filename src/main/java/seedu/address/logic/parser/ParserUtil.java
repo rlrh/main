@@ -32,7 +32,7 @@ public class ParserUtil {
         String trimmedIndex = oneBasedIndex.trim();
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
             throw new ParseException(MESSAGE_INVALID_INDEX
-                + " You entered: [" + oneBasedIndex + "].");
+                + " Entered: [" + oneBasedIndex + "].");
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
     }
