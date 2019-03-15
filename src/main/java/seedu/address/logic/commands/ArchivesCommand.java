@@ -13,13 +13,13 @@ public class ArchivesCommand extends Command {
     public static final String COMMAND_WORD = "archives";
     public static final String COMMAND_ALIAS = "archs";
 
-    public static final String MESSAGE_SUCCESS = "Listed all entries in archives";
+    public static final String MESSAGE_SUCCESS = "Context switched to archive-context. Listed all entries in archives.";
 
 
     @Override
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
-        // TODO: Does nothing for now
+        model.setContext(Model.PARSER_CONTEXT_ARCHIVE);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

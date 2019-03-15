@@ -10,6 +10,8 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.parser.EntryBookArchivesParser;
+import seedu.address.logic.parser.EntryBookListParser;
 import seedu.address.logic.parser.EntryBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -25,19 +27,32 @@ public class LogicManager implements Logic {
 
     private final Model model;
     private final CommandHistory history;
-    private final EntryBookParser entryBookParser;
 
     public LogicManager(Model model) {
         this.model = model;
         history = new CommandHistory();
-        entryBookParser = new EntryBookParser();
     }
 
     @Override
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
+        EntryBookParser entryBookParser;
         CommandResult commandResult;
+
+        switch (model.getContext()) {
+        case Model.PARSER_CONTEXT_LIST:
+            entryBookParser = new EntryBookListParser();
+            break;
+
+        case Model.PARSER_CONTEXT_ARCHIVE:
+            entryBookParser = new EntryBookArchivesParser();
+            break;
+
+        default:
+            entryBookParser = new EntryBookParser();
+        }
+
         try {
             Command command = entryBookParser.parseCommand(commandText);
             commandResult = command.execute(model, history);

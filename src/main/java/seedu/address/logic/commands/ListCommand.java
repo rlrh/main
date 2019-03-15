@@ -14,12 +14,13 @@ public class ListCommand extends Command {
     public static final String COMMAND_WORD = "list";
     public static final String COMMAND_ALIAS = "l";
 
-    public static final String MESSAGE_SUCCESS = "Listed all entries";
+    public static final String MESSAGE_SUCCESS = "Context switched to list-context. Listed all entries";
 
 
     @Override
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
+        model.setContext(Model.PARSER_CONTEXT_LIST);
         model.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(MESSAGE_SUCCESS);
     }

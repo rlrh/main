@@ -251,6 +251,16 @@ public class AddCommandTest {
         public Model clone() {
             return this;
         }
+
+        @Override
+        public int getContext() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setContext(int context) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**

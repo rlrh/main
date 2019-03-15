@@ -35,11 +35,11 @@ import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
 import seedu.address.ui.ViewMode;
 
-public class EntryBookParserTest {
+public class EntryBookListParserTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private final EntryBookParser parser = new EntryBookParser();
+    private final EntryBookListParser parser = new EntryBookListParser();
 
     @Test
     public void parseCommand_add() throws Exception {
