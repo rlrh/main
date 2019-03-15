@@ -23,6 +23,8 @@ import seedu.address.ui.ViewMode;
 public class LogicManager implements Logic {
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
+    private int state = Logic.PARSER_CONTEXT_LIST;
+
     private final Model model;
     private final CommandHistory history;
     private final EntryBookParser entryBookParser;
