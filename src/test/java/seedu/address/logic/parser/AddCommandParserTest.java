@@ -5,10 +5,15 @@ import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_BOB;
@@ -114,27 +119,27 @@ public class AddCommandParserTest {
     public void parse_invalidValue_failure() {
         // invalid name
         assertParseFailure(parser, INVALID_TITLE_DESC + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB
-                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Title.MESSAGE_CONSTRAINTS);
+                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         // invalid phone
         assertParseFailure(parser, TITLE_DESC_BOB + INVALID_DESCRIPTION_DESC + LINK_DESC_BOB + ADDRESS_DESC_BOB
-                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Description.MESSAGE_CONSTRAINTS);
+                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         // invalid email
         assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + INVALID_LINK_DESC + ADDRESS_DESC_BOB
-                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Link.MESSAGE_CONSTRAINTS);
+                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Link.formExceptionMessage(INVALID_LINK.trim()));
 
         // invalid address
         assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + INVALID_ADDRESS_DESC
-                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Address.MESSAGE_CONSTRAINTS);
+                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Address.formExceptionMessage(INVALID_ADDRESS.trim()));
 
         // invalid tag
         assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB
-                + INVALID_TAG_DESC + VALID_TAG_TECH, Tag.MESSAGE_CONSTRAINTS);
+                + INVALID_TAG_DESC, Tag.formExceptionMessage(INVALID_TAG.trim()));
 
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, INVALID_TITLE_DESC + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + INVALID_ADDRESS_DESC,
-                Title.MESSAGE_CONSTRAINTS);
+                Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB

@@ -6,9 +6,13 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_BOB;
@@ -141,17 +145,17 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid title -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + INVALID_TITLE_DESC,
-                Title.MESSAGE_CONSTRAINTS);
+                Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         /* Case: invalid description -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + INVALID_DESCRIPTION_DESC,
-                Description.MESSAGE_CONSTRAINTS);
+                Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         /* Case: invalid link -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + INVALID_LINK_DESC,
-                Link.MESSAGE_CONSTRAINTS);
+                Link.formExceptionMessage(INVALID_LINK.trim()));
 
         // To be deprecated
         /* Case: invalid address -> rejected
@@ -163,7 +167,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid tag -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + INVALID_TAG_DESC,
-                Tag.MESSAGE_CONSTRAINTS);
+                Tag.formExceptionMessage(INVALID_TAG.trim()));
 
         /* Case: edit a entry with new values same as another entry's values -> rejected */
         executeCommand(EntryUtil.getAddCommand(BOB));

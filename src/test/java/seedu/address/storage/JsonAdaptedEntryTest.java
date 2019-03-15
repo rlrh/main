@@ -38,16 +38,13 @@ public class JsonAdaptedEntryTest {
         assertEquals(BENSON, entry.toModelType());
     }
 
-    // Any string is a valid title
-    /*
     @Test
     public void toModelType_invalidTitle_throwsIllegalValueException() {
         JsonAdaptedEntry entry =
                 new JsonAdaptedEntry(INVALID_TITLE, VALID_DESCRIPTION, VALID_LINK, VALID_ADDRESS, VALID_TAGS);
-        String expectedMessage = Title.MESSAGE_CONSTRAINTS;
+        String expectedMessage = Title.formExceptionMessage(INVALID_TITLE);
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
-    */
 
     @Test
     public void toModelType_nullTitle_throwsIllegalValueException() {
@@ -56,16 +53,13 @@ public class JsonAdaptedEntryTest {
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
 
-    // Any string is a valid description
-    /*
     @Test
     public void toModelType_invalidDescription_throwsIllegalValueException() {
         JsonAdaptedEntry entry =
-                new JsonAdaptedEntry(VALID_TITLE, INVALID_DESCRIPTION, VALID_LINK, VALID_ADDRESS, VALID_TAGS);
-        String expectedMessage = Description.MESSAGE_CONSTRAINTS;
+            new JsonAdaptedEntry(VALID_TITLE, INVALID_DESCRIPTION, VALID_LINK, VALID_ADDRESS, VALID_TAGS);
+        String expectedMessage = Description.formExceptionMessage(INVALID_DESCRIPTION);
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
-    */
 
     @Test
     public void toModelType_nullDescription_throwsIllegalValueException() {
@@ -78,7 +72,7 @@ public class JsonAdaptedEntryTest {
     public void toModelType_invalidLink_throwsIllegalValueException() {
         JsonAdaptedEntry entry =
                 new JsonAdaptedEntry(VALID_TITLE, VALID_DESCRIPTION, INVALID_LINK, VALID_ADDRESS, VALID_TAGS);
-        String expectedMessage = Link.MESSAGE_CONSTRAINTS;
+        String expectedMessage = Link.formExceptionMessage(INVALID_LINK);
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
 
@@ -89,16 +83,13 @@ public class JsonAdaptedEntryTest {
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
 
-    // Any string is a valid address
-    /*
     @Test
     public void toModelType_invalidAddress_throwsIllegalValueException() {
         JsonAdaptedEntry entry =
                 new JsonAdaptedEntry(VALID_TITLE, VALID_DESCRIPTION, VALID_LINK, INVALID_ADDRESS, VALID_TAGS);
-        String expectedMessage = Address.MESSAGE_CONSTRAINTS;
+        String expectedMessage = Address.formExceptionMessage(INVALID_ADDRESS);
         Assert.assertThrows(IllegalValueException.class, expectedMessage, entry::toModelType);
     }
-    */
 
     @Test
     public void toModelType_nullAddress_throwsIllegalValueException() {

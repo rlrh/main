@@ -48,11 +48,21 @@ public class CommandTestUtil {
     public static final String TAG_DESC_TECH = " " + PREFIX_TAG + VALID_TAG_TECH;
     public static final String TAG_DESC_SCIENCE = " " + PREFIX_TAG + VALID_TAG_SCIENCE;
 
-    public static final String INVALID_TITLE_DESC = " " + PREFIX_TITLE + " "; // string starting with space not allowed
-    public static final String INVALID_DESCRIPTION_DESC = " " + PREFIX_DESCRIPTION; // empty string not allowed
-    public static final String INVALID_LINK_DESC = " " + PREFIX_LINK + "bob.yahoo.com"; // missing protocol
-    public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
-    public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "tech*"; // '*' not allowed in tags
+    // string starting with space not allowed
+    public static final String INVALID_TITLE = " ";
+    public static final String INVALID_TITLE_DESC = " " + PREFIX_TITLE + INVALID_TITLE;
+    // string starting with space not allowed
+    public static final String INVALID_DESCRIPTION = " ";
+    public static final String INVALID_DESCRIPTION_DESC = " " + PREFIX_DESCRIPTION + INVALID_DESCRIPTION;
+    // missing protocol
+    public static final String INVALID_LINK = "bob.yahoo.com";
+    public static final String INVALID_LINK_DESC = " " + PREFIX_LINK + INVALID_LINK;
+    // string starting with space not allowed
+    public static final String INVALID_ADDRESS = " ";
+    public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS + INVALID_ADDRESS;
+    // '*' not allowed in tags
+    public static final String INVALID_TAG = "tech*";
+    public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + INVALID_TAG;
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
