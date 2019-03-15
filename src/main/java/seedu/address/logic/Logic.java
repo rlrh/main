@@ -16,9 +16,6 @@ import seedu.address.ui.ViewMode;
  * API of the Logic component
  */
 public interface Logic {
-    static int PARSER_CONTEXT_LIST = 0;
-    static int PARSER_CONTEXT_ARCHIVE = 1;
-
     /**
      * Executes the command and returns the result.
      * @param commandText The command as entered by the user.

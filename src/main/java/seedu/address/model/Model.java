@@ -181,4 +181,15 @@ public interface Model {
      * Mainly created because clone is needed a lot in tests.
      */
     Model clone();
+
+    /**
+     * Returns the context of the Model.
+     */
+    int getContext();
+
+    /**
+     * Sets the context of the Model.
+     * @param context
+     */
+    void setContext(int context);
 }

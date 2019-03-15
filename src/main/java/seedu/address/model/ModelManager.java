@@ -31,7 +31,12 @@ import seedu.address.ui.ViewMode;
 public class ModelManager implements Model {
     public static final String FILE_OPS_ERROR_MESSAGE = "Could not save data to file: ";
 
+    public static final int PARSER_CONTEXT_LIST = 0;
+    public static final int PARSER_CONTEXT_ARCHIVE = 1;
+
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
+
+    private int context = PARSER_CONTEXT_LIST;
 
     private final EntryBook entryBook;
     private final UserPrefs userPrefs;
@@ -331,4 +336,13 @@ public class ModelManager implements Model {
         return new ModelManager(this.entryBook, this.userPrefs, this.storage);
     }
 
+    @Override
+    public void setContext(int context) {
+        this.context = context;
+    }
+
+    @Override
+    public int getContext() {
+        return context;
+    }
 }
