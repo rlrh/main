@@ -12,8 +12,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import org.apache.commons.text.WordUtils;
+
 import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.ArticleExtractor;
+import com.google.common.io.Files;
 
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
@@ -23,6 +26,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.ParserUtil;
@@ -146,28 +150,56 @@ public class ModelManager implements Model {
     @Override
     public Entry addEntry(Entry entry) {
 
-        // Represents a string that tries out replacement candidates and accepts suitable ones
-        class CandidateString {
+        /**
+         * Represents an object that tries out replacement candidates and accepts suitable ones
+         */
+        abstract class Candidate<T> {
+            abstract void tryout(String candidate);
+            abstract T get();
+        }
 
-            private String value;
-
-            private CandidateString(String initialValue) {
-                this.value = initialValue;
+        /**
+         * Represents a title that tries out replacement candidates and accepts suitable ones
+         */
+        class CandidateTitle extends Candidate<Title> {
+            private Title value;
+            private CandidateTitle() {
+                value = new Title("Untitled");
             }
-
-            private void tryout(String candidate) {
-                requireNonNull(candidate);
-                String trimmedCandidate = candidate.trim();
-                if (!trimmedCandidate.isEmpty()) {
-                    this.value = trimmedCandidate;
+            @Override
+            void tryout(String candidate) {
+                try {
+                    value = ParserUtil.parseTitle(Optional.of(candidate));
+                } catch (ParseException pe) {
+                    logger.warning("Failed to replace title candidate. " + pe.getMessage());
                 }
             }
-
             @Override
-            public String toString() {
+            Title get() {
                 return this.value;
             }
+        }
 
+        /**
+         * Represents a description that tries out replacement candidates and accepts suitable ones
+         */
+        class CandidateDescription extends Candidate<Description> {
+            private Description value;
+            private CandidateDescription() {
+                value = new Description("No description");
+            }
+            @Override
+            void tryout(String candidate) {
+                try {
+                    value = ParserUtil.parseDescription(Optional.of(candidate));
+                } catch (ParseException pe) {
+                    logger.warning("Failed to replace description candidate. " + pe.getMessage());
+                }
+            }
+            @Override
+            Description get() {
+                return this.value;
+            }
         }
 
         // Initial data
@@ -177,22 +209,20 @@ public class ModelManager implements Model {
         final boolean noTitleOrDescription = title.isEmpty() || description.isEmpty();
 
         // Candidates to replace empty title and description
-        CandidateString candidateTitle = new CandidateString("Untitled");
-        CandidateString candidateDescription = new CandidateString("No description");
+        Candidate<Title> candidateTitle = new CandidateTitle();
+        Candidate<Description> candidateDescription = new CandidateDescription();
 
         // 2nd choice - extract candidates just from URL
         if (noTitleOrDescription) {
             try {
                 URL url = new URL(urlString);
-                candidateTitle.tryout(url
-                        .getFile()
-                        .replaceAll("[^a-zA-Z0-9]+"," ")
-                        .trim()
-                ); // second choice - cleaned up file name
-                candidateDescription.tryout(url
-                        .getHost()
-                        .trim()
-                ); // third choice - host name
+                String baseName = Files.getNameWithoutExtension(url.getPath())
+                        .replaceAll("\n", "") // remove newline chars
+                        .replaceAll("\r", "") // remove carriage return chars
+                        .replaceAll("[^a-zA-Z0-9]+", " ") // replace special chars with spaces
+                        .trim();
+                candidateTitle.tryout(WordUtils.capitalizeFully(baseName)); // title 2nd choice - cleaned up file name
+                candidateDescription.tryout(url.getHost().trim()); // desc 3rd choice - host name
             } catch (MalformedURLException mue) {
                 // Do nothing if URL is malformed
                 logger.warning("Malformed URL: " + urlString);
@@ -212,13 +242,10 @@ public class ModelManager implements Model {
                         .extractMetadata()
                         .extractContent()
                         .article();
-                candidateTitle.tryout(article.title); // 1st choice - extract title
-                candidateDescription.tryout(article
-                        .document
-                        .text()
-                        .substring(0, Math.min(128, article.document.text().length()))
-                ); // 2nd choice - first 128 chars of document body text
-                candidateDescription.tryout(article.description); // 1st choice - extract description
+                candidateTitle.tryout(article.title); // title 1st choice - extract title
+                candidateDescription.tryout(StringUtil.getFirstNWords(article.document.text(), 20)
+                        .concat("…")); // desc 2nd choice - first 20 words of document body text
+                candidateDescription.tryout(article.description); // desc 1st choice - extract description
             }
 
         } catch (IOException ioe) {
@@ -226,27 +253,14 @@ public class ModelManager implements Model {
             logger.warning("Failed to fetch URL: " + urlString);
         }
 
-        // Replace empty title with best candidate
-        try {
-            if (title.isEmpty()) {
-                title = ParserUtil.parseTitle(Optional.of(candidateTitle.toString()));
-            }
-        } catch (ParseException pe) {
-            // Do not replace existing title if exception is thrown
-            logger.warning("Failed to replace title. " + pe.getMessage());
+        // Replace empty title or description with best candidate
+        if (title.isEmpty()) {
+            title = candidateTitle.get();
         }
-
-        // Replace empty description with best candidate
-        try {
-            if (description.isEmpty()) {
-                description = ParserUtil.parseDescription(Optional.of(candidateDescription.toString()));
-            }
-        } catch (ParseException pe) {
-            // Do not replace existing description if exception is thrown
-            logger.warning("Failed to replace description. " + pe.getMessage());
+        if (description.isEmpty()) {
+            description = candidateDescription.get();
         }
-
-        // Update entry with best title and description candidates and add it to entry book
+        // Add entry with updated title and description to entry book
         Entry newEntry = new Entry(title, description, entry.getLink(), entry.getAddress(), entry.getTags());
         entryBook.addPerson(newEntry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
