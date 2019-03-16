@@ -4,10 +4,16 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+
+import com.chimbori.crux.articles.Article;
+import com.chimbori.crux.articles.ArticleExtractor;
 
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
@@ -19,7 +25,11 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.parser.ParserUtil;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
+import seedu.address.model.entry.Title;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 import seedu.address.network.Network;
 import seedu.address.storage.Storage;
@@ -134,15 +144,125 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void addEntry(Entry entry) {
-        entryBook.addPerson(entry);
-        try {
-            byte[] articleContent = Network.fetchAsBytes(entry.getLink().value);
-            storage.addArticle(entry.getLink().value, articleContent);
-        } catch (IOException ioe) {
-            // Do nothing if we fail to fetch the page.
+    public Entry addEntry(Entry entry) {
+
+        // Represents a string that tries out replacement candidates and accepts suitable ones
+        class CandidateString {
+
+            private String value;
+
+            private CandidateString(String initialValue) {
+                this.value = initialValue;
+            }
+
+            private void tryout(String candidate) {
+                try {
+                    requireNonNull(candidate);
+                    String trimmedCandidate = candidate.trim();
+                    if (!trimmedCandidate.isEmpty()) {
+                        this.value = trimmedCandidate;
+                    }
+                } catch (NullPointerException npe) {
+
+                }
+            }
+
+            @Override
+            public String toString() {
+                return this.value;
+            }
+
         }
+
+        // Initial data
+        Title title = entry.getTitle();
+        Description description = entry.getDescription();
+        final String urlString = entry.getLink().value;
+        final boolean noTitleOrDescription = title.isEmpty() || description.isEmpty();
+
+        // Candidates to replace empty title and description
+        CandidateString candidateTitle = new CandidateString("Untitled");
+        CandidateString candidateDescription = new CandidateString("No description");
+
+        // 2nd choice - extract candidates just from URL
+        if (noTitleOrDescription) {
+            try {
+                URL url = new URL(urlString);
+                candidateTitle.tryout(url
+                        .getFile()
+                        .replaceAll("[^a-zA-Z0-9]+"," ")
+                        .trim()
+                ); // second choice - cleaned up file name
+                candidateDescription.tryout(url
+                        .getHost()
+                        .trim()
+                ); // third choice - host name
+            } catch (MalformedURLException mue) {
+                // Do nothing if URL is malformed
+                logger.warning("Malformed URL: " + urlString);
+            }
+        }
+
+        try {
+
+            // Download article content to local storage
+            byte[] articleContent = Network.fetchAsBytes(urlString);
+            storage.addArticle(urlString, articleContent);
+
+            // 1st choice - extract candidates by processing through Crux
+            if (noTitleOrDescription) {
+                String rawHtml = new String(articleContent);
+                Article article = ArticleExtractor.with(urlString, rawHtml)
+                        .extractMetadata()
+                        .extractContent()
+                        .article();
+                candidateTitle.tryout(article.title); // 1st choice - extract title
+                candidateDescription.tryout(article
+                        .document
+                        .text()
+                        .substring(0, Math.min(128, article.document.text().length()))
+                ); // 2nd choice - first 128 chars of document body text
+                candidateDescription.tryout(article.description); // 1st choice - extract description
+            }
+
+        } catch (IOException ioe) {
+            // Do nothing if fail to fetch the page
+            logger.warning("Failed to fetch URL: " + urlString);
+        }
+
+        // Replace empty title with best candidate
+        try {
+            if (title.isEmpty()) {
+                title = ParserUtil.parseTitle(Optional.of(candidateTitle.toString()));
+            }
+        } catch (ParseException pe) {
+            // Do not replace existing title if exception is thrown
+            logger.warning("Failed to replace title. " + pe.getMessage());
+        }
+
+        // Replace empty description with best candidate
+        try {
+            if (description.isEmpty()) {
+                description = ParserUtil.parseDescription(Optional.of(candidateDescription.toString()));
+            }
+        } catch (ParseException pe) {
+            // Do not replace existing description if exception is thrown
+            logger.warning("Failed to replace description. " + pe.getMessage());
+        }
+
+        // Update entry with best title and description candidates and add it to entry book
+        Entry newEntry = new Entry(title, description, entry.getLink(), entry.getAddress(), entry.getTags());
+        entryBook.addPerson(newEntry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+
+        // Return defensive copy of updated entry
+        return new Entry(
+                newEntry.getTitle(),
+                newEntry.getDescription(),
+                newEntry.getLink(),
+                newEntry.getAddress(),
+                newEntry.getTags()
+        );
     }
 
     @Override

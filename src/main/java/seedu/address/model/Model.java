@@ -85,7 +85,7 @@ public interface Model {
      * Adds the given entry.
      * {@code entry} must not already exist in the entry book.
      */
-    void addEntry(Entry entry);
+    Entry addEntry(Entry entry);
 
     /**
      * Replaces the given entry {@code target} with {@code editedEntry}.
