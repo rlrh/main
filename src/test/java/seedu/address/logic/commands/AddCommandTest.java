@@ -143,7 +143,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addEntry(Entry entry) {
+        public Entry addEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -284,9 +284,10 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addEntry(Entry entry) {
+        public Entry addEntry(Entry entry) {
             requireNonNull(entry);
             personsAdded.add(entry);
+            return entry;
         }
 
         @Override
