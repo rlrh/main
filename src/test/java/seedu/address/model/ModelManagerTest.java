@@ -9,6 +9,10 @@ import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.FILE_TEST_CONTENTS;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_DESCRIPTION;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRIPTION;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_FINAL;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_HTTPS_LINK;
 
@@ -133,6 +137,30 @@ public class ModelManagerTest {
     public void hasPerson_personInAddressBook_returnsTrue() {
         modelManager.addEntry(ALICE);
         assertTrue(modelManager.hasEntry(ALICE));
+    }
+
+    @Test
+    public void addEntry_stubEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() {
+        modelManager.addEntry(STUB_LINK_NO_TITLE_NO_DESCRIPTION);
+        assertTrue(modelManager.hasEntryEqualTo(STUB_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_stubEntryHasNoTitle_titleReplaced() {
+        modelManager.addEntry(STUB_LINK_NO_TITLE);
+        assertTrue(modelManager.hasEntryEqualTo(STUB_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_stubEntryHasNoDescription_descriptionReplaced() {
+        modelManager.addEntry(STUB_LINK_NO_DESCRIPTION);
+        assertTrue(modelManager.hasEntryEqualTo(STUB_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_stubEntryHasTitleAndDescription_noChange() {
+        modelManager.addEntry(STUB_LINK_FINAL);
+        assertTrue(modelManager.hasEntryEqualTo(STUB_LINK_FINAL));
     }
 
     @Test

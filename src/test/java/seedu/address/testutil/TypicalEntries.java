@@ -100,6 +100,31 @@ public class TypicalEntries {
             .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH)
             .build();
 
+    // For testing of Model#addEntry
+    public static final String STUB_LINK_URL = "http://www.description.test/title/title_test.html";
+    public static final String STUB_LINK_TITLE = "Title Test";
+    public static final String STUB_LINK_DESCRIPTION = "www.description.test";
+    public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION = new EntryBuilder()
+            .withTitle("")
+            .withDescription("")
+            .withLink(STUB_LINK_URL)
+            .build();
+    public static final Entry STUB_LINK_NO_TITLE = new EntryBuilder()
+            .withTitle("")
+            .withDescription(STUB_LINK_DESCRIPTION)
+            .withLink(STUB_LINK_URL)
+            .build();
+    public static final Entry STUB_LINK_NO_DESCRIPTION = new EntryBuilder()
+            .withTitle(STUB_LINK_TITLE)
+            .withDescription("")
+            .withLink(STUB_LINK_URL)
+            .build();
+    public static final Entry STUB_LINK_FINAL = new EntryBuilder()
+            .withTitle(STUB_LINK_TITLE)
+            .withDescription(STUB_LINK_DESCRIPTION)
+            .withLink(STUB_LINK_URL)
+            .build();
+
     // For testing of networking
     public static final Entry VALID_HTTPS_LINK = new EntryBuilder()
             .withTitle("Valid HTTPS Link")
