@@ -37,6 +37,14 @@ public class UniqueEntryList implements Iterable<Entry> {
     }
 
     /**
+     * Returns true if the list contains an entry equal to the given argument.
+     */
+    public boolean containsEqual(Entry toCheck) {
+        requireNonNull(toCheck);
+        return internalList.stream().anyMatch(toCheck::equals);
+    }
+
+    /**
      * Adds a entry to the list.
      * The entry must not already exist in the list.
      */

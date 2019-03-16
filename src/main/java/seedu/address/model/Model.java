@@ -76,6 +76,11 @@ public interface Model {
     boolean hasEntry(Entry entry);
 
     /**
+     * Returns true if a entry equal to {@code entry} exists in the entry book.
+     */
+    boolean hasEntryEqualTo(Entry entry);
+
+    /**
      * Deletes the given entry.
      * The entry must exist in the entry book.
      */

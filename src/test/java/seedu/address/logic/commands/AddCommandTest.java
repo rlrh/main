@@ -163,6 +163,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasEntryEqualTo(Entry entry) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void deleteEntry(Entry target) {
             throw new AssertionError("This method should not be called.");
         }

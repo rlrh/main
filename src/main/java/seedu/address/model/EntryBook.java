@@ -71,6 +71,14 @@ public class EntryBook implements ReadOnlyEntryBook {
     }
 
     /**
+     * Returns true if a entry equal to {@code entry} exists in the address book.
+     */
+    public boolean hasEntryEqualTo(Entry entry) {
+        requireNonNull(entry);
+        return persons.containsEqual(entry);
+    }
+
+    /**
      * Adds a entry to the address book.
      * The entry must not already exist in the address book.
      */
