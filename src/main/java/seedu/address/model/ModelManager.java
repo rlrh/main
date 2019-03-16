@@ -156,14 +156,10 @@ public class ModelManager implements Model {
             }
 
             private void tryout(String candidate) {
-                try {
-                    requireNonNull(candidate);
-                    String trimmedCandidate = candidate.trim();
-                    if (!trimmedCandidate.isEmpty()) {
-                        this.value = trimmedCandidate;
-                    }
-                } catch (NullPointerException npe) {
-
+                requireNonNull(candidate);
+                String trimmedCandidate = candidate.trim();
+                if (!trimmedCandidate.isEmpty()) {
+                    this.value = trimmedCandidate;
                 }
             }
 
