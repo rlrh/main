@@ -65,4 +65,26 @@ public class StringUtil {
             return false;
         }
     }
+
+    /**
+     * Gets the first given number of words of a given string.
+     * @param string string
+     * @param numOfWords number of words
+     * @return first given number of words of the given string
+     */
+    public static String getFirstNWords(String string, int numOfWords) {
+        if (string == null) {
+            return "";
+        }
+        String [] stringArray = string.split("\\s+");
+        if (numOfWords >= stringArray.length) {
+            return string;
+        }
+        StringBuilder firstNWords = new StringBuilder();
+        for (int i = 0; i < numOfWords; i++) {
+            firstNWords.append(stringArray[i]);
+            firstNWords.append(" ");
+        }
+        return firstNWords.toString().trim();
+    }
 }
