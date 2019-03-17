@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.ArchiveCommand;
+import seedu.address.logic.commands.ArchivesCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -48,6 +50,21 @@ public class EntryBookListParserTest {
         assertEquals(new AddCommand(entry), command);
         AddCommand aliasCommand = (AddCommand) parser.parseCommand(EntryUtil.getAddAliasCommand(entry));
         assertEquals(new AddCommand(entry), aliasCommand);
+    }
+
+    @Test
+    public void parseCommand_archive() throws Exception {
+        ArchiveCommand command = (ArchiveCommand) parser.parseCommand(
+            ArchiveCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
+        assertEquals(new ArchiveCommand(INDEX_FIRST_ENTRY), command);
+    }
+
+    @Test
+    public void parseCommand_archives() throws Exception {
+        assertTrue(parser.parseCommand(ArchivesCommand.COMMAND_WORD) instanceof ArchivesCommand);
+        assertTrue(parser.parseCommand(ArchivesCommand.COMMAND_WORD + " 3") instanceof ArchivesCommand);
+        assertTrue(parser.parseCommand(ArchivesCommand.COMMAND_ALIAS) instanceof ArchivesCommand);
+        assertTrue(parser.parseCommand(ArchivesCommand.COMMAND_ALIAS + " 3") instanceof ArchivesCommand);
     }
 
     @Test
