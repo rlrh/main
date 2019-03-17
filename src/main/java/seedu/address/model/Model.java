@@ -15,8 +15,6 @@ import seedu.address.ui.ViewMode;
  * The API of the Model component.
  */
 public interface Model {
-    static final int PARSER_CONTEXT_LIST = 0;
-    static final int PARSER_CONTEXT_ARCHIVE = 1;
 
     /** {@code Predicate} that always evaluate to true */
     Predicate<Entry> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
@@ -188,11 +186,11 @@ public interface Model {
     /**
      * Returns the context of the Model.
      */
-    int getContext();
+    ModelContext getContext();
 
     /**
      * Sets the context of the Model.
      * @param context
      */
-    void setContext(int context);
+    void setContext(ModelContext context);
 }

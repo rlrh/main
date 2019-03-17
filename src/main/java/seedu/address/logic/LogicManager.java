@@ -41,11 +41,11 @@ public class LogicManager implements Logic {
         CommandResult commandResult;
 
         switch (model.getContext()) {
-        case Model.PARSER_CONTEXT_LIST:
+        case CONTEXT_LIST:
             entryBookParser = new EntryBookListParser();
             break;
 
-        case Model.PARSER_CONTEXT_ARCHIVE:
+        case CONTEXT_ARCHIVE:
             entryBookParser = new EntryBookArchivesParser();
             break;
 

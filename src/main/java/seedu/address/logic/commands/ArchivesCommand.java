@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.logic.CommandHistory;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 
 /**
  * Lists all entries in the archives to the user.
@@ -19,7 +20,7 @@ public class ArchivesCommand extends Command {
     @Override
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
-        model.setContext(Model.PARSER_CONTEXT_ARCHIVE);
+        model.setContext(ModelContext.CONTEXT_ARCHIVE);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

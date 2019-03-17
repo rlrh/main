@@ -33,7 +33,7 @@ public class ModelManager implements Model {
 
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private int context = PARSER_CONTEXT_LIST;
+    private ModelContext context = ModelContext.CONTEXT_LIST;
 
     private final EntryBook entryBook;
     private final UserPrefs userPrefs;
@@ -334,12 +334,12 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void setContext(int context) {
+    public void setContext(ModelContext context) {
         this.context = context;
     }
 
     @Override
-    public int getContext() {
+    public ModelContext getContext() {
         return context;
     }
 
