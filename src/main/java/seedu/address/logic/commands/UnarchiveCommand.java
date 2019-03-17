@@ -45,4 +45,11 @@ public class UnarchiveCommand extends Command {
         return new CommandResult(String.format(MESSAGE_UNARCHIVE_ENTRY_SUCCESS, entryToUnarchive));
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+            || (other instanceof UnarchiveCommand // instanceof handles nulls
+            && targetIndex.equals(((UnarchiveCommand) other).targetIndex)); // state check
+    }
+
 }

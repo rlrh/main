@@ -45,4 +45,10 @@ public class ArchiveCommand extends Command {
         return new CommandResult(String.format(MESSAGE_ARCHIVE_ENTRY_SUCCESS, entryToArchive));
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+            || (other instanceof ArchiveCommand // instanceof handles nulls
+            && targetIndex.equals(((ArchiveCommand) other).targetIndex)); // state check
+    }
 }
