@@ -45,6 +45,7 @@ public class EntryBookParser {
         switch (commandWord) {
 
         case ArchivesCommand.COMMAND_WORD:
+        case ArchivesCommand.COMMAND_ALIAS:
             return new ArchivesCommand();
 
         case ListCommand.COMMAND_WORD:
