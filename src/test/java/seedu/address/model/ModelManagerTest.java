@@ -8,11 +8,19 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_FINAL;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_DESCRIPTION;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_NO_DESCRIPTION;
 import static seedu.address.testutil.TypicalEntries.FILE_TEST_CONTENTS;
-import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_DESCRIPTION;
-import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRIPTION;
-import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_FINAL;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_DESCRIPTION;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_TITLE;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_TITLE_NO_DESCRIPTION;
 import static seedu.address.testutil.TypicalEntries.STUB_LINK_FINAL;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_DESCRIPTION;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRIPTION;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_HTTPS_LINK;
 
@@ -161,6 +169,54 @@ public class ModelManagerTest {
     public void addEntry_stubEntryHasTitleAndDescription_noChange() {
         modelManager.addEntry(STUB_LINK_FINAL);
         assertTrue(modelManager.hasEntryEqualTo(STUB_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_realEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() {
+        modelManager.addEntry(REAL_LINK_NO_TITLE_NO_DESCRIPTION);
+        assertTrue(modelManager.hasEntryEqualTo(REAL_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_realEntryHasNoTitle_titleReplaced() {
+        modelManager.addEntry(REAL_LINK_NO_TITLE);
+        assertTrue(modelManager.hasEntryEqualTo(REAL_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_realEntryHasNoDescription_descriptionReplaced() {
+        modelManager.addEntry(REAL_LINK_NO_DESCRIPTION);
+        assertTrue(modelManager.hasEntryEqualTo(REAL_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_realEntryHasTitleAndDescription_noChange() {
+        modelManager.addEntry(REAL_LINK_FINAL);
+        assertTrue(modelManager.hasEntryEqualTo(REAL_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_cruxEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() {
+        modelManager.addEntry(CRUX_LINK_NO_TITLE_NO_DESCRIPTION);
+        assertTrue(modelManager.hasEntryEqualTo(CRUX_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_cruxEntryHasNoTitle_titleReplaced() {
+        modelManager.addEntry(CRUX_LINK_NO_TITLE);
+        assertTrue(modelManager.hasEntryEqualTo(CRUX_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_cruxEntryHasNoDescription_descriptionReplaced() {
+        modelManager.addEntry(CRUX_LINK_NO_DESCRIPTION);
+        assertTrue(modelManager.hasEntryEqualTo(CRUX_LINK_FINAL));
+    }
+
+    @Test
+    public void addEntry_cruxEntryHasTitleAndDescription_noChange() {
+        modelManager.addEntry(CRUX_LINK_FINAL);
+        assertTrue(modelManager.hasEntryEqualTo(CRUX_LINK_FINAL));
     }
 
     @Test
