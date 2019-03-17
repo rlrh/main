@@ -343,4 +343,13 @@ public class ModelManager implements Model {
         return context;
     }
 
+    @Override
+    public void archiveEntry(Entry target) {
+        return;
+    }
+
+    @Override
+    public void unarchiveEntry(Entry entry) {
+        return;
+    }
 }

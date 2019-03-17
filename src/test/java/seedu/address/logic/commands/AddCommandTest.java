@@ -21,6 +21,7 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.entry.Entry;
@@ -253,12 +254,22 @@ public class AddCommandTest {
         }
 
         @Override
-        public int getContext() {
+        public ModelContext getContext() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setContext(int context) {
+        public void setContext(ModelContext context) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void archiveEntry(Entry target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void unarchiveEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
     }
