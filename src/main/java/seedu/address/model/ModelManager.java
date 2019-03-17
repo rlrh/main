@@ -330,7 +330,9 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        return new ModelManager(this.entryBook, this.userPrefs, this.storage);
+        Model clonedModel = new ModelManager(this.entryBook, this.userPrefs, this.storage);
+        clonedModel.setContext(this.getContext());
+        return clonedModel;
     }
 
     @Override
