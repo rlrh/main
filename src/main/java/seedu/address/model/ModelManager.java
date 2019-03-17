@@ -13,6 +13,8 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import org.apache.commons.text.WordUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.ArticleExtractor;
@@ -157,68 +159,79 @@ public class ModelManager implements Model {
     public Entry addEntry(Entry entry) {
 
         /**
-         * Represents an object that tries out replacement candidates and accepts suitable ones
+         * Represents a builder that tries out replacement candidates and accepts suitable ones
          */
         abstract class Candidate<T> {
-            abstract void tryout(String candidate);
-            abstract T get();
+            private T value;
+
+            Candidate(T initialValue) {
+                this.value = initialValue;
+            }
+
+            abstract Candidate<T> tryout(String candidate);
+
+            void setValue(T value) {
+                this.value = value;
+            }
+
+            T get() {
+                return this.value;
+            }
         }
 
         /**
          * Represents a title that tries out replacement candidates and accepts suitable ones
          */
         class CandidateTitle extends Candidate<Title> {
-            private Title value;
+
             private CandidateTitle() {
-                value = new Title("Untitled");
+                super(new Title("Untitled"));
             }
+
             @Override
-            void tryout(String candidate) {
+            Candidate<Title> tryout(String candidate) {
                 try {
-                    value = ParserUtil.parseTitle(Optional.of(candidate));
+                    setValue(ParserUtil.parseTitle(Optional.of(candidate)));
                 } catch (ParseException pe) {
                     logger.warning("Failed to replace title candidate. " + pe.getMessage());
                 }
+                return this;
             }
-            @Override
-            Title get() {
-                return this.value;
-            }
+
         }
 
         /**
          * Represents a description that tries out replacement candidates and accepts suitable ones
          */
         class CandidateDescription extends Candidate<Description> {
-            private Description value;
+
             private CandidateDescription() {
-                value = new Description("No description");
+                super(new Description("No description"));
             }
+
             @Override
-            void tryout(String candidate) {
+            Candidate<Description> tryout(String candidate) {
                 try {
-                    value = ParserUtil.parseDescription(Optional.of(candidate));
+                    setValue(ParserUtil.parseDescription(Optional.of(candidate)));
                 } catch (ParseException pe) {
                     logger.warning("Failed to replace description candidate. " + pe.getMessage());
                 }
+                return this;
             }
-            @Override
-            Description get() {
-                return this.value;
-            }
+
         }
 
         // Initial data
-        Title title = entry.getTitle();
-        Description description = entry.getDescription();
-        final String urlString = entry.getLink().value;
+        final Title title = entry.getTitle();
+        final Description description = entry.getDescription();
         final boolean noTitleOrDescription = title.isEmpty() || description.isEmpty();
+        final String urlString = entry.getLink().value;
 
         // Candidates to replace empty title and description
         Candidate<Title> candidateTitle = new CandidateTitle();
         Candidate<Description> candidateDescription = new CandidateDescription();
 
-        // 2nd choice - extract candidates just from URL
+        // 3rd choice - extract candidates just from URL
         if (noTitleOrDescription) {
             try {
                 URL url = new URL(urlString);
@@ -227,10 +240,10 @@ public class ModelManager implements Model {
                         .replaceAll("\r", "") // remove carriage return chars
                         .replaceAll("[^a-zA-Z0-9]+", " ") // replace special chars with spaces
                         .trim();
-                candidateTitle.tryout(WordUtils.capitalizeFully(baseName)); // title 2nd choice - cleaned up file name
-                candidateDescription.tryout(url.getHost().trim()); // desc 3rd choice - host name
+                candidateTitle.tryout(WordUtils.capitalizeFully(baseName)); // title 3rd choice - cleaned up base name
+                candidateDescription.tryout(url.getHost().trim()); // desc 4th choice - host name
             } catch (MalformedURLException mue) {
-                // Do nothing if URL is malformed
+                // Skip if URL is malformed
                 logger.warning("Malformed URL: " + urlString);
             }
         }
@@ -241,17 +254,30 @@ public class ModelManager implements Model {
             byte[] articleContent = Network.fetchAsBytes(urlString);
             storage.addArticle(urlString, articleContent);
 
-            // 1st choice - extract candidates by processing through Crux
             if (noTitleOrDescription) {
-                String rawHtml = new String(articleContent);
-                Article article = ArticleExtractor.with(urlString, rawHtml)
+
+                // 2nd choice - extract candidates by parsing through Jsoup
+                String html = new String(articleContent);
+                Document document = Jsoup.parse(html);
+                candidateTitle.tryout(document.title().trim()); // title 2nd choice - document title element
+                candidateDescription.tryout(StringUtil.getFirstNWords(document.body().text(), 24)
+                        .concat("…")
+                        .trim()
+                ); // desc 3rd choice - first N words of raw document body text
+
+                // 1st choice - extract candidates by processing through Crux
+                Article article = ArticleExtractor.with(urlString, document)
                         .extractMetadata()
                         .extractContent()
                         .article();
-                candidateTitle.tryout(article.title); // title 1st choice - extract title
-                candidateDescription.tryout(StringUtil.getFirstNWords(article.document.text(), 20)
-                        .concat("…")); // desc 2nd choice - first 20 words of document body text
-                candidateDescription.tryout(article.description); // desc 1st choice - extract description
+                candidateTitle.tryout(article.title.trim()); // title 1st choice - extract title
+                candidateDescription
+                        .tryout(StringUtil.getFirstNWords(article.document.text(), 24)
+                                .concat("…")
+                                .trim()
+                        ) // desc 2nd choice - first N words of cleaned-up document body text
+                        .tryout(article.description.trim()); // desc 1st choice - extract description
+
             }
 
         } catch (IOException ioe) {
@@ -259,25 +285,24 @@ public class ModelManager implements Model {
             logger.warning("Failed to fetch URL: " + urlString);
         }
 
-        // Replace empty title or description with best candidate
-        if (title.isEmpty()) {
-            title = candidateTitle.get();
-        }
-        if (description.isEmpty()) {
-            description = candidateDescription.get();
-        }
-        // Add entry with updated title and description to entry book
-        Entry newEntry = new Entry(title, description, entry.getLink(), entry.getAddress(), entry.getTags());
-        entryBook.addPerson(newEntry);
+        // Add updated entry to entry book
+        Entry updatedEntry = new Entry(
+                title.isEmpty() ? candidateTitle.get() : title, // replace title if empty
+                description.isEmpty() ? candidateDescription.get() : description, // replace description if empty
+                entry.getLink(),
+                entry.getAddress(),
+                entry.getTags()
+        );
+        entryBook.addPerson(updatedEntry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
 
         // Return defensive copy of updated entry
         return new Entry(
-                newEntry.getTitle(),
-                newEntry.getDescription(),
-                newEntry.getLink(),
-                newEntry.getAddress(),
-                newEntry.getTags()
+                updatedEntry.getTitle(),
+                updatedEntry.getDescription(),
+                updatedEntry.getLink(),
+                updatedEntry.getAddress(),
+                updatedEntry.getTags()
         );
     }
 
