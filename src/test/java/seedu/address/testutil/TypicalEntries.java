@@ -102,79 +102,129 @@ public class TypicalEntries {
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
 
-    // For ModelManagerTest
+    // For AddCommandTest
+    public static final String DUMMY_TITLE = "Dummy Title";
+    public static final String DUMMY_DESCRIPTION = "Dummy description";
+
     public static final String STUB_LINK_URL = "http://www.description.test/title/title_test.html";
     public static final String STUB_LINK_TITLE = "Title Test";
     public static final String STUB_LINK_DESCRIPTION = "www.description.test";
+
     public static final String REAL_LINK_URL = MainApp.class
             .getResource("/ModelManagerTest/NUS_School_of_Computing.html").toExternalForm();
     public static final String REAL_LINK_TITLE = "NUS School of Computing - Wikipedia";
     public static final String REAL_LINK_DESCRIPTION = "NUS School of Computing is a faculty within the National "
             + "University of Singapore (NUS). The School was established in 1998, although its history reaches…";
+
     public static final String CRUX_LINK_URL = MainApp.class
             .getResource("/ModelManagerTest/ProPublica.html").toExternalForm();
     public static final String CRUX_LINK_TITLE = "Our Reporting on Michael Cohen: A Reading Guide — ProPublica";
     public static final String CRUX_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s former "
             + "personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie and "
             + "hundreds of threats. Many of those assertions had been explored before, as these articles show.";
-    public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION = new EntryBuilder()
+
+    public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription("")
             .withLink(STUB_LINK_URL)
             .build();
-    public static final Entry STUB_LINK_NO_TITLE = new EntryBuilder()
-            .withTitle("")
-            .withDescription(STUB_LINK_DESCRIPTION)
-            .withLink(STUB_LINK_URL)
-            .build();
-    public static final Entry STUB_LINK_NO_DESCRIPTION = new EntryBuilder()
-            .withTitle(STUB_LINK_TITLE)
-            .withDescription("")
-            .withLink(STUB_LINK_URL)
-            .build();
-    public static final Entry STUB_LINK_FINAL = new EntryBuilder()
+    public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
             .withTitle(STUB_LINK_TITLE)
             .withDescription(STUB_LINK_DESCRIPTION)
             .withLink(STUB_LINK_URL)
             .build();
-    public static final Entry REAL_LINK_NO_TITLE_NO_DESCRIPTION = new EntryBuilder()
+
+    public static final Entry STUB_LINK_NO_TITLE_INCOMPLETE = new EntryBuilder()
+            .withTitle("")
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(STUB_LINK_URL)
+            .build();
+    public static final Entry STUB_LINK_NO_TITLE_COMPLETE = new EntryBuilder()
+            .withTitle(STUB_LINK_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(STUB_LINK_URL)
+            .build();
+
+    public static final Entry STUB_LINK_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription("")
+            .withLink(STUB_LINK_URL)
+            .build();
+    public static final Entry STUB_LINK_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(STUB_LINK_DESCRIPTION)
+            .withLink(STUB_LINK_URL)
+            .build();
+
+    public static final Entry REAL_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription("")
             .withLink(REAL_LINK_URL)
             .build();
-    public static final Entry REAL_LINK_NO_TITLE = new EntryBuilder()
-            .withTitle("")
+    public static final Entry REAL_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+            .withTitle(REAL_LINK_TITLE)
             .withDescription(REAL_LINK_DESCRIPTION)
             .withLink(REAL_LINK_URL)
             .build();
-    public static final Entry REAL_LINK_NO_DESCRIPTION = new EntryBuilder()
+
+    public static final Entry REAL_LINK_NO_TITLE_INCOMPLETE = new EntryBuilder()
+            .withTitle("")
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(REAL_LINK_URL)
+            .build();
+    public static final Entry REAL_LINK_NO_TITLE_COMPLETE = new EntryBuilder()
             .withTitle(REAL_LINK_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(REAL_LINK_URL)
+            .build();
+
+    public static final Entry REAL_LINK_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
             .withDescription("")
             .withLink(REAL_LINK_URL)
             .build();
-    public static final Entry REAL_LINK_FINAL = new EntryBuilder()
-            .withTitle(REAL_LINK_TITLE)
+    public static final Entry REAL_LINK_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
             .withDescription(REAL_LINK_DESCRIPTION)
             .withLink(REAL_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION = new EntryBuilder()
+
+    public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription("")
             .withLink(CRUX_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_TITLE = new EntryBuilder()
-            .withTitle("")
+    public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+            .withTitle(CRUX_LINK_TITLE)
             .withDescription(CRUX_LINK_DESCRIPTION)
             .withLink(CRUX_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_DESCRIPTION = new EntryBuilder()
+
+    public static final Entry CRUX_LINK_NO_TITLE_INCOMPLETE = new EntryBuilder()
+            .withTitle("")
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(CRUX_LINK_URL)
+            .build();
+    public static final Entry CRUX_LINK_NO_TITLE_COMPLETE = new EntryBuilder()
             .withTitle(CRUX_LINK_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(CRUX_LINK_URL)
+            .build();
+
+    public static final Entry CRUX_LINK_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
             .withDescription("")
             .withLink(CRUX_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_FINAL = new EntryBuilder()
-            .withTitle(CRUX_LINK_TITLE)
+    public static final Entry CRUX_LINK_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
             .withDescription(CRUX_LINK_DESCRIPTION)
+            .withLink(CRUX_LINK_URL)
+            .build();
+
+    public static final Entry CRUX_LINK_COMPLETE = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
             .withLink(CRUX_LINK_URL)
             .build();
 

@@ -2,12 +2,12 @@ package seedu.address.logic.commands;
 
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_FINAL;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_NO_DESCRIPTION;
-import static seedu.address.testutil.TypicalEntries.REAL_LINK_FINAL;
-import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_TITLE_NO_DESCRIPTION;
-import static seedu.address.testutil.TypicalEntries.STUB_LINK_FINAL;
-import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRIPTION;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_DESCRIPTION_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE;
 
 import org.junit.Test;
 
@@ -37,30 +37,30 @@ public class AddCommandIntegrationTest {
     }
 
     @Test
-    public void execute_stubEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() {
+    public void execute_newEntryHasNoTitleAndNoDescription_titleAndDescriptionReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addEntry(STUB_LINK_FINAL);
+        expectedModel.addEntry(CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
 
-        assertCommandSuccess(new AddCommand(STUB_LINK_NO_TITLE_NO_DESCRIPTION), model, commandHistory,
-                String.format(AddCommand.MESSAGE_SUCCESS, STUB_LINK_FINAL), expectedModel);
+        assertCommandSuccess(new AddCommand(CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE), model, commandHistory,
+                String.format(AddCommand.MESSAGE_SUCCESS, CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE), expectedModel);
     }
 
     @Test
-    public void execute_realEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() {
+    public void execute_newEntryHasNoTitle_titleReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addEntry(REAL_LINK_FINAL);
+        expectedModel.addEntry(CRUX_LINK_NO_TITLE_COMPLETE);
 
-        assertCommandSuccess(new AddCommand(REAL_LINK_NO_TITLE_NO_DESCRIPTION), model, commandHistory,
-                String.format(AddCommand.MESSAGE_SUCCESS, REAL_LINK_FINAL), expectedModel);
+        assertCommandSuccess(new AddCommand(CRUX_LINK_NO_TITLE_INCOMPLETE), model, commandHistory,
+                String.format(AddCommand.MESSAGE_SUCCESS, CRUX_LINK_NO_TITLE_COMPLETE), expectedModel);
     }
 
     @Test
-    public void execute_cruxEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() {
+    public void execute_newEntryHasNoDescription_descriptionReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addEntry(CRUX_LINK_FINAL);
+        expectedModel.addEntry(CRUX_LINK_NO_DESCRIPTION_COMPLETE);
 
-        assertCommandSuccess(new AddCommand(CRUX_LINK_NO_TITLE_NO_DESCRIPTION), model, commandHistory,
-                String.format(AddCommand.MESSAGE_SUCCESS, CRUX_LINK_FINAL), expectedModel);
+        assertCommandSuccess(new AddCommand(CRUX_LINK_NO_DESCRIPTION_INCOMPLETE), model, commandHistory,
+                String.format(AddCommand.MESSAGE_SUCCESS, CRUX_LINK_NO_DESCRIPTION_COMPLETE), expectedModel);
     }
 
     @Test

@@ -4,6 +4,25 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_DESCRIPTION_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_DESCRIPTION_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_TITLE_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_TITLE_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_DESCRIPTION_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -38,20 +57,20 @@ public class AddCommandTest {
     private CommandHistory commandHistory = new CommandHistory();
 
     @Test
-    public void constructor_nullPerson_throwsNullPointerException() {
+    public void constructor_nullEntry_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
         new AddCommand(null);
     }
 
     @Test
-    public void execute_personAcceptedByModel_addSuccessful() throws Exception {
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+    public void execute_entryAcceptedByModel_addSuccessful() throws Exception {
+        ModelStubAcceptingEntryAdded modelStub = new ModelStubAcceptingEntryAdded();
         Entry validEntry = new EntryBuilder().build();
 
         CommandResult commandResult = new AddCommand(validEntry).execute(modelStub, commandHistory);
 
         assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, validEntry), commandResult.getFeedbackToUser());
-        assertEquals(Arrays.asList(validEntry), modelStub.personsAdded);
+        assertEquals(Arrays.asList(validEntry), modelStub.entriesAdded);
         assertEquals(EMPTY_COMMAND_HISTORY, commandHistory);
     }
 
@@ -59,15 +78,65 @@ public class AddCommandTest {
     public void execute_duplicatePerson_throwsCommandException() throws Exception {
         Entry validEntry = new EntryBuilder().build();
         AddCommand addCommand = new AddCommand(validEntry);
-        ModelStub modelStub = new ModelStubWithPerson(validEntry);
+        ModelStub modelStub = new ModelStubWithEntry(validEntry);
 
         thrown.expect(CommandException.class);
         thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_PERSON);
         addCommand.execute(modelStub, commandHistory);
     }
 
-    // TODO: Add tests for with/without Title/Description
-    // TODO: Add tests for Crux, should return non-null Title/Description
+    @Test
+    public void execute_stubEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(
+                STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE, STUB_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
+    }
+
+    @Test
+    public void execute_stubEntryHasNoTitle_onlyTitleReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(STUB_LINK_NO_TITLE_INCOMPLETE, STUB_LINK_NO_TITLE_COMPLETE);
+    }
+
+    @Test
+    public void execute_stubEntryHasNoDescription_onlyDescriptionReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(STUB_LINK_NO_DESCRIPTION_INCOMPLETE, STUB_LINK_NO_DESCRIPTION_COMPLETE);
+    }
+
+    @Test
+    public void execute_realEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(
+                REAL_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE, REAL_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
+    }
+
+    @Test
+    public void execute_realEntryHasNoTitle_onlytitleReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(REAL_LINK_NO_TITLE_INCOMPLETE, REAL_LINK_NO_TITLE_COMPLETE);
+    }
+
+    @Test
+    public void execute_realEntryHasNoDescription_onlydescriptionReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(REAL_LINK_NO_DESCRIPTION_INCOMPLETE, REAL_LINK_NO_DESCRIPTION_COMPLETE);
+    }
+
+    @Test
+    public void execute_cruxEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(
+                CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE, CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
+    }
+
+    @Test
+    public void execute_cruxEntryHasNoTitle_onlyTitleReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(CRUX_LINK_NO_TITLE_INCOMPLETE, CRUX_LINK_NO_TITLE_COMPLETE);
+    }
+
+    @Test
+    public void execute_cruxEntryHasNoDescription_onlyDescriptionReplaced() throws Exception {
+        assertInitialEntryBecomesFinalEntry(CRUX_LINK_NO_DESCRIPTION_INCOMPLETE, CRUX_LINK_NO_DESCRIPTION_COMPLETE);
+    }
+
+    @Test
+    public void execute_entryHasTitleAndDescription_noChange() throws Exception {
+        assertInitialEntryBecomesFinalEntry(CRUX_LINK_COMPLETE, CRUX_LINK_COMPLETE);
+    }
 
     @Test
     public void equals() {
@@ -91,6 +160,19 @@ public class AddCommandTest {
 
         // different entry -> returns false
         assertFalse(addAliceCommand.equals(addBobCommand));
+    }
+
+    /**
+     * Asserts that {@code initialEntry} in an {@code AddCommand} becomes {@code finalEntry} after its execution.
+     */
+    private void assertInitialEntryBecomesFinalEntry(Entry initialEntry, Entry finalEntry) throws Exception {
+        ModelStubAcceptingEntryAdded modelStub = new ModelStubAcceptingEntryAdded();
+
+        CommandResult commandResult = new AddCommand(initialEntry).execute(modelStub, commandHistory);
+
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, finalEntry), commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(finalEntry), modelStub.entriesAdded);
+        assertEquals(EMPTY_COMMAND_HISTORY, commandHistory);
     }
 
     /**
@@ -266,10 +348,10 @@ public class AddCommandTest {
     /**
      * A Model stub that contains a single entry.
      */
-    private class ModelStubWithPerson extends ModelStub {
+    private class ModelStubWithEntry extends ModelStub {
         private final Entry entry;
 
-        ModelStubWithPerson(Entry entry) {
+        ModelStubWithEntry(Entry entry) {
             requireNonNull(entry);
             this.entry = entry;
         }
@@ -282,21 +364,24 @@ public class AddCommandTest {
     }
 
     /**
-     * A Model stub that always accept the entry being added.
+     * A Model stub that always accepts the entry being added.
      */
-    private class ModelStubAcceptingPersonAdded extends ModelStub {
-        final ArrayList<Entry> personsAdded = new ArrayList<>();
+    private class ModelStubAcceptingEntryAdded extends ModelStub {
+        final ArrayList<Entry> entriesAdded = new ArrayList<>();
+
+        @Override
+        public void addArticle(String url, byte[] articleContent) { }
 
         @Override
         public boolean hasEntry(Entry entry) {
             requireNonNull(entry);
-            return personsAdded.stream().anyMatch(entry::isSameEntry);
+            return entriesAdded.stream().anyMatch(entry::isSameEntry);
         }
 
         @Override
         public void addEntry(Entry entry) {
             requireNonNull(entry);
-            personsAdded.add(entry);
+            entriesAdded.add(entry);
         }
 
         @Override
