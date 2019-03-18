@@ -104,7 +104,7 @@ class JsonAdaptedEntry {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Link.class.getSimpleName()));
         }
         if (!offlineLink.isEmpty() && !Link.isValidConstructionLink(offlineLink)) {
-            throw new IllegalValueException(Link.formExceptionMessage(link));
+            throw new IllegalValueException(Link.formExceptionMessage(offlineLink));
         }
         final Optional<Link> modelOfflineLink =
                 offlineLink.isEmpty()
