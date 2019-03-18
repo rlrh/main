@@ -11,6 +11,7 @@ import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.FILE_TEST_CONTENTS;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_HTTPS_LINK;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -222,6 +223,12 @@ public class ModelManagerTest {
         UserPrefs differentUserPrefs2 = new UserPrefs();
         differentUserPrefs2.setArticleDataDirectoryPath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs2, storage)));
+
+        // different displayedEntryList -> returns false
+        EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_LINK).build();
+        ModelManager differentDisplayedModelManager = new ModelManager(entryBook, userPrefs, storage);
+        differentDisplayedModelManager.displayEntryBook(differentDisplayedEntryBook);
+        assertFalse(modelManager.equals(differentDisplayedModelManager));
     }
 
     /**

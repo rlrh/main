@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +64,7 @@ public class FeedCommand extends Command {
             throw new CommandException("Some other problem: " + StringUtil.getDetails(e), e);
         }
 
-        model.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+        model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
         return new CommandResult(String.format(MESSAGE_SUCCESS, feedUrl));
     }
 
