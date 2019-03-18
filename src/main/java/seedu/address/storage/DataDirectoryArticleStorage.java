@@ -52,7 +52,7 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
             byte[] truncatedHash = new byte[16];
             System.arraycopy(encodedHash, 0, truncatedHash, 0, 16);
             byte[] hashInBase32 = new Base32().encode(truncatedHash);
-            return new String(hashInBase32, StandardCharsets.UTF_8);
+            return new String(hashInBase32, StandardCharsets.UTF_8) + ".html";
         } catch (NoSuchAlgorithmException nsae) {
             logger.severe("SHA-256 hash not supported on this system. Saving links cannot be done");
             throw nsae;
