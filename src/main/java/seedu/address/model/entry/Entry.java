@@ -42,12 +42,12 @@ public class Entry {
     /**
      * Every field must be present and not null.
      */
-    public Entry(Title title, Description description, Link link, Link offlineLink, Address address, Set<Tag> tags) {
+    public Entry(Title title, Description description, Link link, Optional<Link> offlineLink, Address address, Set<Tag> tags) {
         requireAllNonNull(title, description, link, address, tags);
         this.title = title;
         this.description = description;
         this.link = link;
-        this.offlineLink = Optional.of(offlineLink);
+        this.offlineLink = offlineLink;
         this.address = address;
         this.tags.addAll(tags);
     }
@@ -66,6 +66,10 @@ public class Entry {
 
     public Optional<Link> getOfflineLink() {
         return offlineLink;
+    }
+
+    public Link getOfflineOrOriginalLink() {
+        return offlineLink.orElse(link);
     }
 
     public Address getAddress() {
