@@ -10,8 +10,6 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.parser.EntryBookArchivesParser;
-import seedu.address.logic.parser.EntryBookListParser;
 import seedu.address.logic.parser.EntryBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -40,18 +38,7 @@ public class LogicManager implements Logic {
         EntryBookParser entryBookParser;
         CommandResult commandResult;
 
-        switch (model.getContext()) {
-        case CONTEXT_LIST:
-            entryBookParser = new EntryBookListParser();
-            break;
-
-        case CONTEXT_ARCHIVE:
-            entryBookParser = new EntryBookArchivesParser();
-            break;
-
-        default:
-            entryBookParser = new EntryBookParser();
-        }
+        entryBookParser = model.getContext().getParser();
 
         try {
             Command command = entryBookParser.parseCommand(commandText);
