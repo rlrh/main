@@ -50,7 +50,7 @@ public class ModelManager implements Model {
      */
     public ModelManager(ReadOnlyEntryBook addressBook, ReadOnlyUserPrefs userPrefs, Storage storage) {
         super();
-        requireAllNonNull(addressBook, userPrefs);
+        requireAllNonNull(addressBook, userPrefs, storage);
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
