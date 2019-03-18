@@ -37,6 +37,7 @@ import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Title;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
+import seedu.address.model.util.Candidate;
 import seedu.address.network.Network;
 import seedu.address.storage.Storage;
 import seedu.address.ui.ViewMode;
@@ -158,69 +159,6 @@ public class ModelManager implements Model {
     @Override
     public Entry addEntry(Entry entry) {
 
-        /**
-         * Represents a builder that tries out replacement candidates and accepts suitable ones
-         */
-        abstract class Candidate<T> {
-            private T value;
-
-            Candidate(T initialValue) {
-                this.value = initialValue;
-            }
-
-            abstract Candidate<T> tryout(String candidate);
-
-            void setValue(T value) {
-                this.value = value;
-            }
-
-            T get() {
-                return this.value;
-            }
-        }
-
-        /**
-         * Represents a title that tries out replacement candidates and accepts suitable ones
-         */
-        class CandidateTitle extends Candidate<Title> {
-
-            private CandidateTitle() {
-                super(new Title("Untitled"));
-            }
-
-            @Override
-            Candidate<Title> tryout(String candidate) {
-                try {
-                    setValue(ParserUtil.parseTitle(Optional.of(candidate)));
-                } catch (ParseException pe) {
-                    logger.warning("Failed to replace title candidate. " + pe.getMessage());
-                }
-                return this;
-            }
-
-        }
-
-        /**
-         * Represents a description that tries out replacement candidates and accepts suitable ones
-         */
-        class CandidateDescription extends Candidate<Description> {
-
-            private CandidateDescription() {
-                super(new Description("No description"));
-            }
-
-            @Override
-            Candidate<Description> tryout(String candidate) {
-                try {
-                    setValue(ParserUtil.parseDescription(Optional.of(candidate)));
-                } catch (ParseException pe) {
-                    logger.warning("Failed to replace description candidate. " + pe.getMessage());
-                }
-                return this;
-            }
-
-        }
-
         // Initial data
         final Title title = entry.getTitle();
         final Description description = entry.getDescription();
@@ -228,10 +166,24 @@ public class ModelManager implements Model {
         final String urlString = entry.getLink().value;
 
         // Candidates to replace empty title and description
-        Candidate<Title> candidateTitle = new CandidateTitle();
-        Candidate<Description> candidateDescription = new CandidateDescription();
+        Candidate<Title> candidateTitle = new Candidate<>(new Title("Untitled"), (String s) -> {
+            try {
+                return Optional.of(ParserUtil.parseTitle(Optional.of(s)));
+            } catch (ParseException pe) {
+                logger.warning("Failed to replace title candidate. " + pe.getMessage());
+                return Optional.empty();
+            }
+        });
+        Candidate<Description> candidateDescription = new Candidate<>(new Description("No description"), (String s) -> {
+            try {
+                return Optional.of(ParserUtil.parseDescription(Optional.of(s)));
+            } catch (ParseException pe) {
+                logger.warning("Failed to replace description candidate. " + pe.getMessage());
+                return Optional.empty();
+            }
+        });
 
-        // 3rd choice - extract candidates just from URL
+        // First try - extract candidates just from URL
         if (noTitleOrDescription) {
             try {
                 URL url = new URL(urlString);
@@ -256,16 +208,14 @@ public class ModelManager implements Model {
 
             if (noTitleOrDescription) {
 
-                // 2nd choice - extract candidates by parsing through Jsoup
+                // Second try - extract candidates by parsing through Jsoup
                 String html = new String(articleContent);
                 Document document = Jsoup.parse(html);
                 candidateTitle.tryout(document.title().trim()); // title 2nd choice - document title element
                 candidateDescription.tryout(StringUtil.getFirstNWords(document.body().text(), 24)
-                        .concat("…")
-                        .trim()
-                ); // desc 3rd choice - first N words of raw document body text
+                       .trim()); // desc 3rd choice - first N words of raw document body text
 
-                // 1st choice - extract candidates by processing through Crux
+                // Third try - extract candidates by processing through Crux
                 Article article = ArticleExtractor.with(urlString, document)
                         .extractMetadata()
                         .extractContent()
@@ -273,9 +223,7 @@ public class ModelManager implements Model {
                 candidateTitle.tryout(article.title.trim()); // title 1st choice - extract title
                 candidateDescription
                         .tryout(StringUtil.getFirstNWords(article.document.text(), 24)
-                                .concat("…")
-                                .trim()
-                        ) // desc 2nd choice - first N words of cleaned-up document body text
+                                .trim()) // desc 2nd choice - first N words of cleaned-up document body text
                         .tryout(article.description.trim()); // desc 1st choice - extract description
 
             }

@@ -73,7 +73,7 @@ public class StringUtil {
      * @return first given number of words of the given string
      */
     public static String getFirstNWords(String string, int numOfWords) {
-        if (string == null) {
+        if (string == null || string.isEmpty()) {
             return "";
         }
         String [] stringArray = string.split("\\s+");
@@ -85,6 +85,6 @@ public class StringUtil {
             firstNWords.append(stringArray[i]);
             firstNWords.append(" ");
         }
-        return firstNWords.toString().trim();
+        return firstNWords.toString().trim().concat("…");
     }
 }
