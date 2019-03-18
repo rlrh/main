@@ -37,7 +37,6 @@ public class ModelManager implements Model {
     private ModelContext context = ModelContext.CONTEXT_LIST;
 
     private final EntryBook listEntryBook;
-    private final EntryBook displayedEntryBook = new EntryBook();
     private final UserPrefs userPrefs;
     private final SimpleListProperty<Entry> displayedEntryList = new SimpleListProperty<>();
     private final FilteredList<Entry> filteredEntries;
@@ -163,7 +162,8 @@ public class ModelManager implements Model {
         listEntryBook.clear();
     }
 
-    private void displayEntryBook(ReadOnlyEntryBook entryBook) {
+    @Override
+    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
         displayedEntryList.set(entryBook.getEntryList());
     }
 
@@ -345,6 +345,15 @@ public class ModelManager implements Model {
 
     @Override
     public void setContext(ModelContext context) {
+        switch (context) {
+        case CONTEXT_LIST:
+            displayEntryBook(this.listEntryBook);
+            break;
+        case CONTEXT_ARCHIVE:
+            // something else
+            break;
+        default:
+        }
         this.context = context;
     }
 

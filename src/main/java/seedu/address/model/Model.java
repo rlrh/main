@@ -100,6 +100,9 @@ public interface Model {
      */
     void clearEntryBook();
 
+    /** Displays a given entryBook without touching storage. */
+    void displayEntryBook(ReadOnlyEntryBook entryBook);
+
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();
 
