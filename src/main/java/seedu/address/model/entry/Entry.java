@@ -42,7 +42,9 @@ public class Entry {
     /**
      * Every field must be present and not null.
      */
-    public Entry(Title title, Description description, Link link, Optional<Link> offlineLink, Address address, Set<Tag> tags) {
+    public Entry(Title title, Description description,
+                 Link link, Optional<Link> offlineLink,
+                 Address address, Set<Tag> tags) {
         requireAllNonNull(title, description, link, address, tags);
         this.title = title;
         this.description = description;
