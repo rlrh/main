@@ -1,45 +1,52 @@
 {
   "_comment": "AddressBook save file which contains the same Person values as in TypicalPersons#getTypicalAddressBook()",
   "persons" : [ {
-    "name" : "Alice Pauline",
-    "phone" : "Description place-holder",
-    "email" : "https://alice.example.com",
+    "title" : "Alice Pauline",
+    "description" : "Description place-holder",
+    "link" : "https://alice.example.com",
+    "offlineLink" : "",
     "address" : "123, Jurong West Ave 6, #08-111",
     "tagged" : [ "friends" ]
   }, {
-    "name" : "Benson Meier",
-    "phone" : "Description place-holder",
-    "email" : "https://johnd.example.com",
+    "title" : "Benson Meier",
+    "description" : "Description place-holder",
+    "link" : "https://johnd.example.com",
+    "offlineLink" : "",
     "address" : "311, Clementi Ave 2, #02-25",
     "tagged" : [ "owesMoney", "friends" ]
   }, {
-    "name" : "Carl Kurz",
-    "phone" : "Description place-holder",
-    "email" : "https://heinz.example.com",
+    "title" : "Carl Kurz",
+    "description" : "Description place-holder",
+    "link" : "https://heinz.example.com",
+    "offlineLink" : "",
     "address" : "wall street",
     "tagged" : [ ]
   }, {
-    "name" : "Daniel Meier",
-    "phone" : "Description place-holder",
-    "email" : "https://cornelia.example.com",
+    "title" : "Daniel Meier",
+    "description" : "Description place-holder",
+    "link" : "https://cornelia.example.com",
+    "offlineLink" : "",
     "address" : "10th street",
     "tagged" : [ "friends" ]
   }, {
-    "name" : "Elle Meyer",
-    "phone" : "Description place-holder",
-    "email" : "https://werner.example.com",
+    "title" : "Elle Meyer",
+    "description" : "Description place-holder",
+    "link" : "https://werner.example.com",
+    "offlineLink" : "",
     "address" : "michegan ave",
     "tagged" : [ ]
   }, {
-    "name" : "Fiona Kunz",
-    "phone" : "Description place-holder",
-    "email" : "https://lydia.example.com",
+    "title" : "Fiona Kunz",
+    "description" : "Description place-holder",
+    "link" : "https://lydia.example.com",
+    "offlineLink" : "",
     "address" : "little tokyo",
     "tagged" : [ ]
   }, {
-    "name" : "George Best",
-    "phone" : "Description place-holder",
-    "email" : "https://anna.example.com",
+    "title" : "George Best",
+    "description" : "Description place-holder",
+    "link" : "https://anna.example.com",
+    "offlineLink" : "",
     "address" : "4th street",
     "tagged" : [ ]
   } ]

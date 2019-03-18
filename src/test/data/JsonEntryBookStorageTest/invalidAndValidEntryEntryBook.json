@@ -1,13 +1,15 @@
 {
   "persons": [ {
-    "name": "Valid Title!",
-    "phone": "Val1d-C@mment! ~ !",
-    "email": "https://hans.example.com",
+    "title": "Valid Title!",
+    "description": "Val1d-C@mment! ~ !",
+    "link": "https://hans.example.com",
+    "offlineLink": "",
     "address": "4th street"
   }, {
-    "name": "Entry With Invalid Link Field",
-    "phone": "Oh no!",
-    "email": "hans@example.com",
+    "title": "Entry With Invalid Link Field",
+    "description": "Oh no!",
+    "link": "hans@example.com",
+    "offlineLink": "",
     "address": "4th street"
   } ]
 }
