@@ -53,7 +53,7 @@ public class ModelManagerTest {
     public void constructor() {
         assertEquals(new UserPrefs(), modelManager.getUserPrefs());
         assertEquals(new GuiSettings(), modelManager.getGuiSettings());
-        assertEquals(new EntryBook(), new EntryBook(modelManager.getEntryBook()));
+        assertEquals(new EntryBook(), new EntryBook(modelManager.getListEntryBook()));
         assertEquals(null, modelManager.getSelectedEntry());
     }
 

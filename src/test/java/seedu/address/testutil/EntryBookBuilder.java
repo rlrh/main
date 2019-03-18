@@ -24,7 +24,7 @@ public class EntryBookBuilder {
      * Adds a new {@code Entry} to the {@code EntryBook} that we are building.
      */
     public EntryBookBuilder withPerson(Entry entry) {
-        addressBook.addPerson(entry);
+        addressBook.addEntry(entry);
         return this;
     }
 

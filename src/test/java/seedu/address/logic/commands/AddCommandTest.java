@@ -149,12 +149,17 @@ public class AddCommandTest {
         }
 
         @Override
-        public void setEntryBook(ReadOnlyEntryBook entryBook) {
+        public void addHiddenEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public ReadOnlyEntryBook getEntryBook() {
+        public void setListEntryBook(ReadOnlyEntryBook listEntryBook) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyEntryBook getListEntryBook() {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -311,7 +316,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public ReadOnlyEntryBook getEntryBook() {
+        public ReadOnlyEntryBook getListEntryBook() {
             return new EntryBook();
         }
     }

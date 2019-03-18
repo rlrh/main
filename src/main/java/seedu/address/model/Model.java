@@ -64,12 +64,12 @@ public interface Model {
      */
     void setArticleDataDirectoryPath(Path articleDataDirectoryPath);
     /**
-     * Replaces entry book data with the data in {@code entryBook}.
+     * Replaces entry book data with the data in {@code listEntryBook}.
      */
-    void setEntryBook(ReadOnlyEntryBook entryBook);
+    void setListEntryBook(ReadOnlyEntryBook listEntryBook);
 
     /** Returns the EntryBook */
-    ReadOnlyEntryBook getEntryBook();
+    ReadOnlyEntryBook getListEntryBook();
 
     /**
      * Returns true if a entry with the same identity as {@code entry} exists in the entry book.

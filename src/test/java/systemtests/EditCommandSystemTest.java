@@ -68,7 +68,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, index, BOB);
 
         /* Case: edit a entry with new values same as another entry's values but with different link -> edited */
-        assertTrue(getModel().getEntryBook().getEntryList().contains(BOB));
+        assertTrue(getModel().getListEntryBook().getEntryList().contains(BOB));
         index = INDEX_SECOND_ENTRY;
         assertNotEquals(getModel().getFilteredEntryList().get(index.getZeroBased()), BOB);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
@@ -99,7 +99,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
          * -> rejected
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        int invalidIndex = getModel().getEntryBook().getEntryList().size();
+        int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + TITLE_DESC_BOB,
                 Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
@@ -171,7 +171,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: edit a entry with new values same as another entry's values -> rejected */
         executeCommand(EntryUtil.getAddCommand(BOB));
-        assertTrue(getModel().getEntryBook().getEntryList().contains(BOB));
+        assertTrue(getModel().getListEntryBook().getEntryList().contains(BOB));
         index = INDEX_SECOND_ENTRY;
         assertFalse(getModel().getFilteredEntryList().get(index.getZeroBased()).equals(BOB));
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()

@@ -98,7 +98,7 @@ public class FeedCommandTest {
 
         EntryBook expectedEntryBook = new EntryBook();
         expectedEntryBook.setPersons(entriesToBeImported);
-        expectedModel.setEntryBook(expectedEntryBook);
+        expectedModel.setListEntryBook(expectedEntryBook);
 
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
     }

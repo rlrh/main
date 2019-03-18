@@ -52,7 +52,7 @@ public class LogicManager implements Logic {
 
     @Override
     public ReadOnlyEntryBook getEntryBook() {
-        return model.getEntryBook();
+        return model.getListEntryBook();
     }
 
     @Override
