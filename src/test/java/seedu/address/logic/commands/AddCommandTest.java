@@ -113,6 +113,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void addArticle(String url, byte[] articleContent) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public GuiSettings getGuiSettings() {
             throw new AssertionError("This method should not be called.");
         }
@@ -143,7 +148,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public Entry addEntry(Entry entry) {
+        public void addEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -289,10 +294,9 @@ public class AddCommandTest {
         }
 
         @Override
-        public Entry addEntry(Entry entry) {
+        public void addEntry(Entry entry) {
             requireNonNull(entry);
             personsAdded.add(entry);
-            return entry;
         }
 
         @Override

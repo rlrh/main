@@ -19,6 +19,9 @@ public class Candidate<T> {
         this.value = value;
     }
 
+    /**
+     * Tries to see if candidate is a valid value, and replaces value if so.
+     */
     public Candidate<T> tryout(String candidate) {
         mapper.apply(candidate).ifPresent(value -> this.value = value);
         return this;

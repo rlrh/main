@@ -4,21 +4,10 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
-
-import org.apache.commons.text.WordUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import com.chimbori.crux.articles.Article;
-import com.chimbori.crux.articles.ArticleExtractor;
-import com.google.common.io.Files;
 
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
@@ -28,17 +17,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.parser.ParserUtil;
-import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.Title;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
-import seedu.address.model.util.Candidate;
-import seedu.address.network.Network;
 import seedu.address.storage.Storage;
 import seedu.address.ui.ViewMode;
 
@@ -157,101 +139,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public Entry addEntry(Entry entry) {
-
-        // Initial data
-        final Title title = entry.getTitle();
-        final Description description = entry.getDescription();
-        final boolean noTitleOrDescription = title.isEmpty() || description.isEmpty();
-        final String urlString = entry.getLink().value;
-
-        // Candidates to replace empty title and description
-        Candidate<Title> candidateTitle = new Candidate<>(new Title("Untitled"), (String s) -> {
-            try {
-                return Optional.of(ParserUtil.parseTitle(Optional.of(s)));
-            } catch (ParseException pe) {
-                logger.warning("Failed to replace title candidate. " + pe.getMessage());
-                return Optional.empty();
-            }
-        });
-        Candidate<Description> candidateDescription = new Candidate<>(new Description("No description"), (String s) -> {
-            try {
-                return Optional.of(ParserUtil.parseDescription(Optional.of(s)));
-            } catch (ParseException pe) {
-                logger.warning("Failed to replace description candidate. " + pe.getMessage());
-                return Optional.empty();
-            }
-        });
-
-        // First try - extract candidates just from URL
-        if (noTitleOrDescription) {
-            try {
-                URL url = new URL(urlString);
-                String baseName = Files.getNameWithoutExtension(url.getPath())
-                        .replaceAll("\n", "") // remove newline chars
-                        .replaceAll("\r", "") // remove carriage return chars
-                        .replaceAll("[^a-zA-Z0-9]+", " ") // replace special chars with spaces
-                        .trim();
-                candidateTitle.tryout(WordUtils.capitalizeFully(baseName)); // title 3rd choice - cleaned up base name
-                candidateDescription.tryout(url.getHost().trim()); // desc 4th choice - host name
-            } catch (MalformedURLException mue) {
-                // Skip if URL is malformed
-                logger.warning("Malformed URL: " + urlString);
-            }
-        }
-
-        try {
-
-            // Download article content to local storage
-            byte[] articleContent = Network.fetchAsBytes(urlString);
-            storage.addArticle(urlString, articleContent);
-
-            if (noTitleOrDescription) {
-
-                // Second try - extract candidates by parsing through Jsoup
-                String html = new String(articleContent);
-                Document document = Jsoup.parse(html);
-                candidateTitle.tryout(document.title().trim()); // title 2nd choice - document title element
-                candidateDescription.tryout(StringUtil.getFirstNWords(document.body().text(), 24)
-                       .trim()); // desc 3rd choice - first N words of raw document body text
-
-                // Third try - extract candidates by processing through Crux
-                Article article = ArticleExtractor.with(urlString, document)
-                        .extractMetadata()
-                        .extractContent()
-                        .article();
-                candidateTitle.tryout(article.title.trim()); // title 1st choice - extract title
-                candidateDescription
-                        .tryout(StringUtil.getFirstNWords(article.document.text(), 24)
-                                .trim()) // desc 2nd choice - first N words of cleaned-up document body text
-                        .tryout(article.description.trim()); // desc 1st choice - extract description
-
-            }
-
-        } catch (IOException ioe) {
-            // Do nothing if fail to fetch the page
-            logger.warning("Failed to fetch URL: " + urlString);
-        }
-
-        // Add updated entry to entry book
-        Entry updatedEntry = new Entry(
-                title.isEmpty() ? candidateTitle.get() : title, // replace title if empty
-                description.isEmpty() ? candidateDescription.get() : description, // replace description if empty
-                entry.getLink(),
-                entry.getAddress(),
-                entry.getTags()
-        );
-        entryBook.addPerson(updatedEntry);
+    public void addEntry(Entry entry) {
+        entryBook.addPerson(entry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
-
-        // Return defensive copy of updated entry
-        return new Entry(
-                updatedEntry.getTitle(),
-                updatedEntry.getDescription(),
-                updatedEntry.getLink(),
-                updatedEntry.getAddress(),
-                updatedEntry.getTags()
-        );
     }
 
     @Override
@@ -271,6 +161,11 @@ public class ModelManager implements Model {
     @Override
     public Storage getStorage() {
         return storage;
+    }
+
+    @Override
+    public void addArticle(String url, byte[] articleContent) throws IOException {
+        storage.addArticle(url, articleContent);
     }
 
     //=========== Filtered Entry List Accessors =============================================================
