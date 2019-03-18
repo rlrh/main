@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.model.tag.Tag;
@@ -23,6 +24,7 @@ public class Entry {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final Optional<Link> offlineLink;
 
     /**
      * Every field must be present and not null.
@@ -32,6 +34,20 @@ public class Entry {
         this.title = title;
         this.description = description;
         this.link = link;
+        this.offlineLink = Optional.empty();
+        this.address = address;
+        this.tags.addAll(tags);
+    }
+
+    /**
+     * Every field must be present and not null.
+     */
+    public Entry(Title title, Description description, Link link, Link offlineLink, Address address, Set<Tag> tags) {
+        requireAllNonNull(title, description, link, address, tags);
+        this.title = title;
+        this.description = description;
+        this.link = link;
+        this.offlineLink = Optional.of(offlineLink);
         this.address = address;
         this.tags.addAll(tags);
     }
@@ -46,6 +62,10 @@ public class Entry {
 
     public Link getLink() {
         return link;
+    }
+
+    public Optional<Link> getOfflineLink() {
+        return offlineLink;
     }
 
     public Address getAddress() {
@@ -108,8 +128,12 @@ public class Entry {
                 .append(" Description: ")
                 .append(getDescription())
                 .append(" Link: ")
-                .append(getLink())
-                .append(" Address: ")
+                .append(getLink());
+        offlineLink.ifPresent(link1 ->
+            builder.append(" Offline link: ")
+                    .append(link1)
+        );
+        builder.append(" Address: ")
                 .append(getAddress())
                 .append(" Tags: ");
         getTags().forEach(builder::append);
