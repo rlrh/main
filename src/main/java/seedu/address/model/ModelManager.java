@@ -128,12 +128,6 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasEntryEqualTo(Entry entry) {
-        requireNonNull(entry);
-        return entryBook.hasEntryEqualTo(entry);
-    }
-
-    @Override
     public void deleteEntry(Entry target) {
         entryBook.removePerson(target);
     }

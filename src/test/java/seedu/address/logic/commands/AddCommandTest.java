@@ -250,11 +250,6 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasEntryEqualTo(Entry entry) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
         public void deleteEntry(Entry target) {
             throw new AssertionError("This method should not be called.");
         }
@@ -367,10 +362,12 @@ public class AddCommandTest {
      * A Model stub that always accepts the entry being added.
      */
     private class ModelStubAcceptingEntryAdded extends ModelStub {
-        final ArrayList<Entry> entriesAdded = new ArrayList<>();
+        private final ArrayList<Entry> entriesAdded = new ArrayList<>();
 
         @Override
-        public void addArticle(String url, byte[] articleContent) { }
+        public void addArticle(String url, byte[] articleContent) {
+            // stub - empty on purpose
+        }
 
         @Override
         public boolean hasEntry(Entry entry) {

@@ -76,7 +76,7 @@ public class AddCommand extends Command {
         // Initial data
         final Title title = toAdd.getTitle();
         final Description description = toAdd.getDescription();
-        final boolean noTitleOrDescription = title.isEmpty() || description.isEmpty();
+        final boolean noTitleOrNoDescription = title.isEmpty() || description.isEmpty();
         final String urlString = toAdd.getLink().value;
 
         // Candidates to replace empty title and description
@@ -84,7 +84,6 @@ public class AddCommand extends Command {
             try {
                 return Optional.of(ParserUtil.parseTitle(Optional.of(s)));
             } catch (ParseException pe) {
-                logger.warning("Failed to replace title candidate. " + pe.getMessage());
                 return Optional.empty();
             }
         });
@@ -92,13 +91,12 @@ public class AddCommand extends Command {
             try {
                 return Optional.of(ParserUtil.parseDescription(Optional.of(s)));
             } catch (ParseException pe) {
-                logger.warning("Failed to replace description candidate. " + pe.getMessage());
                 return Optional.empty();
             }
         });
 
         // First try - extract candidates just from URL
-        if (noTitleOrDescription) {
+        if (noTitleOrNoDescription) {
             try {
                 URL url = new URL(urlString);
                 String baseName = Files.getNameWithoutExtension(url.getPath())
@@ -120,13 +118,13 @@ public class AddCommand extends Command {
             byte[] articleContent = Network.fetchAsBytes(urlString);
             model.addArticle(urlString, articleContent);
 
-            if (noTitleOrDescription) {
+            if (noTitleOrNoDescription) {
 
                 // Second try - extract candidates by parsing through Jsoup
                 String html = new String(articleContent);
                 Document document = Jsoup.parse(html);
                 candidateTitle.tryout(document.title().trim()); // title 2nd choice - document title element
-                candidateDescription.tryout(StringUtil.getFirstNWords(document.body().text(), 24)
+                candidateDescription.tryout(StringUtil.getFirstNWordsWithEllipsis(document.body().text(), 24)
                         .trim()); // desc 3rd choice - first N words of raw document body text
 
                 // Third try - extract candidates by processing through Crux
@@ -136,7 +134,7 @@ public class AddCommand extends Command {
                         .article();
                 candidateTitle.tryout(article.title.trim()); // title 1st choice - extract title
                 candidateDescription
-                        .tryout(StringUtil.getFirstNWords(article.document.text(), 24)
+                        .tryout(StringUtil.getFirstNWordsWithEllipsis(article.document.text(), 24)
                                 .trim()) // desc 2nd choice - first N words of cleaned-up document body text
                         .tryout(article.description.trim()); // desc 1st choice - extract description
 
@@ -147,7 +145,7 @@ public class AddCommand extends Command {
             logger.warning("Failed to fetch URL: " + urlString);
         }
 
-        // Add updated entry to entry book
+        // Attempt to add updated entry to entry book
         Entry updatedEntry = new Entry(
                 title.isEmpty() ? candidateTitle.get() : title, // replace title if empty
                 description.isEmpty() ? candidateDescription.get() : description, // replace description if empty
