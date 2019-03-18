@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -119,9 +120,10 @@ public class AddCommand extends Command {
 
             // Download article content to local storage
             byte[] articleContent = Network.fetchAsBytes(urlString);
-            model.addArticle(urlString, articleContent);
-
-            offlineLink = Optional.of(new Link(model.getStorage().getArticlePath(urlString).toUri().toASCIIString()));
+            Optional<Path> articlePath = model.addArticle(urlString, articleContent);
+            if (articlePath.isPresent()) {
+                offlineLink = Optional.of(new Link(articlePath.get().toUri().toASCIIString()));
+            }
 
             if (noTitleOrNoDescription) {
 

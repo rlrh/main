@@ -27,6 +27,7 @@ import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRI
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.junit.Rule;
@@ -196,7 +197,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addArticle(String url, byte[] articleContent) {
+        public Optional<Path> addArticle(String url, byte[] articleContent) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -386,8 +387,8 @@ public class AddCommandTest {
         private final ArrayList<Entry> entriesAdded = new ArrayList<>();
 
         @Override
-        public void addArticle(String url, byte[] articleContent) {
-            // stub - empty on purpose
+        public Optional<Path> addArticle(String url, byte[] articleContent) {
+            return Optional.empty();
         }
 
         @Override

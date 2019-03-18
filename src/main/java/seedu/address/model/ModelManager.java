@@ -6,6 +6,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -160,8 +161,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void addArticle(String url, byte[] articleContent) throws IOException {
-        storage.addArticle(url, articleContent);
+    public Optional<Path> addArticle(String url, byte[] articleContent) throws IOException {
+        return storage.addArticle(url, articleContent);
     }
 
     //=========== Filtered Entry List Accessors =============================================================
