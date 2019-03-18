@@ -17,7 +17,7 @@ import seedu.address.ui.ViewMode;
 public interface Model {
 
     /** {@code Predicate} that always evaluate to true */
-    Predicate<Entry> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
+    Predicate<Entry> PREDICATE_SHOW_ALL_ENTRIES = unused -> true;
 
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.

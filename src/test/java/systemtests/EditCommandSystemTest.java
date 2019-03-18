@@ -24,7 +24,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
@@ -228,7 +228,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
             Index expectedSelectedCardIndex) {
         Model expectedModel = getModel();
         expectedModel.setEntry(expectedModel.getFilteredEntryList().get(toEdit.getZeroBased()), editedEntry);
-        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         assertCommandSuccess(command, expectedModel,
                 String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry), expectedSelectedCardIndex);
@@ -259,7 +259,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
     private void assertCommandSuccess(String command, Model expectedModel, String expectedResultMessage,
             Index expectedSelectedCardIndex) {
         executeCommand(command);
-        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
         assertCommandBoxShowsDefaultStyle();
         assertResultDisplayShowsDefaultStyle();

@@ -38,9 +38,9 @@ public class ModelManager implements Model {
 
     private final EntryBook listEntryBook;
     private final UserPrefs userPrefs;
-    private final SimpleListProperty<Entry> displayedEntryList = new SimpleListProperty<>();
     private final FilteredList<Entry> filteredEntries;
 
+    private final SimpleListProperty<Entry> displayedEntryList = new SimpleListProperty<>();
     private final SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
@@ -147,7 +147,7 @@ public class ModelManager implements Model {
         } catch (IOException ioe) {
             // Do nothing if we fail to fetch the page.
         }
-        updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+        updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
 
     @Override
@@ -320,6 +320,7 @@ public class ModelManager implements Model {
 
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
                 && userPrefs.equals(other.userPrefs)
+                && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
                 && Objects.equals(selectedEntry.get(), other.selectedEntry.get())
                 && Objects.equals(currentViewMode.get(), other.currentViewMode.get())

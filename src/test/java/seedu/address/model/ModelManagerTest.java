@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_BOB;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
@@ -93,13 +93,13 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setAddressBookFilePath_nullPath_throwsNullPointerException() {
+    public void setEntryBookFilePath_nullPath_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
         modelManager.setEntryBookFilePath(null);
     }
 
     @Test
-    public void setAddressBookFilePath_validPath_setsAddressBookFilePath() {
+    public void setEntryBookFilePath_validPath_setsAddressBookFilePath() {
         Path path = Paths.get("address/book/file/path");
         modelManager.setEntryBookFilePath(path);
         assertEquals(path, modelManager.getEntryBookFilePath());
@@ -119,24 +119,24 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void hasPerson_nullPerson_throwsNullPointerException() {
+    public void hasEntry_nullEntry_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
         modelManager.hasEntry(null);
     }
 
     @Test
-    public void hasPerson_personNotInAddressBook_returnsFalse() {
+    public void hasEntry_entryNotInEntryBook_returnsFalse() {
         assertFalse(modelManager.hasEntry(ALICE));
     }
 
     @Test
-    public void hasPerson_personInAddressBook_returnsTrue() {
+    public void hasEntry_entryInEntryBook_returnsTrue() {
         modelManager.addEntry(ALICE);
         assertTrue(modelManager.hasEntry(ALICE));
     }
 
     @Test
-    public void deletePerson_personIsSelectedAndFirstPersonInFilteredPersonList_selectionCleared() {
+    public void deleteEntry_entryIsSelectedAndFirstEntryInFilteredEntryList_selectionCleared() {
         modelManager.addEntry(ALICE);
         modelManager.setSelectedEntry(ALICE);
         modelManager.deleteEntry(ALICE);
@@ -144,7 +144,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void deletePerson_personIsSelectedAndSecondPersonInFilteredPersonList_firstPersonSelected() {
+    public void deleteEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
         modelManager.addEntry(ALICE);
         modelManager.addEntry(BOB);
         assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
@@ -154,7 +154,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setPerson_personIsSelected_selectedPersonUpdated() {
+    public void setEntry_entryIsSelected_selectedEntryUpdated() {
         modelManager.addEntry(ALICE);
         modelManager.setSelectedEntry(ALICE);
         Entry updatedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
@@ -163,19 +163,19 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
+    public void getFilteredEntryList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
         modelManager.getFilteredEntryList().remove(0);
     }
 
     @Test
-    public void setSelectedPerson_personNotInFilteredPersonList_throwsPersonNotFoundException() {
+    public void setSelectedEntry_entryNotInFilteredEntryList_throwsEntryNotFoundException() {
         thrown.expect(EntryNotFoundException.class);
         modelManager.setSelectedEntry(ALICE);
     }
 
     @Test
-    public void setSelectedPerson_personInFilteredPersonList_setsSelectedPerson() {
+    public void setSelectedEntry_entryInFilteredEntryList_setsSelectedEntry() {
         modelManager.addEntry(ALICE);
         assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(ALICE);
@@ -184,14 +184,14 @@ public class ModelManagerTest {
 
     @Test
     public void equals() {
-        EntryBook addressBook = new EntryBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
-        EntryBook differentAddressBook = new EntryBook();
+        EntryBook entryBook = new EntryBookBuilder().withEntry(ALICE).withEntry(BENSON).build();
+        EntryBook differentEntryBook = new EntryBook();
         UserPrefs userPrefs = new UserPrefs();
         Storage storage = new StorageStub();
 
         // same values -> returns true
-        modelManager = new ModelManager(addressBook, userPrefs, storage);
-        ModelManager modelManagerCopy = new ModelManager(addressBook, userPrefs, storage);
+        modelManager = new ModelManager(entryBook, userPrefs, storage);
+        ModelManager modelManagerCopy = new ModelManager(entryBook, userPrefs, storage);
         assertTrue(modelManager.equals(modelManagerCopy));
 
         // same object -> returns true
@@ -203,32 +203,32 @@ public class ModelManagerTest {
         // different types -> returns false
         assertFalse(modelManager.equals(5));
 
-        // different addressBook -> returns false
-        assertFalse(modelManager.equals(new ModelManager(differentAddressBook, userPrefs, storage)));
+        // different entryBook -> returns false
+        assertFalse(modelManager.equals(new ModelManager(differentEntryBook, userPrefs, storage)));
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getTitle().fullTitle.split("\\s+");
         modelManager.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(keywords)));
-        assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs, storage)));
+        assertFalse(modelManager.equals(new ModelManager(entryBook, userPrefs, storage)));
 
         // resets modelManager to initial state for upcoming tests
-        modelManager.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+        modelManager.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
-        assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs, storage)));
+        assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs, storage)));
 
         UserPrefs differentUserPrefs2 = new UserPrefs();
         differentUserPrefs2.setArticleDataDirectoryPath(Paths.get("differentFilePath"));
-        assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs, storage)));
+        assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs2, storage)));
     }
 
     /**
      * This is an integration test to see that ModelManager#addEntry is properly hooked up to ArticleStorage.
      */
     @Test
-    public void addPerson_networkArticleSavedToDisk() throws IOException {
+    public void addEntry_networkArticleSavedToDisk() throws IOException {
         JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(getTempFilePath("ab"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
@@ -248,7 +248,7 @@ public class ModelManagerTest {
      * This is an integration test to see that ModelManager#addEntry is properly hooked up to ArticleStorage.
      */
     @Test
-    public void addPerson_localArticleSavedToDisk() throws IOException {
+    public void addEntry_localArticleSavedToDisk() throws IOException {
         JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(getTempFilePath("ab"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
