@@ -87,8 +87,8 @@ public class StorageManager implements Storage {
     }
 
     @Override
-    public void addArticle(String url, byte[] content) throws IOException {
-        articleStorage.addArticle(url, content);
+    public Optional<Path> addArticle(String url, byte[] content) throws IOException {
+        return articleStorage.addArticle(url, content);
     }
 
     @Override

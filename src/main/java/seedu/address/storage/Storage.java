@@ -30,6 +30,6 @@ public interface Storage extends EntryBookStorage, UserPrefsStorage, ArticleStor
     void saveAddressBook(ReadOnlyEntryBook addressBook) throws IOException;
 
     @Override
-    void addArticle(String url, byte[] articleContent) throws IOException;
+    Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 
 }

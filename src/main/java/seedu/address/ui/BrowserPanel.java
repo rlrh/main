@@ -155,7 +155,7 @@ public class BrowserPanel extends UiPart<Region> {
      * @param entry entry to load
      */
     private void loadEntryPage(Entry entry) {
-        loadPage(entry.getLink().value);
+        loadPage(entry.getOfflineOrOriginalLink().value);
     }
 
     /**
