@@ -61,7 +61,7 @@ public class SampleDataUtil {
     public static ReadOnlyEntryBook getSampleAddressBook() {
         EntryBook sampleAb = new EntryBook();
         for (Entry sampleEntry : getSamplePersons()) {
-            sampleAb.addPerson(sampleEntry);
+            sampleAb.addEntry(sampleEntry);
         }
         return sampleAb;
     }

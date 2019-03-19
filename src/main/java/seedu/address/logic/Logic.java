@@ -28,7 +28,7 @@ public interface Logic {
     /**
      * Returns the EntryBook.
      *
-     * @see seedu.address.model.Model#getEntryBook()
+     * @see seedu.address.model.Model#getListEntryBook()
      */
     ReadOnlyEntryBook getEntryBook();
 

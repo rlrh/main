@@ -24,7 +24,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
@@ -68,7 +68,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, index, BOB);
 
         /* Case: edit a entry with new values same as another entry's values but with different link -> edited */
-        assertTrue(getModel().getEntryBook().getEntryList().contains(BOB));
+        assertTrue(getModel().getListEntryBook().getEntryList().contains(BOB));
         index = INDEX_SECOND_ENTRY;
         assertNotEquals(getModel().getFilteredEntryList().get(index.getZeroBased()), BOB);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
@@ -99,7 +99,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
          * -> rejected
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        int invalidIndex = getModel().getEntryBook().getEntryList().size();
+        int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + TITLE_DESC_BOB,
                 Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
@@ -171,7 +171,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: edit a entry with new values same as another entry's values -> rejected */
         executeCommand(EntryUtil.getAddCommand(BOB));
-        assertTrue(getModel().getEntryBook().getEntryList().contains(BOB));
+        assertTrue(getModel().getListEntryBook().getEntryList().contains(BOB));
         index = INDEX_SECOND_ENTRY;
         assertFalse(getModel().getFilteredEntryList().get(index.getZeroBased()).equals(BOB));
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
@@ -228,7 +228,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
             Index expectedSelectedCardIndex) {
         Model expectedModel = getModel();
         expectedModel.setEntry(expectedModel.getFilteredEntryList().get(toEdit.getZeroBased()), editedEntry);
-        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         assertCommandSuccess(command, expectedModel,
                 String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry), expectedSelectedCardIndex);
@@ -259,7 +259,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
     private void assertCommandSuccess(String command, Model expectedModel, String expectedResultMessage,
             Index expectedSelectedCardIndex) {
         executeCommand(command);
-        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+        expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
         assertCommandBoxShowsDefaultStyle();
         assertResultDisplayShowsDefaultStyle();

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -34,10 +35,11 @@ public class ModelManager implements Model {
 
     private ModelContext context = ModelContext.CONTEXT_LIST;
 
-    private final EntryBook entryBook;
+    private final EntryBook listEntryBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Entry> filteredEntries;
 
+    private final SimpleListProperty<Entry> displayedEntryList = new SimpleListProperty<>();
     private final SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
@@ -45,23 +47,24 @@ public class ModelManager implements Model {
     private final Storage storage;
 
     /**
-     * Initializes a ModelManager with the given addressBook, userPrefs, and storage
+     * Initializes a ModelManager with the given listEntryBook, userPrefs, and storage
      */
-    public ModelManager(ReadOnlyEntryBook addressBook, ReadOnlyUserPrefs userPrefs, Storage storage) {
+    public ModelManager(ReadOnlyEntryBook listEntryBook, ReadOnlyUserPrefs userPrefs, Storage storage) {
         super();
-        requireAllNonNull(addressBook, userPrefs);
+        requireAllNonNull(listEntryBook, userPrefs, storage);
 
-        logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
+        logger.fine("Initializing with list context address book: " + listEntryBook + " and user prefs " + userPrefs);
 
-        entryBook = new EntryBook(addressBook);
+        this.listEntryBook = new EntryBook(listEntryBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredEntries = new FilteredList<>(entryBook.getEntryList());
-        filteredEntries.addListener(this::ensureSelectedPersonIsValid);
-
         this.storage = storage;
 
         // Save the entry book to storage whenever it is modified.
-        entryBook.addListener(this::saveToStorageListener);
+        this.listEntryBook.addListener(this::saveToStorageListener);
+
+        displayEntryBook(this.listEntryBook);
+        filteredEntries = new FilteredList<>(this.displayedEntryList);
+        filteredEntries.addListener(this::ensureSelectedEntryIsValid);
     }
 
     //=========== UserPrefs ==================================================================================
@@ -114,42 +117,47 @@ public class ModelManager implements Model {
     //=========== EntryBook ================================================================================
 
     @Override
-    public void setEntryBook(ReadOnlyEntryBook entryBook) {
-        this.entryBook.resetData(entryBook);
+    public void setListEntryBook(ReadOnlyEntryBook listEntryBook) {
+        this.listEntryBook.resetData(listEntryBook);
     }
 
     @Override
-    public ReadOnlyEntryBook getEntryBook() {
-        return entryBook;
+    public ReadOnlyEntryBook getListEntryBook() {
+        return listEntryBook;
     }
 
     @Override
     public boolean hasEntry(Entry entry) {
         requireNonNull(entry);
-        return entryBook.hasPerson(entry);
+        return listEntryBook.hasPerson(entry);
     }
 
     @Override
     public void deleteEntry(Entry target) {
-        entryBook.removePerson(target);
+        listEntryBook.removePerson(target);
     }
 
     @Override
     public void addEntry(Entry entry) {
-        entryBook.addPerson(entry);
-        updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
+        listEntryBook.addEntry(entry);
+        updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
 
     @Override
     public void setEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
-        entryBook.setPerson(target, editedEntry);
+        listEntryBook.setPerson(target, editedEntry);
     }
 
     @Override
     public void clearEntryBook() {
-        entryBook.clear();
+        listEntryBook.clear();
+    }
+
+    @Override
+    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+        displayedEntryList.set(entryBook.getEntryList());
     }
 
     //=========== Storage ===================================================================================
@@ -168,7 +176,7 @@ public class ModelManager implements Model {
 
     /**
      * Returns an unmodifiable view of the list of {@code Entry} backed by the internal list of
-     * {@code entryBook}
+     * {@code listEntryBook}
      */
     @Override
     public ObservableList<Entry> getFilteredEntryList() {
@@ -255,7 +263,7 @@ public class ModelManager implements Model {
     /**
      * Ensures {@code selectedEntry} is a valid entry in {@code filteredEntries}.
      */
-    private void ensureSelectedPersonIsValid(ListChangeListener.Change<? extends Entry> change) {
+    private void ensureSelectedEntryIsValid(ListChangeListener.Change<? extends Entry> change) {
         while (change.next()) {
             if (selectedEntry.getValue() == null) {
                 // null is always a valid selected entry, so we do not need to check that it is valid anymore.
@@ -287,7 +295,7 @@ public class ModelManager implements Model {
     private void saveToStorageListener(Observable observable) {
         logger.info("Address book modified, saving to file.");
         try {
-            storage.saveAddressBook(entryBook);
+            storage.saveAddressBook(listEntryBook);
         } catch (IOException ioe) {
             setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
         }
@@ -308,8 +316,9 @@ public class ModelManager implements Model {
         // state check
         ModelManager other = (ModelManager) obj;
 
-        boolean stateCheck = entryBook.equals(other.entryBook)
+        boolean stateCheck = listEntryBook.equals(other.listEntryBook)
                 && userPrefs.equals(other.userPrefs)
+                && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
                 && Objects.equals(selectedEntry.get(), other.selectedEntry.get())
                 && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
@@ -328,13 +337,22 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        Model clonedModel = new ModelManager(this.entryBook, this.userPrefs, this.storage);
+        Model clonedModel = new ModelManager(this.listEntryBook, this.userPrefs, this.storage);
         clonedModel.setContext(this.getContext());
         return clonedModel;
     }
 
     @Override
     public void setContext(ModelContext context) {
+        switch (context) {
+        case CONTEXT_LIST:
+            displayEntryBook(this.listEntryBook);
+            break;
+        case CONTEXT_ARCHIVE:
+            // something else
+            break;
+        default:
+        }
         this.context = context;
     }
 

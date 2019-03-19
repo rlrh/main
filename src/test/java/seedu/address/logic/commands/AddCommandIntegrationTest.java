@@ -65,7 +65,7 @@ public class AddCommandIntegrationTest {
 
     @Test
     public void execute_duplicateEntry_throwsCommandException() {
-        Entry entryInList = model.getEntryBook().getEntryList().get(0);
+        Entry entryInList = model.getListEntryBook().getEntryList().get(0);
         assertCommandFailure(new AddCommand(entryInList), model, commandHistory,
                 AddCommand.MESSAGE_DUPLICATE_PERSON);
     }
