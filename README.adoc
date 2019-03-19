@@ -14,15 +14,17 @@ ifndef::env-github[]
 image::images/Ui.png[width="600"]
 endif::[]
 
-* README helps you discover, curate and read more content you care about in less time.
+* README helps you read more content you care about anywhere you go.
 * *All-in-one*: Follow web feeds and bookmark web pages - save interesting articles, cooking recipes, song lyrics, or anything else you come across while browsing.
 * *Read Anywhere*: Read offline, anywhere and anytime you want - all the links you save are downloaded onto your personal computer so you'll never lose them.
-* *Stay Focused*: Consume more content, more comfortably - reading view strips away clutter like buttons and ads for better readability.
+* *Stay Focused*: Consume more content more comfortably - reading view strips away visual clutter to create a distraction-free reading experience so you can focus on content.
 * *Keep Organized*: Curate your content - organize and categorize your feeds and links and find them quickly with powerful search, sort and filter functionality.
 * *Fast*: Never leave your keyboard - single-shot commands and keyboard shortcuts let you do more in less time.
-* You'll love README if you're a heavy consumer of web content but don't have regular internet access, whether because you often head off on long flights or you love working in cafes, and refuse to pay exorbitant prices for Internet access anywhere.
-
-* This is an integrated bookmark manager and feed reader desktop application for saving web pages and feeds to read later on your personal computer. It has a GUI but most of the user interactions happen using a CLI (Command Line Interface).
+* You'll love README if you consume a lot of web content and want to keep up to date with your favourite websites
+  but you're a road warrior who doesn't have regular Internet access.
+  Whether you're heading off on a flight or working in a cafe,
+  README has you covered with all the content you care about in one place.
+* This is an integrated bookmark manager and feed reader desktop application for subscribing to web feeds and saving web pages to read later on your personal computer. It has a GUI but most of the user interactions happen using a CLI (Command Line Interface).
 
 == Site Map
 
@@ -36,6 +38,14 @@ endif::[]
 * This application is based on the AddressBook-Level4 project created by the SE-EDU initiative at https://github.com/se-edu/.
 * Some parts of this application were inspired by the excellent http://code.makery.ch/library/javafx-8-tutorial/[Java FX tutorial] by
 _Marco Jakob_.
-* Libraries used: https://rometools.github.io/rome/[ROME], https://github.com/chimbori/crux[Crux], https://github.com/TestFX/TestFX[TestFX], https://github.com/FasterXML/jackson[Jackson], https://github.com/google/guava[Guava], https://github.com/junit-team/junit5[JUnit5]
+* Libraries used:
+  https://github.com/chimbori/crux[Crux],
+  https://jsoup.org/[jsoup],
+  https://rometools.github.io/rome/[ROME],
+  https://github.com/FasterXML/jackson[Jackson],
+  https://github.com/google/guava[Guava],
+  https://commons.apache.org/[Apache Commons],
+  https://github.com/junit-team/junit5[JUnit5],
+  https://github.com/TestFX/TestFX[TestFX]
 
 == Licence : link:LICENSE[MIT]
