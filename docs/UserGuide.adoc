@@ -30,7 +30,7 @@ Enjoy!
 == Quick Start
 
 .  Ensure you have Java version `9` or later installed in your Computer.
-.  Download the latest `README.jar` entry:{repoURL}/releases[here].
+.  Download the latest `README.jar` link:{repoURL}/releases[here].
 .  Copy the file to the folder you want to use as the home folder for your README.
 .  Double-click the file to start the app. The GUI should appear in a few seconds.
 +
