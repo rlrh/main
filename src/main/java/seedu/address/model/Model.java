@@ -16,6 +16,7 @@ import seedu.address.ui.ViewMode;
  * The API of the Model component.
  */
 public interface Model {
+
     /** {@code Predicate} that always evaluate to true */
     Predicate<Entry> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
 
@@ -184,4 +185,27 @@ public interface Model {
      * Mainly created because clone is needed a lot in tests.
      */
     Model clone();
+
+    /**
+     * Returns the context of the Model.
+     */
+    ModelContext getContext();
+
+    /**
+     * Sets the context of the Model.
+     * @param context
+     */
+    void setContext(ModelContext context);
+
+    /**
+     * Archives the given entry.
+     * The entry must exist in the entry book.
+     */
+    void archiveEntry(Entry target);
+
+    /**
+     * Un-archives the given entry.
+     * The entry must exist in the entry book archives.
+     */
+    void unarchiveEntry(Entry entry);
 }

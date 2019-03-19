@@ -183,6 +183,7 @@ public abstract class AddressBookSystemTest {
         assertEquals(expectedCommandInput, getCommandBox().getInput());
         assertEquals(expectedResultMessage, getResultDisplay().getText());
         assertEquals(new EntryBook(expectedModel.getEntryBook()), testApp.readStorageAddressBook());
+        assertEquals(expectedModel.getContext(), testApp.getModel().getContext());
         assertListMatching(getPersonListPanel(), expectedModel.getFilteredEntryList());
     }
 
@@ -270,7 +271,7 @@ public abstract class AddressBookSystemTest {
     /**
      * Asserts that the entire status bar remains the same.
      */
-    protected void assertStatusBarUnchanged() {
+    protected void assertStatusBarExcludingCountUnchanged() {
         StatusBarFooterHandle handle = getStatusBarFooter();
         assertFalse(handle.isSaveLocationChanged());
         assertFalse(handle.isSyncStatusChanged());
@@ -280,7 +281,7 @@ public abstract class AddressBookSystemTest {
      * Asserts that only the sync status in the status bar was changed to the timing of
      * {@code ClockRule#getInjectedClock()}, while the save location remains the same.
      */
-    protected void assertStatusBarUnchangedExceptSyncStatus() {
+    protected void assertStatusBarUnchangedExceptSyncStatusExcludingCount() {
         StatusBarFooterHandle handle = getStatusBarFooter();
         String timestamp = new Date(clockRule.getInjectedClock().millis()).toString();
         String expectedSyncStatus = String.format(SYNC_STATUS_UPDATED, timestamp);

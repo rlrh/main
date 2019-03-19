@@ -268,14 +268,14 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         } else {
             assertSelectedCardUnchanged();
         }
-        assertStatusBarUnchangedExceptSyncStatus();
+        assertStatusBarUnchangedExceptSyncStatusExcludingCount();
     }
 
     /**
      * Executes {@code command} and in addition,<br>
      * 1. Asserts that the command box displays {@code command}.<br>
      * 2. Asserts that result display box displays {@code expectedResultMessage}.<br>
-     * 3. Asserts that the browser url, selected card and status bar remain unchanged.<br>
+     * 3. Asserts that the browser url, selected card and status bar excluding count remain unchanged.<br>
      * 4. Asserts that the command box has the error style.<br>
      * Verifications 1 and 2 are performed by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
@@ -289,6 +289,6 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
         assertCommandBoxShowsErrorStyle();
         assertResultDisplayShowsErrorStyle();
-        assertStatusBarUnchanged();
+        assertStatusBarExcludingCountUnchanged();
     }
 }

@@ -32,6 +32,8 @@ public class ModelManager implements Model {
 
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
+    private ModelContext context = ModelContext.CONTEXT_LIST;
+
     private final EntryBook entryBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Entry> filteredEntries;
@@ -326,7 +328,28 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        return new ModelManager(this.entryBook, this.userPrefs, this.storage);
+        Model clonedModel = new ModelManager(this.entryBook, this.userPrefs, this.storage);
+        clonedModel.setContext(this.getContext());
+        return clonedModel;
     }
 
+    @Override
+    public void setContext(ModelContext context) {
+        this.context = context;
+    }
+
+    @Override
+    public ModelContext getContext() {
+        return context;
+    }
+
+    @Override
+    public void archiveEntry(Entry target) {
+        return;
+    }
+
+    @Override
+    public void unarchiveEntry(Entry entry) {
+        return;
+    }
 }
