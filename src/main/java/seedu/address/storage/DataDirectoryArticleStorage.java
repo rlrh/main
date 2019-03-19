@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.apache.commons.codec.binary.Base32;
@@ -30,13 +31,15 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
     }
 
     @Override
-    public void addArticle(String url, byte[] articleContent) throws IOException {
+    public Optional<Path> addArticle(String url, byte[] articleContent) throws IOException {
         Path targetPath = getArticlePath(url);
 
         // Ensure data directory exists
         FileUtil.createDirectory(directoryPath);
 
         FileUtil.writeToFile(targetPath, articleContent);
+
+        return Optional.of(targetPath);
     }
 
     /**
@@ -52,7 +55,7 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
             byte[] truncatedHash = new byte[16];
             System.arraycopy(encodedHash, 0, truncatedHash, 0, 16);
             byte[] hashInBase32 = new Base32().encode(truncatedHash);
-            return new String(hashInBase32, StandardCharsets.UTF_8);
+            return new String(hashInBase32, StandardCharsets.UTF_8) + ".html";
         } catch (NoSuchAlgorithmException nsae) {
             logger.severe("SHA-256 hash not supported on this system. Saving links cannot be done");
             throw nsae;

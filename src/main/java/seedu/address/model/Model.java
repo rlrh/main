@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import javafx.beans.property.ReadOnlyProperty;
@@ -101,11 +102,11 @@ public interface Model {
      */
     void clearEntryBook();
 
+    /** Adds article with {@code articleContent} associated with {@code url}. */
+    Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
+
     /** Displays a given entryBook without touching storage. */
     void displayEntryBook(ReadOnlyEntryBook entryBook);
-
-    /** Adds article with {@code articleContent} associated with {@code url}. */
-    void addArticle(String url, byte[] articleContent) throws IOException;
 
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();

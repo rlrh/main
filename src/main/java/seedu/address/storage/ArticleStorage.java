@@ -2,6 +2,7 @@ package seedu.address.storage;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * Represents a storage for articles.
@@ -19,7 +20,7 @@ public interface ArticleStorage {
      * @param url cannot be null.
      * @throws IOException if there was any problem writing to the file.
      */
-    void addArticle(String url, byte[] articleContent) throws IOException;
+    Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 
     /**
      * Converts a given url to a Path where the article would be stored.

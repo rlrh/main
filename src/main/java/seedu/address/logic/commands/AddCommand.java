@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -29,6 +30,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
+import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.util.Candidate;
 import seedu.address.network.Network;
@@ -112,11 +114,16 @@ public class AddCommand extends Command {
             }
         }
 
+        Optional<Link> offlineLink = Optional.empty();
+
         try {
 
             // Download article content to local storage
             byte[] articleContent = Network.fetchAsBytes(urlString);
-            model.addArticle(urlString, articleContent);
+            Optional<Path> articlePath = model.addArticle(urlString, articleContent);
+            if (articlePath.isPresent()) {
+                offlineLink = Optional.of(new Link(articlePath.get().toUri().toASCIIString()));
+            }
 
             if (noTitleOrNoDescription) {
 
@@ -150,6 +157,7 @@ public class AddCommand extends Command {
                 title.isEmpty() ? candidateTitle.get() : title, // replace title if empty
                 description.isEmpty() ? candidateDescription.get() : description, // replace description if empty
                 toAdd.getLink(),
+                offlineLink,
                 toAdd.getAddress(),
                 toAdd.getTags()
         );
