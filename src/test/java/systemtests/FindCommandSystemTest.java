@@ -16,8 +16,6 @@ import org.junit.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.logic.commands.RedoCommand;
-import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.tag.Tag;
 
@@ -69,16 +67,6 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         command = FindCommand.COMMAND_WORD + " Daniel Benson NonMatchingKeyWord";
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
-
-        /* Case: undo previous find command -> rejected */
-        command = UndoCommand.COMMAND_WORD;
-        String expectedResultMessage = UndoCommand.MESSAGE_FAILURE;
-        assertCommandFailure(command, expectedResultMessage);
-
-        /* Case: redo previous find command -> rejected */
-        command = RedoCommand.COMMAND_WORD;
-        expectedResultMessage = RedoCommand.MESSAGE_FAILURE;
-        assertCommandFailure(command, expectedResultMessage);
 
         /* Case: find same persons in address book after deleting 1 of them -> 1 entry found */
         executeCommand(DeleteCommand.COMMAND_WORD + " 1");
@@ -160,8 +148,9 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
      * and the model related components equal to {@code expectedModel}.
      * These verifications are done by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
-     * Also verifies that the status bar remains unchanged, and the command box has the default style class, and the
-     * selected card updated accordingly, depending on {@code cardStatus}.
+     * Also verifies that the status bar excluding count remains unchanged,
+     * and the command box has the default style class,
+     * and the selected card updated accordingly, depending on {@code cardStatus}.
      * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
      */
     private void assertCommandSuccess(String command, Model expectedModel) {
@@ -172,7 +161,7 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
         assertCommandBoxShowsDefaultStyle();
         assertResultDisplayShowsDefaultStyle();
-        assertStatusBarUnchanged();
+        assertStatusBarExcludingCountUnchanged();
     }
 
     /**
@@ -180,8 +169,8 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
      * box displays {@code expectedResultMessage} and the model related components equal to the current model.
      * These verifications are done by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
-     * Also verifies that the browser url, selected card and status bar remain unchanged, and the command box has the
-     * error style.
+     * Also verifies that the browser url, selected card and status bar excluding count remain unchanged,
+     * and the command box has the error style.
      * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
      */
     private void assertCommandFailure(String command, String expectedResultMessage) {
@@ -192,6 +181,6 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
         assertCommandBoxShowsErrorStyle();
         assertResultDisplayShowsErrorStyle();
-        assertStatusBarUnchanged();
+        assertStatusBarExcludingCountUnchanged();
     }
 }

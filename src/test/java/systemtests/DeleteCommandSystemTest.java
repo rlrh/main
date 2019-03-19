@@ -15,8 +15,6 @@ import org.junit.Test;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
-import seedu.address.logic.commands.RedoCommand;
-import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
 
@@ -40,17 +38,6 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         Model modelBeforeDeletingLast = getModel();
         Index lastPersonIndex = getLastIndex(modelBeforeDeletingLast);
         assertCommandSuccess(lastPersonIndex);
-
-        /* Case: undo deleting the last entry in the list -> last entry restored */
-        command = UndoCommand.COMMAND_WORD;
-        expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
-        assertCommandSuccess(command, modelBeforeDeletingLast, expectedResultMessage);
-
-        /* Case: redo deleting the last entry in the list -> last entry deleted again */
-        command = RedoCommand.COMMAND_WORD;
-        removePerson(modelBeforeDeletingLast, lastPersonIndex);
-        expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
-        assertCommandSuccess(command, modelBeforeDeletingLast, expectedResultMessage);
 
         /* Case: delete the middle entry in the list -> deleted */
         Index middlePersonIndex = getMidIndex(getModel());
@@ -169,14 +156,14 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         assertCommandBoxShowsDefaultStyle();
         assertResultDisplayShowsDefaultStyle();
-        assertStatusBarUnchangedExceptSyncStatus();
+        assertStatusBarUnchangedExceptSyncStatusExcludingCount();
     }
 
     /**
      * Executes {@code command} and in addition,<br>
      * 1. Asserts that the command box displays {@code command}.<br>
      * 2. Asserts that result display box displays {@code expectedResultMessage}.<br>
-     * 3. Asserts that the browser url, selected card and status bar remain unchanged.<br>
+     * 3. Asserts that the browser url, selected card and status bar excluding count remain unchanged.<br>
      * 4. Asserts that the command box has the error style.<br>
      * Verifications 1 and 2 are performed by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
@@ -190,6 +177,6 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
         assertCommandBoxShowsErrorStyle();
         assertResultDisplayShowsErrorStyle();
-        assertStatusBarUnchanged();
+        assertStatusBarExcludingCountUnchanged();
     }
 }

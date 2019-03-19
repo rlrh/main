@@ -11,10 +11,10 @@ public class Description {
 
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Descriptions can take any values, and it should not be blank";
+            "Descriptions can take any values, and it should not be blank.";
     public static final String DEFAULT_DESCRIPTION = "";
     public static final String USER_INPUT_VALIDATION_REGEX = "[^\\s].*";
-    public static final String CONSTRUCTION_VALIDATION_REGEX = "^.*";
+    public static final String CONSTRUCTION_VALIDATION_REGEX = "([^\\s].*)|(^$)";
     public final String value;
 
     /**
@@ -40,6 +40,18 @@ public class Description {
      */
     public static boolean isValidConstructionDescription(String test) {
         return test.matches(CONSTRUCTION_VALIDATION_REGEX);
+    }
+
+    public static String formExceptionMessage() {
+        return MESSAGE_CONSTRAINTS;
+    }
+
+    public static String formExceptionMessage(String invalidInput) {
+        return MESSAGE_CONSTRAINTS + " Entered: [" + invalidInput + "].";
+    }
+
+    public boolean isEmpty() {
+        return value.isEmpty();
     }
 
     @Override

@@ -26,12 +26,13 @@ import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 
 public class FeedCommandTest {
-    private static final String TEST_URL = "https://m4th.b0ss.net/temp/rss.xml";
+    private static final String TEST_URL = "https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml";
     private static final String TEST_URL_LOCAL = MainApp.class.getResource("/RssFeedTest/rss.xml")
             .toExternalForm();
 
     private static final String MALFORMED_URL = "notavalidprotocol://malformed.url/invalid";
-    private static final String NOTAFEED_URL = "https://m4th.b0ss.net/temp/notafeed.notxml";
+    private static final String NOTAFEED_URL =
+        "https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml";
 
     private Model model = new ModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
@@ -98,7 +99,6 @@ public class FeedCommandTest {
         EntryBook expectedEntryBook = new EntryBook();
         expectedEntryBook.setPersons(entriesToBeImported);
         expectedModel.setEntryBook(expectedEntryBook);
-        expectedModel.commitEntryBook();
 
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
     }

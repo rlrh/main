@@ -69,6 +69,7 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '19.0'
     implementation group: 'com.rometools', name: 'rome', version: '1.12.0'
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.6'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
     testImplementation group: 'org.testfx', name: 'testfx-core', version: testFxVersion, {
@@ -231,6 +232,15 @@ task copyStylesheets(type: Copy) {
     into "${asciidoctor.outputDir}/html5/stylesheets"
 }
 asciidoctor.dependsOn copyStylesheets
+
+// Copies files needed for network tests into the generated HTML files to
+// use github pages for network testing.
+// This is needed as asciidoctor does not deploy non-asciidoc blobs.
+task copyNetworktestFiles(type: Copy) {
+    from "${asciidoctor.sourceDir}/networktests"
+    into "${asciidoctor.outputDir}/html5/networktests"
+}
+asciidoctor.dependsOn copyNetworktestFiles
 
 task deployOfflineDocs(type: Copy) {
     into('src/main/resources/docs')

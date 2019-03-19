@@ -1,5 +1,6 @@
 package seedu.address.model;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
@@ -15,6 +16,7 @@ import seedu.address.ui.ViewMode;
  * The API of the Model component.
  */
 public interface Model {
+
     /** {@code Predicate} that always evaluate to true */
     Predicate<Entry> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
 
@@ -99,6 +101,8 @@ public interface Model {
      */
     void clearEntryBook();
 
+    void addArticle(String url, byte[] articleContent) throws IOException;
+
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();
 
@@ -107,31 +111,6 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredEntryList(Predicate<Entry> predicate);
-
-    /**
-     * Returns true if the model has previous entry book states to restore.
-     */
-    boolean canUndoEntryBook();
-
-    /**
-     * Returns true if the model has undone entry book states to restore.
-     */
-    boolean canRedoEntryBook();
-
-    /**
-     * Restores the model's entry book to its previous state.
-     */
-    void undoEntryBook();
-
-    /**
-     * Restores the model's entry book to its previously undone state.
-     */
-    void redoEntryBook();
-
-    /**
-     * Saves the current entry book state for undo/redo.
-     */
-    void commitEntryBook();
 
     /**
      * Selected entry in the filtered entry list.
@@ -206,4 +185,27 @@ public interface Model {
      * Mainly created because clone is needed a lot in tests.
      */
     Model clone();
+
+    /**
+     * Returns the context of the Model.
+     */
+    ModelContext getContext();
+
+    /**
+     * Sets the context of the Model.
+     * @param context
+     */
+    void setContext(ModelContext context);
+
+    /**
+     * Archives the given entry.
+     * The entry must exist in the entry book.
+     */
+    void archiveEntry(Entry target);
+
+    /**
+     * Un-archives the given entry.
+     * The entry must exist in the entry book archives.
+     */
+    void unarchiveEntry(Entry entry);
 }

@@ -13,9 +13,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 import org.junit.Test;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.SelectCommand;
-import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 
 public class SelectCommandSystemTest extends AddressBookSystemTest {
@@ -33,16 +31,6 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         Index personCount = getLastIndex(getModel());
         command = SelectCommand.COMMAND_WORD + " " + personCount.getOneBased();
         assertCommandSuccess(command, personCount);
-
-        /* Case: undo previous selection -> rejected */
-        command = UndoCommand.COMMAND_WORD;
-        String expectedResultMessage = UndoCommand.MESSAGE_FAILURE;
-        assertCommandFailure(command, expectedResultMessage);
-
-        /* Case: redo selecting last card in the list -> rejected */
-        command = RedoCommand.COMMAND_WORD;
-        expectedResultMessage = RedoCommand.MESSAGE_FAILURE;
-        assertCommandFailure(command, expectedResultMessage);
 
         /* Case: select the middle card in the entry list -> selected */
         Index middleIndex = getMidIndex(getModel());
@@ -106,7 +94,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
      * {@code expectedSelectedCardIndex} of the selected entry.<br>
      * 4. {@code Storage} and {@code EntryListPanel} remain unchanged.<br>
      * 5. Selected card is at {@code expectedSelectedCardIndex} and the browser url is updated accordingly.<br>
-     * 6. Status bar remains unchanged.<br>
+     * 6. Status bar excluding count remains unchanged.<br>
      * Verifications 1, 3 and 4 are performed by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
      * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
@@ -129,7 +117,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
 
         assertCommandBoxShowsDefaultStyle();
         assertResultDisplayShowsDefaultStyle();
-        assertStatusBarUnchanged();
+        assertStatusBarExcludingCountUnchanged();
     }
 
     /**
@@ -138,7 +126,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
      * 2. Command box has the error style class.<br>
      * 3. Result display box displays {@code expectedResultMessage}.<br>
      * 4. {@code Storage} and {@code EntryListPanel} remain unchanged.<br>
-     * 5. Browser url, selected card and status bar remain unchanged.<br>
+     * 5. Browser url, selected card and status bar excluding count remain unchanged.<br>
      * Verifications 1, 3 and 4 are performed by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
      * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
@@ -151,6 +139,6 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
         assertCommandBoxShowsErrorStyle();
         assertResultDisplayShowsErrorStyle();
-        assertStatusBarUnchanged();
+        assertStatusBarExcludingCountUnchanged();
     }
 }

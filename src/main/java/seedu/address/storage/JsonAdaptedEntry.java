@@ -74,7 +74,7 @@ class JsonAdaptedEntry {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Title.class.getSimpleName()));
         }
         if (!Title.isValidConstructionTitle(name)) {
-            throw new IllegalValueException(Title.MESSAGE_CONSTRAINTS);
+            throw new IllegalValueException(Title.formExceptionMessage(name));
         }
         final Title modelTitle = new Title(name);
 
@@ -83,7 +83,7 @@ class JsonAdaptedEntry {
                                                           Description.class.getSimpleName()));
         }
         if (!Description.isValidConstructionDescription(phone)) {
-            throw new IllegalValueException(Description.MESSAGE_CONSTRAINTS);
+            throw new IllegalValueException(Description.formExceptionMessage(phone));
         }
         final Description modelDescription = new Description(phone);
 
@@ -91,7 +91,7 @@ class JsonAdaptedEntry {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Link.class.getSimpleName()));
         }
         if (!Link.isValidConstructionLink(email)) {
-            throw new IllegalValueException(Link.MESSAGE_CONSTRAINTS);
+            throw new IllegalValueException(Link.formExceptionMessage(email));
         }
         final Link modelLink = new Link(email);
 
@@ -99,7 +99,7 @@ class JsonAdaptedEntry {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
         }
         if (!Address.isValidConstructionAddress(address)) {
-            throw new IllegalValueException(Address.MESSAGE_CONSTRAINTS);
+            throw new IllegalValueException(Address.formExceptionMessage(address));
         }
         final Address modelAddress = new Address(address);
 

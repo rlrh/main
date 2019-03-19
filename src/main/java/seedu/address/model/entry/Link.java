@@ -43,6 +43,13 @@ public class Link {
         return test.matches(CONSTRUCTION_VALIDATION_REGEX);
     }
 
+    public static String formExceptionMessage() {
+        return MESSAGE_CONSTRAINTS;
+    }
+
+    public static String formExceptionMessage(String invalidInput) {
+        return MESSAGE_CONSTRAINTS + " Entered: [" + invalidInput + "].";
+    }
 
     @Override
     public String toString() {

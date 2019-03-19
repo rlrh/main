@@ -21,7 +21,6 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
-import seedu.address.network.Network;
 import seedu.address.storage.Storage;
 import seedu.address.ui.ViewMode;
 
@@ -33,7 +32,9 @@ public class ModelManager implements Model {
 
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private final VersionedEntryBook versionedEntryBook;
+    private ModelContext context = ModelContext.CONTEXT_LIST;
+
+    private final EntryBook entryBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Entry> filteredEntries;
 
@@ -52,15 +53,15 @@ public class ModelManager implements Model {
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
-        versionedEntryBook = new VersionedEntryBook(addressBook);
+        entryBook = new EntryBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredEntries = new FilteredList<>(versionedEntryBook.getEntryList());
+        filteredEntries = new FilteredList<>(entryBook.getEntryList());
         filteredEntries.addListener(this::ensureSelectedPersonIsValid);
 
         this.storage = storage;
 
         // Save the entry book to storage whenever it is modified.
-        versionedEntryBook.addListener(this::saveToStorageListener);
+        entryBook.addListener(this::saveToStorageListener);
     }
 
     //=========== UserPrefs ==================================================================================
@@ -114,34 +115,28 @@ public class ModelManager implements Model {
 
     @Override
     public void setEntryBook(ReadOnlyEntryBook entryBook) {
-        versionedEntryBook.resetData(entryBook);
+        this.entryBook.resetData(entryBook);
     }
 
     @Override
     public ReadOnlyEntryBook getEntryBook() {
-        return versionedEntryBook;
+        return entryBook;
     }
 
     @Override
     public boolean hasEntry(Entry entry) {
         requireNonNull(entry);
-        return versionedEntryBook.hasPerson(entry);
+        return entryBook.hasPerson(entry);
     }
 
     @Override
     public void deleteEntry(Entry target) {
-        versionedEntryBook.removePerson(target);
+        entryBook.removePerson(target);
     }
 
     @Override
     public void addEntry(Entry entry) {
-        versionedEntryBook.addPerson(entry);
-        try {
-            byte[] articleContent = Network.fetchAsBytes(entry.getLink().value);
-            storage.addArticle(entry.getLink().value, articleContent);
-        } catch (IOException ioe) {
-            // Do nothing if we fail to fetch the page.
-        }
+        entryBook.addPerson(entry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
@@ -149,12 +144,12 @@ public class ModelManager implements Model {
     public void setEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
-        versionedEntryBook.setPerson(target, editedEntry);
+        entryBook.setPerson(target, editedEntry);
     }
 
     @Override
     public void clearEntryBook() {
-        versionedEntryBook.clear();
+        entryBook.clear();
     }
 
     //=========== Storage ===================================================================================
@@ -164,11 +159,16 @@ public class ModelManager implements Model {
         return storage;
     }
 
+    @Override
+    public void addArticle(String url, byte[] articleContent) throws IOException {
+        storage.addArticle(url, articleContent);
+    }
+
     //=========== Filtered Entry List Accessors =============================================================
 
     /**
      * Returns an unmodifiable view of the list of {@code Entry} backed by the internal list of
-     * {@code versionedEntryBook}
+     * {@code entryBook}
      */
     @Override
     public ObservableList<Entry> getFilteredEntryList() {
@@ -179,33 +179,6 @@ public class ModelManager implements Model {
     public void updateFilteredEntryList(Predicate<Entry> predicate) {
         requireNonNull(predicate);
         filteredEntries.setPredicate(predicate);
-    }
-
-    //=========== Undo/Redo =================================================================================
-
-    @Override
-    public boolean canUndoEntryBook() {
-        return versionedEntryBook.canUndo();
-    }
-
-    @Override
-    public boolean canRedoEntryBook() {
-        return versionedEntryBook.canRedo();
-    }
-
-    @Override
-    public void undoEntryBook() {
-        versionedEntryBook.undo();
-    }
-
-    @Override
-    public void redoEntryBook() {
-        versionedEntryBook.redo();
-    }
-
-    @Override
-    public void commitEntryBook() {
-        versionedEntryBook.commit();
     }
 
     //=========== Selected entry ===========================================================================
@@ -314,7 +287,7 @@ public class ModelManager implements Model {
     private void saveToStorageListener(Observable observable) {
         logger.info("Address book modified, saving to file.");
         try {
-            storage.saveAddressBook(versionedEntryBook);
+            storage.saveAddressBook(entryBook);
         } catch (IOException ioe) {
             setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
         }
@@ -335,7 +308,7 @@ public class ModelManager implements Model {
         // state check
         ModelManager other = (ModelManager) obj;
 
-        boolean stateCheck = versionedEntryBook.equals(other.versionedEntryBook)
+        boolean stateCheck = entryBook.equals(other.entryBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredEntries.equals(other.filteredEntries)
                 && Objects.equals(selectedEntry.get(), other.selectedEntry.get())
@@ -355,7 +328,28 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        return new ModelManager(this.versionedEntryBook, this.userPrefs, this.storage);
+        Model clonedModel = new ModelManager(this.entryBook, this.userPrefs, this.storage);
+        clonedModel.setContext(this.getContext());
+        return clonedModel;
     }
 
+    @Override
+    public void setContext(ModelContext context) {
+        this.context = context;
+    }
+
+    @Override
+    public ModelContext getContext() {
+        return context;
+    }
+
+    @Override
+    public void archiveEntry(Entry target) {
+        return;
+    }
+
+    @Override
+    public void unarchiveEntry(Entry entry) {
+        return;
+    }
 }

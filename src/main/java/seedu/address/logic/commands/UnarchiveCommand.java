@@ -12,22 +12,23 @@ import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
 
 /**
- * Deletes a entry identified using it's displayed index from the address book.
+ * Lists all entries in the archives to the user.
  */
-public class DeleteCommand extends Command {
+public class UnarchiveCommand extends Command {
 
-    public static final String COMMAND_WORD = "delete";
+    public static final String COMMAND_WORD = "unarchive";
+    public static final String COMMAND_ALIAS = "unarch";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the entry identified by the index number used in the displayed entry list.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1";
+        + ": Un-archives the entry identified by the index number used in the displayed entry list.\n"
+        + "Parameters: INDEX (must be a positive integer)\n"
+        + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Entry: %1$s";
+    public static final String MESSAGE_UNARCHIVE_ENTRY_SUCCESS = "Entry unarchived: %1$s";
 
     private final Index targetIndex;
 
-    public DeleteCommand(Index targetIndex) {
+    public UnarchiveCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
@@ -40,15 +41,15 @@ public class DeleteCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        Entry entryToDelete = lastShownList.get(targetIndex.getZeroBased());
-        model.deleteEntry(entryToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, entryToDelete));
+        Entry entryToUnarchive = lastShownList.get(targetIndex.getZeroBased());
+        return new CommandResult(String.format(MESSAGE_UNARCHIVE_ENTRY_SUCCESS, entryToUnarchive));
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof DeleteCommand // instanceof handles nulls
-                && targetIndex.equals(((DeleteCommand) other).targetIndex)); // state check
+            || (other instanceof UnarchiveCommand // instanceof handles nulls
+            && targetIndex.equals(((UnarchiveCommand) other).targetIndex)); // state check
     }
+
 }

@@ -5,9 +5,13 @@ import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_BOB;
@@ -32,8 +36,6 @@ import org.junit.Test;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddCommand;
-import seedu.address.logic.commands.RedoCommand;
-import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
@@ -58,17 +60,6 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         String command = "   " + AddCommand.COMMAND_WORD + "  " + TITLE_DESC_AMY + "  " + DESCRIPTION_DESC_AMY + " "
                 + LINK_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TAG_DESC_TECH + " ";
         assertCommandSuccess(command, toAdd);
-
-        /* Case: undo adding Amy to the list -> Amy deleted */
-        command = UndoCommand.COMMAND_WORD;
-        String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
-        assertCommandSuccess(command, model, expectedResultMessage);
-
-        /* Case: redo adding Amy to the list -> Amy added again */
-        command = RedoCommand.COMMAND_WORD;
-        model.addEntry(toAdd);
-        expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
-        assertCommandSuccess(command, model, expectedResultMessage);
 
         /* Case: add a entry with all fields same as another entry in the entry book except link -> added */
         toAdd = new EntryBuilder(AMY).withLink(VALID_LINK_BOB).build();
@@ -158,19 +149,18 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid title -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_TITLE_DESC
             + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, Title.MESSAGE_CONSTRAINTS);
+        assertCommandFailure(command, Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         /* Case: invalid description -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_DESCRIPTION_DESC
             + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, Description.MESSAGE_CONSTRAINTS);
+        assertCommandFailure(command, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         /* Case: invalid link -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_LINK_DESC
              + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, Link.MESSAGE_CONSTRAINTS);
+        assertCommandFailure(command, Link.formExceptionMessage(INVALID_LINK.trim()));
 
-        // Deprecated
         /* Case: invalid address -> rejected
         command = AddCommand.COMMAND_WORD + INVALID_ADDRESS_DESC
              + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
@@ -180,7 +170,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid tag -> rejected */
         command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY
                 + INVALID_TAG_DESC;
-        assertCommandFailure(command, Tag.MESSAGE_CONSTRAINTS);
+        assertCommandFailure(command, Tag.formExceptionMessage(INVALID_TAG.trim()));
 
         /* ----------------------------------- Perform invalid add operations --------------------------------------- */
 
@@ -242,7 +232,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
         assertCommandBoxShowsDefaultStyle();
         assertResultDisplayShowsDefaultStyle();
-        assertStatusBarUnchangedExceptSyncStatus();
+        assertStatusBarUnchangedExceptSyncStatusExcludingCount();
     }
 
     /**
@@ -251,7 +241,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
      * 2. Command box has the error style class.<br>
      * 3. Result display box displays {@code expectedResultMessage}.<br>
      * 4. {@code Storage} and {@code EntryListPanel} remain unchanged.<br>
-     * 5. Browser url, selected card and status bar remain unchanged.<br>
+     * 5. Browser url, selected card and status bar excluding count remain unchanged.<br>
      * Verifications 1, 3 and 4 are performed by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
      * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
@@ -264,6 +254,6 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
         assertCommandBoxShowsErrorStyle();
         assertResultDisplayShowsErrorStyle();
-        assertStatusBarUnchanged();
+        assertStatusBarExcludingCountUnchanged();
     }
 }

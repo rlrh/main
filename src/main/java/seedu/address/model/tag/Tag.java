@@ -9,7 +9,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Tag {
 
-    public static final String MESSAGE_CONSTRAINTS = "Tags names should be alphanumeric";
+    public static final String MESSAGE_CONSTRAINTS = "Tags names should be alphanumeric.";
     public static final String VALIDATION_REGEX = "\\p{Alnum}+";
 
     public final String tagName;
@@ -30,6 +30,14 @@ public class Tag {
      */
     public static boolean isValidTagName(String test) {
         return test.matches(VALIDATION_REGEX);
+    }
+
+    public static String formExceptionMessage() {
+        return MESSAGE_CONSTRAINTS;
+    }
+
+    public static String formExceptionMessage(String invalidInput) {
+        return MESSAGE_CONSTRAINTS + " Entered: [" + invalidInput + "].";
     }
 
     @Override

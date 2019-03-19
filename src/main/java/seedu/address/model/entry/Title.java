@@ -10,11 +10,11 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Title {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Titles can take any values, and it should not be blank";
+            "Titles can take any values, and it should not be blank.";
     public static final String DEFAULT_TITLE = "";
 
     public static final String USER_INPUT_VALIDATION_REGEX = "[^\\s].*";
-    public static final String CONSTRUCTION_VALIDATION_REGEX = "^.*";
+    public static final String CONSTRUCTION_VALIDATION_REGEX = "([^\\s].*)|(^$)";
 
     public final String fullTitle;
 
@@ -43,6 +43,17 @@ public class Title {
         return test.matches(CONSTRUCTION_VALIDATION_REGEX);
     }
 
+    public static String formExceptionMessage() {
+        return MESSAGE_CONSTRAINTS;
+    }
+
+    public static String formExceptionMessage(String invalidInput) {
+        return MESSAGE_CONSTRAINTS + " Entered: [" + invalidInput + "].";
+    }
+
+    public boolean isEmpty() {
+        return fullTitle.isEmpty();
+    }
 
     @Override
     public String toString() {

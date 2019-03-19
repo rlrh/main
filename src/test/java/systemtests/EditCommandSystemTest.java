@@ -6,9 +6,13 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_BOB;
@@ -31,8 +35,6 @@ import org.junit.Test;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.RedoCommand;
-import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
@@ -58,17 +60,6 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
                 + DESCRIPTION_DESC_BOB + " " + LINK_DESC_BOB + "  " + ADDRESS_DESC_BOB + " " + TAG_DESC_SCIENCE + " ";
         Entry editedEntry = new EntryBuilder(BOB).withTags(VALID_TAG_SCIENCE).build();
         assertCommandSuccess(command, index, editedEntry);
-
-        /* Case: undo editing the last entry in the list -> last entry restored */
-        command = UndoCommand.COMMAND_WORD;
-        String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
-        assertCommandSuccess(command, model, expectedResultMessage);
-
-        /* Case: redo editing the last entry in the list -> last entry edited again */
-        command = RedoCommand.COMMAND_WORD;
-        expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
-        model.setEntry(getModel().getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased()), editedEntry);
-        assertCommandSuccess(command, model, expectedResultMessage);
 
         /* Case: edit a entry with new values same as existing values -> edited */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
@@ -154,17 +145,17 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid title -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + INVALID_TITLE_DESC,
-                Title.MESSAGE_CONSTRAINTS);
+                Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         /* Case: invalid description -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + INVALID_DESCRIPTION_DESC,
-                Description.MESSAGE_CONSTRAINTS);
+                Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         /* Case: invalid link -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + INVALID_LINK_DESC,
-                Link.MESSAGE_CONSTRAINTS);
+                Link.formExceptionMessage(INVALID_LINK.trim()));
 
         // To be deprecated
         /* Case: invalid address -> rejected
@@ -176,7 +167,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid tag -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_ENTRY.getOneBased() + INVALID_TAG_DESC,
-                Tag.MESSAGE_CONSTRAINTS);
+                Tag.formExceptionMessage(INVALID_TAG.trim()));
 
         /* Case: edit a entry with new values same as another entry's values -> rejected */
         executeCommand(EntryUtil.getAddCommand(BOB));
@@ -277,14 +268,14 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         } else {
             assertSelectedCardUnchanged();
         }
-        assertStatusBarUnchangedExceptSyncStatus();
+        assertStatusBarUnchangedExceptSyncStatusExcludingCount();
     }
 
     /**
      * Executes {@code command} and in addition,<br>
      * 1. Asserts that the command box displays {@code command}.<br>
      * 2. Asserts that result display box displays {@code expectedResultMessage}.<br>
-     * 3. Asserts that the browser url, selected card and status bar remain unchanged.<br>
+     * 3. Asserts that the browser url, selected card and status bar excluding count remain unchanged.<br>
      * 4. Asserts that the command box has the error style.<br>
      * Verifications 1 and 2 are performed by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
@@ -298,6 +289,6 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
         assertCommandBoxShowsErrorStyle();
         assertResultDisplayShowsErrorStyle();
-        assertStatusBarUnchanged();
+        assertStatusBarExcludingCountUnchanged();
     }
 }

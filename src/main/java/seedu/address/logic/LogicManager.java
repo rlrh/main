@@ -25,19 +25,21 @@ public class LogicManager implements Logic {
 
     private final Model model;
     private final CommandHistory history;
-    private final EntryBookParser entryBookParser;
 
     public LogicManager(Model model) {
         this.model = model;
         history = new CommandHistory();
-        entryBookParser = new EntryBookParser();
     }
 
     @Override
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
+        EntryBookParser entryBookParser;
         CommandResult commandResult;
+
+        entryBookParser = model.getContext().getParser();
+
         try {
             Command command = entryBookParser.parseCommand(commandText);
             commandResult = command.execute(model, history);
