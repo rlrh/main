@@ -383,6 +383,70 @@ state for the `Logic` module.
 ** Cons: making this work will involve architectural changes since only the `UI` module has
 a reference to `Logic` module class (Parser).
 
+// tag::autofill[]
+=== Autofill missing title or description when adding a link
+
+When adding a link using the `add` command, users only need to specify the `URL` field.
+If the `Title` or `Description` field is not specified, they are automatically filled.
+This makes adding links much faster and more convenient for users.
+
+==== Current Implementation
+
+If both `Title` and `Description` are already specified by the user, `AddCommand` just adds the `Entry` to the `Model`.
+Otherwise, `AddCommand` attempts to find replacement candidates for a missing `Title` or `Description` heuristically, then updates the `Entry` with the best replacement and adds it to the `Model`.
+
+The fallback is a default `Title` and `Description` guaranteed to work.
+The first attempt to find replacement candidates is by parsing just the URL.
+This will work even if there is no Internet access, whereas the following attempts require Internet access.
+The next attempt is by using the Jsoup library to parse the raw HTML into a Document object and obtain information likely to be present,
+and the last attempt is by using the Crux library to process the Document object and extract metadata.
+In this way, the last successful attempt to replace `Title` and `Description` becomes their current best replacement candidate.
+Since we cascade from the last choice to the first choice for `Title` and `Description` separately,
+by the end we have found the best possible replacement candidate for each of them given the circumstances.
+
+==== Design Considerations
+
+===== Aspect: Where autofill should be carried out
+
+* **Alternative 1 (current choice):** In `AddCommand`
+** Pros: The pattern of keeping logic within `Command` is followed by containing autofill logic within `AddCommand`.
+** Cons: Autofill only works for links added through `AddCommand`.
+* **Alternative 2:** In `Model`
+** Pros: Autofill can work for any link added to `Model`.
+** Cons: The clean `Model` is polluted by including non-core logic like autofill.
+// end::autofill[]
+
+// tag::readerview[]
+=== Reader view mode
+
+The reader view gives users a more focused and comfortable reading experience by removing clutter and formatting content into a clean and easy-to-read layout.
+
+Using the `view` command, users can switch between the `browser` and `reader` view modes.
+
+==== Current Implementation
+
+The two available view modes are specified in the `ViewMode` enum.
+The `Model` exposes an observable `viewModeProperty`, which is set by `ViewModeCommand` and observed by `BrowserPanel`.
+
+The `BrowserPanel` keeps track of whether an original web page or a reader view version is loaded.
+If an original web page is loaded but the `reader` view mode is selected, the reader view is generated and loaded,
+except when the currently loaded web page is the default blank page or error page.
+
+The Crux and Jsoup external libraries do the heavy lifting of parsing the raw HTML currently loaded in the `WebView` to extract useful metadata and content.
+These are combined into a new HTML document, which is styled using Bootstrap and then loaded in the `WebView`.
+
+==== Design Considerations
+
+===== Aspect: When reader view should be generated
+
+* **Alternative 1 (current choice):** Generate reader view on-the-fly from the currently loaded web page.
+** Pros: More flexible in the situations it can be used, will use less disk space.
+** Cons: May have performance issues because it needs to be generated again every time, more difficult to implement.
+* **Alternative 2:** When adding a link, generate reader view and save it to disk.
+** Pros: Easier to implement, better performance as reader view is only generated only once for each link.
+** Cons: Will save redundant data and use more disk space.
+// end::readerview[]
+
 === Feed subscription
 
 ==== Planned implementation
