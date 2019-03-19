@@ -98,7 +98,7 @@ public class LogicManagerTest {
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        model = new ModelManager(model.getEntryBook(), model.getUserPrefs(), storage);
+        model = new ModelManager(model.getListEntryBook(), model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 
         // Execute add command
@@ -167,7 +167,7 @@ public class LogicManagerTest {
      * @see #assertCommandBehavior(Class, String, String, Model)
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getEntryBook(), model.getUserPrefs(), model.getStorage());
+        Model expectedModel = new ModelManager(model.getListEntryBook(), model.getUserPrefs(), model.getStorage());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 

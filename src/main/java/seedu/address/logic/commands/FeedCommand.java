@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +18,7 @@ import com.rometools.rome.io.XmlReader;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
@@ -55,7 +56,13 @@ public class FeedCommand extends Command {
         try {
             InputStream inputStream = Network.fetchAsStream(feedUrl);
             SyndFeed syndFeed = new SyndFeedInput().build(new XmlReader(inputStream));
-            convertToEntryList(syndFeed).forEach(model::addEntry);
+
+            EntryBook toBeDisplayed = new EntryBook();
+            toBeDisplayed.setPersons(convertToEntryList(syndFeed)); // todo: test for dupes
+
+            model.displayEntryBook(toBeDisplayed);
+            model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
+
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e), e);
         } catch (FeedException e) {
@@ -64,7 +71,6 @@ public class FeedCommand extends Command {
             throw new CommandException("Some other problem: " + StringUtil.getDetails(e), e);
         }
 
-        model.updateFilteredEntryList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_SUCCESS, feedUrl));
     }
 
