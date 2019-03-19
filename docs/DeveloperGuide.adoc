@@ -320,6 +320,62 @@ _{Explain here how the data encryption feature will be implemented}_
 
 // end::dataencryption[]
 
+Feed subscription
+~~~~~~~~~~~~~~~~~
+
+Planned implementation
+^^^^^^^^^^^^^^^^^^^^^^
+
+The feed subscription system requires `ModelManager` to contain more
+than one `EntryBook`. Since we should only show a single `EntryBook` at
+a time, we have to decouple the `EntryBook` that is displayed from the
+ones that are in `ModelManager`.
+
+Decoupling displayed `EntryBook`
+++++++++++++++++++++++++++++++++
+
+Decoupling the displayed `EntryBook` means that the following additional
+methods are implemented
+
+* `Model#displayEntryBook(EntryBook)` — shows the `EntryBook` provided
+in the user interface
+
+Given below is an example usage scenario and how this mechanism behaves.
+
+1.  The user launches the application. The `ModelManager` will default
+to displaying the `EntryBook` which corresponds to the default (list)
+context.
+2.  The user executes the `feed [valid_feed_url]` command to view a web
+feed. The `feed` command fetches and parses the web feed into an
+`EntryBook` and calls `Model#displayEntryBook` with it.
+3.  In the case of the `feed` command, the context changes to `search`
+(internal working name). In the `search` context the `EntryBook` is
+read-only, and you can import links from the currently displayed
+`EntryBook` into the `list` context `EntryBook`.
+
+Multiple `EntryBook`’s
+++++++++++++++++++++++
+
+Some contexts (such as `feed` and `archive` context) requires
+maintaining a separate `EntryBook` each. Since we will only need at most
+4 separate `EntryBook`’s, `Model` will basically contain differently
+named `EntryBook`’s with their own accessors.
+
+Design Considerations
+^^^^^^^^^^^^^^^^^^^^^
+
+* *Alternative 1 (current choice):* multiple differently named
+`EntryBook`’s with differently-named accessors each
+** Pros: easy to implement
+** Cons: accessors are basically duplicated code
+* *Alternative 2:* Each `EntryBook` belongs to a `ModelContext`,
+modifiers overloaded to be context-sensitive
+** Pros: less code duplication due to polymorphism
+** Cons: writing to an `EntryBook` that does not belong the current
+state change will either involve an extra accessor (basically
+Alternative 1), or changing state (specifically `Model#setContext`),
+which is not robust.
+
 === Logging
 
 We are using `java.util.logging` package for logging. The `LogsCenter` class is used to manage the logging levels and logging destinations.
