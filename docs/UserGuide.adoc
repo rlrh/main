@@ -255,7 +255,7 @@ Adds a single entry with a description and tagged with “Business”
 
 === Adding entries from a web feed: `feed` `[since v1.2]`
 
-Adds all entries from a web feed to your reading list. 
+Adds all entries from a web feed to your reading list.
 Content is automatically downloaded onto your personal computer.
 
 Format: `feed FEED_URL`
