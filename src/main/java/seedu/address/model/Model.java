@@ -1,5 +1,6 @@
 package seedu.address.model;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
@@ -98,6 +99,8 @@ public interface Model {
      * Clears the entire entry book.
      */
     void clearEntryBook();
+
+    void addArticle(String url, byte[] articleContent) throws IOException;
 
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();
