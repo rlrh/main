@@ -320,6 +320,69 @@ _{Explain here how the data encryption feature will be implemented}_
 
 // end::dataencryption[]
 
+=== Context-specific commands
+
+==== Planned implementation
+
+In order to implement the multiple commands for the application, we require
+a way to disallow certain commands in certain contexts. For example, when the
+user is viewing the archives, he should not be allowed to use the `archive`
+command since every entry listed is already archive. Vice-versa, when a user is
+uses the `list` command, `unarchive` should be registered as an unknown command.
+
+===== Modular Parser classes
+
+We require individual Parser classes for each context.
+Each Parser class should only parse commands allowed for the context it represents.
+
+The following classes were created to support this feature.
+
+* `EntryBookParser` — the base abstract class all Parsers extend from
+* `EntryBookListParser` — Parser for the list context.
+* `EntryBookArchivesParser` —  Parser for the archives context.
+* `EntryBookFeedsParser` —  Parser for the feeds context.
+* `EntryBookSearchParser` —  Parser for the search context.
+
+Each Parser class has a `parseCommand(String)` operation that parses the string command.
+`EntryBookParser#parseCommand(String)` is the fallback operation used when it's children
+fail to parse the command. It parses commands that is common in any context.
+
+===== Context state for Model
+
+Context is represented by the enum class `ModelContext`.
+`Model` to holds this information of the context the application is in, which decides
+Parser class `Logic` should use when a command is executed.
+Each `ModelContext` holds a static Parser class that parses commands for the context it represents.
+
+The following operations are implemented
+* `Model#getContext()` — gets the context the application is in.
+* `Model#setContext(ModelContext)` — sets the context the application is in.
+
+Given below is an example usage scenario and how this mechanism behaves.
+
+1.  The user launches the application. The `ModelManager` will default
+to `ModelContext.CONTEXT_LIST` context.
+2.  The user executes the `archive` command to archive entries.
+3.  The user erroneously executes the `unarchive` command, and the application reports
+it as an "Unknown command".
+4.  The user executes the `archives` command to view his archives. In the execution of
+of this `ArchivesCommand`, `model.setContext(ModelContext)` is called to change the
+context to `ModelContext.CONTEXT_ARCHIVES` context.
+5.  The user executes the `unarchive` command with correct arguments, and the
+application successfully executes the command.
+
+==== Design Considerations
+* *Alternative 1 (current choice):* Context information is held by `Model`
+** Pros: makes the most sense for the context to change only if a context-switching command
+is successfully executed, and `Command` only has a reference to `Model`, not `Logic`.
+** Cons: `Model` is slightly more dependent on `Logic` since it has an indirect reference
+to Parser classes.
+* *Alternative 2:* Context information is held by `Logic`
+** Pros: weakens the dependency of `Model` on `Logic`. Context can then be thought of as a
+state for the `Logic` module.
+** Cons: making this work will involve architectural changes since only the `UI` module has
+a reference to `Logic` module class (Parser).
+
 === Feed subscription
 
 ==== Planned implementation
