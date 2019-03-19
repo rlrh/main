@@ -51,6 +51,10 @@ public class Title {
         return MESSAGE_CONSTRAINTS + " Entered: [" + invalidInput + "].";
     }
 
+    public boolean isEmpty() {
+        return fullTitle.isEmpty();
+    }
+
     @Override
     public String toString() {
         return fullTitle;

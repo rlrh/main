@@ -50,6 +50,10 @@ public class Description {
         return MESSAGE_CONSTRAINTS + " Entered: [" + invalidInput + "].";
     }
 
+    public boolean isEmpty() {
+        return value.isEmpty();
+    }
+
     @Override
     public String toString() {
         return value;
