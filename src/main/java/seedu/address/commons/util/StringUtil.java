@@ -67,34 +67,26 @@ public class StringUtil {
     }
 
     /**
-     * Gets the first given number of words of the given string.
+     * Gets the first given number of words of the given string
+     * with ellipsis appended at the end if there more than the given number of words.
      * @param string string
      * @param numOfWords number of words
-     * @return first given number of words of the given string
+     * @return first given number of words of the given string, possibly with ellipsis at the end
      */
-    public static String getFirstNWords(String string, int numOfWords) {
+    public static String getFirstNWordsWithEllipsis(String string, int numOfWords) {
         if (string == null || string.isEmpty()) {
             return "";
         }
         String [] stringArray = string.split("\\s+");
         if (numOfWords >= stringArray.length) {
-            return string;
+            return string.trim();
         }
         StringBuilder firstNWords = new StringBuilder();
         for (int i = 0; i < numOfWords; i++) {
             firstNWords.append(stringArray[i]);
             firstNWords.append(" ");
         }
-        return firstNWords.toString();
+        return firstNWords.toString().trim().concat("…");
     }
 
-    /**
-     * Gets the first given number of words of the given string with ellipsis appended at the end.
-     * @param string string
-     * @param numOfWords number of words
-     * @return first given number of words of the given string with ellipsis appended at the end
-     */
-    public static String getFirstNWordsWithEllipsis(String string, int numOfWords) {
-        return getFirstNWords(string, numOfWords).trim().concat("…");
-    }
 }
