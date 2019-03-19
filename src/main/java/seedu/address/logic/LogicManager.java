@@ -10,7 +10,6 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.parser.EntryBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyEntryBook;
@@ -35,13 +34,10 @@ public class LogicManager implements Logic {
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
-        EntryBookParser entryBookParser;
         CommandResult commandResult;
 
-        entryBookParser = model.getContext().getParser();
-
         try {
-            Command command = entryBookParser.parseCommand(commandText);
+            Command command = model.getContext().getParser().parseCommand(commandText);
             commandResult = command.execute(model, history);
         } finally {
             history.add(commandText);
