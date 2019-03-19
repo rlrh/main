@@ -22,7 +22,6 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
-import seedu.address.network.Network;
 import seedu.address.storage.Storage;
 import seedu.address.ui.ViewMode;
 
@@ -141,12 +140,6 @@ public class ModelManager implements Model {
     @Override
     public void addEntry(Entry entry) {
         listEntryBook.addEntry(entry);
-        try {
-            byte[] articleContent = Network.fetchAsBytes(entry.getLink().value);
-            storage.addArticle(entry.getLink().value, articleContent);
-        } catch (IOException ioe) {
-            // Do nothing if we fail to fetch the page.
-        }
         updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
 
@@ -172,6 +165,11 @@ public class ModelManager implements Model {
     @Override
     public Storage getStorage() {
         return storage;
+    }
+
+    @Override
+    public void addArticle(String url, byte[] articleContent) throws IOException {
+        storage.addArticle(url, articleContent);
     }
 
     //=========== Filtered Entry List Accessors =============================================================

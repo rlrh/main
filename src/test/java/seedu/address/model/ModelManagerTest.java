@@ -8,14 +8,8 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
-import static seedu.address.testutil.TypicalEntries.FILE_TEST_CONTENTS;
-import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
-import static seedu.address.testutil.TypicalEntries.VALID_HTTPS_LINK;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -32,12 +26,7 @@ import seedu.address.mocks.StorageStub;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
-import seedu.address.storage.ArticleStorage;
-import seedu.address.storage.DataDirectoryArticleStorage;
-import seedu.address.storage.JsonEntryBookStorage;
-import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
-import seedu.address.storage.StorageManager;
 import seedu.address.testutil.EntryBookBuilder;
 import seedu.address.testutil.EntryBuilder;
 
@@ -229,46 +218,6 @@ public class ModelManagerTest {
         ModelManager differentDisplayedModelManager = new ModelManager(entryBook, userPrefs, storage);
         differentDisplayedModelManager.displayEntryBook(differentDisplayedEntryBook);
         assertFalse(modelManager.equals(differentDisplayedModelManager));
-    }
-
-    /**
-     * This is an integration test to see that ModelManager#addEntry is properly hooked up to ArticleStorage.
-     */
-    @Test
-    public void addEntry_networkArticleSavedToDisk() throws IOException {
-        JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(getTempFilePath("ab"));
-        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
-        ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
-        Storage storageManager = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        modelManager = new ModelManager(new EntryBook(), new UserPrefs(), storageManager);
-        modelManager.addEntry(VALID_HTTPS_LINK);
-        String content = new String(
-                Files.readAllBytes(
-                        modelManager
-                                .getStorage()
-                                .getArticlePath(VALID_HTTPS_LINK.getLink().value)),
-                StandardCharsets.UTF_8);
-        assertTrue(content.contains("<p>It works!</p>"));
-    }
-
-    /**
-     * This is an integration test to see that ModelManager#addEntry is properly hooked up to ArticleStorage.
-     */
-    @Test
-    public void addEntry_localArticleSavedToDisk() throws IOException {
-        JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(getTempFilePath("ab"));
-        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
-        ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
-        Storage storageManager = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        modelManager = new ModelManager(new EntryBook(), new UserPrefs(), storageManager);
-        modelManager.addEntry(VALID_FILE_LINK);
-        String content = new String(
-                Files.readAllBytes(
-                        modelManager
-                                .getStorage()
-                                .getArticlePath(VALID_FILE_LINK.getLink().value)),
-                StandardCharsets.UTF_8);
-        assertEquals(FILE_TEST_CONTENTS, content);
     }
 
     private Path getTempFilePath(String fileName) {
