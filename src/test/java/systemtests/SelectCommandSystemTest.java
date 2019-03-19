@@ -46,7 +46,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
          * -> rejected
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        int invalidIndex = getModel().getEntryBook().getEntryList().size();
+        int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
         /* Case: filtered entry list, select index within bounds of address book and entry list -> selected */

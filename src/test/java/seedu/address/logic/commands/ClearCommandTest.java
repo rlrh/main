@@ -26,7 +26,7 @@ public class ClearCommandTest {
     public void execute_nonEmptyAddressBook_success() {
         Model model = new TypicalModelManagerStub();
         Model expectedModel = new TypicalModelManagerStub();
-        expectedModel.setEntryBook(new EntryBook());
+        expectedModel.setListEntryBook(new EntryBook());
 
         assertCommandSuccess(new ClearCommand(), model, commandHistory, ClearCommand.MESSAGE_SUCCESS, expectedModel);
     }

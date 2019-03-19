@@ -276,7 +276,7 @@ public class TypicalEntries {
     public static EntryBook getTypicalEntryBook() {
         EntryBook ab = new EntryBook();
         for (Entry entry : getTypicalEntries()) {
-            ab.addPerson(entry);
+            ab.addEntry(entry);
         }
         return ab;
     }

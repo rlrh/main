@@ -61,7 +61,7 @@ public class StatusBarFooterTest extends GuiUnitTest {
                 String.format(TARGET_COUNT_STATUS, initialTargetCount));
 
         // after address book is updated
-        guiRobot.interact(() -> addressBook.addPerson(ALICE));
+        guiRobot.interact(() -> addressBook.addEntry(ALICE));
         assertStatusBarContent(RELATIVE_PATH.resolve(STUB_SAVE_LOCATION).toString(),
                 String.format(SYNC_STATUS_UPDATED, new Date(injectedClock.millis()).toString()),
                 String.format(TARGET_COUNT_STATUS, initialTargetCount + 1));
