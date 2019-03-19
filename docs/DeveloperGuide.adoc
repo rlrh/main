@@ -320,19 +320,16 @@ _{Explain here how the data encryption feature will be implemented}_
 
 // end::dataencryption[]
 
-Feed subscription
-~~~~~~~~~~~~~~~~~
+=== Feed subscription
 
-Planned implementation
-^^^^^^^^^^^^^^^^^^^^^^
+==== Planned implementation
 
 The feed subscription system requires `ModelManager` to contain more
 than one `EntryBook`. Since we should only show a single `EntryBook` at
 a time, we have to decouple the `EntryBook` that is displayed from the
 ones that are in `ModelManager`.
 
-Decoupling displayed `EntryBook`
-++++++++++++++++++++++++++++++++
+===== Decoupling displayed `EntryBook`
 
 Decoupling the displayed `EntryBook` means that the following additional
 methods are implemented
@@ -353,16 +350,14 @@ feed. The `feed` command fetches and parses the web feed into an
 read-only, and you can import links from the currently displayed
 `EntryBook` into the `list` context `EntryBook`.
 
-Multiple `EntryBook`’s
-++++++++++++++++++++++
+===== Multiple `EntryBook`’s
 
 Some contexts (such as `feed` and `archive` context) requires
 maintaining a separate `EntryBook` each. Since we will only need at most
 4 separate `EntryBook`’s, `Model` will basically contain differently
 named `EntryBook`’s with their own accessors.
 
-Design Considerations
-^^^^^^^^^^^^^^^^^^^^^
+==== Design Considerations
 
 * *Alternative 1 (current choice):* multiple differently named
 `EntryBook`’s with differently-named accessors each
