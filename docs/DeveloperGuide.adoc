@@ -320,6 +320,38 @@ _{Explain here how the data encryption feature will be implemented}_
 
 // end::dataencryption[]
 
+// tag::readerview[]
+=== Reader View Mode
+
+The reader view gives users a more focused and comfortable reading experience by removing clutter and formatting content into a clean and easy-to-read layout.
+
+Using the `view` command, users can switch between the `browser` and `reader` view modes.
+
+==== Current Implementation
+
+The two available view modes are specified in the `ViewMode` enum.
+The `Model` exposes an observable `viewModeProperty`, which is set by `ViewModeCommand` and observed by `BrowserPanel`.
+
+The `BrowserPanel` keeps track of whether an original web page or a reader view version is loaded.
+If an original web page is loaded but the `reader` view mode is selected, the reader view is generated and loaded.
+
+The Crux and Jsoup external libraries do the heavy lifting of parsing the raw HTML currently loaded in the `WebView` to extract useful metadata and content.
+These are combined into a new HTML document, which is beautified using a Bootswatch stylesheet and then loaded in the `WebView`.
+
+
+==== Design Considerations
+
+===== Aspect: When reader view is generated
+
+* **Alternative 1 (current choice):** Generate reader view from the currently loaded web page.
+** Pros: More flexible in the situations it can be used, will use less disk space.
+** Cons: May have slight performance issues because it needs to be generated on-the-fly, more difficult to implement.
+* **Alternative 2:** When adding a link, generate reader view and save it to disk.
+** Pros: Easier to implement.
+** Cons: Will save redundant data and use more disk space.
+
+// end::readerview[]
+
 === Logging
 
 We are using `java.util.logging` package for logging. The `LogsCenter` class is used to manage the logging levels and logging destinations.
