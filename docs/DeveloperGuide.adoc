@@ -435,6 +435,97 @@ state change will either involve an extra accessor (basically
 Alternative 1), or changing state (specifically `Model#setContext`),
 which is not robust.
 
+// tag::network-design[]
+=== `Network` design
+
+As many components have to make network calls
+to retrieve resources from the Internet,
+we decided to centralise it in a "singleton" class named `Network`.
+The following sections describe the different design patterns we considered
+and their pros and cons.
+
+==== Singleton pattern (chosen pattern)
+
+This pattern is to create a new class named `Network`.
+This class is abstract so it cannot be instantiated,
+and all its methods are marked `private`.
+
+===== Pros
+
+* Allows for convenient access to the `Network`
+* Good cohesion: everything with networking details in one file
+* Easy to write and subsequently modify
+
+===== Cons
+
+* Global variable,
+  which encourages coupling with everything else in the codebase
+
+==== TODO: Some other pattern we considered but we forgot
+
+TODO: Add details here
+
+==== TODO: Comparison of methods and why we went with Singleton
+
+TODO: Details
+
+// end::network-design[]
+
+=== Offline mode
+
+Offline mode requires many changes to the architecture as a whole.
+The main point of conflict is that we need to store many articles to disk
+but not keep their full contents in memory.
+This means the full state is no longer stored within `EntryBook` anymore.
+The following sections describe
+the design decisions made to support offline mode.
+
+==== Architectural changes
+
+===== Removing undo/redo feature
+
+The undo/redo feature assumes that a `ReadOnlyEntryBook`
+contains all the information in an `EntryBook`
+and that it can be used to restore an `EntryBook` to any prior state.
+However, this assumption no longer holds if we were to store articles on disk
+but not keep them in memory.
+
+Instead of modifying the design of undo/redo,
+we decided to simply remove the feature as it was not a core feature
+required in our user stories.
+
+===== Moving `Storage` behind `Model`
+
+Because we now have state that exists on the disk but not in memory,
+we want to reflect this as well in the design.
+
+State belongs in the `Model` abstraction layer,
+but at the same time disk access belongs inside `Storage`.
+We decided it was not wise to keep these too decoupled,
+and instead we moved `Storage` under `Model`
+to improve cohesion at the expense of worsening coupling.
+
+==== Planned implementation
+
+After the architectural changes were made,
+there are a few design considerations that needed to be made:
+
+===== `Network` design
+
+As we need to save the articles to disk,
+we first need a way to obtain said articles from the Internet.
+This is described in section xref:network-design[]
+
+===== Interfacing with BrowserPanel
+
+We need to design this component so that `BrowserPanel` can use it.
+
+TODO: Elaborate
+
+===== Storage model
+
+TODO: Talk about storing things to disk, and why this method
+
 === Logging
 
 We are using `java.util.logging` package for logging. The `LogsCenter` class is used to manage the logging levels and logging destinations.
