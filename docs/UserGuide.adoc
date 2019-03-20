@@ -52,7 +52,6 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 .  Refer to below for details of each command.
 
-[[Command]]
 == Command Format
 
 ====
@@ -75,7 +74,7 @@ Format: `macro MACRO_NAME NUM_ARGS command1; command2; ... commandN`
 
 Examples:
 
-- `macro archive-tags-which-are-old 1 find t/$1 d/3 days ago; archive all`
+- `macro archive-tags-which-are-old 1 find t/$1 h/3 days ago; archive all`
 
 === Export settings and data to an export file : `export` `[coming in v2.0]`
 
@@ -134,27 +133,29 @@ Format: `exit`
 == Context-switching commands
 
 ====
-These commands can be used from any context but change the context in which commands with shared command words operate (e.g. `add`, `edit`, `delete`).
+These commands can be used from any context but change the context in which only allowed commands are recognised (e.g. `archive`, `unarchive`, `feed`).
 ====
 
 === Showing entries: `list`
 
 Shows your reading list of all saved entries.
 
+Refer to <<List-Context>> for available commands in this context.
+
 Format: `list`
 
-////
-Shows your reading list of saved entries, optionally finding entries with titles containing any of the given keywords, and filtering by read status, date added and tags.
+Shows your reading list of saved entries, optionally finding entries with titles containing any of the given keyphrases in the title,
+filtering by read status or date added, and tags.
 
-Format: `list [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]... [s/SORT_BY]`
+Format: `list [KEYPHRASES]... [r/READ_STATUS] [h/DATE_ADDED] [t/TAG]`
 
 ****
 - The search is case insensitive. e.g `hans` will match `Hans`
-- Keywords are comma separated. e.g. `Hello world, foo bar`
-- The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
+- Keyphrases are comma separated. e.g. `Hello world, foo bar`
+- The order of the keyphrases does not matter. e.g. `Hans, Bo` will match `Bo Hans`
 - Only the title is searched.
-- Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
-- entries matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
+- Only full phrases will be matched e.g. `Hans Solo` will not match `Hans Solos`
+- Entries matching at least one keyphrase will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
 
 Examples:
@@ -165,21 +166,22 @@ Examples:
 - `list r/unread` Lists only unread entries
 - `list t/Tech` Lists entries tagged with “Tech”
 - `list t/` Lists untagged entries
-////
 
 === Showing archived entries: `archives` `[coming in v2.0]`
 
-Shows a list of archived entries, optionally finding entries with titles containing any of the given keywords, and filtering by read status, date added and tags.
+Shows a list of archived entries, optionally finding entries with titles containing any of the given keyphrases, and filtering by read status, date added and tags.
 
-Format: `archives [KEYWORDS]... [r/READ_STATUS] [d/DATE_ADDED] [t/TAG]...`
+Refer to <<Archives-Context>> for available commands in this context.
+
+Format: `archives [KEYWORDS]... [r/READ_STATUS] [h/DATE_ADDED] [t/TAG]...`
 
 ****
 - The search is case insensitive. e.g `hans` will match `Hans`
-- Keywords are comma separated. e.g. `Hello world, foo bar`
-- The order of the keywords does not matter. e.g. `Hans, Bo` will match `Bo, Hans`
+- Keyphrases are comma separated. e.g. `Hello world, foo bar`
+- The order of the keyphrases does not matter. e.g. `Hans, Bo` will match `Bo Hans`
 - Only the title is searched.
-- Only full words will be matched e.g. `Hans Solo` will not match `Hans Solos`
-- entries matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
+- Only full phrases will be matched e.g. `Hans Solo` will not match `Hans Solos`
+- Entries matching at least one keyphrase will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
 
 Examples:
@@ -194,6 +196,8 @@ Examples:
 === Searching online for entries: `search` `[coming in v2.0]`
 
 Searches online for entries that you can subsequently add.
+
+Refer to <<Search-Context>> for available commands in this context.
 
 Format: `search [KEYWORD]...`
 Format: `search FEED_URL`
@@ -210,6 +214,8 @@ Examples:
 
 Shows a list of feeds being followed.
 
+Refer to <<Feeds-Context>> for available commands in this context.
+
 Format: `feeds [t/TAG]...`
 
 Examples:
@@ -220,6 +226,8 @@ Examples:
 === Searching online for feeds: `searchfeeds` `[coming in v2.0]`
 
 Searches online for feeds that you can subsequently follow.
+
+Refer to <<Searchfeeds-Context>> for available commands in this context.
 
 Format: `searchfeeds [KEYWORD]...`
 
@@ -234,7 +242,8 @@ Shows helpful and fun statistics about your reading progress and habits.
 
 Format: `stats`
 
-== In `list` context (displays entry list)
+[[List-Context]]
+== `list` Context Commands
 
 === Adding a single entry: `add` `[updated v1.2]`
 
@@ -291,13 +300,13 @@ Clears all existing tags from the 2nd entry.
 
 === Finding entries by title: `find`
 
-Finds entries whose titles contain any of the given keywords. +
+Finds entries whose titles contain any of the given keyphrases. +
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find KEYWORD [, MORE_KEYWORDS]`
 
 ****
 * The search is case insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* The order of the keyphrases does not matter. e.g. `Hans, Bo` will match `Bo Hans`
 * Only the name is searched.
 * Only full words will be matched e.g. `Han` will not match `Hans`
 * Entries matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
@@ -460,7 +469,8 @@ Clears all saved entries from the manager.
 
 Format: `clear`
 
-== In `archives` context (displays entry list) `[all coming in v2.0]`
+[[Archives-Context]]
+== `archives` Context Commands
 
 === Unarchiving entries: `unarchive`
 Adds the entries back to the entry list and downloads their content onto disk.
@@ -500,7 +510,8 @@ Clears all archived entries from the manager.
 
 Format: `clear`
 
-== In `search` context (displays entry list) `[all coming in v2.0]`
+[[Search-Context]]
+== `search` Context Commands
 
 === Adding entries: `add`
 
@@ -553,7 +564,8 @@ Examples:
 - `view reader o/fullscreen` Use reader view with maximised window
 - `view reader s/solarized o/fullscreen` Use reader view with "Solarized" style and maximised window
 
-== In `feeds` context (displays feed list) `[all coming in v2.0]`
+[[Feeds-Context]]
+== `feeds` Context Commands
 
 === Adding a feed: `add`
 
@@ -643,7 +655,8 @@ Clears all followed feeds from the manager.
 
 Format: `clear`
 
-== In `searchfeeds` context (displays feed list) `[all coming in v2.0]`
+[[Searchfeeds-Context]]
+== `searchfeeds` Context Commands
 
 === Adding a feed: `add`
 
