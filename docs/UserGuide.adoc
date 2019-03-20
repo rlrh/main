@@ -154,7 +154,6 @@ Format: `list [KEYPHRASES]... [r/READ_STATUS] [h/DATE_ADDED] [t/TAG]`
 - Keyphrases are comma separated. e.g. `Hello world, foo bar`
 - The order of the keyphrases does not matter. e.g. `Hans, Bo` will match `Bo Hans`
 - Only the title is searched.
-- Only full phrases will be matched e.g. `Hans Solo` will not match `Hans Solos`
 - Entries matching at least one keyphrase will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
 
@@ -173,14 +172,13 @@ Shows a list of archived entries, optionally finding entries with titles contain
 
 Refer to <<Archives-Context>> for available commands in this context.
 
-Format: `archives [KEYWORDS]... [r/READ_STATUS] [h/DATE_ADDED] [t/TAG]...`
+Format: `archives [KEYPHRASES]... [r/READ_STATUS] [h/DATE_ADDED] [t/TAG]...`
 
 ****
 - The search is case insensitive. e.g `hans` will match `Hans`
 - Keyphrases are comma separated. e.g. `Hello world, foo bar`
 - The order of the keyphrases does not matter. e.g. `Hans, Bo` will match `Bo Hans`
 - Only the title is searched.
-- Only full phrases will be matched e.g. `Hans Solo` will not match `Hans Solos`
 - Entries matching at least one keyphrase will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
 
@@ -302,14 +300,13 @@ Clears all existing tags from the 2nd entry.
 
 Finds entries whose titles contain any of the given keyphrases. +
 
-Format: `find KEYWORD [, MORE_KEYWORDS]`
+Format: `find KEYPHRASE [, MORE_KEYPHRASE]`
 
 ****
 * The search is case insensitive. e.g `hans` will match `Hans`
 * The order of the keyphrases does not matter. e.g. `Hans, Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Entries matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* Only the title is searched.
+* Entries matching at least one keyphrase will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
 
 Examples:
