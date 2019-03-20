@@ -1,0 +1,25 @@
+{
+  "authors":
+  [
+    {
+      "githubId": "epicfailname",
+      "displayName": "JON...ENG",
+      "authorNames": ["epicfailname", "Jonathan Cheng"]
+    },
+    {
+      "githubId": "qjqqyy",
+      "displayName": "QI JI",
+      "authorNames": ["qjqqyy", "Qi Ji"]
+    },
+    {
+      "githubId": "rlrh",
+      "displayName": "RAY...HAN",
+      "authorNames": ["rlrh", "Rayner Lim"]
+    },
+    {
+      "githubId": "thomastanck",
+      "displayName": "TAN...MAS",
+      "authorNames": ["thomastanck", "Thomas Tan"]
+    }
+  ]
+}
