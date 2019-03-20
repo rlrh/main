@@ -693,6 +693,21 @@ Examples:
 
 - `select 2` Selects the 2nd feed in the manager and displays its entries
 
+== Glossary
+
+. *Archive* +
+The action of placing entries in the entrybook into the archives.
+. *Context* +
+The state of the application, taken with respect to what is being displayed in the list panel.
+. *Entry* +
+The object containing information of a URL. This includes the URL itself, Title, Description among others.
+. *Entrybook* +
+The object representing the collection of entries.
+. *Feed* +
+Short for "Web Feed". The object that aggregates separate content sources, typically news articles.
+. *URL* +
+Stands for Uniform Resource Locator. It is used interchangeably with "link".
+
 == FAQ
 
 ////
