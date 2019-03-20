@@ -45,9 +45,9 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * **`add`**`l/https://en.wikipedia.org/wiki/Special:Random` : adds a random Wikipedia page to your reading list
 * **`select`**`7` : selects the Wikipedia page for reading
 * **`feed`**`http://rss.nytimes.com/services/xml/rss/nyt/World.xml` : adds all the latest articles from the New York Times world news feed
-* **`select`**`8` : selects the first NYT article for reading
+* **`select`**`1` : selects the first NYT article for reading
 * **`view`**`reader` : switches to a more comfortable reading experience
-* **`delete`**`8` : deletes the first NYT article entry
+* **`delete`**`1` : deletes the first NYT article entry
 * *`exit`* : exits the app
 
 .  Refer to below for details of each command.
