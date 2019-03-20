@@ -528,8 +528,8 @@ Title will be automatically filled by parsing the entry if you do not provide it
 
 Examples:
 
-- `add 1 c/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business”
-- `add 4-6 c/read by Monday t/School` Adds the 4th to 6th entries with the same description and tagged with “School"
+- `add 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business”
+- `add 4-6 d/read by Monday t/School` Adds the 4th to 6th entries with the same description and tagged with “School"
 
 === Selecting a entry: `select`
 
