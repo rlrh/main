@@ -281,7 +281,7 @@ Adds all the entries from the New York Times world news feed to your reading lis
 
 Edits an existing entry in the reading list.
 
-Format: `edit INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [s/STATUS]  [t/TAG]...`
+Format: `edit INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [r/READ_STATUS]  [t/TAG]...`
 
 ****
 - Edits the entry at the specified `INDEX`. The index refers to the index number shown in the displayed entry list. The index *must be a positive integer* 1, 2, 3, ...
