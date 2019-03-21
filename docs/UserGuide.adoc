@@ -19,15 +19,62 @@ By: `CS2103-AY1819S2-W10-1`      Since: `Jan 2019`      Licence: `MIT`
 == Introduction
 README is an integrated bookmark manager and feed reader desktop application
 that helps you read more content you care about anywhere you go.
+
 You'll love README if you consume a lot of web content and want to keep up to date with your favourite websites but you're a road warrior who doesn't have regular Internet access.
+
 Whether you're heading off on a long flight or working in a cafe, README has you covered with all the content you care about in one place.
+
 README is for those who *prefer to use a desktop app for subscribing to web feeds and saving web pages to read later on their personal computer*.
+
 More importantly, README is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI).
+
 If you can type fast, README can make you more efficient at consuming content than traditional GUI apps.
+
 Interested? Jump to the <<Quick Start>> to get started.
+
 Enjoy!
 
+== How To Use This Guide
+This User Guide contains everything you need to know in order to use README.
+
+=== Command Format
+
+====
+* Words in `UPPER_CASE` are the parameters to be supplied by the user.
+* Items in square brackets are optional.
+* Items with `…`​ after them can be used multiple times including zero times.
+* Parameters can be in any order.
+====
+
+=== Glossary
+
+. *Archives* +
+Stores entries without their associated web pages saved onto your personal computer.
+You can move entries you don't need to read offline but would still like to keep here.
+. *Context* +
+The state of the application, which determines which type of entries are displayed and what commands are available.
+. *Entry* +
+Similar to a bookmark, comprising URL, Title, and Description fields among others.
+An entry is added by yourself or by a web feed that you subscribe to.
+. *Feed* +
+A data format used by content providers to provide users with frequently updated content.
+Also known as a web feed, they can be found all over the web - you can usually find a link to them titled "RSS feed" or "Atom feed" at the footer of a website.
+. *Link* +
+Short for "hyperlink", a reference to a URL you can follow by clicking on its text.
+. *Reading list* +
+Stores entries with their associated web pages saved onto your personal computer.
+When you or a web feed that you subscribe to adds a new entry, it is stored here.
+. *Subscribe (to a website feed)* +
+Keep up to date with a website by having any new entries added to your reading list.
+. *Tag* +
+A label attached to an entry for the purpose of identification or to give other information.
+. *URL* +
+An address to a web resource, usually beginning with `http://` or `https://`.
+Stands for Uniform Resource Locator.
+
 == Quick Start
+
+Follow these steps to install README get started on a tour of its main features!
 
 .  Ensure you have Java version `9` or later installed in your Computer.
 .  Download the latest `README.jar` link:{repoURL}/releases[here].
@@ -40,7 +87,7 @@ image::Ui.png[width="790"]
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 .  Try these commands in order!
 
-* *`list`* : shows your reading list of all saved links
+* *`list`* : shows your reading list of saved links
 * **`select`**`1` : selects the first entry for reading
 * **`add`**`l/https://en.wikipedia.org/wiki/Special:Random` : adds a random Wikipedia page to your reading list
 * **`select`**`7` : selects the Wikipedia page for reading
@@ -52,14 +99,7 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 .  Refer to below for details of each command.
 
-== Command Format
 
-====
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.
-* Items in square brackets are optional.
-* Items with `…`​ after them can be used multiple times including zero times.
-* Parameters can be in any order.
-====
 
 == Non-contextual commands
 
@@ -260,6 +300,18 @@ Examples:
 - `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
 Adds a single entry with a description and tagged with “Business”
 
+=== Viewing entries from a web feed: `feed` `[since v1.2]`
+
+Displays entries from a web feed.
+
+Format: `feed FEED_URL`
+
+Examples:
+
+- `feed http://rss.nytimes.com/services/xml/rss/nyt/World.xml` +
+Views entries from the New York Times world news feed.
+
+////
 === Adding entries from a web feed: `feed` `[since v1.2]`
 
 Adds all entries from a web feed to your reading list.
@@ -274,6 +326,7 @@ Examples:
 
 - `feed http://rss.nytimes.com/services/xml/rss/nyt/World.xml` +
 Adds all the entries from the New York Times world news feed to your reading list.
+////
 
 === Editing an entry: `edit`
 
@@ -692,21 +745,6 @@ Format: `select INDEX`
 Examples:
 
 - `select 2` Selects the 2nd feed in the manager and displays its entries
-
-== Glossary
-
-. *Archive* +
-The action of placing entries in the entrybook into the archives.
-. *Context* +
-The state of the application, taken with respect to what is being displayed in the list panel.
-. *Entry* +
-The object containing information of a URL. This includes the URL itself, Title, Description among others.
-. *Entrybook* +
-The object representing the collection of entries.
-. *Feed* +
-Short for "Web Feed". The object that aggregates separate content sources, typically news articles.
-. *URL* +
-Stands for Uniform Resource Locator. It is used interchangeably with "link".
 
 == FAQ
 
