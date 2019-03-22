@@ -9,7 +9,7 @@
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10" halignment="RIGHT" />
   </columnConstraints>
-  <Label fx:id="syncStatus" />
-  <Label fx:id="targetCountStatus" GridPane.columnIndex="1" />
-  <Label fx:id="saveLocationStatus" GridPane.columnIndex="2" />
+  <Label fx:id="targetCountStatus" />
+  <Label fx:id="saveLocationStatus" GridPane.columnIndex="1" />
+  <Label fx:id="syncStatus" GridPane.columnIndex="2" />
 </GridPane>
