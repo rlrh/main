@@ -3,7 +3,12 @@ package seedu.address.ui;
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static seedu.address.testutil.TypicalEntries.*;
+import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY;
+import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY_BASE_URL;
+import static seedu.address.testutil.TypicalEntries.INVALID_FILE_LINK;
+import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY_BASE_URL;
 
 import java.net.URL;
 import javax.xml.transform.TransformerException;
@@ -68,6 +73,11 @@ public class BrowserPanelTest extends GuiUnitTest {
         assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_ENTRY_BASE_URL);
     }
 
+    /**
+     * Asserts that reader view works as expected on the given Entry
+     * @param entry Entry to test reader view on
+     * @param baseUrl base url
+     */
     private void assertReaderViewWorksOn(Entry entry, String baseUrl) {
 
         // load associated web page of a Wikipedia entry
