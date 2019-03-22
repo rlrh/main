@@ -8,7 +8,7 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
-import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -214,7 +214,7 @@ public class ModelManagerTest {
         assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs2, storage)));
 
         // different displayedEntryList -> returns false
-        EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_LINK).build();
+        EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_ENTRY).build();
         ModelManager differentDisplayedModelManager = new ModelManager(entryBook, userPrefs, storage);
         differentDisplayedModelManager.displayEntryBook(differentDisplayedEntryBook);
         assertFalse(modelManager.equals(differentDisplayedModelManager));
