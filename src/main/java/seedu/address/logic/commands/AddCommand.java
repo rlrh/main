@@ -33,6 +33,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.util.Candidate;
+import seedu.address.util.AbsoluteUrlDocumentConverter;
 import seedu.address.util.Network;
 
 /**
@@ -120,7 +121,11 @@ public class AddCommand extends Command {
 
             // Download article content to local storage
             byte[] articleContent = Network.fetchAsBytes(urlString);
-            Optional<Path> articlePath = model.addArticle(urlString, articleContent);
+            // Convert all links in article to absolute links
+            byte[] absoluteLinkedArticleContent = AbsoluteUrlDocumentConverter.convert(
+                    new URL(urlString),
+                    articleContent);
+            Optional<Path> articlePath = model.addArticle(urlString, absoluteLinkedArticleContent);
             if (articlePath.isPresent()) {
                 offlineLink = Optional.of(new Link(articlePath.get().toUri().toASCIIString()));
             }
