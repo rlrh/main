@@ -507,7 +507,7 @@ we decided to centralise it in a "singleton" class named `Network`.
 The following sections describe the different design patterns we considered
 and their pros and cons.
 
-==== Singleton pattern (chosen pattern)
+==== Static class pattern (chosen pattern)
 
 This pattern is to create a new class named `Network`.
 This class is abstract so it cannot be instantiated,
@@ -515,7 +515,7 @@ and all its methods are marked `private`.
 
 ===== Pros
 
-* Allows for convenient access to the `Network`
+* Convenient access to the network
 * Good cohesion: everything with networking details in one file
 * Easy to write and subsequently modify
 
@@ -524,13 +524,83 @@ and all its methods are marked `private`.
 * Global variable,
   which encourages coupling with everything else in the codebase
 
-==== TODO: Some other pattern we considered but we forgot
+==== Singleton pattern
 
-TODO: Add details here
+This pattern is very similar to the pattern above.
+We create a new class named `Network`,
+and a static getter method that returns a single instance of `Network`.
+This allows us the flexibility of working with objects
+rather than with static methods.
 
-==== TODO: Comparison of methods and why we went with Singleton
+===== Pros
 
-TODO: Details
+* Convenient access to the network
+* Good cohesion: everything with networking details in one file
+* A little bit harder to write, as we need to include the Singleton logic,
+  but still easy
+* Objects allow you to perform dependency-injection,
+  so the calling class can obtain the `Network` instance and pass it down
+* Has the option of extending the class to possibly allowing multiple instances
+  in the future
+
+===== Cons
+
+* More work than the static class pattern
+
+==== Ad-hoc aka no pattern
+
+We could also choose to directly call the network API
+from whatever calling methods would have called `Network` before.
+This is the simplest "pattern" as it involves not writing any code.
+
+===== Pros
+
+* No need to write any code
+* No coupling since there's no code
+
+===== Cons
+
+* Bad cohesion: networking related code will be thrown all over the codebase.
+  If we were to switch to using a different API
+  or needing to change a particular detail in how the network API is called,
+  then we would need to change them in all the places
+  where the network API got called.
+
+==== Comparison of methods and why we went with the static class pattern
+
+Ranking the patterns from least effort to most effort,
+we have ad-hoc being the easiest,
+followed by static class,
+and finally singleton.
+
+Generally, the less code, the better.
+This is usually the primary consideration.
+This means if there are two patterns
+where both meet some minimum quality standard
+but one takes more effort,
+we should go with the one that takes less effort to write.
+
+We did not choose the ad-hoc pattern
+because we anticipate future changes to the networking code
+as we take into account more details
+like timeouts, asynchronicity, cookies, etc.
+In other words,
+this led us to prioritise good cohesion in our desired pattern.
+
+However, aside from this, both singleton and static class pattern
+have roughly the same benefits.
+We do not yet need to consider things like dependency inversion
+because `Network` calls are decidedly a very global concept
+which makes it less applicable.
+Using the singleton pattern would have improved testability of our code,
+but it would have required rewriting many of our classes
+to use dependency inversion,
+and this makes the code more complex.
+
+So this is why we went with the static class pattern,
+which has effectively the same benefits as singleton
+after ruling out dependency inversion,
+and the static class pattern is easier to write than the singleton pattern.
 
 // end::network-design[]
 
