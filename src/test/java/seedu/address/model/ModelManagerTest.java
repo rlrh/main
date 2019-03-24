@@ -56,7 +56,7 @@ public class ModelManagerTest {
     @Test
     public void setUserPrefs_validUserPrefs_copiesUserPrefs() {
         UserPrefs userPrefs = new UserPrefs();
-        userPrefs.setAddressBookFilePath(Paths.get("address/book/file/path"));
+        userPrefs.setListEntryBookFilePath(Paths.get("address/book/file/path"));
         userPrefs.setArticleDataDirectoryPath(Paths.get("article/data/directory/path"));
         userPrefs.setGuiSettings(new GuiSettings(1, 2, 3, 4));
         modelManager.setUserPrefs(userPrefs);
@@ -64,7 +64,7 @@ public class ModelManagerTest {
 
         // Modifying userPrefs should not modify modelManager's userPrefs
         UserPrefs oldUserPrefs = new UserPrefs(userPrefs);
-        userPrefs.setAddressBookFilePath(Paths.get("new/address/book/file/path"));
+        userPrefs.setListEntryBookFilePath(Paths.get("new/address/book/file/path"));
         userPrefs.setArticleDataDirectoryPath(Paths.get("new/article/data/directory/path"));
         assertEquals(oldUserPrefs, modelManager.getUserPrefs());
     }
@@ -206,7 +206,7 @@ public class ModelManagerTest {
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();
-        differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
+        differentUserPrefs.setListEntryBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs, storage)));
 
         UserPrefs differentUserPrefs2 = new UserPrefs();
