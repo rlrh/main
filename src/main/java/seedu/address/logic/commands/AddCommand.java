@@ -33,7 +33,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.util.Candidate;
-import seedu.address.network.Network;
+import seedu.address.util.Network;
 
 /**
  * Adds a entry to the address book.
