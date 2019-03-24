@@ -5,8 +5,6 @@ import java.nio.file.Paths;
 import java.time.Clock;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -23,8 +21,8 @@ import seedu.address.model.entry.Entry;
 public class StatusBarFooter extends UiPart<Region> {
 
     public static final String SYNC_STATUS_INITIAL = "Not updated yet in this session";
-    public static final String SYNC_STATUS_UPDATED = "Last Updated: %s";
-    public static final String TARGET_COUNT_STATUS = "Found %d entries in %s context";
+    public static final String SYNC_STATUS_UPDATED = "Last updated: %s";
+    public static final String CONTEXT_ENTRY_COUNT_STATUS = "Displaying %d entries in %s context";
 
     /**
      * Used to generate time stamps.
@@ -43,34 +41,36 @@ public class StatusBarFooter extends UiPart<Region> {
     @FXML
     private Label saveLocationStatus;
     @FXML
-    private Label targetCountStatus;
-
+    private Label contextEntryCountStatus;
 
     public StatusBarFooter(Path saveLocation,
                            ReadOnlyEntryBook addressBook,
                            ObservableList<Entry> entryList,
                            ObservableValue<ModelContext> context) {
         super(FXML);
+
         addressBook.addListener(observable -> updateSyncStatus());
         syncStatus.setText(SYNC_STATUS_INITIAL);
+
         saveLocationStatus.setText(Paths.get(".").resolve(saveLocation).toString());
-        entryList.addListener((ListChangeListener.Change<? extends Entry> change) -> {
-            targetCountStatus.setText(String.format(TARGET_COUNT_STATUS, change.getList().size(), context.getValue().toString()));
-        });
-        context.addListener((observable, oldContext, newContext) -> {
-            targetCountStatus.setText(String.format(TARGET_COUNT_STATUS, entryList.size(), newContext.toString()));
-        });
-        targetCountStatus.setText(String.format(TARGET_COUNT_STATUS, entryList.size(), context.getValue().toString()));
+
+        entryList.addListener((ListChangeListener.Change<? extends Entry> change) ->
+            updateContextEntryCountStatus(change.getList().size(), context.getValue().toString())
+        );
+        context.addListener((observable, oldContext, newContext) ->
+            updateContextEntryCountStatus(entryList.size(), newContext.toString())
+        );
+        updateContextEntryCountStatus(entryList.size(), context.getValue().toString());
     }
 
     /**
-     * Updates the target count whenever the displayed entry list changes.
+     * Updates the context and entry count status.
+     * @param entryCount number of entries displayed
+     * @param context current context in model
      */
-    /*
-    private void updateTargetCountOnListChange(ListChangeListener.Change<? extends Entry> change) {
-        targetCountStatus.setText(String.format(TARGET_COUNT_STATUS, change.getList().size()));
+    private void updateContextEntryCountStatus(int entryCount, String context) {
+        contextEntryCountStatus.setText(String.format(CONTEXT_ENTRY_COUNT_STATUS, entryCount, context));
     }
-    */
 
     /**
      * Sets the clock used to determine the current time.
