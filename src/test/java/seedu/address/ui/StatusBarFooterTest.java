@@ -2,9 +2,9 @@ package seedu.address.ui;
 
 import static org.junit.Assert.assertEquals;
 import static seedu.address.testutil.TypicalEntries.ALICE;
+import static seedu.address.ui.StatusBarFooter.CONTEXT_ENTRY_COUNT_STATUS;
 import static seedu.address.ui.StatusBarFooter.SYNC_STATUS_INITIAL;
 import static seedu.address.ui.StatusBarFooter.SYNC_STATUS_UPDATED;
-import static seedu.address.ui.StatusBarFooter.TARGET_COUNT_STATUS;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +19,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import guitests.guihandles.StatusBarFooterHandle;
+import javafx.beans.property.SimpleObjectProperty;
 import seedu.address.model.EntryBook;
+import seedu.address.model.ModelContext;
 
 public class StatusBarFooterTest extends GuiUnitTest {
 
@@ -30,7 +32,8 @@ public class StatusBarFooterTest extends GuiUnitTest {
     private static final Clock injectedClock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
 
     private StatusBarFooterHandle statusBarFooterHandle;
-    private final EntryBook addressBook = new EntryBook();
+    private final EntryBook entryBook = new EntryBook();
+    private final SimpleObjectProperty<ModelContext> context = new SimpleObjectProperty<>(ModelContext.CONTEXT_LIST);
 
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -46,8 +49,8 @@ public class StatusBarFooterTest extends GuiUnitTest {
 
     @Before
     public void setUp() {
-        StatusBarFooter statusBarFooter = new StatusBarFooter(STUB_SAVE_LOCATION, addressBook,
-                addressBook.getEntryList());
+        StatusBarFooter statusBarFooter = new StatusBarFooter(STUB_SAVE_LOCATION, entryBook,
+                entryBook.getEntryList(), context);
         uiPartRule.setUiPart(statusBarFooter);
 
         statusBarFooterHandle = new StatusBarFooterHandle(statusBarFooter.getRoot());
@@ -56,15 +59,23 @@ public class StatusBarFooterTest extends GuiUnitTest {
     @Test
     public void display() {
         // initial state
-        int initialTargetCount = addressBook.getEntryList().size();
+        int initialEntryCount = entryBook.getEntryList().size();
+        String initialContext = context.getValue().toString();
         assertStatusBarContent(RELATIVE_PATH.resolve(STUB_SAVE_LOCATION).toString(), SYNC_STATUS_INITIAL,
-                String.format(TARGET_COUNT_STATUS, initialTargetCount));
+                String.format(CONTEXT_ENTRY_COUNT_STATUS, initialEntryCount, initialContext));
 
-        // after address book is updated
-        guiRobot.interact(() -> addressBook.addEntry(ALICE));
+        // after entry book is updated
+        guiRobot.interact(() -> entryBook.addEntry(ALICE));
         assertStatusBarContent(RELATIVE_PATH.resolve(STUB_SAVE_LOCATION).toString(),
                 String.format(SYNC_STATUS_UPDATED, new Date(injectedClock.millis()).toString()),
-                String.format(TARGET_COUNT_STATUS, initialTargetCount + 1));
+                String.format(CONTEXT_ENTRY_COUNT_STATUS, initialEntryCount + 1, initialContext));
+
+        // after model context is changed
+        String newContext = ModelContext.CONTEXT_ARCHIVE.toString();
+        guiRobot.interact(() -> context.set(ModelContext.CONTEXT_ARCHIVE));
+        assertStatusBarContent(RELATIVE_PATH.resolve(STUB_SAVE_LOCATION).toString(),
+                String.format(SYNC_STATUS_UPDATED, new Date(injectedClock.millis()).toString()),
+                String.format(CONTEXT_ENTRY_COUNT_STATUS, initialEntryCount + 1, newContext));
     }
 
     /**
@@ -72,10 +83,10 @@ public class StatusBarFooterTest extends GuiUnitTest {
      * sync status matches that of {@code expectedSyncStatus}.
      */
     private void assertStatusBarContent(String expectedSaveLocation, String expectedSyncStatus,
-                                        String expectedTargetCountStatus) {
+                                        String expectedContextEntryCountStatus) {
         assertEquals(expectedSaveLocation, statusBarFooterHandle.getSaveLocation());
         assertEquals(expectedSyncStatus, statusBarFooterHandle.getSyncStatus());
-        assertEquals(expectedTargetCountStatus, statusBarFooterHandle.getTargetCount());
+        assertEquals(expectedContextEntryCountStatus, statusBarFooterHandle.getContextEntryCount());
         guiRobot.pauseForHuman();
     }
 
