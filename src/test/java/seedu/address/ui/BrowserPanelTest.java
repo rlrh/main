@@ -75,7 +75,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         } catch (TransformerException te) {
             fail();
         }
-        Document doc = browserPanel.getReaderDocumentFrom(WIKIPEDIA_LINK_BASE_URL, originalHtml);
+        Document doc = browserPanel.getReaderDocumentFrom(originalHtml, WIKIPEDIA_LINK_BASE_URL);
         String expectedText = doc.text();
 
         // set reader mode and reload
