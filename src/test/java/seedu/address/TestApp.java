@@ -46,7 +46,7 @@ public class TestApp extends MainApp {
         if (initialDataSupplier.get() != null) {
             JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocation);
             try {
-                jsonAddressBookStorage.saveAddressBook(initialDataSupplier.get());
+                jsonAddressBookStorage.saveListEntryBook(initialDataSupplier.get());
             } catch (IOException ioe) {
                 throw new AssertionError(ioe);
             }
@@ -75,7 +75,7 @@ public class TestApp extends MainApp {
      */
     public EntryBook readStorageAddressBook() {
         try {
-            return new EntryBook(storage.readAddressBook().get());
+            return new EntryBook(storage.readListEntryBook().get());
         } catch (DataConversionException dce) {
             throw new AssertionError("Data is not in the EntryBook format.", dce);
         } catch (IOException ioe) {
@@ -87,7 +87,7 @@ public class TestApp extends MainApp {
      * Returns the file path of the storage file.
      */
     public Path getStorageSaveLocation() {
-        return storage.getAddressBookFilePath();
+        return storage.getListEntryBookFilePath();
     }
 
     /**

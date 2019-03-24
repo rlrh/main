@@ -53,33 +53,33 @@ public class StorageManager implements Storage {
     // ================ EntryBook methods ==============================
 
     @Override
-    public Path getAddressBookFilePath() {
-        return entryBookStorage.getAddressBookFilePath();
+    public Path getListEntryBookFilePath() {
+        return entryBookStorage.getListEntryBookFilePath();
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook() throws DataConversionException, IOException {
-        return readAddressBook(entryBookStorage.getAddressBookFilePath());
+    public Optional<ReadOnlyEntryBook> readListEntryBook() throws DataConversionException, IOException {
+        return readListEntryBook(entryBookStorage.getListEntryBookFilePath());
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook(Path filePath) throws DataConversionException, IOException {
+    public Optional<ReadOnlyEntryBook> readListEntryBook(Path filePath) throws DataConversionException, IOException {
         logger.fine("Attempting to read data from file: " + filePath);
-        return entryBookStorage.readAddressBook(filePath);
+        return entryBookStorage.readListEntryBook(filePath);
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook) throws IOException {
-        saveAddressBook(addressBook, entryBookStorage.getAddressBookFilePath());
+    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) throws IOException {
+        saveListEntryBook(listEntryBook, entryBookStorage.getListEntryBookFilePath());
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) throws IOException {
+    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
-        entryBookStorage.saveAddressBook(addressBook, filePath);
+        entryBookStorage.saveListEntryBook(listEntryBook, filePath);
     }
 
-    // ================ article methods ================================
+    // ================ Article methods ================================
 
     @Override
     public Path getArticleDataDirectoryPath() {

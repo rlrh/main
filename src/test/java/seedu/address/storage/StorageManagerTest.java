@@ -60,8 +60,8 @@ public class StorageManagerTest {
          * More extensive testing of UserPref saving/reading is done in {@link JsonEntryBookStorageTest} class.
          */
         EntryBook original = getTypicalEntryBook();
-        storageManager.saveAddressBook(original);
-        ReadOnlyEntryBook retrieved = storageManager.readAddressBook().get();
+        storageManager.saveListEntryBook(original);
+        ReadOnlyEntryBook retrieved = storageManager.readListEntryBook().get();
         assertEquals(original, new EntryBook(retrieved));
     }
 
@@ -81,7 +81,7 @@ public class StorageManagerTest {
 
     @Test
     public void getAddressBookFilePath() {
-        assertNotNull(storageManager.getAddressBookFilePath());
+        assertNotNull(storageManager.getListEntryBookFilePath());
     }
 
     @Test

@@ -36,7 +36,7 @@ public class JsonEntryBookStorageTest {
     }
 
     private java.util.Optional<ReadOnlyEntryBook> readAddressBook(String filePath) throws Exception {
-        return new JsonEntryBookStorage(Paths.get(filePath)).readAddressBook(addToTestDataPathIfNotNull(filePath));
+        return new JsonEntryBookStorage(Paths.get(filePath)).readListEntryBook(addToTestDataPathIfNotNull(filePath));
     }
 
     private Path addToTestDataPathIfNotNull(String prefsFileInTestDataFolder) {
@@ -79,21 +79,21 @@ public class JsonEntryBookStorageTest {
         JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(filePath);
 
         // Save in new file and read back
-        jsonAddressBookStorage.saveAddressBook(original, filePath);
-        ReadOnlyEntryBook readBack = jsonAddressBookStorage.readAddressBook(filePath).get();
+        jsonAddressBookStorage.saveListEntryBook(original, filePath);
+        ReadOnlyEntryBook readBack = jsonAddressBookStorage.readListEntryBook(filePath).get();
         assertEquals(original, new EntryBook(readBack));
 
         // Modify data, overwrite exiting file, and read back
         original.addEntry(HOON);
         original.removePerson(ALICE);
-        jsonAddressBookStorage.saveAddressBook(original, filePath);
-        readBack = jsonAddressBookStorage.readAddressBook(filePath).get();
+        jsonAddressBookStorage.saveListEntryBook(original, filePath);
+        readBack = jsonAddressBookStorage.readListEntryBook(filePath).get();
         assertEquals(original, new EntryBook(readBack));
 
         // Save and read without specifying file path
         original.addEntry(IDA);
-        jsonAddressBookStorage.saveAddressBook(original); // file path not specified
-        readBack = jsonAddressBookStorage.readAddressBook().get(); // file path not specified
+        jsonAddressBookStorage.saveListEntryBook(original); // file path not specified
+        readBack = jsonAddressBookStorage.readListEntryBook().get(); // file path not specified
         assertEquals(original, new EntryBook(readBack));
 
     }
@@ -110,7 +110,7 @@ public class JsonEntryBookStorageTest {
     private void saveAddressBook(ReadOnlyEntryBook addressBook, String filePath) {
         try {
             new JsonEntryBookStorage(Paths.get(filePath))
-                    .saveAddressBook(addressBook, addToTestDataPathIfNotNull(filePath));
+                    .saveListEntryBook(addressBook, addToTestDataPathIfNotNull(filePath));
         } catch (IOException ioe) {
             throw new AssertionError("There should not be an error writing to the file.", ioe);
         }

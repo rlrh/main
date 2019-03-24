@@ -21,13 +21,13 @@ public interface Storage extends EntryBookStorage, UserPrefsStorage, ArticleStor
     void saveUserPrefs(ReadOnlyUserPrefs userPrefs) throws IOException;
 
     @Override
-    Path getAddressBookFilePath();
+    Path getListEntryBookFilePath();
 
     @Override
-    Optional<ReadOnlyEntryBook> readAddressBook() throws DataConversionException, IOException;
+    Optional<ReadOnlyEntryBook> readListEntryBook() throws DataConversionException, IOException;
 
     @Override
-    void saveAddressBook(ReadOnlyEntryBook addressBook) throws IOException;
+    void saveListEntryBook(ReadOnlyEntryBook listEntryBook) throws IOException;
 
     @Override
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;

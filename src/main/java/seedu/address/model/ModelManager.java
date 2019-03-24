@@ -296,7 +296,7 @@ public class ModelManager implements Model {
     private void saveToStorageListener(Observable observable) {
         logger.info("Address book modified, saving to file.");
         try {
-            storage.saveAddressBook(listEntryBook);
+            storage.saveListEntryBook(listEntryBook);
         } catch (IOException ioe) {
             setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
         }

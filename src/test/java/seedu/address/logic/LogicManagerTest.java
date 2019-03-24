@@ -235,7 +235,7 @@ public class LogicManagerTest {
         }
 
         @Override
-        public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) throws IOException {
+        public void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
             throw DUMMY_IO_EXCEPTION;
         }
     }

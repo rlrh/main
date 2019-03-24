@@ -29,27 +29,27 @@ public class StorageStub implements Storage {
     }
 
     @Override
-    public Path getAddressBookFilePath() {
+    public Path getListEntryBookFilePath() {
         return null;
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook() {
+    public Optional<ReadOnlyEntryBook> readListEntryBook() {
         return Optional.empty();
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook(Path filePath) {
+    public Optional<ReadOnlyEntryBook> readListEntryBook(Path filePath) {
         return Optional.empty();
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook) {
+    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) {
         // Do nothing
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) {
+    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) {
         // Do nothing
     }
 

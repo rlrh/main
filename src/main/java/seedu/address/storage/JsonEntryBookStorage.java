@@ -27,22 +27,22 @@ public class JsonEntryBookStorage implements EntryBookStorage {
         this.filePath = filePath;
     }
 
-    public Path getAddressBookFilePath() {
+    public Path getListEntryBookFilePath() {
         return filePath;
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook() throws DataConversionException {
-        return readAddressBook(filePath);
+    public Optional<ReadOnlyEntryBook> readListEntryBook() throws DataConversionException {
+        return readListEntryBook(filePath);
     }
 
     /**
-     * Similar to {@link #readAddressBook()}.
+     * Similar to {@link #readListEntryBook()}.
      *
      * @param filePath location of the data. Cannot be null.
      * @throws DataConversionException if the file is not in the correct format.
      */
-    public Optional<ReadOnlyEntryBook> readAddressBook(Path filePath) throws DataConversionException {
+    public Optional<ReadOnlyEntryBook> readListEntryBook(Path filePath) throws DataConversionException {
         requireNonNull(filePath);
 
         Optional<JsonSerializableEntryBook> jsonAddressBook = JsonUtil.readJsonFile(
@@ -60,21 +60,21 @@ public class JsonEntryBookStorage implements EntryBookStorage {
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook) throws IOException {
-        saveAddressBook(addressBook, filePath);
+    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) throws IOException {
+        saveListEntryBook(listEntryBook, filePath);
     }
 
     /**
-     * Similar to {@link #saveAddressBook(ReadOnlyEntryBook)}.
+     * Similar to {@link #saveListEntryBook(ReadOnlyEntryBook)}.
      *
      * @param filePath location of the data. Cannot be null.
      */
-    public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) throws IOException {
-        requireNonNull(addressBook);
+    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
+        requireNonNull(listEntryBook);
         requireNonNull(filePath);
 
         FileUtil.createIfMissing(filePath);
-        JsonUtil.saveJsonFile(new JsonSerializableEntryBook(addressBook), filePath);
+        JsonUtil.saveJsonFile(new JsonSerializableEntryBook(listEntryBook), filePath);
     }
 
 }
