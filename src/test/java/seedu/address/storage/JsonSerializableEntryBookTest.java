@@ -46,7 +46,7 @@ public class JsonSerializableEntryBookTest {
         JsonSerializableEntryBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_PERSON_FILE,
                 JsonSerializableEntryBook.class).get();
         thrown.expect(IllegalValueException.class);
-        thrown.expectMessage(JsonSerializableEntryBook.MESSAGE_DUPLICATE_PERSON);
+        thrown.expectMessage(JsonSerializableEntryBook.MESSAGE_DUPLICATE_ENTRY);
         dataFromFile.toModelType();
     }
 
