@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 
 import seedu.address.logic.CommandHistory;
 import seedu.address.model.Model;
@@ -22,6 +23,7 @@ public class ArchivesCommand extends Command {
         requireNonNull(model);
         model.setContext(ModelContext.CONTEXT_ARCHIVES);
         model.setDisplayEntryList(model.getArchivesEntryBook());
+        model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }
