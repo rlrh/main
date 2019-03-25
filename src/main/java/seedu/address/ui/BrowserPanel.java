@@ -146,7 +146,9 @@ public class BrowserPanel extends UiPart<Region> {
         isLoadingReaderView = false;
 
         // Load reader view if reader view mode is selected but not loaded
-        if (viewMode.equals(ViewMode.READER) && !isReaderViewLoaded && currentLocation.equals(webEngine.getLocation())) {
+        if (viewMode.getViewType().equals(ViewType.READER)
+                && !isReaderViewLoaded
+                && currentLocation.equals(webEngine.getLocation())) {
             try {
                 URL url = new URL(webEngine.getLocation());
                 if (url.equals(DEFAULT_PAGE) || url.equals(ERROR_PAGE) || url.equals(READER_VIEW_FAILURE_PAGE)) {
@@ -227,7 +229,14 @@ public class BrowserPanel extends UiPart<Region> {
 
         // set stylesheet for reader view
         try {
-            Platform.runLater(() -> webEngine.setUserStyleSheetLocation(STYLESHEET.toExternalForm()));
+            Platform.runLater(() -> {
+                webEngine.setUserStyleSheetLocation(
+                        viewMode
+                        .getReaderViewStyle()
+                        .getStylesheetLocation()
+                        .toExternalForm()
+                );
+            });
         } catch (IllegalArgumentException | NullPointerException e) {
             String message = "Failed to set user style sheet location";
             logger.warning(message);

@@ -42,7 +42,7 @@ public class ModelManager implements Model {
 
     private final SimpleListProperty<Entry> displayedEntryList = new SimpleListProperty<>();
     private final SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
+    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(new ViewMode());
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
     private final Storage storage;
