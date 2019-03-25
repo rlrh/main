@@ -101,7 +101,7 @@ public class MainApp extends Application {
             if (!archivesEntryBookOptional.isPresent()) {
                 logger.info("Data file not found. Will be starting with a empty archives");
             }
-            initialArchivesEntryBook = new EntryBook();
+            initialArchivesEntryBook = archivesEntryBookOptional.orElseGet(() -> new EntryBook());
         } catch (DataConversionException e) {
             logger.warning("Data file not in the correct format. Will be starting with an empty archives");
             initialArchivesEntryBook = new EntryBook();
