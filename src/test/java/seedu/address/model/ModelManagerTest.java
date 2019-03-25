@@ -113,18 +113,18 @@ public class ModelManagerTest {
     @Test
     public void hasEntry_nullEntry_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        modelManager.hasListEntry(null);
+        modelManager.hasEntry(null);
     }
 
     @Test
     public void hasEntry_entryNotInEntryBook_returnsFalse() {
-        assertFalse(modelManager.hasListEntry(ALICE));
+        assertFalse(modelManager.hasEntry(ALICE));
     }
 
     @Test
     public void hasEntry_entryInEntryBook_returnsTrue() {
         modelManager.addListEntry(ALICE);
-        assertTrue(modelManager.hasListEntry(ALICE));
+        assertTrue(modelManager.hasEntry(ALICE));
     }
 
     @Test

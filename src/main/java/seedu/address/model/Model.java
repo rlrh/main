@@ -77,6 +77,11 @@ public interface Model {
     void setArticleDataDirectoryPath(Path articleDataDirectoryPath);
 
     /**
+     * Returns true if an entry with the same identity as {@code entry} exists in either the list/archives entry book.
+     */
+    boolean hasEntry(Entry entry);
+
+    /**
      * Replaces list entry book data with the data in {@code listEntryBook}.
      */
     void setListEntryBook(ReadOnlyEntryBook listEntryBook);

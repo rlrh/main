@@ -216,6 +216,7 @@ public class AddCommandTest {
             throw new AssertionError("This method should not be called.");
         }
 
+
         @Override
         public void setListEntryBookFilePath(Path listEntryBookFilePath) {
             throw new AssertionError("This method should not be called.");
@@ -242,6 +243,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasEntry(Entry entry) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void addListEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
@@ -252,12 +258,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public ReadOnlyEntryBook getListEntryBook() {
+        public boolean hasListEntry(Entry listEntry) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public boolean hasListEntry(Entry listEntry) {
+        public ReadOnlyEntryBook getListEntryBook() {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -419,7 +425,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasListEntry(Entry listEntry) {
+        public boolean hasEntry(Entry listEntry) {
             requireNonNull(listEntry);
             return this.entry.isSameEntry(listEntry);
         }
@@ -437,7 +443,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasListEntry(Entry listEntry) {
+        public boolean hasEntry(Entry listEntry) {
             requireNonNull(listEntry);
             return entriesAdded.stream().anyMatch(listEntry::isSameEntry);
         }

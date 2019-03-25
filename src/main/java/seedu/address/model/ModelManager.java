@@ -133,6 +133,14 @@ public class ModelManager implements Model {
         userPrefs.setArchivesEntryBookFilePath(archivesEntryBookFilePath);
     }
 
+    //=========== EntryBook ================================================================================
+
+    @Override
+    public boolean hasEntry(Entry entry) {
+        requireNonNull(entry);
+        return hasListEntry(entry) || hasArchivesEntry(entry);
+    }
+
     //=========== List EntryBook ================================================================================
 
     @Override
