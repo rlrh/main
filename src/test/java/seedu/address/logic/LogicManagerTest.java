@@ -58,8 +58,8 @@ public class LogicManagerTest {
         JsonEntryBookStorage archivesEntryBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(listEntryBookStorage, userPrefsStorage,
-            articleStorage, archivesEntryBookStorage);
+        StorageManager storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, userPrefsStorage,
+            articleStorage);
         model = new ModelManager(new EntryBook(), new EntryBook(), new UserPrefs(), storage);
         logic = new LogicManager(model);
     }
@@ -101,8 +101,8 @@ public class LogicManagerTest {
             new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(listEntryBookStorage, userPrefsStorage,
-            articleStorage, archivesEntryBookStorage);
+        StorageManager storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, userPrefsStorage,
+            articleStorage);
         model = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(), model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 

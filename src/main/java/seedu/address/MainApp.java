@@ -61,7 +61,7 @@ public class MainApp extends Application {
         EntryBookStorage listEntryBookStorage = new JsonEntryBookStorage(userPrefs.getListEntryBookFilePath());
         EntryBookStorage archivesEntryBookStorage = new JsonEntryBookStorage(userPrefs.getArchivesEntryBookFilePath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(userPrefs.getArticleDataDirectoryPath());
-        storage = new StorageManager(listEntryBookStorage, userPrefsStorage, articleStorage, archivesEntryBookStorage);
+        storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, userPrefsStorage, articleStorage);
 
         initLogging(config);
 

@@ -32,8 +32,8 @@ public class StorageManagerTest {
         JsonEntryBookStorage archivesEntryBookStorage = new JsonEntryBookStorage(getTempFilePath("archs"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(getTempFilePath("articles"));
-        storageManager = new StorageManager(listEntryBookStorage, userPrefsStorage,
-            articleStorage, archivesEntryBookStorage);
+        storageManager = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, userPrefsStorage,
+            articleStorage);
     }
 
     private Path getTempFilePath(String fileName) {

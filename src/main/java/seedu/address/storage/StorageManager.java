@@ -24,10 +24,10 @@ public class StorageManager implements Storage {
 
 
     public StorageManager(
-            EntryBookStorage listEntryBookStorage,
-            UserPrefsStorage userPrefsStorage,
-            ArticleStorage articleStorage,
-            EntryBookStorage archivesEntryBookStorage) {
+        EntryBookStorage listEntryBookStorage,
+        EntryBookStorage archivesEntryBookStorage,
+        UserPrefsStorage userPrefsStorage,
+        ArticleStorage articleStorage) {
         super();
         this.listEntryBookStorage = listEntryBookStorage;
         this.userPrefsStorage = userPrefsStorage;
