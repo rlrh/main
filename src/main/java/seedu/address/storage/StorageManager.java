@@ -89,20 +89,22 @@ public class StorageManager implements Storage {
 
     @Override
     public Optional<ReadOnlyEntryBook> readArchivesEntryBook() throws DataConversionException, IOException {
-        return readListEntryBook(archivesEntryBookStorage.getEntryBookFilePath());
+        return readArchivesEntryBook(archivesEntryBookStorage.getEntryBookFilePath());
     }
 
-    private Optional<ReadOnlyEntryBook> readArchivesEntryBook(Path filePath) throws DataConversionException, IOException {
+    private Optional<ReadOnlyEntryBook> readArchivesEntryBook(Path filePath)
+        throws DataConversionException, IOException {
         logger.fine("Attempting to read data from file: " + filePath);
         return archivesEntryBookStorage.readEntryBook(filePath);
     }
 
     @Override
     public void saveArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook) throws IOException {
-        saveListEntryBook(archivesEntryBook, archivesEntryBookStorage.getEntryBookFilePath());
+        saveArchivesEntryBook(archivesEntryBook,
+            archivesEntryBookStorage.getEntryBookFilePath());
     }
 
-    private void saveArchviesEntryBook(ReadOnlyEntryBook archivesEntryBook, Path filePath) throws IOException {
+    private void saveArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook, Path filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
         archivesEntryBookStorage.saveEntryBook(archivesEntryBook, filePath);
     }
