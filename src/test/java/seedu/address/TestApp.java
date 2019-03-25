@@ -71,9 +71,9 @@ public class TestApp extends MainApp {
     }
 
     /**
-     * Returns a defensive copy of the address book data stored inside the storage file.
+     * Returns a defensive copy of the list entry book data stored inside the storage file.
      */
-    public EntryBook readStorageAddressBook() {
+    public EntryBook readStorageListEntryBook() {
         try {
             return new EntryBook(storage.readListEntryBook().get());
         } catch (DataConversionException dce) {
@@ -84,10 +84,30 @@ public class TestApp extends MainApp {
     }
 
     /**
-     * Returns the file path of the storage file.
+     * Returns a defensive copy of the archives entry book data stored inside the storage file.
      */
-    public Path getStorageSaveLocation() {
+    public EntryBook readStorageArchivesEntryBook() {
+        try {
+            return new EntryBook(storage.readArchivesEntryBook().get());
+        } catch (DataConversionException dce) {
+            throw new AssertionError("Data is not in the EntryBook format.", dce);
+        } catch (IOException ioe) {
+            throw new AssertionError("Storage file cannot be found.", ioe);
+        }
+    }
+
+    /**
+     * Returns the file path of the storage file for the list entry book.
+     */
+    public Path getListEntryBookStorageSaveLocation() {
         return storage.getListEntryBookFilePath();
+    }
+
+    /**
+     * Returns the file path of the storage file for the archives entry book.
+     */
+    public Path getArchivesEntryBookStorageSaveLocation() {
+        return storage.getArchivesEntryBookFilePath();
     }
 
     /**

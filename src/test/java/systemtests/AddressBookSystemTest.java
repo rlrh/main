@@ -182,7 +182,8 @@ public abstract class AddressBookSystemTest {
             Model expectedModel) {
         assertEquals(expectedCommandInput, getCommandBox().getInput());
         assertEquals(expectedResultMessage, getResultDisplay().getText());
-        assertEquals(new EntryBook(expectedModel.getListEntryBook()), testApp.readStorageAddressBook());
+        assertEquals(new EntryBook(expectedModel.getListEntryBook()), testApp.readStorageListEntryBook());
+        assertEquals(new EntryBook(expectedModel.getArchivesEntryBook()), testApp.readStorageArchivesEntryBook());
         assertEquals(expectedModel.getContext(), testApp.getModel().getContext());
         assertListMatching(getPersonListPanel(), expectedModel.getFilteredEntryList());
     }
@@ -297,7 +298,7 @@ public abstract class AddressBookSystemTest {
         assertEquals("", getResultDisplay().getText());
         assertListMatching(getPersonListPanel(), getModel().getFilteredEntryList());
         assertEquals(BrowserPanel.DEFAULT_PAGE, getBrowserPanel().getLoadedUrl());
-        assertEquals(Paths.get(".").resolve(testApp.getStorageSaveLocation()).toString(),
+        assertEquals(Paths.get(".").resolve(testApp.getListEntryBookStorageSaveLocation()).toString(),
                 getStatusBarFooter().getSaveLocation());
         assertEquals(SYNC_STATUS_INITIAL, getStatusBarFooter().getSyncStatus());
     }
