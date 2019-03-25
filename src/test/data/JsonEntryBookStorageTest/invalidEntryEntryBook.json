@@ -1,5 +1,5 @@
 {
-  "persons": [ {
+  "entries": [ {
     "title": "Entry with invalid link field",
     "description": "Oh no!",
     "link": "hans@example.com",
