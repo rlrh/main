@@ -72,7 +72,11 @@ public abstract class AddressBookSystemTest {
     @Before
     public void setUp() {
         setupHelper = new SystemTestSetupHelper();
-        testApp = setupHelper.setupApplication(this::getInitialData, getDataFileLocation());
+        testApp = setupHelper.setupApplication(
+                                this::getInitialDataListEntryBook,
+                                this::getInitialDataArchivesEntryBook,
+                                getDataFileLocationListEntryBook(),
+                                getDataFileLocationArchivesEntryBook());
         mainWindowHandle = setupHelper.setupMainWindowHandle();
 
         waitUntilBrowserLoaded(getBrowserPanel());
@@ -85,17 +89,33 @@ public abstract class AddressBookSystemTest {
     }
 
     /**
-     * Returns the data to be loaded into the file in {@link #getDataFileLocation()}.
+     * Returns the data for the list entry book to be loaded into the file in
+     * {@link #getDataFileLocationListEntryBook()}.
      */
-    protected EntryBook getInitialData() {
+    protected EntryBook getInitialDataListEntryBook() {
         return TypicalEntries.getTypicalListEntryBook();
     }
 
     /**
-     * Returns the directory of the data file.
+     * Returns the data for the archives entry book to be loaded into the file in
+     * {@link #getDataFileLocationListEntryBook()}.
      */
-    protected Path getDataFileLocation() {
-        return TestApp.SAVE_LOCATION_FOR_TESTING;
+    protected EntryBook getInitialDataArchivesEntryBook() {
+        return TypicalEntries.getTypicalArchivesEntryBook();
+    }
+
+    /**
+     * Returns the directory of the data file for the list entry book.
+     */
+    protected Path getDataFileLocationListEntryBook() {
+        return TestApp.SAVE_LOCATION_LIST_ENTRYBOOK_FOR_TESTING;
+    }
+
+    /**
+     * Returns the directory of the data file for the archives entry book.
+     */
+    protected Path getDataFileLocationArchivesEntryBook() {
+        return TestApp.SAVE_LOCATION_ARCHIVES_ENTRYBOOK_FOR_TESTING;
     }
 
     public MainWindowHandle getMainWindowHandle() {
@@ -325,4 +345,5 @@ public abstract class AddressBookSystemTest {
     protected void setExceptionInApp(Exception e) {
         testApp.setException(e);
     }
+
 }

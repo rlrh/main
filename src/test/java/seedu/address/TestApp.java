@@ -27,26 +27,47 @@ import systemtests.ModelHelper;
  */
 public class TestApp extends MainApp {
 
-    public static final Path SAVE_LOCATION_FOR_TESTING = TestUtil.getFilePathInSandboxFolder("sampleData.json");
+    public static final Path SAVE_LOCATION_LIST_ENTRYBOOK_FOR_TESTING =
+        TestUtil.getFilePathInSandboxFolder("sampleListEntryBookData.json");
+
+    public static final Path SAVE_LOCATION_ARCHIVES_ENTRYBOOK_FOR_TESTING =
+        TestUtil.getFilePathInSandboxFolder("sampleArchiveEntryBookData.json");
 
     protected static final Path DEFAULT_PREF_FILE_LOCATION_FOR_TESTING =
             TestUtil.getFilePathInSandboxFolder("pref_testing.json");
-    protected Supplier<ReadOnlyEntryBook> initialDataSupplier = () -> null;
-    protected Path saveFileLocation = SAVE_LOCATION_FOR_TESTING;
+
+    protected Supplier<ReadOnlyEntryBook> initialListEntryBookDataSupplier = () -> null;
+    protected Supplier<ReadOnlyEntryBook> initialArchivesEntryBookDataSupplier = () -> null;
+    protected Path saveFileLocationListEntryBook = SAVE_LOCATION_LIST_ENTRYBOOK_FOR_TESTING;
+    protected Path saveFileLocationArchivesEntryBook = SAVE_LOCATION_ARCHIVES_ENTRYBOOK_FOR_TESTING;
 
     public TestApp() {
     }
 
-    public TestApp(Supplier<ReadOnlyEntryBook> initialDataSupplier, Path saveFileLocation) {
+    public TestApp(
+        Supplier<ReadOnlyEntryBook> initialListEntryBookDataSupplier,
+        Supplier<ReadOnlyEntryBook> initialArchivesEntryBookDataSupplier,
+        Path saveFileLocationListEntryBook,
+        Path saveFileLocationArchivesEntryBook) {
         super();
-        this.initialDataSupplier = initialDataSupplier;
-        this.saveFileLocation = saveFileLocation;
+        this.initialListEntryBookDataSupplier = initialListEntryBookDataSupplier;
+        this.initialArchivesEntryBookDataSupplier = initialArchivesEntryBookDataSupplier;
+        this.saveFileLocationListEntryBook = saveFileLocationListEntryBook;
+        this.saveFileLocationArchivesEntryBook = saveFileLocationArchivesEntryBook;
 
         // If some initial local data has been provided, write those to the file
-        if (initialDataSupplier.get() != null) {
-            JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocation);
+        if (initialListEntryBookDataSupplier.get() != null) {
+            JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocationListEntryBook);
             try {
-                jsonAddressBookStorage.saveEntryBook(initialDataSupplier.get());
+                jsonAddressBookStorage.saveEntryBook(initialListEntryBookDataSupplier.get());
+            } catch (IOException ioe) {
+                throw new AssertionError(ioe);
+            }
+        }
+        if (initialArchivesEntryBookDataSupplier.get() != null) {
+            JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocationArchivesEntryBook);
+            try {
+                jsonAddressBookStorage.saveEntryBook(initialArchivesEntryBookDataSupplier.get());
             } catch (IOException ioe) {
                 throw new AssertionError(ioe);
             }
@@ -66,7 +87,8 @@ public class TestApp extends MainApp {
         double x = Screen.getPrimary().getVisualBounds().getMinX();
         double y = Screen.getPrimary().getVisualBounds().getMinY();
         userPrefs.setGuiSettings(new GuiSettings(600.0, 600.0, (int) x, (int) y));
-        userPrefs.setListEntryBookFilePath(saveFileLocation);
+        userPrefs.setListEntryBookFilePath(saveFileLocationListEntryBook);
+        userPrefs.setArchivesEntryBookFilePath(saveFileLocationArchivesEntryBook);
         return userPrefs;
     }
 
@@ -117,6 +139,16 @@ public class TestApp extends MainApp {
         Model copy = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
             new UserPrefs(), new StorageStub());
         copy.setContext(model.getContext());
+        // This is needed to ensure the copy also has the correct entrybook displayed
+        switch (copy.getContext()) {
+        case CONTEXT_LIST:
+            copy.setDisplayEntryList(copy.getListEntryBook());
+            break;
+        case CONTEXT_ARCHIVES:
+            copy.setDisplayEntryList(copy.getArchivesEntryBook());
+            break;
+        default:
+        }
         ModelHelper.setFilteredList(copy, model.getFilteredEntryList());
         return copy;
     }
