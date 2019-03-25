@@ -113,7 +113,7 @@ public class ContextSwitchSystemTest extends AddressBookSystemTest {
      */
     private void assertArchivesCommandSuccess(String command) {
         Model expectedModel = getModel();
-        expectedModel.setContext(ModelContext.CONTEXT_ARCHIVE);
+        expectedModel.setContext(ModelContext.CONTEXT_ARCHIVES);
         String expectedResultMessage = String.format(ArchivesCommand.MESSAGE_SUCCESS);
 
         assertCommandSuccess(command, expectedModel, expectedResultMessage);

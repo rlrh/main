@@ -8,7 +8,7 @@ import seedu.address.logic.parser.EntryBookParser;
  * Enums for contexts Model can take
  */
 public enum ModelContext {
-    CONTEXT_LIST(new EntryBookListParser()), CONTEXT_ARCHIVE(new EntryBookArchivesParser());
+    CONTEXT_LIST(new EntryBookListParser()), CONTEXT_ARCHIVES(new EntryBookArchivesParser());
 
     private EntryBookParser parser;
 

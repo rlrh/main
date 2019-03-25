@@ -24,7 +24,7 @@ public class ArchivesCommandTest {
 
     @Before
     public void setUp() {
-        expectedModel.setContext(ModelContext.CONTEXT_ARCHIVE);
+        expectedModel.setContext(ModelContext.CONTEXT_ARCHIVES);
         expectedModel.setDisplayEntryList(expectedModel.getArchivesEntryBook().getEntryList());
     }
 

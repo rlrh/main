@@ -20,7 +20,7 @@ public class ArchivesCommand extends Command {
     @Override
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
-        model.setContext(ModelContext.CONTEXT_ARCHIVE);
+        model.setContext(ModelContext.CONTEXT_ARCHIVES);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

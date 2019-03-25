@@ -350,7 +350,7 @@ public class ModelManager implements Model {
         case CONTEXT_LIST:
             setDisplayEntryList(this.listEntryBook);
             break;
-        case CONTEXT_ARCHIVE:
+        case CONTEXT_ARCHIVES:
             // something else
             break;
         default:
