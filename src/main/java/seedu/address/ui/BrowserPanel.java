@@ -124,6 +124,7 @@ public class BrowserPanel extends UiPart<Region> {
             String message = String.format("Loading %s...", webEngine.getLocation());
             logger.info(message);
         }
+        isReaderViewLoaded = false;
 
     }
 
@@ -136,17 +137,16 @@ public class BrowserPanel extends UiPart<Region> {
         if (isLoadingReaderView) {
             String message = String.format("Successfully loaded reader view for %s", currentLocation);
             logger.info(message);
-            isLoadingReaderView = false;
             isReaderViewLoaded = true;
         } else {
             String message = String.format("Successfully loaded %s", webEngine.getLocation());
             logger.info(message);
-            isLoadingReaderView = false;
             isReaderViewLoaded = false;
         }
+        isLoadingReaderView = false;
 
         // Load reader view if reader view mode is selected but not loaded
-        if (viewMode.equals(ViewMode.READER) && !isReaderViewLoaded) {
+        if (viewMode.equals(ViewMode.READER) && !isReaderViewLoaded && currentLocation.equals(webEngine.getLocation())) {
             try {
                 URL url = new URL(webEngine.getLocation());
                 if (url.equals(DEFAULT_PAGE) || url.equals(ERROR_PAGE) || url.equals(READER_VIEW_FAILURE_PAGE)) {
@@ -167,6 +167,9 @@ public class BrowserPanel extends UiPart<Region> {
 
         String message = String.format("Failed to load %s", webEngine.getLocation());
         logger.warning(message);
+
+        isLoadingReaderView = false;
+        isReaderViewLoaded = false;
 
         loadErrorPage();
 
