@@ -23,8 +23,7 @@ public class ViewModeCommandParserTest {
     @Test
     public void parse_validArgs_returnsViewCommand() {
         // no leading and trailing whitespaces
-        ViewModeCommand expectedViewModeCommand =
-                new ViewModeCommand(ViewMode.BROWSER);
+        ViewModeCommand expectedViewModeCommand = new ViewModeCommand(new ViewMode());
         assertParseSuccess(parser, "browser", expectedViewModeCommand);
 
         // multiple whitespaces between keywords

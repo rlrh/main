@@ -24,7 +24,7 @@ import seedu.address.model.entry.Entry;
 
 public class BrowserPanelTest extends GuiUnitTest {
     private SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
-    private SimpleObjectProperty<ViewMode> viewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
+    private SimpleObjectProperty<ViewMode> viewMode = new SimpleObjectProperty<>(new ViewMode());
     private BrowserPanel browserPanel;
     private BrowserPanelHandle browserPanelHandle;
 
@@ -79,7 +79,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         String expectedText = doc.text();
 
         // set reader mode and reload
-        guiRobot.interact(() -> viewMode.set(ViewMode.READER));
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER)));
         waitUntilBrowserLoaded(browserPanelHandle);
 
         // extract loaded content

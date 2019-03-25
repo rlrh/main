@@ -36,6 +36,7 @@ import seedu.address.testutil.EditEntryDescriptorBuilder;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
 import seedu.address.ui.ViewMode;
+import seedu.address.ui.ViewType;
 
 public class EntryBookListParserTest {
     @Rule
@@ -158,11 +159,11 @@ public class EntryBookListParserTest {
     @Test
     public void parseCommand_view() throws Exception {
         ViewModeCommand command = (ViewModeCommand) parser.parseCommand(
-                ViewModeCommand.COMMAND_WORD + " " + ViewMode.values()[0].toString());
-        assertEquals(new ViewModeCommand(ViewMode.values()[0]), command);
+                ViewModeCommand.COMMAND_WORD + " " + ViewType.BROWSER.toString());
+        assertEquals(new ViewModeCommand(new ViewMode(ViewType.BROWSER)), command);
         ViewModeCommand aliasCommand = (ViewModeCommand) parser.parseCommand(
-                ViewModeCommand.COMMAND_ALIAS + " " + ViewMode.values()[1].toString());
-        assertEquals(new ViewModeCommand(ViewMode.values()[1]), aliasCommand);
+                ViewModeCommand.COMMAND_ALIAS + " " + ViewType.READER.toString());
+        assertEquals(new ViewModeCommand(new ViewMode(ViewType.READER)), aliasCommand);
     }
 
     @Test
