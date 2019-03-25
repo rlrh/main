@@ -27,7 +27,7 @@ import seedu.address.storage.Storage;
 import seedu.address.ui.ViewMode;
 
 /**
- * Represents the in-memory model of the address book data.
+ * Represents the in-memory model of the entry book data.
  */
 public class ModelManager implements Model {
     public static final String FILE_OPS_ERROR_MESSAGE = "Could not save data to file: ";
@@ -54,16 +54,16 @@ public class ModelManager implements Model {
         super();
         requireAllNonNull(listEntryBook, userPrefs, storage);
 
-        logger.fine("Initializing with list context address book: " + listEntryBook + " and user prefs " + userPrefs);
+        logger.fine("Initializing with list context entry book: " + listEntryBook + " and user prefs " + userPrefs);
 
         this.listEntryBook = new EntryBook(listEntryBook);
         this.userPrefs = new UserPrefs(userPrefs);
         this.storage = storage;
 
         // Save the entry book to storage whenever it is modified.
-        this.listEntryBook.addListener(this::saveToStorageListener);
+        this.listEntryBook.addListener(this::saveListEntryBookToStorageListener);
 
-        displayEntryBook(this.listEntryBook);
+        setDisplayEntryList(this.listEntryBook);
         filteredEntries = new FilteredList<>(this.displayedEntryList);
         filteredEntries.addListener(this::ensureSelectedEntryIsValid);
     }
@@ -93,14 +93,14 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public Path getEntryBookFilePath() {
+    public Path getListEntryBookFilePath() {
         return userPrefs.getListEntryBookFilePath();
     }
 
     @Override
-    public void setEntryBookFilePath(Path entryBookFilePath) {
-        requireNonNull(entryBookFilePath);
-        userPrefs.setListEntryBookFilePath(entryBookFilePath);
+    public void setListEntryBookFilePath(Path listEntryBookFilePath) {
+        requireNonNull(listEntryBookFilePath);
+        userPrefs.setListEntryBookFilePath(listEntryBookFilePath);
     }
 
     @Override
@@ -114,8 +114,7 @@ public class ModelManager implements Model {
         userPrefs.setArticleDataDirectoryPath(articleDataDirectoryPath);
     }
 
-
-    //=========== EntryBook ================================================================================
+    //=========== List EntryBook ================================================================================
 
     @Override
     public void setListEntryBook(ReadOnlyEntryBook listEntryBook) {
@@ -128,37 +127,32 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasEntry(Entry entry) {
-        requireNonNull(entry);
-        return listEntryBook.hasPerson(entry);
+    public boolean hasListEntry(Entry listEntry) {
+        requireNonNull(listEntry);
+        return listEntryBook.hasPerson(listEntry);
     }
 
     @Override
-    public void deleteEntry(Entry target) {
+    public void deleteListEntry(Entry target) {
         listEntryBook.removePerson(target);
     }
 
     @Override
-    public void addEntry(Entry entry) {
+    public void addListEntry(Entry entry) {
         listEntryBook.addEntry(entry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
 
     @Override
-    public void setEntry(Entry target, Entry editedEntry) {
+    public void setListEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
         listEntryBook.setPerson(target, editedEntry);
     }
 
     @Override
-    public void clearEntryBook() {
+    public void clearListEntryBook() {
         listEntryBook.clear();
-    }
-
-    @Override
-    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
-        displayedEntryList.set(entryBook.getEntryList());
     }
 
     //=========== Storage ===================================================================================
@@ -173,7 +167,14 @@ public class ModelManager implements Model {
         return storage.addArticle(url, articleContent);
     }
 
-    //=========== Filtered Entry List Accessors =============================================================
+    //=========== Displayed Entry List ================================================================================
+
+    @Override
+    public void setDisplayEntryList(ReadOnlyEntryBook entryBook) {
+        displayedEntryList.set(entryBook.getEntryList());
+    }
+
+    //=========== Filtered Entry List =============================================================
 
     /**
      * Returns an unmodifiable view of the list of {@code Entry} backed by the internal list of
@@ -291,10 +292,10 @@ public class ModelManager implements Model {
     }
 
     /**
-     * Ensures that storage is updated whenever entry book is modified.
+     * Ensures that storage is updated whenever list entry book is modified.
      */
-    private void saveToStorageListener(Observable observable) {
-        logger.info("Address book modified, saving to file.");
+    private void saveListEntryBookToStorageListener(Observable observable) {
+        logger.info("List entry book modified, saving to file.");
         try {
             storage.saveListEntryBook(listEntryBook);
         } catch (IOException ioe) {
@@ -347,7 +348,7 @@ public class ModelManager implements Model {
     public void setContext(ModelContext context) {
         switch (context) {
         case CONTEXT_LIST:
-            displayEntryBook(this.listEntryBook);
+            setDisplayEntryList(this.listEntryBook);
             break;
         case CONTEXT_ARCHIVE:
             // something else

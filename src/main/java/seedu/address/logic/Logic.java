@@ -30,7 +30,7 @@ public interface Logic {
      *
      * @see seedu.address.model.Model#getListEntryBook()
      */
-    ReadOnlyEntryBook getEntryBook();
+    ReadOnlyEntryBook getListEntryBook();
 
     /** Returns an unmodifiable view of the filtered list of entries */
     ObservableList<Entry> getFilteredEntryList();
@@ -42,9 +42,9 @@ public interface Logic {
     ObservableList<String> getHistory();
 
     /**
-     * Returns the user prefs' entry book file path.
+     * Returns the user prefs' list entry book file path.
      */
-    Path getEntryBookFilePath();
+    Path getListEntryBookFilePath();
 
     /**
      * Returns the user prefs' GUI settings.

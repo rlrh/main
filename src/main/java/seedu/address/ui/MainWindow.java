@@ -123,7 +123,7 @@ public class MainWindow extends UiPart<Stage> {
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
-        statusBarFooter = new StatusBarFooter(logic.getEntryBookFilePath(), logic.getEntryBook(),
+        statusBarFooter = new StatusBarFooter(logic.getListEntryBookFilePath(), logic.getListEntryBook(),
                 logic.getFilteredEntryList());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 

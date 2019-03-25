@@ -49,12 +49,12 @@ public interface Model {
     /**
      * Returns the user prefs' entry book file path.
      */
-    Path getEntryBookFilePath();
+    Path getListEntryBookFilePath();
 
     /**
      * Sets the user prefs' entry book file path.
      */
-    void setEntryBookFilePath(Path entryBookFilePath);
+    void setListEntryBookFilePath(Path listEntryBookFilePath);
 
     /**
      * Returns the user prefs' article data directory path.
@@ -66,47 +66,47 @@ public interface Model {
      */
     void setArticleDataDirectoryPath(Path articleDataDirectoryPath);
     /**
-     * Replaces entry book data with the data in {@code listEntryBook}.
+     * Replaces list entry book data with the data in {@code listEntryBook}.
      */
     void setListEntryBook(ReadOnlyEntryBook listEntryBook);
 
-    /** Returns the EntryBook */
+    /** Returns the list EntryBook */
     ReadOnlyEntryBook getListEntryBook();
 
     /**
-     * Returns true if a entry with the same identity as {@code entry} exists in the entry book.
+     * Returns true if a list entry with the same identity as {@code entry} exists in the entry book.
      */
-    boolean hasEntry(Entry entry);
+    boolean hasListEntry(Entry listEntry);
 
     /**
      * Deletes the given entry.
      * The entry must exist in the entry book.
      */
-    void deleteEntry(Entry target);
+    void deleteListEntry(Entry target);
 
     /**
      * Adds the given entry.
      * {@code entry} must not already exist in the entry book.
      */
-    void addEntry(Entry entry);
+    void addListEntry(Entry entry);
 
     /**
      * Replaces the given entry {@code target} with {@code editedEntry}.
      * {@code target} must exist in the entry book.
      * The entry identity of {@code editedEntry} must not be the same as another existing entry in the entry book.
      */
-    void setEntry(Entry target, Entry editedEntry);
+    void setListEntry(Entry target, Entry editedEntry);
 
     /**
      * Clears the entire entry book.
      */
-    void clearEntryBook();
+    void clearListEntryBook();
 
     /** Adds article with {@code articleContent} associated with {@code url}. */
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 
     /** Displays a given entryBook without touching storage. */
-    void displayEntryBook(ReadOnlyEntryBook entryBook);
+    void setDisplayEntryList(ReadOnlyEntryBook entryBook);
 
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();

@@ -85,14 +85,14 @@ public class ModelManagerTest {
     @Test
     public void setEntryBookFilePath_nullPath_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        modelManager.setEntryBookFilePath(null);
+        modelManager.setListEntryBookFilePath(null);
     }
 
     @Test
     public void setEntryBookFilePath_validPath_setsAddressBookFilePath() {
         Path path = Paths.get("address/book/file/path");
-        modelManager.setEntryBookFilePath(path);
-        assertEquals(path, modelManager.getEntryBookFilePath());
+        modelManager.setListEntryBookFilePath(path);
+        assertEquals(path, modelManager.getListEntryBookFilePath());
     }
 
     @Test
@@ -111,44 +111,44 @@ public class ModelManagerTest {
     @Test
     public void hasEntry_nullEntry_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        modelManager.hasEntry(null);
+        modelManager.hasListEntry(null);
     }
 
     @Test
     public void hasEntry_entryNotInEntryBook_returnsFalse() {
-        assertFalse(modelManager.hasEntry(ALICE));
+        assertFalse(modelManager.hasListEntry(ALICE));
     }
 
     @Test
     public void hasEntry_entryInEntryBook_returnsTrue() {
-        modelManager.addEntry(ALICE);
-        assertTrue(modelManager.hasEntry(ALICE));
+        modelManager.addListEntry(ALICE);
+        assertTrue(modelManager.hasListEntry(ALICE));
     }
 
     @Test
     public void deleteEntry_entryIsSelectedAndFirstEntryInFilteredEntryList_selectionCleared() {
-        modelManager.addEntry(ALICE);
+        modelManager.addListEntry(ALICE);
         modelManager.setSelectedEntry(ALICE);
-        modelManager.deleteEntry(ALICE);
+        modelManager.deleteListEntry(ALICE);
         assertEquals(null, modelManager.getSelectedEntry());
     }
 
     @Test
     public void deleteEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
-        modelManager.addEntry(ALICE);
-        modelManager.addEntry(BOB);
+        modelManager.addListEntry(ALICE);
+        modelManager.addListEntry(BOB);
         assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(BOB);
-        modelManager.deleteEntry(BOB);
+        modelManager.deleteListEntry(BOB);
         assertEquals(ALICE, modelManager.getSelectedEntry());
     }
 
     @Test
     public void setEntry_entryIsSelected_selectedEntryUpdated() {
-        modelManager.addEntry(ALICE);
+        modelManager.addListEntry(ALICE);
         modelManager.setSelectedEntry(ALICE);
         Entry updatedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
-        modelManager.setEntry(ALICE, updatedAlice);
+        modelManager.setListEntry(ALICE, updatedAlice);
         assertEquals(updatedAlice, modelManager.getSelectedEntry());
     }
 
@@ -166,7 +166,7 @@ public class ModelManagerTest {
 
     @Test
     public void setSelectedEntry_entryInFilteredEntryList_setsSelectedEntry() {
-        modelManager.addEntry(ALICE);
+        modelManager.addListEntry(ALICE);
         assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(ALICE);
         assertEquals(ALICE, modelManager.getSelectedEntry());
@@ -216,7 +216,7 @@ public class ModelManagerTest {
         // different displayedEntryList -> returns false
         EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_LINK).build();
         ModelManager differentDisplayedModelManager = new ModelManager(entryBook, userPrefs, storage);
-        differentDisplayedModelManager.displayEntryBook(differentDisplayedEntryBook);
+        differentDisplayedModelManager.setDisplayEntryList(differentDisplayedEntryBook);
         assertFalse(modelManager.equals(differentDisplayedModelManager));
     }
 

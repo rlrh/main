@@ -212,12 +212,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public Path getEntryBookFilePath() {
+        public Path getListEntryBookFilePath() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setEntryBookFilePath(Path entryBookFilePath) {
+        public void setListEntryBookFilePath(Path listEntryBookFilePath) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -232,7 +232,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addEntry(Entry entry) {
+        public void addListEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -247,27 +247,27 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasEntry(Entry entry) {
+        public boolean hasListEntry(Entry listEntry) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void deleteEntry(Entry target) {
+        public void deleteListEntry(Entry target) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setEntry(Entry target, Entry editedEntry) {
+        public void setListEntry(Entry target, Entry editedEntry) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void clearEntryBook() {
+        public void clearListEntryBook() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+        public void setDisplayEntryList(ReadOnlyEntryBook entryBook) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -379,9 +379,9 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasEntry(Entry entry) {
-            requireNonNull(entry);
-            return this.entry.isSameEntry(entry);
+        public boolean hasListEntry(Entry listEntry) {
+            requireNonNull(listEntry);
+            return this.entry.isSameEntry(listEntry);
         }
     }
 
@@ -397,13 +397,13 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasEntry(Entry entry) {
-            requireNonNull(entry);
-            return entriesAdded.stream().anyMatch(entry::isSameEntry);
+        public boolean hasListEntry(Entry listEntry) {
+            requireNonNull(listEntry);
+            return entriesAdded.stream().anyMatch(listEntry::isSameEntry);
         }
 
         @Override
-        public void addEntry(Entry entry) {
+        public void addListEntry(Entry entry) {
             requireNonNull(entry);
             entriesAdded.add(entry);
         }

@@ -108,7 +108,7 @@ public class LogicManagerTest {
         Model expectedModel = new ModelManagerStub();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
         String expectedFinalMessage = ModelManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
-        expectedModel.addEntry(expectedEntry);
+        expectedModel.addListEntry(expectedEntry);
         expectedModel.setException(new CommandException(expectedFinalMessage));
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
         assertManualExceptionPropagated(CommandException.class, expectedFinalMessage);

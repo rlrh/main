@@ -162,11 +162,11 @@ public class AddCommand extends Command {
                 toAdd.getTags()
         );
 
-        if (model.hasEntry(updatedEntry)) {
+        if (model.hasListEntry(updatedEntry)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.addEntry(updatedEntry);
+        model.addListEntry(updatedEntry);
         return new CommandResult(String.format(MESSAGE_SUCCESS, updatedEntry));
     }
 
