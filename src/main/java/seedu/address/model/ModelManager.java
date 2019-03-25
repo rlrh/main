@@ -37,6 +37,7 @@ public class ModelManager implements Model {
     private ModelContext context = ModelContext.CONTEXT_LIST;
 
     private final EntryBook listEntryBook;
+    private final EntryBook archivesEntryBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Entry> filteredEntries;
 
@@ -50,18 +51,25 @@ public class ModelManager implements Model {
     /**
      * Initializes a ModelManager with the given listEntryBook, userPrefs, and storage
      */
-    public ModelManager(ReadOnlyEntryBook listEntryBook, ReadOnlyUserPrefs userPrefs, Storage storage) {
+    public ModelManager(ReadOnlyEntryBook listEntryBook,
+                        ReadOnlyEntryBook archivesEntryBook,
+                        ReadOnlyUserPrefs userPrefs,
+                        Storage storage) {
         super();
         requireAllNonNull(listEntryBook, userPrefs, storage);
 
         logger.fine("Initializing with list context entry book: " + listEntryBook + " and user prefs " + userPrefs);
 
         this.listEntryBook = new EntryBook(listEntryBook);
+        this.archivesEntryBook = new EntryBook(archivesEntryBook);
         this.userPrefs = new UserPrefs(userPrefs);
         this.storage = storage;
 
-        // Save the entry book to storage whenever it is modified.
+        // Save the list entry book to storage whenever it is modified.
         this.listEntryBook.addListener(this::saveListEntryBookToStorageListener);
+
+        // Save the archives entry book to storage whenever it is modified.
+        this.archivesEntryBook.addListener(this::saveArchivesEntryBookToStorageListener);
 
         setDisplayEntryList(this.listEntryBook);
         filteredEntries = new FilteredList<>(this.displayedEntryList);
@@ -114,6 +122,17 @@ public class ModelManager implements Model {
         userPrefs.setArticleDataDirectoryPath(articleDataDirectoryPath);
     }
 
+    @Override
+    public Path getArchivesEntryBookFilePath() {
+        return userPrefs.getArchivesEntryBookFilePath();
+    }
+
+    @Override
+    public void setArchivesEntryBookFilePath(Path archivesEntryBookFilePath) {
+        requireNonNull(archivesEntryBookFilePath);
+        userPrefs.setArchivesEntryBookFilePath(archivesEntryBookFilePath);
+    }
+
     //=========== List EntryBook ================================================================================
 
     @Override
@@ -153,6 +172,40 @@ public class ModelManager implements Model {
     @Override
     public void clearListEntryBook() {
         listEntryBook.clear();
+    }
+
+    //=========== Archives EntryBook ================================================================================
+
+    @Override
+    public void setArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook) {
+        this.archivesEntryBook.resetData(archivesEntryBook);
+    }
+
+    @Override
+    public ReadOnlyEntryBook getArchivesEntryBook() {
+        return archivesEntryBook;
+    }
+
+    @Override
+    public boolean hasArchivesEntry(Entry archiveEntry) {
+        requireNonNull(archiveEntry);
+        return archivesEntryBook.hasPerson(archiveEntry);
+    }
+
+    @Override
+    public void deleteArchivesEntry(Entry target) {
+        archivesEntryBook.removePerson(target);
+    }
+
+    @Override
+    public void addArchivesEntry(Entry entry) {
+        archivesEntryBook.addEntry(entry);
+        updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
+    }
+
+    @Override
+    public void clearArchivesEntryBook() {
+        archivesEntryBook.clear();
     }
 
     //=========== Storage ===================================================================================
@@ -295,9 +348,21 @@ public class ModelManager implements Model {
      * Ensures that storage is updated whenever list entry book is modified.
      */
     private void saveListEntryBookToStorageListener(Observable observable) {
-        logger.info("List entry book modified, saving to file.");
+        logger.info("Entry book modified, saving to file.");
         try {
             storage.saveListEntryBook(listEntryBook);
+        } catch (IOException ioe) {
+            setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+        }
+    }
+
+    /**
+     * Ensures that storage is updated whenever archives entry book is modified.
+     */
+    private void saveArchivesEntryBookToStorageListener(Observable observable) {
+        logger.info("Archives modified, saving to file.");
+        try {
+            storage.saveArchivesEntryBook(archivesEntryBook);
         } catch (IOException ioe) {
             setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
         }
@@ -319,6 +384,7 @@ public class ModelManager implements Model {
         ModelManager other = (ModelManager) obj;
 
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
+                && archivesEntryBook.equals(other.archivesEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
@@ -339,7 +405,7 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        Model clonedModel = new ModelManager(this.listEntryBook, this.userPrefs, this.storage);
+        Model clonedModel = new ModelManager(this.listEntryBook, this.archivesEntryBook, this.userPrefs, this.storage);
         clonedModel.setContext(this.getContext());
         return clonedModel;
     }

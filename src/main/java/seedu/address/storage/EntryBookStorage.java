@@ -16,7 +16,7 @@ public interface EntryBookStorage {
     /**
      * Returns the file path of the data file.
      */
-    Path getListEntryBookFilePath();
+    Path getEntryBookFilePath();
 
     /**
      * Returns EntryBook data as a {@link ReadOnlyEntryBook}.
@@ -24,23 +24,23 @@ public interface EntryBookStorage {
      * @throws DataConversionException if the data in storage is not in the expected format.
      * @throws IOException if there was any problem when reading from the storage.
      */
-    Optional<ReadOnlyEntryBook> readListEntryBook() throws DataConversionException, IOException;
+    Optional<ReadOnlyEntryBook> readEntryBook() throws DataConversionException, IOException;
 
     /**
-     * @see #getListEntryBookFilePath()
+     * @see #getEntryBookFilePath()
      */
-    Optional<ReadOnlyEntryBook> readListEntryBook(Path filePath) throws DataConversionException, IOException;
+    Optional<ReadOnlyEntryBook> readEntryBook(Path filePath) throws DataConversionException, IOException;
 
     /**
      * Saves the given {@link ReadOnlyEntryBook} to the storage.
-     * @param listEntryBook cannot be null.
+     * @param entryBook cannot be null.
      * @throws IOException if there was any problem writing to the file.
      */
-    void saveListEntryBook(ReadOnlyEntryBook listEntryBook) throws IOException;
+    void saveEntryBook(ReadOnlyEntryBook entryBook) throws IOException;
 
     /**
-     * @see #saveListEntryBook(ReadOnlyEntryBook)
+     * @see #saveEntryBook(ReadOnlyEntryBook)
      */
-    void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException;
+    void saveEntryBook(ReadOnlyEntryBook entryBook, Path filePath) throws IOException;
 
 }

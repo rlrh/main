@@ -15,6 +15,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
 
     private GuiSettings guiSettings = new GuiSettings();
     private Path listEntryBookFilePath = Paths.get("data" , "entrybook.json");
+    private Path archivesEntryBookFilePath = Paths.get("data" , "archives.json");
     private Path articleDataDirectoryPath = Paths.get("data", "articles");
 
     /**
@@ -67,6 +68,15 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         this.articleDataDirectoryPath = articleDataDirectoryPath;
     }
 
+    public Path getArchivesEntryBookFilePath() {
+        return archivesEntryBookFilePath;
+    }
+
+    public void setArchivesEntryBookFilePath(Path archivesEntryBookFilePath) {
+        requireNonNull(archivesEntryBookFilePath);
+        this.archivesEntryBookFilePath = archivesEntryBookFilePath;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -80,7 +90,8 @@ public class UserPrefs implements ReadOnlyUserPrefs {
 
         return guiSettings.equals(o.guiSettings)
                 && listEntryBookFilePath.equals(o.listEntryBookFilePath)
-                && articleDataDirectoryPath.equals(o.articleDataDirectoryPath);
+                && articleDataDirectoryPath.equals(o.articleDataDirectoryPath)
+                && archivesEntryBookFilePath.equals(o.archivesEntryBookFilePath);
     }
 
     @Override
@@ -92,7 +103,8 @@ public class UserPrefs implements ReadOnlyUserPrefs {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Gui Settings : " + guiSettings);
-        sb.append("\nLocal data file location : " + listEntryBookFilePath);
+        sb.append("\nEntrybook data file location : " + listEntryBookFilePath);
+        sb.append("\nArchives data file location : " + archivesEntryBookFilePath);
         return sb.toString();
     }
 

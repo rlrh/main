@@ -46,7 +46,7 @@ public class TestApp extends MainApp {
         if (initialDataSupplier.get() != null) {
             JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocation);
             try {
-                jsonAddressBookStorage.saveListEntryBook(initialDataSupplier.get());
+                jsonAddressBookStorage.saveEntryBook(initialDataSupplier.get());
             } catch (IOException ioe) {
                 throw new AssertionError(ioe);
             }
@@ -94,7 +94,8 @@ public class TestApp extends MainApp {
      * Returns a defensive copy of the model.
      */
     public Model getModel() {
-        Model copy = new ModelManager(model.getListEntryBook(), new UserPrefs(), new StorageStub());
+        Model copy = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
+            new UserPrefs(), new StorageStub());
         copy.setContext(model.getContext());
         ModelHelper.setFilteredList(copy, model.getFilteredEntryList());
         return copy;

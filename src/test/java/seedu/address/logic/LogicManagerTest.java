@@ -54,11 +54,13 @@ public class LogicManagerTest {
 
     @Before
     public void setUp() throws Exception {
-        JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
+        JsonEntryBookStorage listEntryBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
+        JsonEntryBookStorage archivesEntryBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        model = new ModelManager(new EntryBook(), new UserPrefs(), storage);
+        StorageManager storage = new StorageManager(listEntryBookStorage, userPrefsStorage,
+            articleStorage, archivesEntryBookStorage);
+        model = new ModelManager(new EntryBook(), new EntryBook(), new UserPrefs(), storage);
         logic = new LogicManager(model);
     }
 
@@ -93,12 +95,15 @@ public class LogicManagerTest {
     @Test
     public void execute_storageThrowsIoException_throwsCommandException() throws Exception {
         // Setup LogicManager with JsonEntryBookIoExceptionThrowingStub
-        JsonEntryBookStorage addressBookStorage =
+        JsonEntryBookStorage listEntryBookStorage =
                 new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
+        JsonEntryBookStorage archivesEntryBookStorage =
+            new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        model = new ModelManager(model.getListEntryBook(), model.getUserPrefs(), storage);
+        StorageManager storage = new StorageManager(listEntryBookStorage, userPrefsStorage,
+            articleStorage, archivesEntryBookStorage);
+        model = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(), model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 
         // Execute add command
@@ -167,7 +172,8 @@ public class LogicManagerTest {
      * @see #assertCommandBehavior(Class, String, String, Model)
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getListEntryBook(), model.getUserPrefs(), model.getStorage());
+        Model expectedModel = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
+            model.getUserPrefs(), model.getStorage());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 
@@ -235,7 +241,7 @@ public class LogicManagerTest {
         }
 
         @Override
-        public void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
+        public void saveEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
             throw DUMMY_IO_EXCEPTION;
         }
     }

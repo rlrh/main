@@ -27,22 +27,22 @@ public class JsonEntryBookStorage implements EntryBookStorage {
         this.filePath = filePath;
     }
 
-    public Path getListEntryBookFilePath() {
+    public Path getEntryBookFilePath() {
         return filePath;
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readListEntryBook() throws DataConversionException {
-        return readListEntryBook(filePath);
+    public Optional<ReadOnlyEntryBook> readEntryBook() throws DataConversionException {
+        return readEntryBook(filePath);
     }
 
     /**
-     * Similar to {@link #readListEntryBook()}.
+     * Similar to {@link #readEntryBook()}.
      *
      * @param filePath location of the data. Cannot be null.
      * @throws DataConversionException if the file is not in the correct format.
      */
-    public Optional<ReadOnlyEntryBook> readListEntryBook(Path filePath) throws DataConversionException {
+    public Optional<ReadOnlyEntryBook> readEntryBook(Path filePath) throws DataConversionException {
         requireNonNull(filePath);
 
         Optional<JsonSerializableEntryBook> jsonAddressBook = JsonUtil.readJsonFile(
@@ -60,16 +60,16 @@ public class JsonEntryBookStorage implements EntryBookStorage {
     }
 
     @Override
-    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) throws IOException {
-        saveListEntryBook(listEntryBook, filePath);
+    public void saveEntryBook(ReadOnlyEntryBook entryBook) throws IOException {
+        saveEntryBook(entryBook, filePath);
     }
 
     /**
-     * Similar to {@link #saveListEntryBook(ReadOnlyEntryBook)}.
+     * Similar to {@link #saveEntryBook(ReadOnlyEntryBook)}.
      *
      * @param filePath location of the data. Cannot be null.
      */
-    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
+    public void saveEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
         requireNonNull(listEntryBook);
         requireNonNull(filePath);
 

@@ -39,17 +39,22 @@ public class StorageStub implements Storage {
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readListEntryBook(Path filePath) {
-        return Optional.empty();
-    }
-
-    @Override
     public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) {
         // Do nothing
     }
 
     @Override
-    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) {
+    public Path getArchivesEntryBookFilePath() {
+        return null;
+    }
+
+    @Override
+    public Optional<ReadOnlyEntryBook> readArchivesEntryBook() {
+        return Optional.empty();
+    }
+
+    @Override
+    public void saveArchivesEntryBook(ReadOnlyEntryBook listEntryBook) {
         // Do nothing
     }
 

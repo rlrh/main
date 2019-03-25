@@ -222,6 +222,16 @@ public class AddCommandTest {
         }
 
         @Override
+        public Path getArchivesEntryBookFilePath() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setArchivesEntryBookFilePath(Path archivesEntryBookFilePath) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public Path getArticleDataDirectoryPath() {
             throw new AssertionError("This method should not be called.");
         }
@@ -263,6 +273,36 @@ public class AddCommandTest {
 
         @Override
         public void clearListEntryBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addArchivesEntry(Entry entry) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyEntryBook getArchivesEntryBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasArchivesEntry(Entry archiveEntry) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteArchivesEntry(Entry target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearArchivesEntryBook() {
             throw new AssertionError("This method should not be called.");
         }
 

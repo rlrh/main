@@ -8,6 +8,8 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
+import static seedu.address.testutil.TypicalEntries.CARL;
+import static seedu.address.testutil.TypicalEntries.DANIEL;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
 
 import java.nio.file.Path;
@@ -174,14 +176,16 @@ public class ModelManagerTest {
 
     @Test
     public void equals() {
-        EntryBook entryBook = new EntryBookBuilder().withEntry(ALICE).withEntry(BENSON).build();
-        EntryBook differentEntryBook = new EntryBook();
+        EntryBook listEntryBook = new EntryBookBuilder().withEntry(ALICE).withEntry(BENSON).build();
+        EntryBook archivesEntryBook = new EntryBookBuilder().withEntry(CARL).withEntry(DANIEL).build();
+        EntryBook differentListEntryBook = new EntryBook();
+        EntryBook differentArchivesEntryBook = new EntryBook();
         UserPrefs userPrefs = new UserPrefs();
         Storage storage = new StorageStub();
 
         // same values -> returns true
-        modelManager = new ModelManager(entryBook, userPrefs, storage);
-        ModelManager modelManagerCopy = new ModelManager(entryBook, userPrefs, storage);
+        modelManager = new ModelManager(listEntryBook, archivesEntryBook, userPrefs, storage);
+        ModelManager modelManagerCopy = new ModelManager(listEntryBook, archivesEntryBook, userPrefs, storage);
         assertTrue(modelManager.equals(modelManagerCopy));
 
         // same object -> returns true
@@ -193,13 +197,18 @@ public class ModelManagerTest {
         // different types -> returns false
         assertFalse(modelManager.equals(5));
 
-        // different entryBook -> returns false
-        assertFalse(modelManager.equals(new ModelManager(differentEntryBook, userPrefs, storage)));
+        // different listEntryBook -> returns false
+        assertFalse(modelManager.equals(new ModelManager(differentListEntryBook, archivesEntryBook,
+            userPrefs, storage)));
+
+        // different archivesEntryBook -> returns false
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, differentArchivesEntryBook,
+            userPrefs, storage)));
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getTitle().fullTitle.split("\\s+");
         modelManager.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(keywords)));
-        assertFalse(modelManager.equals(new ModelManager(entryBook, userPrefs, storage)));
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, userPrefs, storage)));
 
         // resets modelManager to initial state for upcoming tests
         modelManager.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
@@ -207,15 +216,18 @@ public class ModelManagerTest {
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setListEntryBookFilePath(Paths.get("differentFilePath"));
-        assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs, storage)));
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook,
+            differentUserPrefs, storage)));
 
         UserPrefs differentUserPrefs2 = new UserPrefs();
         differentUserPrefs2.setArticleDataDirectoryPath(Paths.get("differentFilePath"));
-        assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs2, storage)));
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook,
+            differentUserPrefs2, storage)));
 
         // different displayedEntryList -> returns false
         EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_LINK).build();
-        ModelManager differentDisplayedModelManager = new ModelManager(entryBook, userPrefs, storage);
+        ModelManager differentDisplayedModelManager = new ModelManager(listEntryBook, archivesEntryBook,
+            userPrefs, storage);
         differentDisplayedModelManager.setDisplayEntryList(differentDisplayedEntryBook);
         assertFalse(modelManager.equals(differentDisplayedModelManager));
     }
