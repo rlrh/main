@@ -62,30 +62,30 @@ public class BrowserPanelTest extends GuiUnitTest {
     }
 
     @Test
-    public void displayReader() {
+    public void displayReaderView() {
 
         // load associated web page of a Wikipedia entry
         guiRobot.interact(() -> selectedPerson.set(WIKIPEDIA_LINK));
         waitUntilBrowserLoaded(browserPanelHandle);
 
-        // process loaded content through Crux
+        // generate reader view by processing loaded content
         String originalHtml = "";
         try {
-            originalHtml = XmlUtil.convertDocumentToString(browserPanel.getWebEngine().getDocument());
+            originalHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getWebEngine().getDocument());
         } catch (TransformerException te) {
             fail();
         }
         Document doc = browserPanel.getReaderDocumentFrom(originalHtml, WIKIPEDIA_LINK_BASE_URL);
         String expectedText = doc.text();
 
-        // set reader mode and reload
+        // set reader view mode
         guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER)));
         waitUntilBrowserLoaded(browserPanelHandle);
 
         // extract loaded content
         String readerHtml = "";
         try {
-            readerHtml = XmlUtil.convertDocumentToString(browserPanel.getWebEngine().getDocument());
+            readerHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getWebEngine().getDocument());
         } catch (TransformerException te) {
             fail();
         }
@@ -93,6 +93,25 @@ public class BrowserPanelTest extends GuiUnitTest {
 
         // check actual loaded content is the same as expected processed content
         assertEquals(expectedText, actualText);
+
+    }
+
+    @Test
+    public void displayReaderViewStyle() {
+
+        // load associated web page of a Wikipedia entry
+        guiRobot.interact(() -> selectedPerson.set(WIKIPEDIA_LINK));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // set reader view mode with specified style
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER, ReaderViewStyle.DARK)));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // check actual stylesheet is the same as specified stylesheet
+        assertEquals(
+                ReaderViewStyle.DARK.getStylesheetLocation().toExternalForm(),
+                browserPanelHandle.getWebEngine().getUserStyleSheetLocation()
+        );
 
     }
 
