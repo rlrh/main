@@ -9,6 +9,7 @@ import org.junit.Test;
 import seedu.address.logic.CommandHistory;
 import seedu.address.mocks.TypicalModelManagerStub;
 import seedu.address.model.Model;
+import seedu.address.ui.ReaderViewStyle;
 import seedu.address.ui.ViewMode;
 import seedu.address.ui.ViewType;
 
@@ -22,8 +23,14 @@ public class ViewModeCommandTest {
 
     @Test
     public void execute_viewMode_success() {
+        // test view types success
         for (ViewType viewType: ViewType.values()) {
             assertExecutionSuccess(new ViewMode(viewType));
+        }
+
+        // test reader view styles success
+        for (ReaderViewStyle viewStyle: ReaderViewStyle.values()) {
+            assertExecutionSuccess(new ViewMode(ViewType.READER, viewStyle));
         }
     }
 
