@@ -6,6 +6,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Helper functions for handling strings.
@@ -87,6 +88,15 @@ public class StringUtil {
             firstNWords.append(" ");
         }
         return firstNWords.toString().trim().concat("…");
+    }
+
+    /**
+     * Gets a null-safe version of a string.
+     * @param string possibly null string
+     * @return string if non-null, empty string if null
+     */
+    public static String nullSafeOf(String string) {
+        return Optional.ofNullable(string).orElse("");
     }
 
 }
