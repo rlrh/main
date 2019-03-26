@@ -42,6 +42,7 @@ public class UnarchiveCommand extends Command {
         }
 
         Entry entryToUnarchive = lastShownList.get(targetIndex.getZeroBased());
+        model.unarchiveEntry(entryToUnarchive);
         return new CommandResult(String.format(MESSAGE_UNARCHIVE_ENTRY_SUCCESS, entryToUnarchive));
     }
 

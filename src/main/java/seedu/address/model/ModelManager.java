@@ -439,11 +439,13 @@ public class ModelManager implements Model {
 
     @Override
     public void archiveEntry(Entry target) {
-        return;
+        deleteListEntry(target);
+        addArchivesEntry(target);
     }
 
     @Override
     public void unarchiveEntry(Entry entry) {
-        return;
+        deleteArchivesEntry(entry);
+        addListEntry(entry);
     }
 }
