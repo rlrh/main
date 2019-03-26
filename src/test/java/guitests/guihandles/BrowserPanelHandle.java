@@ -19,11 +19,14 @@ public class BrowserPanelHandle extends NodeHandle<Node> {
 
     private URL lastRememberedUrl;
 
+    private WebView webView;
+    private WebEngine engine;
+
     public BrowserPanelHandle(Node browserPanelNode) {
         super(browserPanelNode);
 
-        WebView webView = getChildNode(BROWSER_ID);
-        WebEngine engine = webView.getEngine();
+        this.webView = getChildNode(BROWSER_ID);
+        this.engine = webView.getEngine();
         new GuiRobot().interact(() -> engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
             if (newState == Worker.State.RUNNING) {
                 isWebViewLoaded = false;
@@ -60,5 +63,12 @@ public class BrowserPanelHandle extends NodeHandle<Node> {
      */
     public boolean isLoaded() {
         return isWebViewLoaded;
+    }
+
+    /**
+     * Returns the WebEngine of the WebView.
+     */
+    public WebEngine getWebEngine() {
+        return engine;
     }
 }

@@ -256,14 +256,7 @@ public class BrowserPanel extends UiPart<Region> {
             logger.warning(message);
             loadReaderViewFailurePage();
         }
-    }
 
-    /**
-     * Gets browser's web engine.
-     * @return browser's web engine
-     */
-    protected WebEngine getWebEngine() {
-        return webEngine;
     }
 
     /**
