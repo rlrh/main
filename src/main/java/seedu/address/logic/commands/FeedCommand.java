@@ -40,7 +40,7 @@ public class FeedCommand extends Command {
         requireNonNull(model);
 
         try {
-            EntryBook toBeDisplayed = FeedUtil.importFrom(feedUrl);
+            EntryBook toBeDisplayed = FeedUtil.fromFeedUrl(feedUrl);
 
             model.setDisplayEntryList(toBeDisplayed);
             model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
