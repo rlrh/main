@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import seedu.address.logic.commands.ArchivesCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.FeedCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -54,6 +55,9 @@ public class EntryBookParser {
 
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
+
+        case FeedCommand.COMMAND_WORD:
+            return new FeedCommandParser().parse(arguments);
 
         case HistoryCommand.COMMAND_WORD:
         case HistoryCommand.COMMAND_ALIAS:

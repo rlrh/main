@@ -12,6 +12,7 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 
 /**
  * Shows a feed given an URL.
@@ -50,6 +51,7 @@ public class FeedCommand extends Command {
             throw new CommandException("Some other problem: " + StringUtil.getDetails(e), e);
         }*/
 
+        model.setContext(ModelContext.CONTEXT_SEARCH);
         model.setDisplayEntryList(toBeDisplayed);
         model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 

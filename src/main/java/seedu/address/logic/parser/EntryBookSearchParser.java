@@ -6,23 +6,17 @@ import java.util.regex.Matcher;
 
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.HelpCommand;
-import seedu.address.logic.commands.UnarchiveCommand;
+import seedu.address.logic.commands.SelectCommand;
+import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
- * Represents the parser for the archive-context.
- * It successfully parses a command if and only if the command is archive-context command.
+ * Represents the parser for the search context.
+ * It successfully parses a command if and only if the command is a search context or context-switching command.
  */
-public class EntryBookArchivesParser extends EntryBookParser {
+public class EntryBookSearchParser extends EntryBookParser {
 
-    /**
-     * Parses user input into command for execution.
-     * Parses successfully if and only if the command is archive-context command.
-     *
-     * @param userInput full user input string
-     * @return the command based on the user input
-     * @throws ParseException if the user input does not conform the expected format
-     */
+    /** Parses user input into command for execution. */
     @Override
     public Command parseCommand(String userInput) throws ParseException {
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
@@ -34,13 +28,16 @@ public class EntryBookArchivesParser extends EntryBookParser {
         final String arguments = matcher.group("arguments");
         switch (commandWord) {
 
-        case UnarchiveCommand.COMMAND_WORD:
-        case UnarchiveCommand.COMMAND_ALIAS:
-            return new UnarchiveCommandParser().parse(arguments);
+        case SelectCommand.COMMAND_WORD:
+        case SelectCommand.COMMAND_ALIAS:
+            return new SelectCommandParser().parse(arguments);
+
+        case ViewModeCommand.COMMAND_WORD:
+        case ViewModeCommand.COMMAND_ALIAS:
+            return new ViewModeCommandParser().parse(arguments);
 
         default:
             return super.parseCommand(userInput);
         }
     }
-
 }

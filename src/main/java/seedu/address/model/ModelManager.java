@@ -429,6 +429,7 @@ public class ModelManager implements Model {
             break;
         default:
         }
+        logger.info("Context switched to " + context);
         this.context = context;
     }
 
