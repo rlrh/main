@@ -1,4 +1,4 @@
-package seedu.address.network;
+package seedu.address.util;
 
 import java.io.IOException;
 import java.io.InputStream;

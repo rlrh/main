@@ -123,6 +123,11 @@ public class TypicalEntries {
             + "personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie and "
             + "hundreds of threats. Many of those assertions had been explored before, as these articles show.";
 
+    public static final String RELATIVE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/relativeLinkedArticle.html").toExternalForm();
+    public static final String ABSOLUTE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/absoluteLinkedArticle.html").toExternalForm();
+
     public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription("")
@@ -226,6 +231,17 @@ public class TypicalEntries {
             .withTitle(DUMMY_TITLE)
             .withDescription(DUMMY_DESCRIPTION)
             .withLink(CRUX_LINK_URL)
+            .build();
+
+    public static final Entry ENTRY_WITH_RELATIVE_LINK = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(RELATIVE_LINK_ARTICLE_URL)
+            .build();
+    public static final Entry ENTRY_WITH_ABSOLUTE_LINK = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(ABSOLUTE_LINK_ARTICLE_URL)
             .build();
 
     // For testing of networking
