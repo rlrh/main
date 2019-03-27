@@ -4,21 +4,9 @@ import static java.util.Objects.requireNonNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.xml.transform.TransformerException;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.parser.Tag;
-
-import net.dankito.readability4j.Article;
-import net.dankito.readability4j.Readability4J;
-import net.dankito.readability4j.extended.Readability4JExtended;
 
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -30,10 +18,9 @@ import javafx.scene.web.WebView;
 
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.commons.util.DateUtil;
-import seedu.address.commons.util.OptionalCandidate;
 import seedu.address.commons.util.XmlUtil;
 import seedu.address.model.entry.Entry;
+import seedu.address.ui.util.ReaderViewUtil;
 
 /**
  * The Browser Panel of the App.
@@ -48,8 +35,6 @@ public class BrowserPanel extends UiPart<Region> {
             requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "error.html"));
     public static final URL READER_VIEW_FAILURE_PAGE =
             requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "reader_view_failure.html"));
-    public static final URL STYLESHEET =
-            requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "default.css"));
 
     private static final String FXML = "BrowserPanel.fxml";
 
@@ -60,10 +45,10 @@ public class BrowserPanel extends UiPart<Region> {
 
     private WebEngine webEngine = browser.getEngine();
 
-    private String currentLocation;
-    private String currentBaseUrl;
-    private boolean isLoadingReaderView;
-    private boolean isReaderViewLoaded;
+    private String currentLocation; // location of selected entry, regardless of reader view, error page etc
+    private String currentBaseUrl; // original URL, even if offline is loaded
+    private boolean shouldLoadReaderView; //  flag - whether reader view should be loaded
+    private boolean hasLoadedReaderView; // status - whether reader view has loaded
     private ViewMode viewMode;
 
     public BrowserPanel(ObservableValue<Entry> selectedEntry, ObservableValue<ViewMode> viewMode) {
@@ -72,8 +57,8 @@ public class BrowserPanel extends UiPart<Region> {
 
         this.currentLocation = "";
         this.currentBaseUrl = "";
-        this.isLoadingReaderView = false;
-        this.isReaderViewLoaded = false;
+        this.shouldLoadReaderView = false;
+        this.hasLoadedReaderView = false;
         this.viewMode = viewMode.getValue();
 
         // To prevent triggering events for typing inside the loaded Web page.
@@ -94,7 +79,7 @@ public class BrowserPanel extends UiPart<Region> {
             try {
                 URL url = new URL(webEngine.getLocation());
                 if (url.equals(DEFAULT_PAGE) || url.equals(ERROR_PAGE) || url.equals(READER_VIEW_FAILURE_PAGE)) {
-                    return;
+                    return; // do not reload
                 }
                 loadPage(currentLocation);
             } catch (MalformedURLException mue) {
@@ -128,16 +113,14 @@ public class BrowserPanel extends UiPart<Region> {
      * Displays loading message.
      */
     private void handleRunning() {
-
-        if (isLoadingReaderView) {
+        if (shouldLoadReaderView) {
             String message = String.format("Loading reader view for %s...", currentLocation);
             logger.info(message);
         } else {
             String message = String.format("Loading %s...", webEngine.getLocation());
             logger.info(message);
         }
-        isReaderViewLoaded = false;
-
+        hasLoadedReaderView = false;
     }
 
     /**
@@ -146,20 +129,19 @@ public class BrowserPanel extends UiPart<Region> {
     private void handleSucceeded() {
 
         // Log and display loaded message
-        if (isLoadingReaderView) {
+        if (shouldLoadReaderView) {
             String message = String.format("Successfully loaded reader view for %s", currentLocation);
             logger.info(message);
-            isReaderViewLoaded = true;
+            hasLoadedReaderView = true;
         } else {
             String message = String.format("Successfully loaded %s", webEngine.getLocation());
             logger.info(message);
-            isReaderViewLoaded = false;
+            hasLoadedReaderView = false;
         }
-        isLoadingReaderView = false;
 
         // Load reader view if reader view mode is selected but not loaded
         if (viewMode.getViewType().equals(ViewType.READER)
-                && !isReaderViewLoaded
+                && !hasLoadedReaderView
                 && currentLocation.equals(webEngine.getLocation())) {
             try {
                 URL url = new URL(webEngine.getLocation());
@@ -178,15 +160,10 @@ public class BrowserPanel extends UiPart<Region> {
      * Displays failed to load message, and loads error page.
      */
     private void handleFailed() {
-
         String message = String.format("Failed to load %s", webEngine.getLocation());
         logger.warning(message);
 
-        isLoadingReaderView = false;
-        isReaderViewLoaded = false;
-
         loadErrorPage();
-
     }
 
     /**
@@ -226,7 +203,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void loadPage(String url) {
         Platform.runLater(() -> {
-            isLoadingReaderView = false;
+            shouldLoadReaderView = false;
             webEngine.setUserStyleSheetLocation(null);
             webEngine.load(url);
         });
@@ -241,14 +218,14 @@ public class BrowserPanel extends UiPart<Region> {
 
         // set stylesheet for reader view
         try {
-            Platform.runLater(() -> {
+            Platform.runLater(() ->
                 webEngine.setUserStyleSheetLocation(
                         viewMode
                         .getReaderViewStyle()
                         .getStylesheetLocation()
                         .toExternalForm()
-                );
-            });
+                )
+            );
         } catch (IllegalArgumentException | NullPointerException e) {
             String message = "Failed to set user style sheet location";
             logger.warning(message);
@@ -257,10 +234,9 @@ public class BrowserPanel extends UiPart<Region> {
         // process loaded content, then load processed content
         try {
             String rawHtml = XmlUtil.convertDocumentToString(webEngine.getDocument());
-            Document readerDocument = getReaderDocumentFrom(rawHtml, baseUrl);
-            String processedHtml = readerDocument.outerHtml();
+            String processedHtml = ReaderViewUtil.generateReaderViewStringFrom(rawHtml, baseUrl);
             Platform.runLater(() -> {
-                isLoadingReaderView = true;
+                shouldLoadReaderView = true;
                 webEngine.loadContent(processedHtml);
             });
         } catch (TransformerException | IllegalArgumentException e) {
@@ -271,195 +247,16 @@ public class BrowserPanel extends UiPart<Region> {
 
     }
 
-    /**
-     * Gets a document representing the reader view of the given HTML.
-     * @param rawHtml raw HTML to process
-     * @param baseUrl base URL used to resolve relative URLs to absolute URLs
-     * @return document representing the reader view of rawHtml
-     */
-    protected Document getReaderDocumentFrom(String rawHtml, String baseUrl) throws IllegalArgumentException {
-
-        // create Jsoup document
-        Document document = Document.createShell(baseUrl);
-        document.updateMetaCharsetElement(true);
-        document.charset(StandardCharsets.UTF_8);
-
-        // extract article using Readability4J
-        Document rawDocument = Jsoup.parse(rawHtml, baseUrl);
-        Readability4J readability4J = new Readability4JExtended(baseUrl, rawDocument);
-        Article article = readability4J.parse();
-
-        // put article content in document
-        if (article.getArticleContent() == null) {
-            throw new IllegalArgumentException("Null article content");
-        }
-        document.body().prependChild(article.getArticleContent());
-
-        // wrap body in container
-        document.body().addClass("container py-5");
-
-        // make images responsive
-        makeImagesResponsive(document);
-
-        // add article metadata
-        createArticleMetadataElement(rawDocument, article).ifPresent(document.body()::prependChild);
-
-        // add title
-        createTitleElement(article).ifPresent(document.body()::prependChild);
-
-        // add site name
-        createSiteNameElement(rawDocument).ifPresent(document.body()::prependChild);
-
-        System.out.println(document);
-
-        return document;
-
-    }
-
-    /**
-     * Resolves relative links to absolute links.
-     * @param document Jsoup document parsed from raw HTML
-     */
-    private void resolveRelativeLinksToAbsoluteLinks(Document document) {
-        document.select("a")
-                .forEach(link -> {
-                    String absoluteUrl = link.absUrl("href");
-                    link.attr("href", absoluteUrl);
-                });
-    }
-
-    /**
-     * Resolves relative links to absolute links.
-     * @param document Jsoup document parsed from raw HTML
-     */
-    private void makeImagesResponsive(Document document) {
-        document.select("img").forEach(image -> image.addClass("img-fluid"));
-    }
-
-    /**
-     * Attempts to create an article metadata element.
-     * @param rawDocument Jsoup document parsed from raw HTML
-     * @return optional article metadata element
-     */
-    private Optional<Element> createArticleMetadataElement(Document rawDocument, Article article) {
-
-        Element articleMetadataWrapperElement =
-                new Element(Tag.valueOf("div"), "").addClass("d-flex flex-wrap pb-4");
-
-        // add byline element if author(s) present
-        OptionalCandidate.with((String candidate) ->
-                        Optional.ofNullable(candidate).filter(presentCandidate -> !presentCandidate.isEmpty())
-                )
-                .tryout(rawDocument
-                        .select("head meta[name=author]")
-                        .attr("content"))
-                .tryout(rawDocument
-                        .select("head meta[property=author]")
-                        .attr("content"))
-                .tryout(rawDocument
-                        .select("head meta[property=article:author]")
-                        .stream()
-                        .map(author -> author.attr("content"))
-                        .collect(Collectors.joining(", ")))
-                .getOptional()
-                .map(authors ->
-                        new Element(Tag.valueOf("small"), "")
-                                .text("By " + authors)
-                                .addClass("pr-3"))
-                .ifPresent(articleMetadataWrapperElement::appendChild);
-
-        // add published datetime element if published datetime is present
-        Optional.of(rawDocument.select("head meta[property=article:published_time]").attr("content"))
-                .filter(dateTime -> !dateTime.isEmpty())
-                .map(DateUtil::getHumanReadableDateTimeFrom)
-                .map(dateTime ->
-                    new Element(Tag.valueOf("small"), "")
-                            .text(dateTime)
-                            .addClass("pr-3"))
-                .ifPresent(articleMetadataWrapperElement::appendChild);
-
-        // add section element if section is present
-        Optional.of(rawDocument.select("head meta[property=article:section]").attr("content"))
-                .filter(section -> !section.isEmpty())
-                .map(section ->
-                        new Element(Tag.valueOf("small"), "")
-                                .text("In " + section + " section")
-                                .addClass("pr-3"))
-                .ifPresent(articleMetadataWrapperElement::appendChild);
-
-        // add reading time element
-        Optional.ofNullable(article.getTextContent())
-                .filter(text -> !text.isEmpty())
-                .map(text -> text.split("\\s+"))
-                .map(words -> Arrays.stream(words).count())
-                .map(count -> Math.max(1, (int) Math.ceil(count / 250.0)))
-                .map(minutes -> new Element(Tag.valueOf("small"), "")
-                        .text(minutes + " minute read")
-                        .addClass("pr-3"))
-                .ifPresent(articleMetadataWrapperElement::appendChild);
-
-        // return article metadata wrapper element if it has child elements
-        return Optional.of(articleMetadataWrapperElement).filter(element -> !element.children().isEmpty());
-
-    }
-
-    /**
-     * Attempts to create a title element.
-     * @param article Readability4J article
-     * @return optional title element
-     */
-    private Optional<Element> createTitleElement(Article article) {
-        return Optional.ofNullable(article.getTitle())
-                .filter(title -> !title.isEmpty())
-                .map(title ->
-                    new Element(Tag.valueOf("h1"), "").text(title).addClass("pb-3")
-                );
-    }
-
-    /**
-     * Attempts to create a excerpt element.
-     * @param article Readability4J article
-     * @return optional excerpt element
-     */
-    private Optional<Element> createExcerptElement(Article article) {
-        return Optional.ofNullable(article.getExcerpt())
-                .filter(excerpt -> !excerpt.isEmpty())
-                .map(excerpt ->
-                        new Element(Tag.valueOf("p"), "").text(excerpt).addClass("lead")
-                );
-    }
-
-    /**
-     * Attempts to create a site name element.
-     * @param document Jsoup document
-     * @return optional site name element
-     */
-    private Optional<Element> createSiteNameElement(Document document) {
-
-        OptionalCandidate<String, String> candidateSiteName = new OptionalCandidate<>(candidate ->
-            Optional.ofNullable(candidate).filter(presentCandidate -> !presentCandidate.isEmpty())
-        );
-
-        String hostName = "";
+    private boolean canLoadReaderView(String urlString) {
         try {
-            hostName = new URL(document.baseUri()).getHost();
+            URL url = new URL(urlString);
+            if (url.equals(DEFAULT_PAGE) || url.equals(ERROR_PAGE) || url.equals(READER_VIEW_FAILURE_PAGE)) {
+                return false;
+            }
+            return true;
         } catch (MalformedURLException mue) {
-            // do nothing
+            return false;
         }
-
-        return candidateSiteName
-                .tryout(hostName)
-                .tryout(document
-                        .select("head meta[property=og:site_name]")
-                        .attr("content"))
-                .tryout(document
-                        .select("head meta[name=application-name]")
-                        .attr("content"))
-                .getOptional()
-                .map(siteName ->
-                    new Element(Tag.valueOf("p"), "").text(siteName).addClass("lead")
-                );
-
     }
 
 }
