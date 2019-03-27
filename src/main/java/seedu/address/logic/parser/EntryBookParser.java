@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.logic.commands.ArchivesCommand;
+import seedu.address.logic.commands.BingWebSearchCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FeedCommand;
@@ -48,6 +49,9 @@ public class EntryBookParser {
         case ArchivesCommand.COMMAND_WORD:
         case ArchivesCommand.COMMAND_ALIAS:
             return new ArchivesCommand();
+
+        case BingWebSearchCommand.COMMAND_WORD:
+            return new BingWebSearchCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
         case ListCommand.COMMAND_ALIAS:
