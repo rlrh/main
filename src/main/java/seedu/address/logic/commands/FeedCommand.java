@@ -8,7 +8,6 @@ import java.io.IOException;
 import com.rometools.rome.io.FeedException;
 
 import seedu.address.commons.util.FeedUtil;
-import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
@@ -39,19 +38,20 @@ public class FeedCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
+        EntryBook toBeDisplayed;
+
         try {
-            EntryBook toBeDisplayed = FeedUtil.fromFeedUrl(feedUrl);
-
-            model.setDisplayEntryList(toBeDisplayed);
-            model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
-
+            toBeDisplayed = FeedUtil.fromFeedUrl(feedUrl);
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e), e);
         } catch (FeedException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_XML, feedUrl), e);
-        } catch (Exception e) {
+        } /*catch (Exception e) {
             throw new CommandException("Some other problem: " + StringUtil.getDetails(e), e);
-        }
+        }*/
+
+        model.setDisplayEntryList(toBeDisplayed);
+        model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, feedUrl));
     }

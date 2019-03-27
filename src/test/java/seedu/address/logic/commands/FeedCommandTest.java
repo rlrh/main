@@ -2,9 +2,9 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static seedu.address.commons.util.FeedUtil.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.FeedCommand.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_NET;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_XML;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_SUCCESS;

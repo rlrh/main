@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.jsoup.Jsoup;
+
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -27,8 +29,8 @@ import seedu.address.util.Network;
  * Converts between RSS/Syndication feeds and EntryBook.
  */
 public class FeedUtil {
-    private static final Logger logger = LogsCenter.getLogger(FeedUtil.class);
     public static final String DEFAULT_DESCRIPTION_TEXT = "imported from %s";
+    private static final Logger logger = LogsCenter.getLogger(FeedUtil.class);
 
     /** Reads in URL of a feed and serializes it into an {@code EntryBook}. */
     public static EntryBook fromFeedUrl(String feedUrl) throws IOException, FeedException {
@@ -43,8 +45,8 @@ public class FeedUtil {
             try {
                 entryBook.addEntry(entry);
             } catch (DuplicateEntryException dee) {
-                logger.warning("Entry " + entry +
-                        " duplicates earlier entry and has been discarded while importing entries from " + feedUrl);
+                logger.warning("Entry " + entry
+                        + " duplicates earlier entry and has been discarded while importing entries from " + feedUrl);
             }
         }
         return entryBook;
@@ -63,10 +65,12 @@ public class FeedUtil {
 
     /** Extracts a useful description from a SyndEntry. */
     private static Description extractDescription(SyndEntry syndEntry, String feedUrl) {
-        String description = syndEntry.getDescription().getValue().replace('\n', ' ').trim();
-        if (description.isEmpty()) {
-            description = String.format(DEFAULT_DESCRIPTION_TEXT, feedUrl);
+        String descriptionFromSyndEntry = syndEntry.getDescription().getValue();
+        String descriptionText = Jsoup.parseBodyFragment(descriptionFromSyndEntry).body().text()
+                .replace('\n', ' ').trim();
+        if (descriptionText.isEmpty()) {
+            descriptionText = String.format(DEFAULT_DESCRIPTION_TEXT, feedUrl);
         }
-        return new Description(description);
+        return new Description(descriptionText);
     }
 }
