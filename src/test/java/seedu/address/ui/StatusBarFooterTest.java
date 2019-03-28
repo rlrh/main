@@ -71,8 +71,8 @@ public class StatusBarFooterTest extends GuiUnitTest {
                 String.format(CONTEXT_ENTRY_COUNT_STATUS, initialEntryCount + 1, initialContext));
 
         // after model context is changed
-        String newContext = ModelContext.CONTEXT_ARCHIVE.toString();
-        guiRobot.interact(() -> context.set(ModelContext.CONTEXT_ARCHIVE));
+        String newContext = ModelContext.CONTEXT_ARCHIVES.toString();
+        guiRobot.interact(() -> context.set(ModelContext.CONTEXT_ARCHIVES));
         assertStatusBarContent(RELATIVE_PATH.resolve(STUB_SAVE_LOCATION).toString(),
                 String.format(SYNC_STATUS_UPDATED, new Date(injectedClock.millis()).toString()),
                 String.format(CONTEXT_ENTRY_COUNT_STATUS, initialEntryCount + 1, newContext));
