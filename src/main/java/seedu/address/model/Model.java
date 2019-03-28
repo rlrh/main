@@ -185,22 +185,27 @@ public interface Model {
     void setCommandResult(CommandResult result);
 
     /**
+     * Current context of the model.
+     */
+    ReadOnlyProperty<ModelContext> contextProperty();
+
+    /**
+     * Returns the context of the model.
+     */
+    ModelContext getContext();
+
+    /**
+     * Sets the context of the model.
+     * @param context
+     */
+    void setContext(ModelContext context);
+
+    /**
      * Makes a copy of the model.
      *
      * Mainly created because clone is needed a lot in tests.
      */
     Model clone();
-
-    /**
-     * Returns the context of the Model.
-     */
-    ModelContext getContext();
-
-    /**
-     * Sets the context of the Model.
-     * @param context
-     */
-    void setContext(ModelContext context);
 
     /**
      * Archives the given entry.
