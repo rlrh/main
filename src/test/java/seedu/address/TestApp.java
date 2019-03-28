@@ -142,10 +142,10 @@ public class TestApp extends MainApp {
         // This is needed to ensure the copy also has the correct entrybook displayed
         switch (copy.getContext()) {
         case CONTEXT_LIST:
-            copy.setDisplayEntryList(copy.getListEntryBook());
+            copy.displayEntryBook(copy.getListEntryBook());
             break;
         case CONTEXT_ARCHIVES:
-            copy.setDisplayEntryList(copy.getArchivesEntryBook());
+            copy.displayEntryBook(copy.getArchivesEntryBook());
             break;
         default:
         }

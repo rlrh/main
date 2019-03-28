@@ -70,7 +70,7 @@ public class ModelManager implements Model {
         // Save the archives entry book to storage whenever it is modified.
         this.archivesEntryBook.addListener(this::saveArchivesEntryBookToStorageListener);
 
-        setDisplayEntryList(this.listEntryBook);
+        displayEntryBook(this.listEntryBook);
         filteredEntries = new FilteredList<>(this.displayedEntryList);
         filteredEntries.addListener(this::ensureSelectedEntryIsValid);
     }
@@ -230,7 +230,7 @@ public class ModelManager implements Model {
     //=========== Displayed Entry List ================================================================================
 
     @Override
-    public void setDisplayEntryList(ReadOnlyEntryBook entryBook) {
+    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
         displayedEntryList.set(entryBook.getEntryList());
     }
 
@@ -338,11 +338,11 @@ public class ModelManager implements Model {
     public void setContext(ModelContext context) {
         switch (context) {
         case CONTEXT_LIST:
-            setDisplayEntryList(this.listEntryBook);
+            displayEntryBook(this.listEntryBook);
             updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
             break;
         case CONTEXT_ARCHIVES:
-            setDisplayEntryList(this.archivesEntryBook);
+            displayEntryBook(this.archivesEntryBook);
             updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
             // something else
             break;

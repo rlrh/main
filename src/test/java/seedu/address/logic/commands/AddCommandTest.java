@@ -313,7 +313,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void setDisplayEntryList(ReadOnlyEntryBook entryBook) {
+        public void displayEntryBook(ReadOnlyEntryBook entryBook) {
             throw new AssertionError("This method should not be called.");
         }
 

@@ -228,7 +228,7 @@ public class ModelManagerTest {
         EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_ENTRY).build();
         ModelManager differentDisplayedModelManager = new ModelManager(listEntryBook, archivesEntryBook,
             userPrefs, storage);
-        differentDisplayedModelManager.setDisplayEntryList(differentDisplayedEntryBook);
+        differentDisplayedModelManager.displayEntryBook(differentDisplayedEntryBook);
         assertFalse(modelManager.equals(differentDisplayedModelManager));
     }
 

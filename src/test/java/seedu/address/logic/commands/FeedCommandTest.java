@@ -96,7 +96,7 @@ public class FeedCommandTest {
         String expectedMessage = String.format(MESSAGE_SUCCESS, url);
         FeedCommand command = new FeedCommand(url);
 
-        expectedModel.setDisplayEntryList(expectedDisplayedEntryBook);
+        expectedModel.displayEntryBook(expectedDisplayedEntryBook);
 
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
     }

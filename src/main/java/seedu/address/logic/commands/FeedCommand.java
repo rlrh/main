@@ -60,7 +60,7 @@ public class FeedCommand extends Command {
             EntryBook toBeDisplayed = new EntryBook();
             toBeDisplayed.setPersons(convertToEntryList(syndFeed)); // todo: test for dupes
 
-            model.setDisplayEntryList(toBeDisplayed);
+            model.displayEntryBook(toBeDisplayed);
             model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         } catch (IOException e) {

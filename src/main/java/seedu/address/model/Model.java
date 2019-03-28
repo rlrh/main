@@ -154,7 +154,7 @@ public interface Model {
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 
     /** Displays a given entryBook without touching storage. */
-    void setDisplayEntryList(ReadOnlyEntryBook entryBook);
+    void displayEntryBook(ReadOnlyEntryBook entryBook);
 
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();
