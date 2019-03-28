@@ -113,13 +113,13 @@ public class TypicalEntries {
     public static final String REAL_LINK_URL = MainApp.class
             .getResource("/ModelManagerTest/NUS_School_of_Computing.html").toExternalForm();
     public static final String REAL_LINK_TITLE = "NUS School of Computing - Wikipedia";
-    public static final String REAL_LINK_DESCRIPTION = "NUS School of Computing is a faculty within the National "
-            + "University of Singapore (NUS). The School was established in 1998, although its history reaches…";
+    public static final String REAL_LINK_DESCRIPTION = "COM1. The Computing Dean's Office "
+            + "and Department of Computer Science are located in this building.";
 
-    public static final String CRUX_LINK_URL = MainApp.class
+    public static final String READABILITY_LINK_URL = MainApp.class
             .getResource("/ModelManagerTest/ProPublica.html").toExternalForm();
-    public static final String CRUX_LINK_TITLE = "Our Reporting on Michael Cohen: A Reading Guide — ProPublica";
-    public static final String CRUX_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s former "
+    public static final String READABILITY_LINK_TITLE = "A Reading Guide — ProPublica";
+    public static final String READABILITY_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s former "
             + "personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie and "
             + "hundreds of threats. Many of those assertions had been explored before, as these articles show.";
 
@@ -192,40 +192,40 @@ public class TypicalEntries {
     public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription("")
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
     public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
-            .withTitle(CRUX_LINK_TITLE)
-            .withDescription(CRUX_LINK_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withTitle(READABILITY_LINK_TITLE)
+            .withDescription(READABILITY_LINK_DESCRIPTION)
+            .withLink(READABILITY_LINK_URL)
             .build();
 
     public static final Entry CRUX_LINK_NO_TITLE_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription(DUMMY_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
     public static final Entry CRUX_LINK_NO_TITLE_COMPLETE = new EntryBuilder()
-            .withTitle(CRUX_LINK_TITLE)
+            .withTitle(READABILITY_LINK_TITLE)
             .withDescription(DUMMY_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
 
     public static final Entry CRUX_LINK_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
             .withDescription("")
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
     public static final Entry CRUX_LINK_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
-            .withDescription(CRUX_LINK_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withDescription(READABILITY_LINK_DESCRIPTION)
+            .withLink(READABILITY_LINK_URL)
             .build();
 
     public static final Entry CRUX_LINK_COMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
             .withDescription(DUMMY_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
 
     // For testing of networking

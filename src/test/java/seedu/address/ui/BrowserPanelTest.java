@@ -21,6 +21,7 @@ import guitests.guihandles.BrowserPanelHandle;
 import javafx.beans.property.SimpleObjectProperty;
 import seedu.address.commons.util.XmlUtil;
 import seedu.address.model.entry.Entry;
+import seedu.address.ui.util.ReaderViewUtil;
 
 public class BrowserPanelTest extends GuiUnitTest {
     private SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
@@ -75,7 +76,8 @@ public class BrowserPanelTest extends GuiUnitTest {
         } catch (TransformerException te) {
             fail();
         }
-        Document doc = browserPanel.getReaderDocumentFrom(originalHtml, WIKIPEDIA_LINK_BASE_URL);
+        Document originalDoc = Jsoup.parse(originalHtml, WIKIPEDIA_LINK.getLink().value);
+        Document doc = ReaderViewUtil.generateReaderViewFrom(originalDoc);
         String expectedText = doc.text();
 
         // set reader view mode
