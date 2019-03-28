@@ -37,9 +37,9 @@ public class ModelManager implements Model {
     private final EntryBook listEntryBook;
     private final EntryBook archivesEntryBook;
     private final UserPrefs userPrefs;
-    private final FilteredList<Entry> filteredEntries;
 
-    private final SimpleListProperty<Entry> displayedEntryList = new SimpleListProperty<>();
+    private final SimpleListProperty<Entry> displayedEntryList;
+    private final FilteredList<Entry> filteredEntries;
     private final SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
@@ -64,15 +64,35 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         this.storage = storage;
 
+        displayedEntryList = new SimpleListProperty<>(this.listEntryBook.getEntryList());
+        filteredEntries = new FilteredList<>(this.displayedEntryList);
+
+        setUpListeners();
+    }
+
+    private void setUpListeners() {
         // Save the list entry book to storage whenever it is modified.
-        this.listEntryBook.addListener(this::saveListEntryBookToStorageListener);
+        listEntryBook.addListener(this::saveListEntryBookToStorageListener);
 
         // Save the archives entry book to storage whenever it is modified.
-        this.archivesEntryBook.addListener(this::saveArchivesEntryBookToStorageListener);
+        archivesEntryBook.addListener(this::saveArchivesEntryBookToStorageListener);
 
-        displayEntryBook(this.listEntryBook);
-        filteredEntries = new FilteredList<>(this.displayedEntryList);
+        // Updates selected entry to a valid selection (or none) whenever filtered entries is modified.
         filteredEntries.addListener(this::ensureSelectedEntryIsValid);
+
+        // Updates displayed entry list whenever the context of the Model changes.
+        context.addListener((observable, oldContext, newContext) -> {
+                switch (newContext) {
+                case CONTEXT_LIST:
+                    displayEntryBook(listEntryBook);
+                    break;
+                case CONTEXT_ARCHIVES:
+                    displayEntryBook(archivesEntryBook);
+                    break;
+                default:
+                }
+            }
+        );
     }
 
     //=========== UserPrefs ==================================================================================
@@ -336,18 +356,6 @@ public class ModelManager implements Model {
 
     @Override
     public void setContext(ModelContext context) {
-        switch (context) {
-        case CONTEXT_LIST:
-            displayEntryBook(this.listEntryBook);
-            updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
-            break;
-        case CONTEXT_ARCHIVES:
-            displayEntryBook(this.archivesEntryBook);
-            updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
-            // something else
-            break;
-        default:
-        }
         this.context.setValue(context);
     }
 

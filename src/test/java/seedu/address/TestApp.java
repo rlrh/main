@@ -139,16 +139,6 @@ public class TestApp extends MainApp {
         Model copy = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
             new UserPrefs(), new StorageStub());
         copy.setContext(model.getContext());
-        // This is needed to ensure the copy also has the correct entrybook displayed
-        switch (copy.getContext()) {
-        case CONTEXT_LIST:
-            copy.displayEntryBook(copy.getListEntryBook());
-            break;
-        case CONTEXT_ARCHIVES:
-            copy.displayEntryBook(copy.getArchivesEntryBook());
-            break;
-        default:
-        }
         ModelHelper.setFilteredList(copy, model.getFilteredEntryList());
         return copy;
     }
