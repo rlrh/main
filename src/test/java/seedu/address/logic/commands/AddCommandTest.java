@@ -393,6 +393,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public ReadOnlyProperty<ModelContext> contextProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public ModelContext getContext() {
             throw new AssertionError("This method should not be called.");
         }

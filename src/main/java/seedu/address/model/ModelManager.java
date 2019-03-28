@@ -34,8 +34,6 @@ public class ModelManager implements Model {
 
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private ModelContext context = ModelContext.CONTEXT_LIST;
-
     private final EntryBook listEntryBook;
     private final EntryBook archivesEntryBook;
     private final UserPrefs userPrefs;
@@ -46,6 +44,7 @@ public class ModelManager implements Model {
     private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<ModelContext> context = new SimpleObjectProperty<>(ModelContext.CONTEXT_LIST);
     private final Storage storage;
 
     /**
@@ -323,6 +322,32 @@ public class ModelManager implements Model {
         commandResult.setValue(result);
     }
 
+    //=========== Context ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<ModelContext> contextProperty() {
+        return this.context;
+    }
+
+    @Override
+    public ModelContext getContext() {
+        return this.context.getValue();
+    }
+
+    @Override
+    public void setContext(ModelContext context) {
+        switch (context) {
+        case CONTEXT_LIST:
+            setDisplayEntryList(this.listEntryBook);
+            break;
+        case CONTEXT_ARCHIVES:
+            // something else
+            break;
+        default:
+        }
+        this.context.setValue(context);
+    }
+
     /**
      * Ensures {@code selectedEntry} is a valid entry in {@code filteredEntries}.
      */
@@ -416,27 +441,6 @@ public class ModelManager implements Model {
         Model clonedModel = new ModelManager(this.listEntryBook, this.archivesEntryBook, this.userPrefs, this.storage);
         clonedModel.setContext(this.getContext());
         return clonedModel;
-    }
-
-    @Override
-    public void setContext(ModelContext context) {
-        switch (context) {
-        case CONTEXT_LIST:
-            setDisplayEntryList(this.listEntryBook);
-            updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
-            break;
-        case CONTEXT_ARCHIVES:
-            setDisplayEntryList(this.archivesEntryBook);
-            updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
-            break;
-        default:
-        }
-        this.context = context;
-    }
-
-    @Override
-    public ModelContext getContext() {
-        return context;
     }
 
     @Override
