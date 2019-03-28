@@ -123,6 +123,8 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public void setContext(ModelContext context) { model.setContext(context); }
+    public void setContext(ModelContext context) {
+        model.setContext(context);
+    }
 
 }
