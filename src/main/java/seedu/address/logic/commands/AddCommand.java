@@ -18,10 +18,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import com.google.common.io.Files;
+
 import net.dankito.readability4j.Article;
 import net.dankito.readability4j.Readability4J;
 
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.util.Candidate;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -32,7 +34,6 @@ import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
-import seedu.address.commons.util.Candidate;
 import seedu.address.network.Network;
 
 /**

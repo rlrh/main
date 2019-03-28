@@ -11,14 +11,6 @@ public class Candidate<S, T> {
     private Function<S, Optional<T>> mapper;
 
     /**
-     * Builder
-     * @param mapper defines the suitability of values mapped from candidates
-     */
-    public static <S, T> Candidate<S, T> with(T initialValue, Function<S, Optional<T>> mapper) {
-        return new Candidate<>(initialValue, mapper);
-    }
-
-    /**
      * Constructor
      * @param initialValue must be guaranteed to be suitable
      * @param mapper defines the suitability of values mapped from candidates
@@ -26,6 +18,14 @@ public class Candidate<S, T> {
     public Candidate(T initialValue, Function<S, Optional<T>> mapper) {
         this.value = initialValue;
         this.mapper = mapper;
+    }
+
+    /**
+     * Builder
+     * @param mapper defines the suitability of values mapped from candidates
+     */
+    public static <S, T> Candidate<S, T> with(T initialValue, Function<S, Optional<T>> mapper) {
+        return new Candidate<>(initialValue, mapper);
     }
 
     /**

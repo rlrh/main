@@ -6,7 +6,6 @@ import static org.junit.Assert.fail;
 import static seedu.address.testutil.TypicalEntries.INVALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
-import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK_BASE_URL;
 
 import java.net.URL;
 import javax.xml.transform.TransformerException;

@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
 
@@ -245,18 +244,6 @@ public class BrowserPanel extends UiPart<Region> {
             loadReaderViewFailurePage();
         }
 
-    }
-
-    private boolean canLoadReaderView(String urlString) {
-        try {
-            URL url = new URL(urlString);
-            if (url.equals(DEFAULT_PAGE) || url.equals(ERROR_PAGE) || url.equals(READER_VIEW_FAILURE_PAGE)) {
-                return false;
-            }
-            return true;
-        } catch (MalformedURLException mue) {
-            return false;
-        }
     }
 
 }

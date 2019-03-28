@@ -11,20 +11,20 @@ public class OptionalCandidate<S, T> {
     private Function<S, Optional<T>> mapper;
 
     /**
-     * Builder
-     * @param mapper defines the suitability of values mapped from candidates
-     */
-    public static <S, T> OptionalCandidate<S, T> with(Function<S, Optional<T>> mapper) {
-        return new OptionalCandidate<>(mapper);
-    }
-
-    /**
      * Constructor
      * @param mapper defines the suitability of values mapped from candidates
      */
     public OptionalCandidate(Function<S, Optional<T>> mapper) {
         this.value = Optional.empty();
         this.mapper = mapper;
+    }
+
+    /**
+     * Builder
+     * @param mapper defines the suitability of values mapped from candidates
+     */
+    public static <S, T> OptionalCandidate<S, T> with(Function<S, Optional<T>> mapper) {
+        return new OptionalCandidate<>(mapper);
     }
 
     /**

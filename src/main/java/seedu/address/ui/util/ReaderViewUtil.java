@@ -7,13 +7,14 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import net.dankito.readability4j.Article;
-import net.dankito.readability4j.Readability4J;
-import net.dankito.readability4j.extended.Readability4JExtended;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Tag;
+
+import net.dankito.readability4j.Article;
+import net.dankito.readability4j.Readability4J;
+import net.dankito.readability4j.extended.Readability4JExtended;
 
 import seedu.address.commons.util.DateUtil;
 import seedu.address.commons.util.OptionalCandidate;

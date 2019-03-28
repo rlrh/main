@@ -119,9 +119,9 @@ public class TypicalEntries {
     public static final String READABILITY_LINK_URL = MainApp.class
             .getResource("/ModelManagerTest/ProPublica.html").toExternalForm();
     public static final String READABILITY_LINK_TITLE = "A Reading Guide — ProPublica";
-    public static final String READABILITY_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s former "
-            + "personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie and "
-            + "hundreds of threats. Many of those assertions had been explored before, as these articles show.";
+    public static final String READABILITY_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s "
+            + "former personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie "
+            + "and hundreds of threats. Many of those assertions had been explored before, as these articles show.";
 
     public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
@@ -189,40 +189,40 @@ public class TypicalEntries {
             .withLink(REAL_LINK_URL)
             .build();
 
-    public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription("")
             .withLink(READABILITY_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
             .withTitle(READABILITY_LINK_TITLE)
             .withDescription(READABILITY_LINK_DESCRIPTION)
             .withLink(READABILITY_LINK_URL)
             .build();
 
-    public static final Entry CRUX_LINK_NO_TITLE_INCOMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_TITLE_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription(DUMMY_DESCRIPTION)
             .withLink(READABILITY_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_TITLE_COMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_TITLE_COMPLETE = new EntryBuilder()
             .withTitle(READABILITY_LINK_TITLE)
             .withDescription(DUMMY_DESCRIPTION)
             .withLink(READABILITY_LINK_URL)
             .build();
 
-    public static final Entry CRUX_LINK_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
             .withDescription("")
             .withLink(READABILITY_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
             .withDescription(READABILITY_LINK_DESCRIPTION)
             .withLink(READABILITY_LINK_URL)
             .build();
 
-    public static final Entry CRUX_LINK_COMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_COMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
             .withDescription(DUMMY_DESCRIPTION)
             .withLink(READABILITY_LINK_URL)
