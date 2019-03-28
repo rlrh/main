@@ -69,6 +69,31 @@ public class TypicalEntries {
             .withLink("https://anna.example.com")
             .withAddress("4th street")
             .build();
+    public static final Entry HANS = new EntryBuilder()
+        .withTitle("Hans Solo")
+        .withDescription("Description place-holder")
+        .withLink("https://bobo.example.com")
+        .withAddress("10th street")
+        .withTags("friends")
+        .build();
+    public static final Entry ISABELLE = new EntryBuilder()
+        .withTitle("Isabelle Toh")
+        .withDescription("Description place-holder")
+        .withLink("https://koko.example.com")
+        .withAddress("michegan ave")
+        .build();
+    public static final Entry JONATHAN = new EntryBuilder()
+        .withTitle("Jonathan Cheng")
+        .withDescription("Description place-holder")
+        .withLink("https://lolo.example.com")
+        .withAddress("little tokyo")
+        .build();
+    public static final Entry KEVIN = new EntryBuilder()
+        .withTitle("Kevin Hart")
+        .withDescription("Description place-holder")
+        .withLink("https://dodo.example.com")
+        .withAddress("4th street")
+        .build();
 
     // Manually added
     public static final Entry HOON = new EntryBuilder()
@@ -292,9 +317,9 @@ public class TypicalEntries {
     private TypicalEntries() {} // prevents instantiation
 
     /**
-     * Returns an {@code EntryBook} with all the typical persons.
+     * Returns an {@code EntryBook} with all the typical entries.
      */
-    public static EntryBook getTypicalEntryBook() {
+    public static EntryBook getTypicalListEntryBook() {
         EntryBook ab = new EntryBook();
         for (Entry entry : getTypicalEntries()) {
             ab.addEntry(entry);
@@ -302,7 +327,22 @@ public class TypicalEntries {
         return ab;
     }
 
+    /**
+     * Returns an {@code EntryBook} with all the typical persons.
+     */
+    public static EntryBook getTypicalArchivesEntryBook() {
+        EntryBook ab = new EntryBook();
+        for (Entry entry : getTypicalArchivesEntries()) {
+            ab.addEntry(entry);
+        }
+        return ab;
+    }
+
     public static List<Entry> getTypicalEntries() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+    }
+
+    public static List<Entry> getTypicalArchivesEntries() {
+        return new ArrayList<>(Arrays.asList(HANS, ISABELLE, JONATHAN, KEVIN));
     }
 }

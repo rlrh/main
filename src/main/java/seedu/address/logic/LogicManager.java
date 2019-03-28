@@ -48,7 +48,7 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public ReadOnlyEntryBook getEntryBook() {
+    public ReadOnlyEntryBook getListEntryBook() {
         return model.getListEntryBook();
     }
 
@@ -63,8 +63,8 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public Path getEntryBookFilePath() {
-        return model.getEntryBookFilePath();
+    public Path getListEntryBookFilePath() {
+        return model.getListEntryBookFilePath();
     }
 
     @Override
@@ -123,6 +123,8 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public void setContext(ModelContext context) { model.setContext(context); }
+    public void setContext(ModelContext context) {
+        model.setContext(context);
+    }
 
 }

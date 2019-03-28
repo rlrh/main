@@ -171,7 +171,7 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.addEntry(updatedEntry);
+        model.addListEntry(updatedEntry);
         return new CommandResult(String.format(MESSAGE_SUCCESS, updatedEntry));
     }
 

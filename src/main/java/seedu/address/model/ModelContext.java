@@ -9,7 +9,7 @@ import seedu.address.logic.parser.EntryBookParser;
  */
 public enum ModelContext {
     CONTEXT_LIST(new EntryBookListParser(), "Reading List"),
-    CONTEXT_ARCHIVE(new EntryBookArchivesParser(), "Archives");
+    CONTEXT_ARCHIVES(new EntryBookArchivesParser(), "Archives");
 
     private EntryBookParser parser;
     private String friendlyName;

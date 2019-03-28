@@ -56,7 +56,7 @@ public class LogicManagerTest {
     @Before
     public void setUp() throws Exception {
         StorageManager storage = new TemporaryStorageManager(temporaryFolder);
-        model = new ModelManager(new EntryBook(), new UserPrefs(), storage);
+        model = new ModelManager(new EntryBook(), new EntryBook(), new UserPrefs(), storage);
         logic = new LogicManager(model);
     }
 
@@ -91,12 +91,15 @@ public class LogicManagerTest {
     @Test
     public void execute_storageThrowsIoException_throwsCommandException() throws Exception {
         // Setup LogicManager with JsonEntryBookIoExceptionThrowingStub
-        JsonEntryBookStorage addressBookStorage =
+        JsonEntryBookStorage listEntryBookStorage =
                 new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
+        JsonEntryBookStorage archivesEntryBookStorage =
+            new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        model = new ModelManager(model.getListEntryBook(), model.getUserPrefs(), storage);
+        StorageManager storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, userPrefsStorage,
+            articleStorage);
+        model = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(), model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 
         // Execute add command
@@ -106,7 +109,7 @@ public class LogicManagerTest {
         Model expectedModel = new ModelManagerStub();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
         String expectedFinalMessage = ModelManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
-        expectedModel.addEntry(expectedEntry);
+        expectedModel.addListEntry(expectedEntry);
         expectedModel.setException(new CommandException(expectedFinalMessage));
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
         assertManualExceptionPropagated(CommandException.class, expectedFinalMessage);
@@ -165,7 +168,8 @@ public class LogicManagerTest {
      * @see #assertCommandBehavior(Class, String, String, Model)
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getListEntryBook(), model.getUserPrefs(), model.getStorage());
+        Model expectedModel = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
+            model.getUserPrefs(), model.getStorage());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 
@@ -233,7 +237,7 @@ public class LogicManagerTest {
         }
 
         @Override
-        public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) throws IOException {
+        public void saveEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
             throw DUMMY_IO_EXCEPTION;
         }
     }

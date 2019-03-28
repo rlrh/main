@@ -1,6 +1,7 @@
 package seedu.address.mocks;
 
-import static seedu.address.testutil.TypicalEntries.getTypicalEntryBook;
+import static seedu.address.testutil.TypicalEntries.getTypicalArchivesEntryBook;
+import static seedu.address.testutil.TypicalEntries.getTypicalListEntryBook;
 
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -12,11 +13,13 @@ import seedu.address.storage.Storage;
 public class TypicalModelManagerStub extends ModelManager {
 
     public TypicalModelManagerStub() {
-        super(getTypicalEntryBook(), new UserPrefs(), new StorageStub());
+        super(getTypicalListEntryBook(), getTypicalArchivesEntryBook(),
+            new UserPrefs(), new StorageStub());
     }
 
     public TypicalModelManagerStub(Storage storage) {
-        super(getTypicalEntryBook(), new UserPrefs(), storage);
+        super(getTypicalListEntryBook(), getTypicalArchivesEntryBook(),
+            new UserPrefs(), storage);
     }
 
 }

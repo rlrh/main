@@ -45,7 +45,7 @@ public class AddCommandIntegrationTest {
         Entry validEntry = new EntryBuilder().build();
 
         Model expectedModel = model.clone();
-        expectedModel.addEntry(validEntry);
+        expectedModel.addListEntry(validEntry);
 
         assertCommandSuccess(new AddCommand(validEntry), model, commandHistory,
                 String.format(AddCommand.MESSAGE_SUCCESS, validEntry), expectedModel);
@@ -54,7 +54,7 @@ public class AddCommandIntegrationTest {
     @Test
     public void execute_newEntryHasNoTitleAndNoDescription_titleAndDescriptionReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addEntry(CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
+        expectedModel.addListEntry(CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
 
         assertCommandSuccess(new AddCommand(CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE), model, commandHistory,
                 String.format(AddCommand.MESSAGE_SUCCESS, CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE), expectedModel);
@@ -63,7 +63,7 @@ public class AddCommandIntegrationTest {
     @Test
     public void execute_newEntryHasNoTitle_titleReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addEntry(CRUX_LINK_NO_TITLE_COMPLETE);
+        expectedModel.addListEntry(CRUX_LINK_NO_TITLE_COMPLETE);
 
         assertCommandSuccess(new AddCommand(CRUX_LINK_NO_TITLE_INCOMPLETE), model, commandHistory,
                 String.format(AddCommand.MESSAGE_SUCCESS, CRUX_LINK_NO_TITLE_COMPLETE), expectedModel);
@@ -72,7 +72,7 @@ public class AddCommandIntegrationTest {
     @Test
     public void execute_newEntryHasNoDescription_descriptionReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addEntry(CRUX_LINK_NO_DESCRIPTION_COMPLETE);
+        expectedModel.addListEntry(CRUX_LINK_NO_DESCRIPTION_COMPLETE);
 
         assertCommandSuccess(new AddCommand(CRUX_LINK_NO_DESCRIPTION_INCOMPLETE), model, commandHistory,
                 String.format(AddCommand.MESSAGE_SUCCESS, CRUX_LINK_NO_DESCRIPTION_COMPLETE), expectedModel);
