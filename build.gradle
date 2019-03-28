@@ -63,6 +63,7 @@ dependencies {
     String jUnitVersion = '5.1.0'
 
     compile group: 'com.github.chimbori', name:'crux', version: '2.0.2'
+    compile group: 'net.sourceforge.cssparser', name: 'cssparser', version: '0.9.27'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.0'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.7.4'
