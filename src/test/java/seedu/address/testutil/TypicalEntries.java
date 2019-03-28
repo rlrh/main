@@ -148,6 +148,11 @@ public class TypicalEntries {
             + "personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie and "
             + "hundreds of threats. Many of those assertions had been explored before, as these articles show.";
 
+    public static final String RELATIVE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/relativeLinkedArticle.html").toExternalForm();
+    public static final String ABSOLUTE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/absoluteLinkedArticle.html").toExternalForm();
+
     public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription("")
@@ -253,6 +258,17 @@ public class TypicalEntries {
             .withLink(CRUX_LINK_URL)
             .build();
 
+    public static final Entry ENTRY_WITH_RELATIVE_LINK = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(RELATIVE_LINK_ARTICLE_URL)
+            .build();
+    public static final Entry ENTRY_WITH_ABSOLUTE_LINK = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(ABSOLUTE_LINK_ARTICLE_URL)
+            .build();
+
     // For testing of networking
     public static final Entry VALID_HTTPS_LINK = new EntryBuilder()
             .withTitle("Valid HTTPS Link")
@@ -282,16 +298,21 @@ public class TypicalEntries {
     public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
 
     // For BrowserPanelTest
-    public static final Entry WIKIPEDIA_LINK = new EntryBuilder()
+    public static final Entry BROWSER_PANEL_TEST_ENTRY = new EntryBuilder()
+            .withTitle("Browser Panel Test Web Page")
+            .withDescription("Browser panel test web page")
+            .withLink(MainApp.class.getResource("/view/BrowserPanelTest/test.html").toExternalForm())
+            .withAddress("Browser panel test web page")
+            .build();
+    public static final String BROWSER_PANEL_TEST_ENTRY_BASE_URL =
+            MainApp.class.getResource("/view/BrowserPanelTest/test.html").toExternalForm();
+    public static final Entry WIKIPEDIA_ENTRY = new EntryBuilder()
             .withTitle("Wikipedia Test Web Page")
             .withDescription("Wikipedia test web page")
-            .withLink("file://" + MainApp.class.getResource(
-                    "/view/BrowserPanelTest/wikipedia.html").toExternalForm().substring(5))
+            .withLink(MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html").toExternalForm())
             .withAddress("Wikipedia test web page")
             .build();
-    public static final String WIKIPEDIA_LINK_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
-
-
+    public static final String WIKIPEDIA_ENTRY_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
 
     private TypicalEntries() {} // prevents instantiation
 

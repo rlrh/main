@@ -10,7 +10,7 @@ import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.CARL;
 import static seedu.address.testutil.TypicalEntries.DANIEL;
-import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -225,7 +225,7 @@ public class ModelManagerTest {
             differentUserPrefs2, storage)));
 
         // different displayedEntryList -> returns false
-        EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_LINK).build();
+        EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_ENTRY).build();
         ModelManager differentDisplayedModelManager = new ModelManager(listEntryBook, archivesEntryBook,
             userPrefs, storage);
         differentDisplayedModelManager.setDisplayEntryList(differentDisplayedEntryBook);

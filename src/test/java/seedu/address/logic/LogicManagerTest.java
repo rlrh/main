@@ -26,6 +26,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.mocks.ModelManagerStub;
+import seedu.address.mocks.TemporaryStorageManager;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -54,12 +55,7 @@ public class LogicManagerTest {
 
     @Before
     public void setUp() throws Exception {
-        JsonEntryBookStorage listEntryBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
-        JsonEntryBookStorage archivesEntryBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
-        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
-        ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, userPrefsStorage,
-            articleStorage);
+        StorageManager storage = new TemporaryStorageManager(temporaryFolder);
         model = new ModelManager(new EntryBook(), new EntryBook(), new UserPrefs(), storage);
         logic = new LogicManager(model);
     }
