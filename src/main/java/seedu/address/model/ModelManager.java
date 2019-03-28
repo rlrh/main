@@ -339,8 +339,11 @@ public class ModelManager implements Model {
         switch (context) {
         case CONTEXT_LIST:
             setDisplayEntryList(this.listEntryBook);
+            updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
             break;
         case CONTEXT_ARCHIVES:
+            setDisplayEntryList(this.archivesEntryBook);
+            updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
             // something else
             break;
         default:
