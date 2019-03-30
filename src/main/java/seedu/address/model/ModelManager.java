@@ -27,45 +27,72 @@ import seedu.address.storage.Storage;
 import seedu.address.ui.ViewMode;
 
 /**
- * Represents the in-memory model of the address book data.
+ * Represents the in-memory model of the entry book data.
  */
 public class ModelManager implements Model {
     public static final String FILE_OPS_ERROR_MESSAGE = "Could not save data to file: ";
 
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private ModelContext context = ModelContext.CONTEXT_LIST;
-
     private final EntryBook listEntryBook;
+    private final EntryBook archivesEntryBook;
     private final UserPrefs userPrefs;
-    private final FilteredList<Entry> filteredEntries;
 
-    private final SimpleListProperty<Entry> displayedEntryList = new SimpleListProperty<>();
+    private final SimpleListProperty<Entry> displayedEntryList;
+    private final FilteredList<Entry> filteredEntries;
     private final SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<ModelContext> context = new SimpleObjectProperty<>(ModelContext.CONTEXT_LIST);
     private final Storage storage;
 
     /**
      * Initializes a ModelManager with the given listEntryBook, userPrefs, and storage
      */
-    public ModelManager(ReadOnlyEntryBook listEntryBook, ReadOnlyUserPrefs userPrefs, Storage storage) {
+    public ModelManager(ReadOnlyEntryBook listEntryBook,
+                        ReadOnlyEntryBook archivesEntryBook,
+                        ReadOnlyUserPrefs userPrefs,
+                        Storage storage) {
         super();
         requireAllNonNull(listEntryBook, userPrefs, storage);
 
-        logger.fine("Initializing with list context address book: " + listEntryBook + " and user prefs " + userPrefs);
+        logger.fine("Initializing with list context entry book: " + listEntryBook + " and user prefs " + userPrefs);
 
         this.listEntryBook = new EntryBook(listEntryBook);
+        this.archivesEntryBook = new EntryBook(archivesEntryBook);
         this.userPrefs = new UserPrefs(userPrefs);
         this.storage = storage;
 
-        // Save the entry book to storage whenever it is modified.
-        this.listEntryBook.addListener(this::saveToStorageListener);
-
-        displayEntryBook(this.listEntryBook);
+        displayedEntryList = new SimpleListProperty<>(this.listEntryBook.getEntryList());
         filteredEntries = new FilteredList<>(this.displayedEntryList);
+
+        setUpListeners();
+    }
+
+    private void setUpListeners() {
+        // Save the list entry book to storage whenever it is modified.
+        listEntryBook.addListener(this::saveListEntryBookToStorageListener);
+
+        // Save the archives entry book to storage whenever it is modified.
+        archivesEntryBook.addListener(this::saveArchivesEntryBookToStorageListener);
+
+        // Updates selected entry to a valid selection (or none) whenever filtered entries is modified.
         filteredEntries.addListener(this::ensureSelectedEntryIsValid);
+
+        // Updates displayed entry list whenever the context of the Model changes.
+        context.addListener((observable, oldContext, newContext) -> {
+                switch (newContext) {
+                case CONTEXT_LIST:
+                    displayEntryBook(listEntryBook);
+                    break;
+                case CONTEXT_ARCHIVES:
+                    displayEntryBook(archivesEntryBook);
+                    break;
+                default:
+                }
+            }
+        );
     }
 
     //=========== UserPrefs ==================================================================================
@@ -93,14 +120,14 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public Path getEntryBookFilePath() {
-        return userPrefs.getAddressBookFilePath();
+    public Path getListEntryBookFilePath() {
+        return userPrefs.getListEntryBookFilePath();
     }
 
     @Override
-    public void setEntryBookFilePath(Path entryBookFilePath) {
-        requireNonNull(entryBookFilePath);
-        userPrefs.setAddressBookFilePath(entryBookFilePath);
+    public void setListEntryBookFilePath(Path listEntryBookFilePath) {
+        requireNonNull(listEntryBookFilePath);
+        userPrefs.setListEntryBookFilePath(listEntryBookFilePath);
     }
 
     @Override
@@ -114,8 +141,26 @@ public class ModelManager implements Model {
         userPrefs.setArticleDataDirectoryPath(articleDataDirectoryPath);
     }
 
+    @Override
+    public Path getArchivesEntryBookFilePath() {
+        return userPrefs.getArchivesEntryBookFilePath();
+    }
+
+    @Override
+    public void setArchivesEntryBookFilePath(Path archivesEntryBookFilePath) {
+        requireNonNull(archivesEntryBookFilePath);
+        userPrefs.setArchivesEntryBookFilePath(archivesEntryBookFilePath);
+    }
 
     //=========== EntryBook ================================================================================
+
+    @Override
+    public boolean hasEntry(Entry entry) {
+        requireNonNull(entry);
+        return hasListEntry(entry) || hasArchivesEntry(entry);
+    }
+
+    //=========== List EntryBook ================================================================================
 
     @Override
     public void setListEntryBook(ReadOnlyEntryBook listEntryBook) {
@@ -128,37 +173,66 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasEntry(Entry entry) {
-        requireNonNull(entry);
-        return listEntryBook.hasPerson(entry);
+    public boolean hasListEntry(Entry listEntry) {
+        requireNonNull(listEntry);
+        return listEntryBook.hasPerson(listEntry);
     }
 
     @Override
-    public void deleteEntry(Entry target) {
+    public void deleteListEntry(Entry target) {
         listEntryBook.removePerson(target);
     }
 
     @Override
-    public void addEntry(Entry entry) {
+    public void addListEntry(Entry entry) {
         listEntryBook.addEntry(entry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
 
     @Override
-    public void setEntry(Entry target, Entry editedEntry) {
+    public void setListEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
         listEntryBook.setPerson(target, editedEntry);
     }
 
     @Override
-    public void clearEntryBook() {
+    public void clearListEntryBook() {
         listEntryBook.clear();
     }
 
+    //=========== Archives EntryBook ================================================================================
+
     @Override
-    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
-        displayedEntryList.set(entryBook.getEntryList());
+    public void setArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook) {
+        this.archivesEntryBook.resetData(archivesEntryBook);
+    }
+
+    @Override
+    public ReadOnlyEntryBook getArchivesEntryBook() {
+        return archivesEntryBook;
+    }
+
+    @Override
+    public boolean hasArchivesEntry(Entry archiveEntry) {
+        requireNonNull(archiveEntry);
+        return archivesEntryBook.hasPerson(archiveEntry);
+    }
+
+    @Override
+    public void deleteArchivesEntry(Entry target) {
+        archivesEntryBook.removePerson(target);
+    }
+
+    @Override
+    public void addArchivesEntry(Entry entry) {
+        archivesEntryBook.addEntry(entry);
+        updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
+    }
+
+    @Override
+    public void clearArchivesEntryBook() {
+        archivesEntryBook.clear();
     }
 
     //=========== Storage ===================================================================================
@@ -173,7 +247,14 @@ public class ModelManager implements Model {
         return storage.addArticle(url, articleContent);
     }
 
-    //=========== Filtered Entry List Accessors =============================================================
+    //=========== Displayed Entry List ================================================================================
+
+    @Override
+    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+        displayedEntryList.set(entryBook.getEntryList());
+    }
+
+    //=========== Filtered Entry List =============================================================
 
     /**
      * Returns an unmodifiable view of the list of {@code Entry} backed by the internal list of
@@ -261,6 +342,23 @@ public class ModelManager implements Model {
         commandResult.setValue(result);
     }
 
+    //=========== Context ===========================================================================
+
+    @Override
+    public ReadOnlyProperty<ModelContext> contextProperty() {
+        return this.context;
+    }
+
+    @Override
+    public ModelContext getContext() {
+        return this.context.getValue();
+    }
+
+    @Override
+    public void setContext(ModelContext context) {
+        this.context.setValue(context);
+    }
+
     /**
      * Ensures {@code selectedEntry} is a valid entry in {@code filteredEntries}.
      */
@@ -291,12 +389,24 @@ public class ModelManager implements Model {
     }
 
     /**
-     * Ensures that storage is updated whenever entry book is modified.
+     * Ensures that storage is updated whenever list entry book is modified.
      */
-    private void saveToStorageListener(Observable observable) {
-        logger.info("Address book modified, saving to file.");
+    private void saveListEntryBookToStorageListener(Observable observable) {
+        logger.info("Entry book modified, saving to file.");
         try {
-            storage.saveAddressBook(listEntryBook);
+            storage.saveListEntryBook(listEntryBook);
+        } catch (IOException ioe) {
+            setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+        }
+    }
+
+    /**
+     * Ensures that storage is updated whenever archives entry book is modified.
+     */
+    private void saveArchivesEntryBookToStorageListener(Observable observable) {
+        logger.info("Archives modified, saving to file.");
+        try {
+            storage.saveArchivesEntryBook(archivesEntryBook);
         } catch (IOException ioe) {
             setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
         }
@@ -318,6 +428,7 @@ public class ModelManager implements Model {
         ModelManager other = (ModelManager) obj;
 
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
+                && archivesEntryBook.equals(other.archivesEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
@@ -338,37 +449,20 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        Model clonedModel = new ModelManager(this.listEntryBook, this.userPrefs, this.storage);
+        Model clonedModel = new ModelManager(this.listEntryBook, this.archivesEntryBook, this.userPrefs, this.storage);
         clonedModel.setContext(this.getContext());
         return clonedModel;
     }
 
     @Override
-    public void setContext(ModelContext context) {
-        switch (context) {
-        case CONTEXT_LIST:
-            displayEntryBook(this.listEntryBook);
-            break;
-        case CONTEXT_ARCHIVE:
-            // something else
-            break;
-        default:
-        }
-        this.context = context;
-    }
-
-    @Override
-    public ModelContext getContext() {
-        return context;
-    }
-
-    @Override
     public void archiveEntry(Entry target) {
-        return;
+        deleteListEntry(target);
+        addArchivesEntry(target);
     }
 
     @Override
     public void unarchiveEntry(Entry entry) {
-        return;
+        deleteArchivesEntry(entry);
+        addListEntry(entry);
     }
 }

@@ -8,6 +8,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.entry.Entry;
 import seedu.address.ui.ViewMode;
@@ -30,7 +31,7 @@ public interface Logic {
      *
      * @see seedu.address.model.Model#getListEntryBook()
      */
-    ReadOnlyEntryBook getEntryBook();
+    ReadOnlyEntryBook getListEntryBook();
 
     /** Returns an unmodifiable view of the filtered list of entries */
     ObservableList<Entry> getFilteredEntryList();
@@ -42,9 +43,9 @@ public interface Logic {
     ObservableList<String> getHistory();
 
     /**
-     * Returns the user prefs' entry book file path.
+     * Returns the user prefs' list entry book file path.
      */
-    Path getEntryBookFilePath();
+    Path getListEntryBookFilePath();
 
     /**
      * Returns the user prefs' GUI settings.
@@ -115,4 +116,19 @@ public interface Logic {
      * @see seedu.address.model.Model#setCommandResult(CommandResult)
      */
     void setCommandResult(CommandResult commandResult);
+
+    /**
+     * Current context of the model.
+     *
+     * @see seedu.address.model.Model#contextProperty()
+     */
+    ReadOnlyProperty<ModelContext> contextProperty();
+
+    /**
+     * Sets the context in the model.
+     *
+     * @see seedu.address.model.Model#setContext(ModelContext)
+     */
+    void setContext(ModelContext context);
+
 }

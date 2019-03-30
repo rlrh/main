@@ -25,7 +25,7 @@ import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
-import seedu.address.network.Network;
+import seedu.address.util.Network;
 
 /**
  * Shows a feed given an URL.
