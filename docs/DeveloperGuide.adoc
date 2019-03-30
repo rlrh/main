@@ -507,6 +507,32 @@ we decided to centralise it in a "singleton" class named `Network`.
 The following sections describe the different design patterns we considered
 and their pros and cons.
 
+==== Considerations
+
+This component is depended on by the following components:
+
+* AddCommand (when adding articles so that they can be saved to disk)
+* BrowserPanel (when viewing articles or feeds)
+* Feeds management system (for fetching subscriptions, or saving feeds)
+
+Thus, our design needs to take into consideration how it is going to be used.
+
+Because it's possible that the settings we use to fetch resources
+may need to be changed over time
+(e.g. timeouts, request headers, cookies, etc.),
+we should centralise the design to one component
+so that these can easily be changed.
+Obviously, this component should be easily accessible
+from all the components listed above.
+Finally, the interface for this component should be general
+and apply to all use cases
+because we have a large mix of possible requests:
+articles, feeds, or other resources.
+
+The only way we can make this component easily accessible is to make it global.
+However, there are a couple of ways to design a global component.
+The following sections describe the patterns considered.
+
 ==== Static class pattern (chosen pattern)
 
 This pattern is to create a new class named `Network`.
