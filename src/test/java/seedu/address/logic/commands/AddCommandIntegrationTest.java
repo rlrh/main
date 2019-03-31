@@ -5,14 +5,14 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 
+import static seedu.address.testutil.TypicalEntries.ENTRY_WITH_ABSOLUTE_LINK;
+import static seedu.address.testutil.TypicalEntries.ENTRY_WITH_RELATIVE_LINK;
 import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_DESCRIPTION_COMPLETE;
 import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_DESCRIPTION_INCOMPLETE;
 import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_COMPLETE;
 import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_INCOMPLETE;
 import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE;
 import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE;
-import static seedu.address.testutil.TypicalEntries.ENTRY_WITH_ABSOLUTE_LINK;
-import static seedu.address.testutil.TypicalEntries.ENTRY_WITH_RELATIVE_LINK;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -7,7 +7,7 @@ import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY;
 import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY_BASE_URL;
 import static seedu.address.testutil.TypicalEntries.INVALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
-import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
 
 import java.net.URL;
 import javax.xml.transform.TransformerException;
@@ -70,14 +70,14 @@ public class BrowserPanelTest extends GuiUnitTest {
 
     @Test
     public void displayReaderViewOnWikipediaPage() {
-        assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_LINK.getLink().value);
+        assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_ENTRY.getLink().value);
     }
 
     @Test
     public void displayReaderViewStyle() {
 
         // load associated web page of a Wikipedia entry
-        guiRobot.interact(() -> selectedPerson.set(WIKIPEDIA_LINK));
+        guiRobot.interact(() -> selectedPerson.set(WIKIPEDIA_ENTRY));
         waitUntilBrowserLoaded(browserPanelHandle);
 
         // set reader view mode with specified style
@@ -91,7 +91,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         );
 
     }
-  
+
     /**
      * Asserts that reader view works as expected on the given Entry
      * @param entry Entry to test reader view on
@@ -110,7 +110,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         } catch (TransformerException te) {
             fail();
         }
-      
+
         Document originalDoc = Jsoup.parse(originalHtml, baseUrl);
         Document doc = ReaderViewUtil.generateReaderViewFrom(originalDoc);
         String expectedText = doc.text();

@@ -298,21 +298,23 @@ public class TypicalEntries {
     public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
 
     // For BrowserPanelTest
+    public static final String BROWSER_PANEL_TEST_ENTRY_BASE_URL =
+            "file://" + MainApp.class.getResource("/view/BrowserPanelTest/test.html")
+                    .toExternalForm().substring(5);
     public static final Entry BROWSER_PANEL_TEST_ENTRY = new EntryBuilder()
             .withTitle("Browser Panel Test Web Page")
             .withDescription("Browser panel test web page")
-            .withLink(MainApp.class.getResource("/view/BrowserPanelTest/test.html").toExternalForm())
+            .withLink(BROWSER_PANEL_TEST_ENTRY_BASE_URL)
             .withAddress("Browser panel test web page")
             .build();
-    public static final String BROWSER_PANEL_TEST_ENTRY_BASE_URL =
-            MainApp.class.getResource("/view/BrowserPanelTest/test.html").toExternalForm();
+    public static final String WIKIPEDIA_ENTRY_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
     public static final Entry WIKIPEDIA_ENTRY = new EntryBuilder()
             .withTitle("Wikipedia Test Web Page")
             .withDescription("Wikipedia test web page")
-            .withLink(MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html").toExternalForm())
+            .withLink("file://" + MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html")
+                    .toExternalForm().substring(5))
             .withAddress("Wikipedia test web page")
             .build();
-    public static final String WIKIPEDIA_ENTRY_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
 
     private TypicalEntries() {} // prevents instantiation
 
