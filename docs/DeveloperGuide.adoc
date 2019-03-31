@@ -374,7 +374,7 @@ These are combined into a new HTML document, which is styled using Bootstrap and
 
 === Feed subscription
 
-==== Planned implementation
+==== Current implementation
 
 The feed subscription system requires `ModelManager` to contain more
 than one `EntryBook`. Since we should only show a single `EntryBook` at
@@ -590,7 +590,7 @@ We decided it was not wise to keep these too decoupled,
 and instead we moved `Storage` under `Model`
 to improve cohesion at the expense of worsening coupling.
 
-==== Planned implementation
+==== Current implementation
 
 After the architectural changes were made,
 there are a few design considerations that needed to be made:
