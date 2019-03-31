@@ -3,7 +3,6 @@ package seedu.address.ui.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,11 +17,15 @@ import net.dankito.readability4j.extended.Readability4JExtended;
 
 import seedu.address.commons.util.DateUtil;
 import seedu.address.commons.util.OptionalCandidate;
+import seedu.address.commons.util.StringUtil;
 
 /**
  * Utility functions specific to Reader View
  */
 public class ReaderViewUtil {
+
+    // Average human reading speed
+    private static final int AVERAGE_WORDS_PER_MINUTE = 250;
 
     // Bootstrap style classes
     private static final String CONTAINER_STYLE_CLASS = "container py-5";
@@ -146,6 +149,7 @@ public class ReaderViewUtil {
         // add byline element if author(s) present
         OptionalCandidate
                 .with((String candidate) ->
+                        // acceptable candidates are non-null and non-empty
                         Optional.ofNullable(candidate).filter(presentCandidate -> !presentCandidate.isEmpty())
                 )
                 .tryout(rawDocument
@@ -188,9 +192,8 @@ public class ReaderViewUtil {
         // add reading time element
         Optional.ofNullable(article.getTextContent())
                 .filter(text -> !text.isEmpty())
-                .map(text -> text.split("\\s+"))
-                .map(words -> Arrays.stream(words).count())
-                .map(count -> Math.max(1, (int) Math.ceil(count / 250.0)))
+                .map(StringUtil::getNumberOfWords)
+                .map(wordCount -> Math.max(1, Math.ceil(wordCount / (float) AVERAGE_WORDS_PER_MINUTE)))
                 .map(minutes -> new Element(Tag.valueOf(SMALL_TAG), "")
                         .text(minutes + " minute read")
                         .addClass(METADATA_STYLE_CLASS))
@@ -234,6 +237,7 @@ public class ReaderViewUtil {
      */
     private static Optional<Element> createSiteNameElement(Document document) {
 
+        // acceptable candidate site names are non-null and non-empty
         OptionalCandidate<String, String> candidateSiteName = new OptionalCandidate<>(candidate ->
                 Optional.ofNullable(candidate).filter(presentCandidate -> !presentCandidate.isEmpty())
         );

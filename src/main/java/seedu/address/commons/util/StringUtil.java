@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Helper functions for handling strings.
@@ -88,6 +89,17 @@ public class StringUtil {
             firstNWords.append(" ");
         }
         return firstNWords.toString().trim().concat("…");
+    }
+
+    /**
+     * Gets the number of words in a string. Method is null-safe.
+     * @param string any string, can be empty or null
+     * @return number of words in string, 0 if string is empty or null
+     */
+    public static long getNumberOfWords(String string) {
+        return Stream.ofNullable(string)
+                .flatMap(text -> Arrays.stream(text.split("\\s+")))
+                .count();
     }
 
     /**
