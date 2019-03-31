@@ -74,7 +74,6 @@ public class DateUtil {
                 .tryout(DateTimeFormatter.ISO_INSTANT)
                 .getOptional()
                 .map(temporalAccessor -> {
-                    System.out.println(temporalAccessor);
                     if (temporalAccessor instanceof LocalDate) {
                         return DateTimeFormatter.ofLocalizedDate(dateStyle).format(temporalAccessor);
                     } else {
