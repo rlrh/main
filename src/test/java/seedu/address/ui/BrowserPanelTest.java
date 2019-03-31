@@ -71,7 +71,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         // generate reader view by processing loaded content
         String originalHtml = "";
         try {
-            originalHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getWebEngine().getDocument());
+            originalHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
         } catch (TransformerException te) {
             fail();
         }
@@ -86,7 +86,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         // extract loaded content
         String readerHtml = "";
         try {
-            readerHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getWebEngine().getDocument());
+            readerHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
         } catch (TransformerException te) {
             fail();
         }
@@ -111,7 +111,7 @@ public class BrowserPanelTest extends GuiUnitTest {
         // check actual stylesheet is the same as specified stylesheet
         assertEquals(
                 ReaderViewStyle.DARK.getStylesheetLocation().toExternalForm(),
-                browserPanelHandle.getWebEngine().getUserStyleSheetLocation()
+                browserPanelHandle.getUserStyleSheetLocation()
         );
 
     }
