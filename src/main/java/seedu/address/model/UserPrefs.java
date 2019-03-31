@@ -14,7 +14,8 @@ import seedu.address.commons.core.GuiSettings;
 public class UserPrefs implements ReadOnlyUserPrefs {
 
     private GuiSettings guiSettings = new GuiSettings();
-    private Path addressBookFilePath = Paths.get("data" , "entrybook.json");
+    private Path listEntryBookFilePath = Paths.get("data" , "entrybook.json");
+    private Path archivesEntryBookFilePath = Paths.get("data" , "archives.json");
     private Path articleDataDirectoryPath = Paths.get("data", "articles");
 
     /**
@@ -36,7 +37,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
     public void resetData(ReadOnlyUserPrefs newUserPrefs) {
         requireNonNull(newUserPrefs);
         setGuiSettings(newUserPrefs.getGuiSettings());
-        setAddressBookFilePath(newUserPrefs.getAddressBookFilePath());
+        setListEntryBookFilePath(newUserPrefs.getListEntryBookFilePath());
         setArticleDataDirectoryPath(newUserPrefs.getArticleDataDirectoryPath());
     }
 
@@ -49,13 +50,13 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         this.guiSettings = guiSettings;
     }
 
-    public Path getAddressBookFilePath() {
-        return addressBookFilePath;
+    public Path getListEntryBookFilePath() {
+        return listEntryBookFilePath;
     }
 
-    public void setAddressBookFilePath(Path addressBookFilePath) {
-        requireNonNull(addressBookFilePath);
-        this.addressBookFilePath = addressBookFilePath;
+    public void setListEntryBookFilePath(Path listEntryBookFilePath) {
+        requireNonNull(listEntryBookFilePath);
+        this.listEntryBookFilePath = listEntryBookFilePath;
     }
 
     public Path getArticleDataDirectoryPath() {
@@ -65,6 +66,15 @@ public class UserPrefs implements ReadOnlyUserPrefs {
     public void setArticleDataDirectoryPath(Path articleDataDirectoryPath) {
         requireNonNull(articleDataDirectoryPath);
         this.articleDataDirectoryPath = articleDataDirectoryPath;
+    }
+
+    public Path getArchivesEntryBookFilePath() {
+        return archivesEntryBookFilePath;
+    }
+
+    public void setArchivesEntryBookFilePath(Path archivesEntryBookFilePath) {
+        requireNonNull(archivesEntryBookFilePath);
+        this.archivesEntryBookFilePath = archivesEntryBookFilePath;
     }
 
     @Override
@@ -79,20 +89,22 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         UserPrefs o = (UserPrefs) other;
 
         return guiSettings.equals(o.guiSettings)
-                && addressBookFilePath.equals(o.addressBookFilePath)
-                && articleDataDirectoryPath.equals(o.articleDataDirectoryPath);
+                && listEntryBookFilePath.equals(o.listEntryBookFilePath)
+                && articleDataDirectoryPath.equals(o.articleDataDirectoryPath)
+                && archivesEntryBookFilePath.equals(o.archivesEntryBookFilePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(guiSettings, addressBookFilePath);
+        return Objects.hash(guiSettings, listEntryBookFilePath);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Gui Settings : " + guiSettings);
-        sb.append("\nLocal data file location : " + addressBookFilePath);
+        sb.append("\nEntrybook data file location : " + listEntryBookFilePath);
+        sb.append("\nArchives data file location : " + archivesEntryBookFilePath);
         return sb.toString();
     }
 

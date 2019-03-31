@@ -19,16 +19,16 @@ import seedu.address.model.entry.Entry;
 @JsonRootName(value = "addressbook")
 class JsonSerializableEntryBook {
 
-    public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate entry(s).";
+    public static final String MESSAGE_DUPLICATE_ENTRY = "Entry list contains duplicate entry(s).";
 
-    private final List<JsonAdaptedEntry> persons = new ArrayList<>();
+    private final List<JsonAdaptedEntry> entries = new ArrayList<>();
 
     /**
-     * Constructs a {@code JsonSerializableEntryBook} with the given persons.
+     * Constructs a {@code JsonSerializableEntryBook} with the given entries.
      */
     @JsonCreator
-    public JsonSerializableEntryBook(@JsonProperty("persons") List<JsonAdaptedEntry> persons) {
-        this.persons.addAll(persons);
+    public JsonSerializableEntryBook(@JsonProperty("entries") List<JsonAdaptedEntry> entries) {
+        this.entries.addAll(entries);
     }
 
     /**
@@ -37,7 +37,7 @@ class JsonSerializableEntryBook {
      * @param source future changes to this will not affect the created {@code JsonSerializableEntryBook}.
      */
     public JsonSerializableEntryBook(ReadOnlyEntryBook source) {
-        persons.addAll(source.getEntryList().stream().map(JsonAdaptedEntry::new).collect(Collectors.toList()));
+        entries.addAll(source.getEntryList().stream().map(JsonAdaptedEntry::new).collect(Collectors.toList()));
     }
 
     /**
@@ -47,10 +47,10 @@ class JsonSerializableEntryBook {
      */
     public EntryBook toModelType() throws IllegalValueException {
         EntryBook addressBook = new EntryBook();
-        for (JsonAdaptedEntry jsonAdaptedEntry : persons) {
+        for (JsonAdaptedEntry jsonAdaptedEntry : entries) {
             Entry entry = jsonAdaptedEntry.toModelType();
             if (addressBook.hasPerson(entry)) {
-                throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
+                throw new IllegalValueException(MESSAGE_DUPLICATE_ENTRY);
             }
             addressBook.addEntry(entry);
         }

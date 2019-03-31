@@ -42,7 +42,7 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
-        expectedModel.setEntry(model.getFilteredEntryList().get(0), editedEntry);
+        expectedModel.setListEntry(model.getFilteredEntryList().get(0), editedEntry);
 
         assertCommandSuccess(editCommand, model, commandHistory, expectedMessage, expectedModel);
     }
@@ -63,7 +63,7 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
-        expectedModel.setEntry(lastEntry, editedEntry);
+        expectedModel.setListEntry(lastEntry, editedEntry);
 
         assertCommandSuccess(editCommand, model, commandHistory, expectedMessage, expectedModel);
     }
@@ -92,7 +92,7 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
-        expectedModel.setEntry(model.getFilteredEntryList().get(0), editedEntry);
+        expectedModel.setListEntry(model.getFilteredEntryList().get(0), editedEntry);
 
         assertCommandSuccess(editCommand, model, commandHistory, expectedMessage, expectedModel);
     }

@@ -3,6 +3,8 @@ package seedu.address.ui;
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY;
+import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY_BASE_URL;
 import static seedu.address.testutil.TypicalEntries.INVALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
@@ -62,39 +64,13 @@ public class BrowserPanelTest extends GuiUnitTest {
     }
 
     @Test
-    public void displayReaderView() {
+    public void displayReaderViewOnTestPage() {
+        assertReaderViewWorksOn(BROWSER_PANEL_TEST_ENTRY, BROWSER_PANEL_TEST_ENTRY_BASE_URL);
+    }
 
-        // load associated web page of a Wikipedia entry
-        guiRobot.interact(() -> selectedPerson.set(WIKIPEDIA_LINK));
-        waitUntilBrowserLoaded(browserPanelHandle);
-
-        // generate reader view by processing loaded content
-        String originalHtml = "";
-        try {
-            originalHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
-        } catch (TransformerException te) {
-            fail();
-        }
-        Document originalDoc = Jsoup.parse(originalHtml, WIKIPEDIA_LINK.getLink().value);
-        Document doc = ReaderViewUtil.generateReaderViewFrom(originalDoc);
-        String expectedText = doc.text();
-
-        // set reader view mode
-        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER)));
-        waitUntilBrowserLoaded(browserPanelHandle);
-
-        // extract loaded content
-        String readerHtml = "";
-        try {
-            readerHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
-        } catch (TransformerException te) {
-            fail();
-        }
-        String actualText = Jsoup.parse(readerHtml).text();
-
-        // check actual loaded content is the same as expected processed content
-        assertEquals(expectedText, actualText);
-
+    @Test
+    public void displayReaderViewOnWikipediaPage() {
+        assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_LINK.getLink().value);
     }
 
     @Test
@@ -113,6 +89,47 @@ public class BrowserPanelTest extends GuiUnitTest {
                 ReaderViewStyle.DARK.getStylesheetLocation().toExternalForm(),
                 browserPanelHandle.getUserStyleSheetLocation()
         );
+
+    }
+  
+    /**
+     * Asserts that reader view works as expected on the given Entry
+     * @param entry Entry to test reader view on
+     * @param baseUrl base url
+     */
+    private void assertReaderViewWorksOn(Entry entry, String baseUrl) {
+
+        // load associated web page of a Wikipedia entry
+        guiRobot.interact(() -> selectedPerson.set(entry));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // generate reader view by processing loaded content
+        String originalHtml = "";
+        try {
+            originalHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
+        } catch (TransformerException te) {
+            fail();
+        }
+      
+        Document originalDoc = Jsoup.parse(originalHtml, baseUrl);
+        Document doc = ReaderViewUtil.generateReaderViewFrom(originalDoc);
+        String expectedText = doc.text();
+
+        // set reader view mode
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER)));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // extract loaded content
+        String readerHtml = "";
+        try {
+            readerHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
+        } catch (TransformerException te) {
+            fail();
+        }
+        String actualText = Jsoup.parse(readerHtml).text();
+
+        // check actual loaded content is the same as expected processed content
+        assertEquals(expectedText, actualText);
 
     }
 

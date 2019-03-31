@@ -69,6 +69,31 @@ public class TypicalEntries {
             .withLink("https://anna.example.com")
             .withAddress("4th street")
             .build();
+    public static final Entry HANS = new EntryBuilder()
+        .withTitle("Hans Solo")
+        .withDescription("Description place-holder")
+        .withLink("https://bobo.example.com")
+        .withAddress("10th street")
+        .withTags("friends")
+        .build();
+    public static final Entry ISABELLE = new EntryBuilder()
+        .withTitle("Isabelle Toh")
+        .withDescription("Description place-holder")
+        .withLink("https://koko.example.com")
+        .withAddress("michegan ave")
+        .build();
+    public static final Entry JONATHAN = new EntryBuilder()
+        .withTitle("Jonathan Cheng")
+        .withDescription("Description place-holder")
+        .withLink("https://lolo.example.com")
+        .withAddress("little tokyo")
+        .build();
+    public static final Entry KEVIN = new EntryBuilder()
+        .withTitle("Kevin Hart")
+        .withDescription("Description place-holder")
+        .withLink("https://dodo.example.com")
+        .withAddress("4th street")
+        .build();
 
     // Manually added
     public static final Entry HOON = new EntryBuilder()
@@ -122,6 +147,11 @@ public class TypicalEntries {
     public static final String READABILITY_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s "
             + "former personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie "
             + "and hundreds of threats. Many of those assertions had been explored before, as these articles show.";
+
+    public static final String RELATIVE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/relativeLinkedArticle.html").toExternalForm();
+    public static final String ABSOLUTE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/absoluteLinkedArticle.html").toExternalForm();
 
     public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
@@ -228,6 +258,17 @@ public class TypicalEntries {
             .withLink(READABILITY_LINK_URL)
             .build();
 
+    public static final Entry ENTRY_WITH_RELATIVE_LINK = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(RELATIVE_LINK_ARTICLE_URL)
+            .build();
+    public static final Entry ENTRY_WITH_ABSOLUTE_LINK = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(ABSOLUTE_LINK_ARTICLE_URL)
+            .build();
+
     // For testing of networking
     public static final Entry VALID_HTTPS_LINK = new EntryBuilder()
             .withTitle("Valid HTTPS Link")
@@ -257,23 +298,28 @@ public class TypicalEntries {
     public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
 
     // For BrowserPanelTest
-    public static final Entry WIKIPEDIA_LINK = new EntryBuilder()
+    public static final Entry BROWSER_PANEL_TEST_ENTRY = new EntryBuilder()
+            .withTitle("Browser Panel Test Web Page")
+            .withDescription("Browser panel test web page")
+            .withLink(MainApp.class.getResource("/view/BrowserPanelTest/test.html").toExternalForm())
+            .withAddress("Browser panel test web page")
+            .build();
+    public static final String BROWSER_PANEL_TEST_ENTRY_BASE_URL =
+            MainApp.class.getResource("/view/BrowserPanelTest/test.html").toExternalForm();
+    public static final Entry WIKIPEDIA_ENTRY = new EntryBuilder()
             .withTitle("Wikipedia Test Web Page")
             .withDescription("Wikipedia test web page")
-            .withLink("file://" + MainApp.class.getResource(
-                    "/view/BrowserPanelTest/wikipedia.html").toExternalForm().substring(5))
+            .withLink(MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html").toExternalForm())
             .withAddress("Wikipedia test web page")
             .build();
-    public static final String WIKIPEDIA_LINK_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
-
-
+    public static final String WIKIPEDIA_ENTRY_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
 
     private TypicalEntries() {} // prevents instantiation
 
     /**
-     * Returns an {@code EntryBook} with all the typical persons.
+     * Returns an {@code EntryBook} with all the typical entries.
      */
-    public static EntryBook getTypicalEntryBook() {
+    public static EntryBook getTypicalListEntryBook() {
         EntryBook ab = new EntryBook();
         for (Entry entry : getTypicalEntries()) {
             ab.addEntry(entry);
@@ -281,7 +327,22 @@ public class TypicalEntries {
         return ab;
     }
 
+    /**
+     * Returns an {@code EntryBook} with all the typical persons.
+     */
+    public static EntryBook getTypicalArchivesEntryBook() {
+        EntryBook ab = new EntryBook();
+        for (Entry entry : getTypicalArchivesEntries()) {
+            ab.addEntry(entry);
+        }
+        return ab;
+    }
+
     public static List<Entry> getTypicalEntries() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+    }
+
+    public static List<Entry> getTypicalArchivesEntries() {
+        return new ArrayList<>(Arrays.asList(HANS, ISABELLE, JONATHAN, KEVIN));
     }
 }

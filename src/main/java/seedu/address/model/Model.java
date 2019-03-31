@@ -47,14 +47,24 @@ public interface Model {
     void setGuiSettings(GuiSettings guiSettings);
 
     /**
-     * Returns the user prefs' entry book file path.
+     * Returns the user prefs' list entry book file path.
      */
-    Path getEntryBookFilePath();
+    Path getListEntryBookFilePath();
 
     /**
-     * Sets the user prefs' entry book file path.
+     * Sets the user prefs' list entry book file path.
      */
-    void setEntryBookFilePath(Path entryBookFilePath);
+    void setListEntryBookFilePath(Path listEntryBookFilePath);
+
+    /**
+     * Returns the user prefs' archives entry book file path.
+     */
+    Path getArchivesEntryBookFilePath();
+
+    /**
+     * Sets the user prefs' archives entry book file path.
+     */
+    void setArchivesEntryBookFilePath(Path archivesEntryBookFilePath);
 
     /**
      * Returns the user prefs' article data directory path.
@@ -65,42 +75,80 @@ public interface Model {
      * Sets the user prefs' article data directory path.
      */
     void setArticleDataDirectoryPath(Path articleDataDirectoryPath);
-    /**
-     * Replaces entry book data with the data in {@code listEntryBook}.
-     */
-    void setListEntryBook(ReadOnlyEntryBook listEntryBook);
-
-    /** Returns the EntryBook */
-    ReadOnlyEntryBook getListEntryBook();
 
     /**
-     * Returns true if a entry with the same identity as {@code entry} exists in the entry book.
+     * Returns true if an entry with the same identity as {@code entry} exists in either the list/archives entry book.
      */
     boolean hasEntry(Entry entry);
 
     /**
-     * Deletes the given entry.
-     * The entry must exist in the entry book.
+     * Replaces list entry book data with the data in {@code listEntryBook}.
      */
-    void deleteEntry(Entry target);
+    void setListEntryBook(ReadOnlyEntryBook listEntryBook);
+
+    /** Returns the list entry book */
+    ReadOnlyEntryBook getListEntryBook();
+
+    /**
+     * Returns true if a list entry with the same identity as {@code entry} exists in the entry book.
+     */
+    boolean hasListEntry(Entry listEntry);
+
+    /**
+     * Deletes the given entry.
+     * The entry must exist in the list entry book.
+     */
+    void deleteListEntry(Entry target);
 
     /**
      * Adds the given entry.
-     * {@code entry} must not already exist in the entry book.
+     * {@code entry} must not already exist in the list entry book.
      */
-    void addEntry(Entry entry);
+    void addListEntry(Entry entry);
 
     /**
      * Replaces the given entry {@code target} with {@code editedEntry}.
-     * {@code target} must exist in the entry book.
-     * The entry identity of {@code editedEntry} must not be the same as another existing entry in the entry book.
+     * {@code target} must exist in the list entry book.
+     * The entry identity of {@code editedEntry} must not be the same as another existing entry in the list entry book.
      */
-    void setEntry(Entry target, Entry editedEntry);
+    void setListEntry(Entry target, Entry editedEntry);
 
     /**
-     * Clears the entire entry book.
+     * Clears the entire list entry book.
      */
-    void clearEntryBook();
+    void clearListEntryBook();
+
+    /**
+     * Replaces archives entry book data with the data in {@code archivesEntryBook}.
+     */
+    void setArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook);
+
+    /**
+     * Returns the archives entry book.
+     */
+    ReadOnlyEntryBook getArchivesEntryBook();
+
+    /**
+     * Returns true if an entry with the same identity as {@code archiveEntry} exists in the archives entry book.
+     */
+    boolean hasArchivesEntry(Entry archiveEntry);
+
+    /**
+     * Deletes the given entry.
+     * The entry must exist in the archives entry book.
+     */
+    void deleteArchivesEntry(Entry target);
+
+    /**
+     * Adds the given archives entry.
+     * {@code entry} must not already exist in the archives entry book.
+     */
+    void addArchivesEntry(Entry entry);
+
+    /**
+     * Clears the entire archives entry book.
+     */
+    void clearArchivesEntryBook();
 
     /** Adds article with {@code articleContent} associated with {@code url}. */
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
@@ -185,22 +233,27 @@ public interface Model {
     void setCommandResult(CommandResult result);
 
     /**
+     * Current context of the model.
+     */
+    ReadOnlyProperty<ModelContext> contextProperty();
+
+    /**
+     * Returns the context of the model.
+     */
+    ModelContext getContext();
+
+    /**
+     * Sets the context of the model.
+     * @param context
+     */
+    void setContext(ModelContext context);
+
+    /**
      * Makes a copy of the model.
      *
      * Mainly created because clone is needed a lot in tests.
      */
     Model clone();
-
-    /**
-     * Returns the context of the Model.
-     */
-    ModelContext getContext();
-
-    /**
-     * Sets the context of the Model.
-     * @param context
-     */
-    void setContext(ModelContext context);
 
     /**
      * Archives the given entry.
