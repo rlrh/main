@@ -3,6 +3,10 @@ package seedu.address.logic.commands;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+/**
+ * Searches Bing (web search) with the given keywords.
+ * Uses Bing's RSS feature.
+ */
 public class BingWebSearchCommand extends FeedCommand {
 
     public static final String COMMAND_WORD = "bing";

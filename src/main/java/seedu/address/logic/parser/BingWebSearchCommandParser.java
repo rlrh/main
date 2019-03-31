@@ -7,8 +7,15 @@ import java.io.UnsupportedEncodingException;
 import seedu.address.logic.commands.BingWebSearchCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
+/**
+ * Parses input arguments and creates a new BingWebSearchCommand object
+ */
 public class BingWebSearchCommandParser implements Parser<BingWebSearchCommand> {
 
+    /**
+     * Parses the given arguments into a BingWebSearchCommand.
+     * @throws ParseException if we cannot encode the URL somehow
+     */
     @Override
     public BingWebSearchCommand parse(String userInput) throws ParseException {
         if (userInput.trim().isEmpty()) {

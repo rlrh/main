@@ -6,6 +6,9 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.IndexedAddCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
+/**
+ * Parses the indexed add command.
+ */
 public class IndexedAddCommandParser implements Parser<IndexedAddCommand> {
 
     /**
