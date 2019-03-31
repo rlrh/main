@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
 
 import com.google.common.base.Strings;
+
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
