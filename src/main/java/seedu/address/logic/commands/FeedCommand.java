@@ -52,7 +52,7 @@ public class FeedCommand extends Command {
         }*/
 
         model.setContext(ModelContext.CONTEXT_SEARCH);
-        model.setDisplayEntryList(toBeDisplayed);
+        model.displayEntryBook(toBeDisplayed);
         model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, feedUrl));

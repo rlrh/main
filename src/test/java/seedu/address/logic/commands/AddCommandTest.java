@@ -313,7 +313,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void setDisplayEntryList(ReadOnlyEntryBook entryBook) {
+        public void displayEntryBook(ReadOnlyEntryBook entryBook) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -390,6 +390,11 @@ public class AddCommandTest {
         @Override
         public Model clone() {
             return this;
+        }
+
+        @Override
+        public ReadOnlyProperty<ModelContext> contextProperty() {
+            throw new AssertionError("This method should not be called.");
         }
 
         @Override

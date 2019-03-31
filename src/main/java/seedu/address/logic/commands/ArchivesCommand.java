@@ -22,7 +22,6 @@ public class ArchivesCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
         model.setContext(ModelContext.CONTEXT_ARCHIVES);
-        model.setDisplayEntryList(model.getArchivesEntryBook());
         model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
         return new CommandResult(MESSAGE_SUCCESS);
     }

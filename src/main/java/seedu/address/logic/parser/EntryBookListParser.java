@@ -12,7 +12,6 @@ import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
-import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -52,10 +51,6 @@ public class EntryBookListParser extends EntryBookParser {
         case EditCommand.COMMAND_WORD:
         case EditCommand.COMMAND_ALIAS:
             return new EditCommandParser().parse(arguments);
-
-        case SelectCommand.COMMAND_WORD:
-        case SelectCommand.COMMAND_ALIAS:
-            return new SelectCommandParser().parse(arguments);
 
         case DeleteCommand.COMMAND_WORD:
             return new DeleteCommandParser().parse(arguments);

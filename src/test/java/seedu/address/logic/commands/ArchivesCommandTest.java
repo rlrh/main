@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +23,19 @@ public class ArchivesCommandTest {
 
     @Before
     public void setUp() {
+        model.setContext(ModelContext.CONTEXT_ARCHIVES);
         expectedModel.setContext(ModelContext.CONTEXT_ARCHIVES);
-        expectedModel.setDisplayEntryList(expectedModel.getArchivesEntryBook());
     }
 
     @Test
-    public void execute_listIsNotFiltered_showsSameList() {
+    public void execute_archivesIsNotFiltered_showsSameArchives() {
+        assertCommandSuccess(new ArchivesCommand(), model, commandHistory,
+            ArchivesCommand.MESSAGE_SUCCESS, expectedModel);
+    }
+
+    @Test
+    public void execute_archivesIsFiltered_showsEverything() {
+        showPersonAtIndex(model, INDEX_FIRST_ENTRY);
         assertCommandSuccess(new ArchivesCommand(), model, commandHistory,
             ArchivesCommand.MESSAGE_SUCCESS, expectedModel);
     }

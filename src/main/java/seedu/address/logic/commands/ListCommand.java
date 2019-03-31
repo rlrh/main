@@ -22,7 +22,6 @@ public class ListCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
         model.setContext(ModelContext.CONTEXT_LIST);
-        model.setDisplayEntryList(model.getListEntryBook());
         model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
         return new CommandResult(MESSAGE_SUCCESS);
     }
