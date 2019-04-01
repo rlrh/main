@@ -88,8 +88,11 @@ public class MainApp extends Application {
                 SampleDataUtil::getSampleAddressBook, "reading list");
         ReadOnlyEntryBook initialArchivesEntryBook = initEntryBook(storage::readArchivesEntryBook, EntryBook::new,
                 "archives");
+        ReadOnlyEntryBook initialFeedEntryBook = initEntryBook(storage::readFeedsEntryBook, EntryBook::new,
+                "feed list");
 
-        return new ModelManager(initialListEntryBook, initialArchivesEntryBook, userPrefs, storage);
+        return new ModelManager(initialListEntryBook, initialArchivesEntryBook, initialFeedEntryBook, userPrefs,
+                storage);
     }
 
 

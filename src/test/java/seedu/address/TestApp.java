@@ -137,7 +137,7 @@ public class TestApp extends MainApp {
      */
     public Model getModel() {
         Model copy = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
-            new UserPrefs(), new StorageStub());
+                model.getFeedsEntryBook(), new UserPrefs(), new StorageStub());
         copy.setContext(model.getContext());
         ModelHelper.setFilteredList(copy, model.getFilteredEntryList());
         return copy;

@@ -150,6 +150,8 @@ public interface Model {
      */
     void clearArchivesEntryBook();
 
+    /** Returns the feeds entry book. */
+    ReadOnlyEntryBook getFeedsEntryBook();
 
     /** Sets the search context entry book. */
     void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook);
