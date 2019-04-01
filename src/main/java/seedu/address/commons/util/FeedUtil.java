@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class FeedUtil {
         SyndFeed syndFeed = new SyndFeedInput().build(new XmlReader(inputStream));
 
         List<Entry> importedEntries = syndFeed.getEntries().stream()
-                .map(syndEntry -> syndEntryToEntryBookEntry(syndEntry, feedUrl))
+                .flatMap(syndEntry -> syndEntryToEntryBookEntry(syndEntry, feedUrl).stream())
                 .collect(Collectors.toList());
         EntryBook entryBook = new EntryBook();
         for (Entry entry : importedEntries) {
@@ -55,24 +56,37 @@ public class FeedUtil {
     }
 
     /** Converts a single SyndEntry into an EntryBook Entry. */
-    private static Entry syndEntryToEntryBookEntry(SyndEntry syndEntry, String feedUrl) {
-        return new Entry(
-                new Title(syndEntry.getTitle().trim()),
+    private static Optional<Entry> syndEntryToEntryBookEntry(SyndEntry syndEntry, String feedUrl) {
+        Optional<String> link = Optional.ofNullable(syndEntry.getLink());
+        if (!link.isPresent()) {
+            logger.warning("Entry without link found when processing " + feedUrl + ", discarding.");
+            return Optional.empty();
+        }
+        return Optional.of(new Entry(
+                extractTitle(syndEntry),
                 extractDescription(syndEntry, feedUrl),
-                new Link(syndEntry.getLink()),
+                new Link(link.get()),
                 new Address(DEFAULT_ADDRESS_TEXT),
                 Collections.emptySet()
-        );
+        ));
+    }
+
+    /** Extracts title from syndication entry. */
+    private static Title extractTitle(SyndEntry syndEntry) {
+        // defend against nulls from library
+        Optional<String> title = Optional.ofNullable(syndEntry.getTitle())
+                .map(String::trim);
+        return new Title(title.orElse(""));
     }
 
     /** Extracts a useful description from a SyndEntry. */
     private static Description extractDescription(SyndEntry syndEntry, String feedUrl) {
-        String descriptionFromSyndEntry = syndEntry.getDescription().getValue();
-        String descriptionText = Jsoup.parseBodyFragment(descriptionFromSyndEntry).body().text()
-                .replace('\n', ' ').trim();
-        if (descriptionText.isEmpty()) {
-            descriptionText = String.format(DEFAULT_DESCRIPTION_TEXT, feedUrl);
-        }
-        return new Description(descriptionText);
+        // note that both SyndEntry#getDescription and SyndContent#getValue might null
+        Optional<String> description = Optional.ofNullable(syndEntry.getDescription())
+                .flatMap(syndContent -> Optional.ofNullable(syndContent.getValue()))
+                .map(desc -> Jsoup.parseBodyFragment(desc).body().text().replace('\n', ' ').trim())
+                .filter(s -> !s.isEmpty());
+
+        return new Description(description.orElse(String.format(DEFAULT_DESCRIPTION_TEXT, feedUrl)));
     }
 }
