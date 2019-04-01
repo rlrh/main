@@ -75,11 +75,10 @@ public class ModelManager implements Model {
     }
 
     private void setUpListeners() {
-        // Save the list entry book to storage whenever it is modified.
+        // Save the relevant entry books to storage whenever they are modified.
         listEntryBook.addListener(this::saveListEntryBookToStorageListener);
-
-        // Save the archives entry book to storage whenever it is modified.
         archivesEntryBook.addListener(this::saveArchivesEntryBookToStorageListener);
+        feedsEntryBook.addListener(this::saveFeedsEntryBookToStorageListener);
 
         // Updates selected entry to a valid selection (or none) whenever filtered entries is modified.
         filteredEntries.addListener(this::ensureSelectedEntryIsValid);
@@ -251,6 +250,27 @@ public class ModelManager implements Model {
     @Override
     public ReadOnlyEntryBook getFeedsEntryBook() {
         return feedsEntryBook;
+    }
+
+    @Override
+    public boolean hasFeedsEntry(Entry feed) {
+        requireNonNull(feed);
+        return feedsEntryBook.hasEntry(feed);
+    }
+
+    @Override
+    public void deleteFeedsEntry(Entry target) {
+        feedsEntryBook.removeEntry(target);
+    }
+
+    @Override
+    public void addFeedsEntry(Entry feed) {
+        feedsEntryBook.addEntry(feed);
+    }
+
+    @Override
+    public void clearFeedsEntryBook() {
+        feedsEntryBook.clear();
     }
 
     //=========== Search EntryBook ==========================================================================
@@ -431,6 +451,18 @@ public class ModelManager implements Model {
         logger.info("Archives modified, saving to file.");
         try {
             storage.saveArchivesEntryBook(archivesEntryBook);
+        } catch (IOException ioe) {
+            setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+        }
+    }
+
+    /**
+     * Ensures that storage is updated whenever archives entry book is modified.
+     */
+    private void saveFeedsEntryBookToStorageListener(Observable observable) {
+        logger.info("Feed list modified, saving to file.");
+        try {
+            storage.saveFeedsEntryBook(feedsEntryBook);
         } catch (IOException ioe) {
             setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
         }

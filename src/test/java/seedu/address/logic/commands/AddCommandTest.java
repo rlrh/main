@@ -318,6 +318,26 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasFeedsEntry(Entry feed) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteFeedsEntry(Entry target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addFeedsEntry(Entry feed) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearFeedsEntryBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook) {
             throw new AssertionError("This method should not be called.");
         }

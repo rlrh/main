@@ -153,6 +153,21 @@ public interface Model {
     /** Returns the feeds entry book. */
     ReadOnlyEntryBook getFeedsEntryBook();
 
+    /** Returns whether feed is in the feeds entry book. */
+    boolean hasFeedsEntry(Entry feed);
+
+    /**
+     * Removes the target from feed entry book.
+     * Target must exist in feed entry book.
+     */
+    void deleteFeedsEntry(Entry target);
+
+    /** Adds feed to the feed entry book. It should not already be there. */
+    void addFeedsEntry(Entry feed);
+
+    /** Clears the entire feed entry book. */
+    void clearFeedsEntryBook();
+
     /** Sets the search context entry book. */
     void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook);
 
