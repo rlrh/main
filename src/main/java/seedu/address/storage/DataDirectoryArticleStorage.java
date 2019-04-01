@@ -31,6 +31,13 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
     }
 
     @Override
+    public void deleteArticle(String url) throws IOException {
+        Path targetPath = getArticlePath(url);
+
+        FileUtil.deleteFile(targetPath);
+    }
+
+    @Override
     public Optional<Path> addArticle(String url, byte[] articleContent) throws IOException {
         Path targetPath = getArticlePath(url);
 

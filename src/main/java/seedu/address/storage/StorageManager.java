@@ -117,6 +117,11 @@ public class StorageManager implements Storage {
     }
 
     @Override
+    public void deleteArticle(String url) throws IOException {
+        articleStorage.deleteArticle(url);
+    }
+
+    @Override
     public Optional<Path> addArticle(String url, byte[] content) throws IOException {
         return articleStorage.addArticle(url, content);
     }

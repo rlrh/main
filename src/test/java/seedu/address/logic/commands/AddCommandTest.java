@@ -198,6 +198,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void deleteArticle(String url) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public Optional<Path> addArticle(String url, byte[] articleContent) {
             throw new AssertionError("This method should not be called.");
         }

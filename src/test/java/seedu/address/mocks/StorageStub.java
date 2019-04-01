@@ -64,6 +64,11 @@ public class StorageStub implements Storage {
     }
 
     @Override
+    public void deleteArticle(String url) {
+        // Do nothing
+    }
+
+    @Override
     public Optional<Path> addArticle(String url, byte[] content) {
         return Optional.empty();
     }

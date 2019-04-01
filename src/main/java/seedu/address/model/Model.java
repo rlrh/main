@@ -150,6 +150,9 @@ public interface Model {
      */
     void clearArchivesEntryBook();
 
+    /** Deletes article associated with {@code url}. */
+    void deleteArticle(String url) throws IOException;
+
     /** Adds article with {@code articleContent} associated with {@code url}. */
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 

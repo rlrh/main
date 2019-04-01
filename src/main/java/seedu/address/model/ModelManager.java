@@ -180,6 +180,14 @@ public class ModelManager implements Model {
 
     @Override
     public void deleteListEntry(Entry target) {
+        try {
+            this.deleteArticle(target.getLink().value);
+        } catch (IOException ioe) {
+            // If there was a problem deleting the file,
+            // do nothing because that either means
+            // the file didn't exist to begin with
+            // or we are in some really deep OS-related system error.
+        }
         listEntryBook.removePerson(target);
     }
 
@@ -247,6 +255,11 @@ public class ModelManager implements Model {
     @Override
     public Storage getStorage() {
         return storage;
+    }
+
+    @Override
+    public void deleteArticle(String url) throws IOException {
+        storage.deleteArticle(url);
     }
 
     @Override
