@@ -234,20 +234,19 @@ Examples:
 
 Searches https://www.bing.com[Bing] for entries that you can subsequently add.
 
-Refer to <<Search-Context>> for available commands in this context.
+Refer to <<Results-Context>> for available commands in this context.
 
 Format: `bing [KEYWORD]...`
 
 Examples:
 
-- `search Trump` Returns entries containing the `Trump` keyword
-- `search https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Returns all entries from this article `[coming in v2.0]`
+- `bing Trump` Returns entries containing the `Trump` keyword
 
 === Viewing a web feed: `feed` `[since v1.2]`
 
-Opens a web feed at the URL for previewing. This command also enters the Search context.
+Opens a web feed at the URL for previewing. This command also enters the Results context.
 
-Refer to <<Search-Context>> for available commands in this context.
+Refer to <<Results-Context>> for available commands in this context.
 
 Format: `feed [FEED URL]`
 
@@ -388,10 +387,13 @@ Switches to a clean and clutter-free reader view mode for a more comfortable rea
 
 === Listing links in current web page: `links` `[coming in v2.0]`
 
-Lists all the links in the current web page and switches context to `search`. +
-Equivalent to `search CURRENT_WEB_PAGE`.
+Lists all the links in an url, or the currently displayed web page.
 
 Format: `links`
+Format: `links [URL]`
+
+- `links`
+- `links https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Shows all entries from this article
 
 === Redownloading an entry: `redownload` `[coming in v2.0]`
 
@@ -539,12 +541,12 @@ Clears all archived entries from the manager.
 
 Format: `clear`
 
-[[Search-Context]]
-== `search` Context Commands
+[[Results-Context]]
+== `Results` Context Commands
 
 === Adding entries: `add`
 
-Adds entries from search results to the manager. Content is automatically downloaded to disk.
+Adds entries from results to the reading list. Content is automatically downloaded to disk.
 
 Format: `add INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
 
@@ -643,7 +645,7 @@ Format: `select INDEX`
 
 ****
 - Selects the feed and displays its entries.
-- Equivalent to `search [URL_OF_INDEXED_FEED]`
+- Equivalent to `feed [URL_OF_INDEXED_FEED]`
 - The index refers to the index number shown in the displayed feed list.
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
