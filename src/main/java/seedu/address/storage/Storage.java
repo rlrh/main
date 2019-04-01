@@ -34,4 +34,10 @@ public interface Storage extends UserPrefsStorage, ArticleStorage {
     Optional<ReadOnlyEntryBook> readArchivesEntryBook() throws DataConversionException, IOException;
 
     void saveArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook) throws IOException;
+
+    Path getFeedsEntryBookFilePath();
+
+    Optional<ReadOnlyEntryBook> readFeedsEntryBook() throws DataConversionException, IOException;
+
+    void saveFeedsEntryBook(ReadOnlyEntryBook feedsEntryBook) throws IOException;
 }
