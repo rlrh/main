@@ -230,22 +230,30 @@ Examples:
 - `archives t/Tech` Lists archived entries tagged with “Tech”
 - `archives t/` Lists untagged archived entries
 
-=== Searching online for entries: `search` `[coming in v2.0]`
+=== Searching the web: `bing` `[since v1.3]`
 
-Searches online for entries that you can subsequently add.
+Searches https://www.bing.com[Bing] for entries that you can subsequently add.
 
 Refer to <<Search-Context>> for available commands in this context.
 
-Format: `search [KEYWORD]...`
-Format: `search FEED_URL`
-Format: `search ARTICLE_URL`
+Format: `bing [KEYWORD]...`
 
 Examples:
 
-- `search` Returns top headlines
 - `search Trump` Returns entries containing the `Trump` keyword
-- `search https://live.engadget.com/rss.xml` Returns entries from this feed
-- `search https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Returns all entries from this article
+- `search https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Returns all entries from this article `[coming in v2.0]`
+
+=== Viewing a web feed: `feed` `[since v1.2]`
+
+Opens a web feed at the URL for previewing. This command also enters the Search context.
+
+Refer to <<Search-Context>> for available commands in this context.
+
+Format: `feed [FEED URL]`
+
+Examples:
+
+- `feed https://live.engadget.com/rss.xml` Shows entries from this feed
 
 === Showing feeds: `feeds` `[coming in v2.0]`
 
@@ -253,12 +261,12 @@ Shows a list of feeds being followed.
 
 Refer to <<Feeds-Context>> for available commands in this context.
 
-Format: `feeds [t/TAG]...`
+Format: `feeds`
 
 Examples:
 
 - `feeds` Lists all feeds
-- `feeds t/Business` Lists all feeds tagged with “Business”
+- `feeds t/Business` Lists all feeds tagged with “Business” `[coming in v2.0]`
 
 === Searching online for feeds: `searchfeeds` `[coming in v2.0]`
 
@@ -298,34 +306,6 @@ Examples:
 
 - `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
 Adds a single entry with a description and tagged with “Business”
-
-=== Viewing entries from a web feed: `feed` `[since v1.2]`
-
-Displays entries from a web feed.
-
-Format: `feed FEED_URL`
-
-Examples:
-
-- `feed http://rss.nytimes.com/services/xml/rss/nyt/World.xml` +
-Views entries from the New York Times world news feed.
-
-////
-=== Adding entries from a web feed: `feed` `[since v1.2]`
-
-Adds all entries from a web feed to your reading list.
-Content is automatically downloaded onto your personal computer.
-
-Format: `feed FEED_URL`
-
-[WARNING]
-The application may freeze for a short time as it downloads content onto disk.
-
-Examples:
-
-- `feed http://rss.nytimes.com/services/xml/rss/nyt/World.xml` +
-Adds all the entries from the New York Times world news feed to your reading list.
-////
 
 === Editing an entry: `edit`
 
@@ -616,11 +596,12 @@ Examples:
 [[Feeds-Context]]
 == `feeds` Context Commands
 
-=== Adding a feed: `add`
+=== Subscribing to a feed: `subscribe`
 
 Adds a feed to the manager and subscribes to updates.
+All entries in the subscribed feed will be added to the reading list.
 
-Format: `add URL [n/NAME] [t/TAG]...`
+Format: `subscribe URL [n/NAME] [t/TAG]...`
 
 [TIP]
 ====
@@ -631,18 +612,28 @@ Examples:
 
 - `add https://www.engadget.com/rss.xml n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with “Tech”
 
+[WARNING]
+====
+The application may be unresponsive for a short while when adding entries from a large feed.
+====
+
 === Updating entries from feeds: `update`
 
 Refreshes all feeds.
 
-Format: `update INDICES`
+Format: `update INDEX`
 
-Format: `update all`
+Format: `update all` `[coming in v2.0]`
 
 Examples:
 
-- `update all` Updates entries from all feeds
+- `update all` Updates entries from all feeds `[coming in v2.0]`
 - `update 2` Updates entries from the 2nd feed
+
+[WARNING]
+====
+The application may be unresponsive for a short while when adding entries from a large feed.
+====
 
 === Selecting a feed: `select`
 
@@ -680,11 +671,11 @@ Examples:
 - `edit 1 n/HackerNews` Edits the name of the 1st feed
 - `edit 2 t/` Clears all existing tags from the 2nd feed
 
-=== Deleting a feed: `delete`
+=== Deleting a feed: `unsubscribe`
 
 Deletes the specified feeds from the manager and unsubscribes from them, but existing entries obtained from that feed will not be deleted.
 
-Format: `delete INDICES`
+Format: `unsubscribe INDEX`
 
 ****
 - Deletes the feeds at the specified indices.
@@ -692,12 +683,12 @@ Format: `delete INDICES`
 - The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Format: `delete all`
+Format: `unsubscribe INDEX`
 
 Examples:
 
-- `delete all` Deletes all shown feeds
-- `delete 2` Deletes the 2nd feed
+- `unsubscribe all` Deletes all shown feeds `[coming in v2.0]`
+- `unsubscribe 2` Deletes the 2nd shown feed
 
 === Clearing all feeds : `clear`
 Clears all followed feeds from the manager.
@@ -705,7 +696,7 @@ Clears all followed feeds from the manager.
 Format: `clear`
 
 [[Searchfeeds-Context]]
-== `searchfeeds` Context Commands
+== `searchfeeds` Context Commands `[coming in v2.0]`
 
 === Adding a feed: `add`
 
