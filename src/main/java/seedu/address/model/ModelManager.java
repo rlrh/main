@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
-import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -76,9 +75,9 @@ public class ModelManager implements Model {
 
     private void setUpListeners() {
         // Save the relevant entry books to storage whenever they are modified.
-        listEntryBook.addListener(this::saveListEntryBookToStorageListener);
-        archivesEntryBook.addListener(this::saveArchivesEntryBookToStorageListener);
-        feedsEntryBook.addListener(this::saveFeedsEntryBookToStorageListener);
+        listEntryBook.addListener(observable -> saveListEntryBookToStorageListener());
+        archivesEntryBook.addListener(observable -> saveArchivesEntryBookToStorageListener());
+        feedsEntryBook.addListener(obserable -> saveFeedsEntryBookToStorageListener());
 
         // Updates selected entry to a valid selection (or none) whenever filtered entries is modified.
         filteredEntries.addListener(this::ensureSelectedEntryIsValid);
@@ -435,7 +434,7 @@ public class ModelManager implements Model {
     /**
      * Ensures that storage is updated whenever list entry book is modified.
      */
-    private void saveListEntryBookToStorageListener(Observable observable) {
+    private void saveListEntryBookToStorageListener() {
         logger.info("Entry book modified, saving to file.");
         try {
             storage.saveListEntryBook(listEntryBook);
@@ -447,7 +446,7 @@ public class ModelManager implements Model {
     /**
      * Ensures that storage is updated whenever archives entry book is modified.
      */
-    private void saveArchivesEntryBookToStorageListener(Observable observable) {
+    private void saveArchivesEntryBookToStorageListener() {
         logger.info("Archives modified, saving to file.");
         try {
             storage.saveArchivesEntryBook(archivesEntryBook);
@@ -459,7 +458,7 @@ public class ModelManager implements Model {
     /**
      * Ensures that storage is updated whenever archives entry book is modified.
      */
-    private void saveFeedsEntryBookToStorageListener(Observable observable) {
+    private void saveFeedsEntryBookToStorageListener() {
         logger.info("Feed list modified, saving to file.");
         try {
             storage.saveFeedsEntryBook(feedsEntryBook);
