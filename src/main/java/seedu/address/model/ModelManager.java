@@ -184,7 +184,14 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void addListEntry(Entry entry) {
+    public void addListEntry(Entry entry, Optional<byte[]> articleContent) {
+        if (articleContent.isPresent()) {
+            try {
+                this.addArticle(entry.getLink().value, articleContent.get());
+            } catch (IOException ioe) {
+                // Do nothing if failed to save content to disk
+            }
+        }
         listEntryBook.addEntry(entry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
@@ -461,8 +468,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void unarchiveEntry(Entry entry) {
+    public void unarchiveEntry(Entry entry, Optional<byte[]> articleContent) {
         deleteArchivesEntry(entry);
-        addListEntry(entry);
+        addListEntry(entry, articleContent);
     }
 }

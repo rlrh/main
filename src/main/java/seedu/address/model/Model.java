@@ -104,7 +104,7 @@ public interface Model {
      * Adds the given entry.
      * {@code entry} must not already exist in the list entry book.
      */
-    void addListEntry(Entry entry);
+    void addListEntry(Entry entry, Optional<byte[]> articleContent);
 
     /**
      * Replaces the given entry {@code target} with {@code editedEntry}.
@@ -265,5 +265,5 @@ public interface Model {
      * Un-archives the given entry.
      * The entry must exist in the entry book archives.
      */
-    void unarchiveEntry(Entry entry);
+    void unarchiveEntry(Entry entry, Optional<byte[]> articleContent);
 }

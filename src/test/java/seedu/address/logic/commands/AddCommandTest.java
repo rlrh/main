@@ -249,7 +249,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addListEntry(Entry entry) {
+        public void addListEntry(Entry entry, Optional<byte[]> articleContent) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -414,7 +414,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void unarchiveEntry(Entry entry) {
+        public void unarchiveEntry(Entry entry, Optional<byte[]> articleContent) {
             throw new AssertionError("This method should not be called.");
         }
     }
@@ -455,7 +455,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addListEntry(Entry entry) {
+        public void addListEntry(Entry entry, Optional<byte[]> articleContent) {
             requireNonNull(entry);
             entriesAdded.add(entry);
         }
