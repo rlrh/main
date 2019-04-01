@@ -94,7 +94,6 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * **`feed`**`http://rss.nytimes.com/services/xml/rss/nyt/World.xml` : adds all the latest articles from the New York Times world news feed
 * **`select`**`1` : selects the first NYT article for reading
 * **`view`**`reader` : switches to a more comfortable reading experience
-* **`delete`**`1` : deletes the first NYT article entry
 * *`exit`* : exits the app
 
 .  Refer to below for details of each command.
