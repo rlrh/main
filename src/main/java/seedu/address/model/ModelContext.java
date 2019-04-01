@@ -11,7 +11,8 @@ import seedu.address.logic.parser.EntryBookSearchParser;
 public enum ModelContext {
     CONTEXT_LIST(new EntryBookListParser(), "Reading List"),
     CONTEXT_ARCHIVES(new EntryBookArchivesParser(), "Archives"),
-    CONTEXT_SEARCH(new EntryBookSearchParser(), "Results");
+    CONTEXT_SEARCH(new EntryBookSearchParser(), "Results"),
+    CONTEXT_FEEDS(new EntryBookParser(), "Feeds");
 
     private EntryBookParser parser;
     private String friendlyName;
