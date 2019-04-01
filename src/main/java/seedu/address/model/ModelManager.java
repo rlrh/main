@@ -54,6 +54,7 @@ public class ModelManager implements Model {
      */
     public ModelManager(ReadOnlyEntryBook listEntryBook,
                         ReadOnlyEntryBook archivesEntryBook,
+                        ReadOnlyEntryBook feedEntryBook,
                         ReadOnlyUserPrefs userPrefs,
                         Storage storage) {
         super();
@@ -63,7 +64,7 @@ public class ModelManager implements Model {
 
         this.listEntryBook = new EntryBook(listEntryBook);
         this.archivesEntryBook = new EntryBook(archivesEntryBook);
-        this.feedsEntryBook = new EntryBook(); // TODO: make it actualy eat in
+        this.feedsEntryBook = new EntryBook(feedEntryBook);
         this.userPrefs = new UserPrefs(userPrefs);
         this.storage = storage;
 
@@ -243,6 +244,13 @@ public class ModelManager implements Model {
     @Override
     public void clearArchivesEntryBook() {
         archivesEntryBook.clear();
+    }
+
+    //=========== Feeds EntryBook ============================================================================
+
+    @Override
+    public ReadOnlyEntryBook getFeedsEntryBook() {
+        return feedsEntryBook;
     }
 
     //=========== Search EntryBook ==========================================================================
@@ -446,7 +454,7 @@ public class ModelManager implements Model {
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
                 && archivesEntryBook.equals(other.archivesEntryBook)
                 && searchEntryBook.equals(other.searchEntryBook)
-                // TODO: compare feedentrybook
+                && feedsEntryBook.equals(other.feedsEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
@@ -468,7 +476,8 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        Model clonedModel = new ModelManager(this.listEntryBook, this.archivesEntryBook, this.userPrefs, this.storage);
+        Model clonedModel = new ModelManager(this.listEntryBook, this.archivesEntryBook, this.feedsEntryBook,
+                this.userPrefs, this.storage);
         clonedModel.setContext(this.getContext());
         return clonedModel;
     }
