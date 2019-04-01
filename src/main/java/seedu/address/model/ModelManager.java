@@ -36,6 +36,7 @@ public class ModelManager implements Model {
 
     private final EntryBook listEntryBook;
     private final EntryBook archivesEntryBook;
+    private final EntryBook searchEntryBook = new EntryBook();
     private final UserPrefs userPrefs;
 
     private final SimpleListProperty<Entry> displayedEntryList;
@@ -88,6 +89,9 @@ public class ModelManager implements Model {
                     break;
                 case CONTEXT_ARCHIVES:
                     displayEntryBook(archivesEntryBook);
+                    break;
+                case CONTEXT_SEARCH:
+                    displayEntryBook(searchEntryBook);
                     break;
                 default:
                 }
@@ -235,6 +239,13 @@ public class ModelManager implements Model {
         archivesEntryBook.clear();
     }
 
+    //=========== Search EntryBook ==========================================================================
+
+    @Override
+    public void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook) {
+        this.searchEntryBook.resetData(searchEntryBook);
+    }
+
     //=========== Storage ===================================================================================
 
     @Override
@@ -249,8 +260,7 @@ public class ModelManager implements Model {
 
     //=========== Displayed Entry List ================================================================================
 
-    @Override
-    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+    private void displayEntryBook(ReadOnlyEntryBook entryBook) {
         displayedEntryList.set(entryBook.getEntryList());
     }
 

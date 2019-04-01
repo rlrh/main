@@ -18,6 +18,7 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
@@ -96,7 +97,9 @@ public class FeedCommandTest {
         String expectedMessage = String.format(MESSAGE_SUCCESS, url);
         FeedCommand command = new FeedCommand(url);
 
-        expectedModel.displayEntryBook(expectedDisplayedEntryBook);
+        expectedModel.setSearchEntryBook(expectedDisplayedEntryBook);
+        expectedModel.setContext(ModelContext.CONTEXT_SEARCH);
+        // todo: isolate command test and util test
 
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
     }
