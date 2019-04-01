@@ -440,9 +440,11 @@ public class ModelManager implements Model {
 
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
                 && archivesEntryBook.equals(other.archivesEntryBook)
+                && searchEntryBook.equals(other.searchEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
+                && Objects.equals(context.get(), other.context.get())
                 && Objects.equals(selectedEntry.get(), other.selectedEntry.get())
                 && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
                 && Objects.equals(commandResult.get(), other.commandResult.get());

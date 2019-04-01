@@ -10,6 +10,7 @@ import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.CARL;
 import static seedu.address.testutil.TypicalEntries.DANIEL;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -177,6 +178,7 @@ public class ModelManagerTest {
     public void equals() {
         EntryBook listEntryBook = new EntryBookBuilder().withEntry(ALICE).withEntry(BENSON).build();
         EntryBook archivesEntryBook = new EntryBookBuilder().withEntry(CARL).withEntry(DANIEL).build();
+        EntryBook searchEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_ENTRY).build();
         EntryBook differentListEntryBook = new EntryBook();
         EntryBook differentArchivesEntryBook = new EntryBook();
         UserPrefs userPrefs = new UserPrefs();
@@ -196,6 +198,10 @@ public class ModelManagerTest {
         // different types -> returns false
         assertFalse(modelManager.equals(5));
 
+        // different context -> returns false
+        modelManager.setContext(ModelContext.CONTEXT_ARCHIVES); // default context is LIST
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, userPrefs, storage)));
+
         // different listEntryBook -> returns false
         assertFalse(modelManager.equals(new ModelManager(differentListEntryBook, archivesEntryBook,
             userPrefs, storage)));
@@ -204,12 +210,17 @@ public class ModelManagerTest {
         assertFalse(modelManager.equals(new ModelManager(listEntryBook, differentArchivesEntryBook,
             userPrefs, storage)));
 
+        // different searchEntryBook -> returns false
+        modelManager.setSearchEntryBook(searchEntryBook);
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, userPrefs, storage)));
+
         // different filteredList -> returns false
         String[] keywords = ALICE.getTitle().fullTitle.split("\\s+");
         modelManager.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(keywords)));
         assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, userPrefs, storage)));
 
         // resets modelManager to initial state for upcoming tests
+        modelManager.setContext(ModelContext.CONTEXT_LIST);
         modelManager.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         // different userPrefs -> returns false
