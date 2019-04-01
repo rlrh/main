@@ -40,7 +40,7 @@ import seedu.address.ui.UiManager;
  */
 public class MainApp extends Application {
 
-    public static final Version VERSION = new Version(1, 2, 0, false);
+    public static final Version VERSION = new Version(1, 2, 1, true);
 
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
 
@@ -62,8 +62,11 @@ public class MainApp extends Application {
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         EntryBookStorage listEntryBookStorage = new JsonEntryBookStorage(userPrefs.getListEntryBookFilePath());
         EntryBookStorage archivesEntryBookStorage = new JsonEntryBookStorage(userPrefs.getArchivesEntryBookFilePath());
+        EntryBookStorage feedsEntryBookStorage = new JsonEntryBookStorage(userPrefs.getFeedsEntryBookFilePath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(userPrefs.getArticleDataDirectoryPath());
-        storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, userPrefsStorage, articleStorage);
+
+        storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, feedsEntryBookStorage,
+                userPrefsStorage, articleStorage);
 
         initLogging(config);
 

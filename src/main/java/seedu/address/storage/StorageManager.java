@@ -27,7 +27,7 @@ public class StorageManager implements Storage {
     public StorageManager(
         EntryBookStorage listEntryBookStorage,
         EntryBookStorage archivesEntryBookStorage,
-        //EntryBookStorage feedsEntryBookStorage,
+        EntryBookStorage feedsEntryBookStorage,
         UserPrefsStorage userPrefsStorage,
         ArticleStorage articleStorage) {
         super();
