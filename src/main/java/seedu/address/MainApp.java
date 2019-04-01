@@ -3,6 +3,7 @@ package seedu.address;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
@@ -23,6 +24,7 @@ import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.ArticleStorage;
+import seedu.address.storage.DataConversionAndIOExceptionsThrowingSupplier;
 import seedu.address.storage.DataDirectoryArticleStorage;
 import seedu.address.storage.EntryBookStorage;
 import seedu.address.storage.JsonEntryBookStorage;
@@ -78,39 +80,39 @@ public class MainApp extends Application {
      * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
      */
     private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
-        Optional<ReadOnlyEntryBook> listEntryBookOptional;
-        ReadOnlyEntryBook initialListEntryBookData;
-        try {
-            listEntryBookOptional = storage.readListEntryBook();
-            if (!listEntryBookOptional.isPresent()) {
-                logger.info("Data file not found. Will be starting with a sample EntryBook");
-            }
-            initialListEntryBookData = listEntryBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
-        } catch (DataConversionException e) {
-            logger.warning("Data file not in the correct format. Will be starting with an empty EntryBook");
-            initialListEntryBookData = new EntryBook();
-        } catch (IOException e) {
-            logger.warning("Problem while reading from the file. Will be starting with an empty EntryBook");
-            initialListEntryBookData = new EntryBook();
-        }
 
-        Optional<ReadOnlyEntryBook> archivesEntryBookOptional;
-        ReadOnlyEntryBook initialArchivesEntryBook;
-        try {
-            archivesEntryBookOptional = storage.readArchivesEntryBook();
-            if (!archivesEntryBookOptional.isPresent()) {
-                logger.info("Data file not found. Will be starting with a empty archives");
-            }
-            initialArchivesEntryBook = archivesEntryBookOptional.orElseGet(() -> new EntryBook());
-        } catch (DataConversionException e) {
-            logger.warning("Data file not in the correct format. Will be starting with an empty archives");
-            initialArchivesEntryBook = new EntryBook();
-        } catch (IOException e) {
-            logger.warning("Problem while reading from the file. Will be starting with an empty archives");
-            initialArchivesEntryBook = new EntryBook();
-        }
+        ReadOnlyEntryBook initialListEntryBook = initEntryBook(storage::readListEntryBook,
+                SampleDataUtil::getSampleAddressBook, "reading list");
+        ReadOnlyEntryBook initialArchivesEntryBook = initEntryBook(storage::readArchivesEntryBook, EntryBook::new,
+                "archives");
 
-        return new ModelManager(initialListEntryBookData, initialArchivesEntryBook, userPrefs, storage);
+        return new ModelManager(initialListEntryBook, initialArchivesEntryBook, userPrefs, storage);
+    }
+
+
+    /**
+     * Returns an initialized EntryBook given a method reference which reads it from storage and another function
+     * which returns a sample EntryBook.
+     * Also takes in the name of the EntryBook initialized for logging messages.
+     */
+    private ReadOnlyEntryBook initEntryBook(
+            DataConversionAndIOExceptionsThrowingSupplier<Optional<ReadOnlyEntryBook>> storageFetcher,
+            Supplier<ReadOnlyEntryBook> sampleEntryBookSupplier,
+            String entryBookName) {
+
+        try {
+            Optional<ReadOnlyEntryBook> fetchedEntryBook = storageFetcher.get();
+            if (!fetchedEntryBook.isPresent()) {
+                logger.info("Data file not found. Will be starting with a default " + entryBookName);
+            }
+            return fetchedEntryBook.orElseGet(sampleEntryBookSupplier);
+        } catch (DataConversionException e) {
+            logger.warning("Data file not in the correct format. Will be starting with an empty " + entryBookName);
+            return new EntryBook();
+        } catch (IOException e) {
+            logger.warning("Problem while reading from the file. Will be starting with an empty " + entryBookName);
+            return new EntryBook();
+        }
     }
 
     private void initLogging(Config config) {

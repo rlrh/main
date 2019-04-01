@@ -37,6 +37,7 @@ public class ModelManager implements Model {
     private final EntryBook listEntryBook;
     private final EntryBook archivesEntryBook;
     private final EntryBook searchEntryBook = new EntryBook();
+    private final EntryBook feedsEntryBook;
     private final UserPrefs userPrefs;
 
     private final SimpleListProperty<Entry> displayedEntryList;
@@ -62,6 +63,7 @@ public class ModelManager implements Model {
 
         this.listEntryBook = new EntryBook(listEntryBook);
         this.archivesEntryBook = new EntryBook(archivesEntryBook);
+        this.feedsEntryBook = new EntryBook(); // TODO: make it actualy eat in
         this.userPrefs = new UserPrefs(userPrefs);
         this.storage = storage;
 
@@ -93,6 +95,8 @@ public class ModelManager implements Model {
                 case CONTEXT_SEARCH:
                     displayEntryBook(searchEntryBook);
                     break;
+                case CONTEXT_FEEDS:
+                    displayEntryBook(feedsEntryBook);
                 default:
                 }
                 updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
@@ -441,6 +445,7 @@ public class ModelManager implements Model {
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
                 && archivesEntryBook.equals(other.archivesEntryBook)
                 && searchEntryBook.equals(other.searchEntryBook)
+                // TODO: compare feedentrybook
                 && userPrefs.equals(other.userPrefs)
                 && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
