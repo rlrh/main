@@ -30,6 +30,8 @@ import seedu.address.util.Network;
  */
 public class FeedUtil {
     public static final String DEFAULT_DESCRIPTION_TEXT = "imported from %s";
+    public static final String DEFAULT_ADDRESS_TEXT = "this field is deprecated";
+
     private static final Logger logger = LogsCenter.getLogger(FeedUtil.class);
 
     /** Reads in URL of a feed and serializes it into an {@code EntryBook}. */
@@ -58,7 +60,7 @@ public class FeedUtil {
                 new Title(syndEntry.getTitle().trim()),
                 extractDescription(syndEntry, feedUrl),
                 new Link(syndEntry.getLink()),
-                new Address("unused"),
+                new Address(DEFAULT_ADDRESS_TEXT),
                 Collections.emptySet()
         );
     }

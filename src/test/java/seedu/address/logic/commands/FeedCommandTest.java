@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static seedu.address.commons.util.FeedUtil.DEFAULT_ADDRESS_TEXT;
 import static seedu.address.commons.util.FeedUtil.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -83,7 +84,7 @@ public class FeedCommandTest {
                 new Title(title),
                 new Description(description),
                 new Link(link),
-                new Address("unused"), // this dummy matches that in FeedCommand
+                new Address(DEFAULT_ADDRESS_TEXT),
                 Collections.emptySet()
         );
     }
