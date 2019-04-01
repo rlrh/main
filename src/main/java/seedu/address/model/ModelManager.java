@@ -97,6 +97,7 @@ public class ModelManager implements Model {
                     break;
                 case CONTEXT_FEEDS:
                     displayEntryBook(feedsEntryBook);
+                    break;
                 default:
                 }
                 updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);

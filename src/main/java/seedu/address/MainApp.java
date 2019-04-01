@@ -24,7 +24,7 @@ import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.ArticleStorage;
-import seedu.address.storage.DataConversionAndIOExceptionsThrowingSupplier;
+import seedu.address.storage.DataConversionAndIoExceptionsThrowingSupplier;
 import seedu.address.storage.DataDirectoryArticleStorage;
 import seedu.address.storage.EntryBookStorage;
 import seedu.address.storage.JsonEntryBookStorage;
@@ -96,7 +96,7 @@ public class MainApp extends Application {
      * Also takes in the name of the EntryBook initialized for logging messages.
      */
     private ReadOnlyEntryBook initEntryBook(
-            DataConversionAndIOExceptionsThrowingSupplier<Optional<ReadOnlyEntryBook>> storageFetcher,
+            DataConversionAndIoExceptionsThrowingSupplier<Optional<ReadOnlyEntryBook>> storageFetcher,
             Supplier<ReadOnlyEntryBook> sampleEntryBookSupplier,
             String entryBookName) {
 

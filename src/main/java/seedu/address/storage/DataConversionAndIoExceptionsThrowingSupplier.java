@@ -9,6 +9,6 @@ import seedu.address.commons.exceptions.DataConversionException;
  * Defining this allows us to have method references to Storage::read__EntryBook.
  */
 @FunctionalInterface
-public interface DataConversionAndIOExceptionsThrowingSupplier<T> {
+public interface DataConversionAndIoExceptionsThrowingSupplier<T> {
     T get() throws DataConversionException, IOException;
 }
