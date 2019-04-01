@@ -95,6 +95,7 @@ public class ModelManager implements Model {
                     break;
                 default:
                 }
+                updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
             }
         );
     }
