@@ -175,12 +175,12 @@ public class ModelManager implements Model {
     @Override
     public boolean hasListEntry(Entry listEntry) {
         requireNonNull(listEntry);
-        return listEntryBook.hasPerson(listEntry);
+        return listEntryBook.hasEntry(listEntry);
     }
 
     @Override
     public void deleteListEntry(Entry target) {
-        listEntryBook.removePerson(target);
+        listEntryBook.removeEntry(target);
     }
 
     @Override
@@ -193,7 +193,7 @@ public class ModelManager implements Model {
     public void setListEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
-        listEntryBook.setPerson(target, editedEntry);
+        listEntryBook.setEntry(target, editedEntry);
     }
 
     @Override
@@ -216,12 +216,12 @@ public class ModelManager implements Model {
     @Override
     public boolean hasArchivesEntry(Entry archiveEntry) {
         requireNonNull(archiveEntry);
-        return archivesEntryBook.hasPerson(archiveEntry);
+        return archivesEntryBook.hasEntry(archiveEntry);
     }
 
     @Override
     public void deleteArchivesEntry(Entry target) {
-        archivesEntryBook.removePerson(target);
+        archivesEntryBook.removeEntry(target);
     }
 
     @Override
