@@ -39,7 +39,7 @@ public class EditCommandTest {
         EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(editedEntry).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
         expectedModel.setListEntry(model.getFilteredEntryList().get(0), editedEntry);
@@ -60,7 +60,7 @@ public class EditCommandTest {
                 .withDescription(VALID_DESCRIPTION_BOB).withTags(VALID_TAG_SCIENCE).build();
         EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
         expectedModel.setListEntry(lastEntry, editedEntry);
@@ -73,7 +73,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY, new EditCommand.EditEntryDescriptor());
         Entry editedEntry = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
 
@@ -89,7 +89,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY,
                 new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB).build());
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
         expectedModel.setListEntry(model.getFilteredEntryList().get(0), editedEntry);
@@ -103,7 +103,7 @@ public class EditCommandTest {
         EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(firstEntry).build();
         EditCommand editCommand = new EditCommand(INDEX_SECOND_ENTRY, descriptor);
 
-        assertCommandFailure(editCommand, model, commandHistory, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(editCommand, model, commandHistory, EditCommand.MESSAGE_DUPLICATE_ENTRY);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY,
                 new EditEntryDescriptorBuilder(entryInList).build());
 
-        assertCommandFailure(editCommand, model, commandHistory, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(editCommand, model, commandHistory, EditCommand.MESSAGE_DUPLICATE_ENTRY);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class EditCommandTest {
                                                             .build();
         EditCommand editCommand = new EditCommand(outOfBoundIndex, descriptor);
 
-        assertCommandFailure(editCommand, model, commandHistory, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(editCommand, model, commandHistory, Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
     }
 
     /**
@@ -143,7 +143,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(outOfBoundIndex,
                 new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB).build());
 
-        assertCommandFailure(editCommand, model, commandHistory, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(editCommand, model, commandHistory, Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
     }
 
     @Test

@@ -46,9 +46,9 @@ public class EditCommand extends Command {
             + PREFIX_DESCRIPTION + "New description "
             + PREFIX_LINK + "https://new-link.com";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Entry: %1$s";
+    public static final String MESSAGE_EDIT_ENTRY_SUCCESS = "Edited Entry: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This entry already exists in the entry book.";
+    public static final String MESSAGE_DUPLICATE_ENTRY = "This entry already exists in the entry book.";
 
     private final Index index;
     private final EditEntryDescriptor editEntryDescriptor;
@@ -71,19 +71,19 @@ public class EditCommand extends Command {
         List<Entry> lastShownList = model.getFilteredEntryList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
         }
 
         Entry entryToEdit = lastShownList.get(index.getZeroBased());
         Entry editedEntry = createEditedPerson(entryToEdit, editEntryDescriptor);
 
         if (!entryToEdit.isSameEntry(editedEntry) && model.hasEntry(editedEntry)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+            throw new CommandException(MESSAGE_DUPLICATE_ENTRY);
         }
 
         model.setListEntry(entryToEdit, editedEntry);
         model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
-        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedEntry));
+        return new CommandResult(String.format(MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry));
     }
 
     /**
