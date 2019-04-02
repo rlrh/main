@@ -28,7 +28,7 @@ public class SubscribeCommand extends Command {
             + PREFIX_TAG + "programming "
             + PREFIX_TAG + "tech";
     public static final String MESSAGE_SUCCESS = "New feed added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This feed already exists in the feed list";
+    public static final String MESSAGE_DUPLICATE_FEED = "This feed already exists in the feed list";
 
     private final Entry toSubscribe;
 
@@ -38,6 +38,12 @@ public class SubscribeCommand extends Command {
 
     @Override
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
+        if (model.hasFeedsEntry(toSubscribe)) {
+            throw new CommandException(MESSAGE_DUPLICATE_FEED);
+        }
+
+        model.addFeedsEntry(toSubscribe);
+        // todo: import to reading list
         return new CommandResult(String.format(MESSAGE_SUCCESS, toSubscribe));
     }
 }
