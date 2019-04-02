@@ -95,7 +95,7 @@ public class AddCommandSystemTest extends EntryBookSystemTest {
         /* -------------------------- Perform add operation on the shown filtered list ------------------------------ */
 
         /* Case: filters the entry list before adding -> added */
-        showEntriesWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
         assertCommandSuccess(IDA);
 
         /* ------------------------ Perform add operation while a entry card is selected --------------------------- */

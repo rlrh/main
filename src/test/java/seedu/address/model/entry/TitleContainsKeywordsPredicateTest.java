@@ -40,7 +40,7 @@ public class TitleContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void test_nameContainsKeywords_returnsTrue() {
+    public void test_titleContainsKeywords_returnsTrue() {
         // One keyword
         TitleContainsKeywordsPredicate predicate = new TitleContainsKeywordsPredicate(
             Collections.singletonList("Alice"));
@@ -60,7 +60,7 @@ public class TitleContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void test_nameDoesNotContainKeywords_returnsFalse() {
+    public void test_titleDoesNotContainKeywords_returnsFalse() {
         // Zero keywords
         TitleContainsKeywordsPredicate predicate = new TitleContainsKeywordsPredicate(Collections.emptyList());
         assertFalse(predicate.test(new EntryBuilder().withTitle("Alice").build()));

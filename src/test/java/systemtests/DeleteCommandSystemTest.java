@@ -46,7 +46,7 @@ public class DeleteCommandSystemTest extends EntryBookSystemTest {
         /* ------------------ Performing delete operation while a filtered list is being shown ---------------------- */
 
         /* Case: filtered entry list, delete index within bounds of address book and entry list -> deleted */
-        showEntriesWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
         Index index = INDEX_FIRST_ENTRY;
         assertTrue(index.getZeroBased() < getModel().getFilteredEntryList().size());
         assertCommandSuccess(index);
@@ -54,7 +54,7 @@ public class DeleteCommandSystemTest extends EntryBookSystemTest {
         /* Case: filtered entry list, delete index within bounds of address book but out of bounds of entry list
          * -> rejected
          */
-        showEntriesWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
         int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         command = DeleteCommand.COMMAND_WORD + " " + invalidIndex;
         assertCommandFailure(command, MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);

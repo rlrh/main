@@ -93,7 +93,7 @@ public class EditCommandSystemTest extends EntryBookSystemTest {
         /* ------------------ Performing edit operation while a filtered list is being shown ------------------------ */
 
         /* Case: filtered entry list, edit index within bounds of entry book and entry list -> edited */
-        showEntriesWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
         index = INDEX_FIRST_ENTRY;
         assertTrue(index.getZeroBased() < getModel().getFilteredEntryList().size());
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + TITLE_DESC_BOB;
@@ -104,7 +104,7 @@ public class EditCommandSystemTest extends EntryBookSystemTest {
         /* Case: filtered entry list, edit index within bounds of entry book but out of bounds of entry list
          * -> rejected
          */
-        showEntriesWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
         int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + TITLE_DESC_BOB,
                 Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);

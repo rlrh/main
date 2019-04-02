@@ -172,7 +172,7 @@ public abstract class EntryBookSystemTest {
     /**
      * Displays all persons with any parts of their names matching {@code keyword} (case-insensitive).
      */
-    protected void showEntriesWithName(String keyword) {
+    protected void showEntriesWithTitle(String keyword) {
         executeCommand(FindCommand.COMMAND_WORD + " " + keyword);
         assertTrue(getModel().getFilteredEntryList().size() < getModel().getListEntryBook().getEntryList().size());
     }
