@@ -40,7 +40,7 @@ public class TitleContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void test_nameContainsKeywords_returnsTrue() {
+    public void test_titleContainsKeywords_returnsTrue() {
         // One keyword
         TitleContainsKeywordsPredicate predicate = new TitleContainsKeywordsPredicate(
             Collections.singletonList("Alice"));
@@ -60,7 +60,7 @@ public class TitleContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void test_nameDoesNotContainKeywords_returnsFalse() {
+    public void test_titleDoesNotContainKeywords_returnsFalse() {
         // Zero keywords
         TitleContainsKeywordsPredicate predicate = new TitleContainsKeywordsPredicate(Collections.emptyList());
         assertFalse(predicate.test(new EntryBuilder().withTitle("Alice").build()));
@@ -69,7 +69,7 @@ public class TitleContainsKeywordsPredicateTest {
         predicate = new TitleContainsKeywordsPredicate(Arrays.asList("Carol"));
         assertFalse(predicate.test(new EntryBuilder().withTitle("Alice Bob").build()));
 
-        // Keywords match phone, email and address, but does not match name
+        // Keywords match description, link and address, but does not match title
         predicate = new TitleContainsKeywordsPredicate(Arrays.asList("12345", "https://example.com", "Main", "Street"));
         assertFalse(predicate.test(new EntryBuilder().withTitle("Alice").withDescription("12345")
                 .withLink("https://example.com").withAddress("Main Street").build()));

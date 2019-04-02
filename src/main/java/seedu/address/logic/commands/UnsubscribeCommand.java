@@ -12,23 +12,22 @@ import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
 
 /**
- * Lists all entries in the archives to the user.
+ * Unsubscribes from a feed identified using its displayed index.
  */
-public class ArchiveCommand extends Command {
-
-    public static final String COMMAND_WORD = "archive";
-    public static final String COMMAND_ALIAS = "arch";
+public class UnsubscribeCommand extends Command {
+    public static final String COMMAND_WORD = "unsubscribe";
+    public static final String COMMAND_ALIAS = "unsub";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-        + ": Archives the entry identified by the index number used in the displayed entry list.\n"
-        + "Parameters: INDEX (must be a positive integer)\n"
-        + "Example: " + COMMAND_WORD + " 1";
+            + ": Unsubscribes from the feed identified by the index number used in the displayed entry list.\n"
+            + "Parameters: INDEX (must be a positive integer)\n"
+            + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_ARCHIVE_ENTRY_SUCCESS = "Entry archived: %1$s";
+    public static final String MESSAGE_DELETE_FEED_SUCCESS = "Deleted feed: %1$s";
 
     private final Index targetIndex;
 
-    public ArchiveCommand(Index targetIndex) {
+    public UnsubscribeCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
@@ -40,15 +39,16 @@ public class ArchiveCommand extends Command {
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
         }
-        Entry entryToArchive = lastShownList.get(targetIndex.getZeroBased());
-        model.archiveEntry(entryToArchive);
-        return new CommandResult(String.format(MESSAGE_ARCHIVE_ENTRY_SUCCESS, entryToArchive));
+
+        Entry entryToDelete = lastShownList.get(targetIndex.getZeroBased());
+        model.deleteFeedsEntry(entryToDelete);
+        return new CommandResult(String.format(MESSAGE_DELETE_FEED_SUCCESS, entryToDelete));
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-            || (other instanceof ArchiveCommand // instanceof handles nulls
-            && targetIndex.equals(((ArchiveCommand) other).targetIndex)); // state check
+                || (other instanceof UnsubscribeCommand // instanceof handles nulls
+                && targetIndex.equals(((UnsubscribeCommand) other).targetIndex)); // state check
     }
 }

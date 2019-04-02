@@ -7,21 +7,18 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.model.Model;
 import seedu.address.model.ModelContext;
 
-/**
- * Lists all entries in the entry book to the user.
- */
-public class ListCommand extends Command {
+/** Enters the feed management context. */
+public class FeedsCommand extends Command {
 
-    public static final String COMMAND_WORD = "list";
-    public static final String COMMAND_ALIAS = "l";
+    public static final String COMMAND_WORD = "feeds";
 
-    public static final String MESSAGE_SUCCESS = "Context switched to list-context. Listed all entries";
+    public static final String MESSAGE_SUCCESS = "Context switched to feeds. Listing all feeds";
 
 
     @Override
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
-        model.setContext(ModelContext.CONTEXT_LIST);
+        model.setContext(ModelContext.CONTEXT_FEEDS);
         model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
         return new CommandResult(MESSAGE_SUCCESS);
     }

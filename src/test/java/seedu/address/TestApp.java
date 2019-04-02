@@ -57,17 +57,17 @@ public class TestApp extends MainApp {
 
         // If some initial local data has been provided, write those to the file
         if (initialListEntryBookDataSupplier.get() != null) {
-            JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocationListEntryBook);
+            JsonEntryBookStorage jsonEntryBookStorage = new JsonEntryBookStorage(saveFileLocationListEntryBook);
             try {
-                jsonAddressBookStorage.saveEntryBook(initialListEntryBookDataSupplier.get());
+                jsonEntryBookStorage.saveEntryBook(initialListEntryBookDataSupplier.get());
             } catch (IOException ioe) {
                 throw new AssertionError(ioe);
             }
         }
         if (initialArchivesEntryBookDataSupplier.get() != null) {
-            JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocationArchivesEntryBook);
+            JsonEntryBookStorage jsonEntryBookStorage = new JsonEntryBookStorage(saveFileLocationArchivesEntryBook);
             try {
-                jsonAddressBookStorage.saveEntryBook(initialArchivesEntryBookDataSupplier.get());
+                jsonEntryBookStorage.saveEntryBook(initialArchivesEntryBookDataSupplier.get());
             } catch (IOException ioe) {
                 throw new AssertionError(ioe);
             }
@@ -137,7 +137,7 @@ public class TestApp extends MainApp {
      */
     public Model getModel() {
         Model copy = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
-            new UserPrefs(), new StorageStub());
+                model.getFeedsEntryBook(), new UserPrefs(), new StorageStub());
         copy.setContext(model.getContext());
         ModelHelper.setFilteredList(copy, model.getFilteredEntryList());
         return copy;

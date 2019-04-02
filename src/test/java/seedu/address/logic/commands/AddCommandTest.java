@@ -77,13 +77,13 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_duplicatePerson_throwsCommandException() throws Exception {
+    public void execute_duplicateEntry_throwsCommandException() throws Exception {
         Entry validEntry = new EntryBuilder().build();
         AddCommand addCommand = new AddCommand(validEntry);
         ModelStub modelStub = new ModelStubWithEntry(validEntry);
 
         thrown.expect(CommandException.class);
-        thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_PERSON);
+        thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_ENTRY);
         addCommand.execute(modelStub, commandHistory);
     }
 
@@ -320,6 +320,31 @@ public class AddCommandTest {
 
         @Override
         public void clearArchivesEntryBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyEntryBook getFeedsEntryBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasFeedsEntry(Entry feed) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteFeedsEntry(Entry target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addFeedsEntry(Entry feed) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearFeedsEntryBook() {
             throw new AssertionError("This method should not be called.");
         }
 

@@ -36,7 +36,7 @@ public class GuiTestAssert {
     /**
      * Asserts that {@code actualCard} displays the details of {@code expectedEntry}.
      */
-    public static void assertCardDisplaysPerson(Entry expectedEntry, EntryCardHandle actualCard) {
+    public static void assertCardDisplaysEntry(Entry expectedEntry, EntryCardHandle actualCard) {
         assertEquals(expectedEntry.getTitle().fullTitle, actualCard.getTitle());
         assertEquals(expectedEntry.getDescription().value, actualCard.getDescription());
         assertEquals(expectedEntry.getLink().value, actualCard.getLink());
@@ -51,7 +51,7 @@ public class GuiTestAssert {
     public static void assertListMatching(EntryListPanelHandle entryListPanelHandle, Entry... entries) {
         for (int i = 0; i < entries.length; i++) {
             entryListPanelHandle.navigateToCard(i);
-            assertCardDisplaysPerson(entries[i], entryListPanelHandle.getEntryCardHandle(i));
+            assertCardDisplaysEntry(entries[i], entryListPanelHandle.getEntryCardHandle(i));
         }
     }
 

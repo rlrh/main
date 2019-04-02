@@ -16,6 +16,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
     private GuiSettings guiSettings = new GuiSettings();
     private Path listEntryBookFilePath = Paths.get("data" , "entrybook.json");
     private Path archivesEntryBookFilePath = Paths.get("data" , "archives.json");
+    private Path feedsEntryBookFilePath = Paths.get("data" , "feeds.json");
     private Path articleDataDirectoryPath = Paths.get("data", "articles");
 
     /**
@@ -77,6 +78,15 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         this.archivesEntryBookFilePath = archivesEntryBookFilePath;
     }
 
+    public Path getFeedsEntryBookFilePath() {
+        return feedsEntryBookFilePath;
+    }
+
+    public void setFeedsEntryBookFilePath(Path feedsEntryBookFilePath) {
+        requireNonNull(feedsEntryBookFilePath);
+        this.feedsEntryBookFilePath = feedsEntryBookFilePath;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -91,21 +101,22 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         return guiSettings.equals(o.guiSettings)
                 && listEntryBookFilePath.equals(o.listEntryBookFilePath)
                 && articleDataDirectoryPath.equals(o.articleDataDirectoryPath)
-                && archivesEntryBookFilePath.equals(o.archivesEntryBookFilePath);
+                && archivesEntryBookFilePath.equals(o.archivesEntryBookFilePath)
+                && feedsEntryBookFilePath.equals(o.feedsEntryBookFilePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(guiSettings, listEntryBookFilePath);
+        return Objects.hash(guiSettings, listEntryBookFilePath, articleDataDirectoryPath, archivesEntryBookFilePath,
+                feedsEntryBookFilePath);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Gui Settings : " + guiSettings);
-        sb.append("\nEntrybook data file location : " + listEntryBookFilePath);
-        sb.append("\nArchives data file location : " + archivesEntryBookFilePath);
-        return sb.toString();
+        return "Gui Settings : " + guiSettings
+                + "\nEntrybook data file location : " + listEntryBookFilePath
+                + "\nArchives data file location : " + archivesEntryBookFilePath
+                + "\nFeeds data file location : " + feedsEntryBookFilePath;
     }
 
 }

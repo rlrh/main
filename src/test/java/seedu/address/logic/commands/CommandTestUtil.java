@@ -131,7 +131,7 @@ public class CommandTestUtil {
             String expectedMessage) {
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
-        EntryBook expectedAddressBook = new EntryBook(actualModel.getListEntryBook());
+        EntryBook expectedEntryBook = new EntryBook(actualModel.getListEntryBook());
         List<Entry> expectedFilteredList = new ArrayList<>(actualModel.getFilteredEntryList());
         Entry expectedSelectedEntry = actualModel.getSelectedEntry();
 
@@ -142,7 +142,7 @@ public class CommandTestUtil {
             throw new AssertionError("The expected CommandException was not thrown.");
         } catch (CommandException e) {
             assertEquals(expectedMessage, e.getMessage());
-            assertEquals(expectedAddressBook, actualModel.getListEntryBook());
+            assertEquals(expectedEntryBook, actualModel.getListEntryBook());
             assertEquals(expectedFilteredList, actualModel.getFilteredEntryList());
             assertEquals(expectedSelectedEntry, actualModel.getSelectedEntry());
             assertEquals(expectedCommandHistory, actualCommandHistory);
@@ -153,12 +153,12 @@ public class CommandTestUtil {
      * Updates {@code model}'s filtered list to show only the entry at the given {@code targetIndex} in the
      * {@code model}'s address book.
      */
-    public static void showPersonAtIndex(Model model, Index targetIndex) {
+    public static void showEntryAtIndex(Model model, Index targetIndex) {
         assertTrue(targetIndex.getZeroBased() < model.getFilteredEntryList().size());
 
         Entry entry = model.getFilteredEntryList().get(targetIndex.getZeroBased());
-        final String[] splitName = entry.getTitle().fullTitle.split("\\s+");
-        model.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(splitName[0])));
+        final String[] splitTitle = entry.getTitle().fullTitle.split("\\s+");
+        model.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(splitTitle[0])));
 
         assertEquals(1, model.getFilteredEntryList().size());
     }
@@ -166,7 +166,7 @@ public class CommandTestUtil {
     /**
      * Deletes the first entry in {@code model}'s filtered list from {@code model}'s address book.
      */
-    public static void deleteFirstPerson(Model model) {
+    public static void deleteFirstEntry(Model model) {
         Entry firstEntry = model.getFilteredEntryList().get(0);
         model.deleteListEntry(firstEntry);
     }

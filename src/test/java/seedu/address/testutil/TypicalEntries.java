@@ -146,7 +146,7 @@ public class TypicalEntries {
     public static final String READABILITY_LINK_TITLE = "A Reading Guide — ProPublica";
     public static final String READABILITY_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s "
             + "former personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie "
-            + "and hundreds of threats. Many of those assertions had been explored before, as these articles show.";
+            + "and hundreds of threats. Many of those assertions had…";
 
     public static final String RELATIVE_LINK_ARTICLE_URL = MainApp.class
             .getResource("/util/relativeLinkedArticle.html").toExternalForm();
@@ -316,6 +316,34 @@ public class TypicalEntries {
             .withAddress("Wikipedia test web page")
             .build();
 
+    // bunch of RSS feeds
+    public static final Entry KATTIS_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Kattis - new problems")
+            .withDescription("kattis the kat")
+            .withLink("https://open.kattis.com/rss/new-problems")
+            .withAddress("kattis")
+            .build();
+
+    public static final Entry LOCAL_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Tsutsukakushi's anime reviews - local copy")
+            .withDescription("anime reviews")
+            .withLink(MainApp.class.getResource("/RssFeedTest/rss.xml").toExternalForm())
+            .withAddress("somewhere in Finland")
+            .build();
+
+    public static final Entry ANIMEREVIEW_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Tsutsukakushi's anime reviews - remote mirror")
+            .withDescription("anime reviews!")
+            .withLink("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml")
+            .withAddress("also finland")
+            .build();
+
+    public static final Entry ENGADGET_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Engadget RSS")
+            .withLink("https://live.engadget.com/rss.xml")
+            .withAddress("engadget")
+            .build();
+
     private TypicalEntries() {} // prevents instantiation
 
     /**
@@ -330,7 +358,7 @@ public class TypicalEntries {
     }
 
     /**
-     * Returns an {@code EntryBook} with all the typical persons.
+     * Returns an {@code EntryBook} with all the typical archive entries.
      */
     public static EntryBook getTypicalArchivesEntryBook() {
         EntryBook ab = new EntryBook();
@@ -340,11 +368,22 @@ public class TypicalEntries {
         return ab;
     }
 
+    /** Returns a typical EntryBook with typical feed subscriptions. */
+    public static EntryBook getTypicalFeedsEntryBook() {
+        EntryBook eb = new EntryBook();
+        eb.setEntries(getTypicalFeedsEntries());
+        return eb;
+    }
+
     public static List<Entry> getTypicalEntries() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
     }
 
     public static List<Entry> getTypicalArchivesEntries() {
         return new ArrayList<>(Arrays.asList(HANS, ISABELLE, JONATHAN, KEVIN));
+    }
+
+    public static List<Entry> getTypicalFeedsEntries() {
+        return List.of(LOCAL_FEED_ENTRY, KATTIS_FEED_ENTRY);
     }
 }

@@ -14,7 +14,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.entry.Entry;
 
 /**
- * Panel containing the list of persons.
+ * Panel containing the list of entries.
  */
 public class EntryListPanel extends UiPart<Region> {
     private static final String FXML = "EntryListPanel.fxml";
@@ -23,16 +23,17 @@ public class EntryListPanel extends UiPart<Region> {
     @FXML
     private ListView<Entry> entryListView;
 
-    public EntryListPanel(ObservableList<Entry> entryList, ObservableValue<Entry> selectedPerson,
-                          Consumer<Entry> onSelectedPersonChange) {
+    public EntryListPanel(ObservableList<Entry> entryList,
+                          ObservableValue<Entry> selectedEntry,
+                          Consumer<Entry> onSelectedEntryChange) {
         super(FXML);
         entryListView.setItems(entryList);
-        entryListView.setCellFactory(listView -> new PersonListViewCell());
+        entryListView.setCellFactory(listView -> new EntryListViewCell());
         entryListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             logger.fine("Selection in entry list panel changed to : '" + newValue + "'");
-            onSelectedPersonChange.accept(newValue);
+            onSelectedEntryChange.accept(newValue);
         });
-        selectedPerson.addListener((observable, oldValue, newValue) -> {
+        selectedEntry.addListener((observable, oldValue, newValue) -> {
             logger.fine("Selected entry changed to: " + newValue);
 
             // Don't modify selection if we are already selecting the selected entry,
@@ -54,7 +55,7 @@ public class EntryListPanel extends UiPart<Region> {
     /**
      * Custom {@code ListCell} that displays the graphics of a {@code Entry} using a {@code EntryCard}.
      */
-    class PersonListViewCell extends ListCell<Entry> {
+    class EntryListViewCell extends ListCell<Entry> {
         @Override
         protected void updateItem(Entry entry, boolean empty) {
             super.updateItem(entry, empty);
