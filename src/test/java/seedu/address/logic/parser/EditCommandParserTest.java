@@ -9,26 +9,22 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TITLE_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -43,7 +39,6 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
 import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
-import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
@@ -91,15 +86,13 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1"
             + INVALID_DESCRIPTION_DESC, Description.formExceptionMessage(INVALID_DESCRIPTION.trim())); // invalid desc
         assertParseFailure(parser, "1"
-            + INVALID_LINK_DESC, Link.formExceptionMessage(INVALID_LINK.trim())); // invalid link
-        assertParseFailure(parser, "1"
             + INVALID_ADDRESS_DESC, Address.formExceptionMessage(INVALID_ADDRESS.trim())); // invalid address
         assertParseFailure(parser, "1"
             + INVALID_TAG_DESC, Tag.formExceptionMessage(INVALID_TAG.trim())); // invalid tag
 
-        // invalid description followed by valid link
+        // invalid description followed by valid title
         assertParseFailure(parser, "1"
-            + INVALID_DESCRIPTION_DESC + LINK_DESC_AMY, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
+            + INVALID_DESCRIPTION_DESC + TITLE_DESC_AMY, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         // valid description followed by invalid description.
         // The test case for invalid description followed by valid description
@@ -119,7 +112,7 @@ public class EditCommandParserTest {
 
         // multiple invalid values, but only the first invalid value is captured
         assertParseFailure(parser,
-            "1" + INVALID_TITLE_DESC + INVALID_LINK_DESC + VALID_ADDRESS_AMY + VALID_DESCRIPTION_AMY,
+            "1" + INVALID_TITLE_DESC + INVALID_DESCRIPTION_DESC + VALID_ADDRESS_AMY + VALID_DESCRIPTION_AMY,
                 Title.formExceptionMessage(INVALID_TITLE.trim()));
     }
 
@@ -127,10 +120,10 @@ public class EditCommandParserTest {
     public void parse_allFieldsSpecified_success() {
         Index targetIndex = INDEX_SECOND_ENTRY;
         String userInput = targetIndex.getOneBased() + DESCRIPTION_DESC_BOB + TAG_DESC_SCIENCE
-                + LINK_DESC_AMY + ADDRESS_DESC_AMY + TITLE_DESC_AMY + TAG_DESC_TECH;
+                + ADDRESS_DESC_AMY + TITLE_DESC_AMY + TAG_DESC_TECH;
 
         EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_AMY)
-                .withDescription(VALID_DESCRIPTION_BOB).withLink(VALID_LINK_AMY).withAddress(VALID_ADDRESS_AMY)
+                .withDescription(VALID_DESCRIPTION_BOB).withAddress(VALID_ADDRESS_AMY)
                 .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH).build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
@@ -140,10 +133,10 @@ public class EditCommandParserTest {
     @Test
     public void parse_someFieldsSpecified_success() {
         Index targetIndex = INDEX_FIRST_ENTRY;
-        String userInput = targetIndex.getOneBased() + DESCRIPTION_DESC_BOB + LINK_DESC_AMY;
+        String userInput = targetIndex.getOneBased() + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB;
 
-        EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withDescription(VALID_DESCRIPTION_BOB)
-                .withLink(VALID_LINK_AMY).build();
+        EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder()
+            .withTitle(VALID_TITLE_BOB).withDescription(VALID_DESCRIPTION_BOB).build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -151,22 +144,16 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_oneFieldSpecified_success() {
-        // name
+        // title
         Index targetIndex = INDEX_THIRD_ENTRY;
         String userInput = targetIndex.getOneBased() + TITLE_DESC_AMY;
         EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_AMY).build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
-        // phone
+        // description
         userInput = targetIndex.getOneBased() + DESCRIPTION_DESC_AMY;
         descriptor = new EditEntryDescriptorBuilder().withDescription(VALID_DESCRIPTION_AMY).build();
-        expectedCommand = new EditCommand(targetIndex, descriptor);
-        assertParseSuccess(parser, userInput, expectedCommand);
-
-        // email
-        userInput = targetIndex.getOneBased() + LINK_DESC_AMY;
-        descriptor = new EditEntryDescriptorBuilder().withLink(VALID_LINK_AMY).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
@@ -186,13 +173,12 @@ public class EditCommandParserTest {
     @Test
     public void parse_multipleRepeatedFields_acceptsLast() {
         Index targetIndex = INDEX_FIRST_ENTRY;
-        String userInput = targetIndex.getOneBased() + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY + LINK_DESC_AMY
-                + TAG_DESC_TECH + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY + LINK_DESC_AMY + TAG_DESC_TECH
-                + DESCRIPTION_DESC_BOB + ADDRESS_DESC_BOB + LINK_DESC_BOB + TAG_DESC_SCIENCE;
+        String userInput = targetIndex.getOneBased() + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY
+                + TAG_DESC_TECH + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY + TAG_DESC_TECH
+                + DESCRIPTION_DESC_BOB + ADDRESS_DESC_BOB + TAG_DESC_SCIENCE;
 
         EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder().withDescription(VALID_DESCRIPTION_BOB)
-                .withLink(VALID_LINK_BOB).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_TECH, VALID_TAG_SCIENCE)
-                .build();
+                .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_TECH, VALID_TAG_SCIENCE).build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -210,9 +196,9 @@ public class EditCommandParserTest {
         assertParseSuccess(parser, userInput, expectedCommand);
 
         // other valid values specified
-        userInput = targetIndex.getOneBased() + LINK_DESC_BOB + INVALID_DESCRIPTION_DESC + ADDRESS_DESC_BOB
+        userInput = targetIndex.getOneBased() + TITLE_DESC_BOB + INVALID_DESCRIPTION_DESC + ADDRESS_DESC_BOB
                 + DESCRIPTION_DESC_BOB;
-        descriptor = new EditEntryDescriptorBuilder().withDescription(VALID_DESCRIPTION_BOB).withLink(VALID_LINK_BOB)
+        descriptor = new EditEntryDescriptorBuilder().withDescription(VALID_DESCRIPTION_BOB).withTitle(VALID_TITLE_BOB)
                 .withAddress(VALID_ADDRESS_BOB).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
