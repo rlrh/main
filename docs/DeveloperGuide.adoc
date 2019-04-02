@@ -308,17 +308,25 @@ This makes adding links much faster and more convenient for users.
 
 ==== Current Implementation
 
-If both `Title` and `Description` are already specified by the user, `AddCommand` just adds the `Entry` to the `Model`.
-Otherwise, `AddCommand` attempts to find replacement candidates for a missing `Title` or `Description` heuristically, then updates the `Entry` with the best replacement and adds it to the `Model`.
+Autofill-related code lies in the `EntryAutofill` utility class.
+The constructor takes in the original `Title` and `Description`,
+and there are methods to parse URL and HTML in order to extract replacement candidates,
+as well as to get the best `Title` and `Description` candidates.
 
 The fallback is a default `Title` and `Description` guaranteed to work.
 The first attempt to find replacement candidates is by parsing just the URL.
 This will work even if there is no Internet access, whereas the following attempts require Internet access.
 The next attempt is by using the Jsoup library to parse the raw HTML into a Document object and obtain information likely to be present,
-and the last attempt is by using the Crux library to process the Document object and extract metadata.
+and the last attempt is by using the Readability4J library to process the Document object and extract metadata.
 In this way, the last successful attempt to replace `Title` and `Description` becomes their current best replacement candidate.
 Since we cascade from the last choice to the first choice for `Title` and `Description` separately,
 by the end we have found the best possible replacement candidate for each of them given the circumstances.
+However, replacement candidates are only chosen if the original `Title` and `Description` are empty,
+so the original user input is still the first choice, followed by the best replacement candidates found.
+
+This means that if both `Title` and `Description` are already specified by the user, `AddCommand` just adds the `Entry` to the `Model`.
+Otherwise, `AddCommand` attempts to find replacement candidates for a missing `Title` or `Description` heuristically,
+then updates the `Entry` with the best replacement and adds it to the `Model`.
 
 ==== Design Considerations
 
@@ -330,25 +338,42 @@ by the end we have found the best possible replacement candidate for each of the
 * **Alternative 2:** In `Model`
 ** Pros: Autofill can work for any link added to `Model`.
 ** Cons: The clean `Model` is polluted by including non-core logic like autofill.
+* **Why current choice:**
+** It is more important to follow the existing design conventions since it is not hard to include autofill logic in other areas using the `EntryAutofill` utility class.
+
+===== Aspect: How replacement candidates should be cascaded
+
+* **Alternative 1:** Check candidates are non-null and non-empty before replacing best candidate so far directly within `EntryAutofill` methods
+** Pros: Simple to implement.
+** Cons: Messy and hard-to-read code.
+* **Alternative 2 (current choice):** Create and use a new `Candidate` class that generalizes this idea to any type and any function that checks for candidate validity
+** Pros: Can be reused in many places, more elegant code.
+** Cons: Abstraction may be unnecessary.
+* **Why current choice:**
+** It is not hard to implement the `Candidate` class and the semantic beauty and elegance it affords is worth the small extra effort.
 // end::autofill[]
 
 // tag::readerview[]
 === Reader view mode
 
-The reader view gives users a more focused and comfortable reading experience by removing clutter and formatting content into a clean and easy-to-read layout.
+The reader view gives users a more focused reading experience by removing clutter and formatting content into a clean and easy-to-read layout.
+Letting users choose a colour scheme that fits their lighting environment also makes their reading experience more comfortable.
 
-Using the `view` command, users can switch between the `browser` and `reader` view modes.
+Using the `view` command, users can switch between the `browser` and `reader` view modes, as well as choose a colour scheme using the optional `s/STYLE` parameter.
 
 ==== Current Implementation
 
-The two available view modes are specified in the `ViewMode` enum.
+Available view types are specified in the `ViewType` enum, and available reader view styles are specified in the `ReaderViewStyle` enum.
+The `ViewMode` object encapsulates a `ViewType` and `ReaderViewStyle` and represents a user setting.
 The `Model` exposes an observable `viewModeProperty`, which is set by `ViewModeCommand` and observed by `BrowserPanel`.
 
 The `BrowserPanel` keeps track of whether an original web page or a reader view version is loaded.
-If an original web page is loaded but the `reader` view mode is selected, the reader view is generated and loaded,
+If an original web page is loaded but the `reader` view mode is selected,
+the CSS stylesheet is changed accordingly and the reader view is generated and loaded,
 except when the currently loaded web page is the default blank page or error page.
 
-The Crux and Jsoup external libraries do the heavy lifting of parsing the raw HTML currently loaded in the `WebView` to extract useful metadata and content.
+The Jsoup and Readability4J external libraries do the heavy lifting of parsing the raw HTML currently loaded in the `WebView` to extract useful metadata and content.
+Jsoup was chosen as it is a mature HTML parser library while Readability4J was chosen as it is a port of port of Mozilla's excellent Readability.js.
 These are combined into a new HTML document, which is styled using Bootstrap and then loaded in the `WebView`.
 
 ==== Design Considerations
@@ -361,6 +386,25 @@ These are combined into a new HTML document, which is styled using Bootstrap and
 * **Alternative 2:** When adding a link, generate reader view and save it to disk.
 ** Pros: Easier to implement, better performance as reader view is only generated only once for each link.
 ** Cons: Will save redundant data and use more disk space.
+* **Why current choice:**
+* Since users might be browsing the Internet using our application's online search features,
+it is not practical to download and save every page when users are likely to be at a particular page only for a short time.
+Therefore, generating reader view on-the-fly will open up reader view to our application's online search features and add value to them.
+
+===== Aspect: How reader view styles should be specified
+
+* **Alternative 1 (current choice):** Hard-code reader view styles in the app.
+** Pros: Easy to implement, more control over user experience.
+** Cons: Users may not like the hard-coded reader view styles.
+* **Alternative 2:** Let users add custom stylesheets.
+** Pros: Gives users customization options.
+** Cons: Difficult to implement, stylesheets still need to be based on Bootstrap.
+* **Why current choice:**
+* It is a case of diminishing returns.
+It is not difficult for us to add a few reader view styles for users to choose from, which gives them a lot more flexibility compared to not having any styles to choose from.
+but making the design support custom user stylesheets would require much more effort while not giving users a lot more benefit.
+The current design makes it very simple for us to add another reader view style, in case many users demand a particular style.
+
 // end::readerview[]
 
 // tag::multiple-entrybooks[]
@@ -873,9 +917,9 @@ Do take a look at <<Design-Model>> before attempting to modify the `Model` compo
 * Hints
 ** The link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model`] and the link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] API need to be updated.
 ** Think about how you can use SLAP to design the method. Where should we place the main logic of deleting tags?
-**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] allows you to update a person, and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] allows you to update the tags.
+**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] and link:{repoURL}/src/main/java/seedu/address/model/entry/Entry.java[`Entry`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] allows you to update a entry, and link:{repoURL}/src/main/java/seedu/address/model/entry/Entry.java[`Entry`] allows you to update the tags.
 * Solution
-** Implement a `removeTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`]. Loop through each person, and remove the `tag` from each person.
+** Implement a `removeTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`]. Loop through each entry, and remove the `tag` from each entry.
 ** Add a new API method `deleteTag(Tag)` in link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`]. Your link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`] should call `AddressBook#removeTag(Tag)`.
 ** Add new tests for each of the new public methods that you have added.
 ** See this https://github.com/se-edu/addressbook-level4/pull/790[PR] for the full solution.
@@ -884,12 +928,12 @@ Do take a look at <<Design-Model>> before attempting to modify the `Model` compo
 [discrete]
 ==== `Ui` component
 
-*Scenario:* You are in charge of `ui`. During a beta testing session, your team is observing how the users use your address book application. You realize that one of the users occasionally tries to delete non-existent tags from a contact, because the tags all look the same visually, and the user got confused. Another user made a typing mistake in his command, but did not realize he had done so because the error message wasn't prominent enough. A third user keeps scrolling down the list, because he keeps forgetting the index of the last person in the list. Your job is to implement improvements to the UI to solve all these problems.
+*Scenario:* You are in charge of `ui`. During a beta testing session, your team is observing how the users use your address book application. You realize that one of the users occasionally tries to delete non-existent tags from a contact, because the tags all look the same visually, and the user got confused. Another user made a typing mistake in his command, but did not realize he had done so because the error message wasn't prominent enough. A third user keeps scrolling down the list, because he keeps forgetting the index of the last entry in the list. Your job is to implement improvements to the UI to solve all these problems.
 
 [TIP]
 Do take a look at <<Design-Ui>> before attempting to modify the `UI` component.
 
-. Use different colors for different tags inside person cards. For example, `friends` tags can be all in brown, and `colleagues` tags can be all in yellow.
+. Use different colors for different tags inside entry cards. For example, `friends` tags can be all in brown, and `colleagues` tags can be all in yellow.
 +
 **Before**
 +
@@ -949,7 +993,7 @@ image::getting-started-ui-status-after.png[width="500"]
 ** link:{repoURL}/src/main/resources/view/StatusBarFooter.fxml[`StatusBarFooter.fxml`] will need a new `StatusBar`. Be sure to set the `GridPane.columnIndex` properly for each `StatusBar` to avoid misalignment!
 ** link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] needs to initialize the status bar on application start, and to update it accordingly whenever the address book is updated.
 * Solution
-** Modify the constructor of link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to take in the number of persons when the application just started.
+** Modify the constructor of link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to take in the number of entries when the application just started.
 ** Use link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter#handleAddressBookChangedEvent(AddressBookChangedEvent)`] to update the number of persons whenever there are new changes to the addressbook.
 ** For tests, modify link:{repoURL}/src/test/java/guitests/guihandles/StatusBarFooterHandle.java[`StatusBarFooterHandle`] by adding a state-saving functionality for the total number of people status, just like what we did for save location and sync status.
 ** For system tests, modify link:{repoURL}/src/test/java/systemtests/AddressBookSystemTest.java[`AddressBookSystemTest`] to also verify the new total number of persons status bar.
@@ -982,15 +1026,15 @@ By creating this command, you will get a chance to learn how to implement a feat
 *Scenario:* You are a software maintainer for `addressbook`, as the former developer team has moved on to new projects. The current users of your application have a list of new feature requests that they hope the software will eventually have. The most popular request is to allow adding additional comments/notes about a particular contact, by providing a flexible `remark` field for each contact, rather than relying on tags alone. After designing the specification for the `remark` command, you are convinced that this feature is worth implementing. Your job is to implement the `remark` command.
 
 ==== Description
-Edits the remark for a person specified in the `INDEX`. +
+Edits the remark for a entry specified in the `INDEX`. +
 Format: `remark INDEX r/[REMARK]`
 
 Examples:
 
 * `remark 1 r/Likes to drink coffee.` +
-Edits the remark for the first person to `Likes to drink coffee.`
+Edits the remark for the first entry to `Likes to drink coffee.`
 * `remark 1 r/` +
-Removes the remark for the first person.
+Removes the remark for the first entry.
 
 ==== Step-by-step Instructions
 
@@ -1024,7 +1068,7 @@ for `RemarkCommandParser`.
 . Modify link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`] to test that the correct command is generated according to the user input.
 
 ===== [Step 3] Ui: Add a placeholder for remark in `PersonCard`
-Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] s to display a remark for each person later.
+Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] s to display a remark for each entry later.
 
 **Main:**
 
@@ -1036,28 +1080,28 @@ Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui
 . Modify link:{repoURL}/src/test/java/guitests/guihandles/PersonCardHandle.java[`PersonCardHandle`] so that future tests can read the contents of the remark label.
 
 ===== [Step 4] Model: Add `Remark` class
-We have to properly encapsulate the remark in our link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] class. Instead of just using a `String`, let's follow the conventional class structure that the codebase already uses by adding a `Remark` class.
+We have to properly encapsulate the remark in our link:{repoURL}/src/main/java/seedu/address/model/entry/Entry.java[`Entry`] class. Instead of just using a `String`, let's follow the conventional class structure that the codebase already uses by adding a `Remark` class.
 
 **Main:**
 
-. Add `Remark` to model component (you can copy from link:{repoURL}/src/main/java/seedu/address/model/person/Address.java[`Address`], remove the regex and change the names accordingly).
+. Add `Remark` to model component (you can copy from link:{repoURL}/src/main/java/seedu/address/model/entry/Address.java[`Address`], remove the regex and change the names accordingly).
 . Modify `RemarkCommand` to now take in a `Remark` instead of a `String`.
 
 **Tests:**
 
 . Add test for `Remark`, to test the `Remark#equals()` method.
 
-===== [Step 5] Model: Modify `Person` to support a `Remark` field
-Now we have the `Remark` class, we need to actually use it inside link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`].
+===== [Step 5] Model: Modify `Entry` to support a `Remark` field
+Now we have the `Remark` class, we need to actually use it inside link:{repoURL}/src/main/java/seedu/address/model/entry/Entry.java[`Entry`].
 
 **Main:**
 
-. Add `getRemark()` in link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`].
-. You may assume that the user will not be able to use the `add` and `edit` commands to modify the remarks field (i.e. the person will be created without a remark).
+. Add `getRemark()` in link:{repoURL}/src/main/java/seedu/address/model/entry/Entry.java[`Entry`].
+. You may assume that the user will not be able to use the `add` and `edit` commands to modify the remarks field (i.e. the entry will be created without a remark).
 . Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample data (delete your `data/addressbook.json` so that the application will load the sample data when you launch it.)
 
 ===== [Step 6] Storage: Add `Remark` field to `JsonAdaptedPerson` class
-We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
+We now have `Remark` s for `Entry` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
 
 **Main:**
 
@@ -1068,19 +1112,19 @@ We now have `Remark` s for `Person` s, but they will be gone when we exit the ap
 . Fix `invalidAndValidPersonAddressBook.json`, `typicalPersonsAddressBook.json`, `validAddressBook.json` etc., such that the JSON tests will not fail due to a missing `remark` field.
 
 ===== [Step 6b] Test: Add withRemark() for `PersonBuilder`
-Since `Person` can now have a `Remark`, we should add a helper method to link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`], so that users are able to create remarks when building a link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`].
+Since `Entry` can now have a `Remark`, we should add a helper method to link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`], so that users are able to create remarks when building a link:{repoURL}/src/main/java/seedu/address/model/entry/Entry.java[`Entry`].
 
 **Tests:**
 
-. Add a new method `withRemark()` for link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`]. This method will create a new `Remark` for the person that it is currently building.
-. Try and use the method on any sample `Person` in link:{repoURL}/src/test/java/seedu/address/testutil/TypicalPersons.java[`TypicalPersons`].
+. Add a new method `withRemark()` for link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`]. This method will create a new `Remark` for the entry that it is currently building.
+. Try and use the method on any sample `Entry` in link:{repoURL}/src/test/java/seedu/address/testutil/TypicalPersons.java[`TypicalPersons`].
 
 ===== [Step 7] Ui: Connect `Remark` field to `PersonCard`
 Our remark label in link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] is still a placeholder. Let's bring it to life by binding it with the actual `remark` field.
 
 **Main:**
 
-. Modify link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`]'s constructor to bind the `Remark` field to the `Person` 's remark.
+. Modify link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`]'s constructor to bind the `Remark` field to the `Entry` 's remark.
 
 **Tests:**
 
@@ -1091,7 +1135,7 @@ We now have everything set up... but we still can't modify the remarks. Let's fi
 
 **Main:**
 
-. Replace the logic in `RemarkCommand#execute()` (that currently just throws an `Exception`), with the actual logic to modify the remarks of a person.
+. Replace the logic in `RemarkCommand#execute()` (that currently just throws an `Exception`), with the actual logic to modify the remarks of a entry.
 
 **Tests:**
 
@@ -1464,15 +1508,15 @@ These instructions only provide a starting point for testers to work on; testers
 
 _{ more test cases ... }_
 
-=== Deleting a person
+=== Deleting a entry
 
-. Deleting a person while all persons are listed
+. Deleting a entry while all persons are listed
 
 .. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 .. Test case: `delete 1` +
    Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 .. Test case: `delete 0` +
-   Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   Expected: No entry is deleted. Error details shown in the status message. Status bar remains the same.
 .. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size) _{give more}_ +
    Expected: Similar to previous.
 
