@@ -57,7 +57,7 @@ public class LogicManagerTest {
     @Before
     public void setUp() throws Exception {
         StorageManager storage = new TemporaryStorageManager(temporaryFolder);
-        model = new ModelManager(new EntryBook(), new EntryBook(), new UserPrefs(), storage);
+        model = new ModelManager(new EntryBook(), new EntryBook(), new EntryBook(), new UserPrefs(), storage);
         logic = new LogicManager(model);
     }
 
@@ -95,12 +95,15 @@ public class LogicManagerTest {
         JsonEntryBookStorage listEntryBookStorage =
                 new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
         JsonEntryBookStorage archivesEntryBookStorage =
-            new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
+                new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
+        JsonEntryBookStorage feedsEntryBookStorage =
+                new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, userPrefsStorage,
-            articleStorage);
-        model = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(), model.getUserPrefs(), storage);
+        StorageManager storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage,
+                feedsEntryBookStorage, userPrefsStorage, articleStorage);
+        model = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(), model.getFeedsEntryBook(),
+                model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 
         // Execute add command
@@ -170,7 +173,7 @@ public class LogicManagerTest {
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
         Model expectedModel = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
-            model.getUserPrefs(), model.getStorage());
+            model.getFeedsEntryBook(), model.getUserPrefs(), model.getStorage());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 
