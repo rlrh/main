@@ -46,4 +46,11 @@ public class SubscribeCommand extends Command {
         // todo: import to reading list
         return new CommandResult(String.format(MESSAGE_SUCCESS, toSubscribe));
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof SubscribeCommand // instanceof handles nulls
+                && toSubscribe.equals(((SubscribeCommand) other).toSubscribe));
+    }
 }
