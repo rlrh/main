@@ -12,10 +12,11 @@ README is a desktop bookmark manager/rss feed reader application.
 == Summary of contributions
 
 === *Major enhancement*: Entry management system
-** What it does: A collection of several commands that allow users to mange a large number of entries in the entrybook.
-** Justification: Essential for heavy users especially so that they can manage increasing large lists of entries.
+** What it does: A collection of several commands that allow users to manage a large number of entries in the entrybook.
+** Justification: Essential for heavy users so that they can navigate large numbers of entries efficiently, and allows
+them to partition their entries into groups using tags and the archive.
 ** Highlights:
-*** Find command: Users can search for links in the list of currently displayed entries
+*** Find command: Users can search for links in the list of currently displayed entries using any of the fields and/or tags.
 *** Archives command: Users can archive links they have read.
 *** Context switching: Users can make the application display different entries (archive entries, search result entries etc.)
 via context-switching commands.
