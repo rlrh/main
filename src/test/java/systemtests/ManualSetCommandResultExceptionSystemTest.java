@@ -5,7 +5,7 @@ import org.junit.Test;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.Model;
 
-public class ManualSetCommandResultExceptionSystemTest extends AddressBookSystemTest {
+public class ManualSetCommandResultExceptionSystemTest extends EntryBookSystemTest {
 
     @Test
     public void commandResultDisplayed() {

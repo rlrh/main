@@ -17,7 +17,7 @@ import seedu.address.model.tag.Tag;
  * Contains utility methods for populating {@code EntryBook} with sample data.
  */
 public class SampleDataUtil {
-    public static Entry[] getSamplePersons() {
+    public static Entry[] getSampleEntries() {
         return new Entry[] {
             new Entry(
                 new Title("CS2103 the best mod ever?"),
@@ -58,9 +58,9 @@ public class SampleDataUtil {
         };
     }
 
-    public static ReadOnlyEntryBook getSampleAddressBook() {
+    public static ReadOnlyEntryBook getSampleEntryBook() {
         EntryBook sampleAb = new EntryBook();
-        for (Entry sampleEntry : getSamplePersons()) {
+        for (Entry sampleEntry : getSampleEntries()) {
             sampleAb.addEntry(sampleEntry);
         }
         return sampleAb;

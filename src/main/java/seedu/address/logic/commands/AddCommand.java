@@ -39,7 +39,7 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "tech";
 
     public static final String MESSAGE_SUCCESS = "New entry added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This entry already exists in the entry book";
+    public static final String MESSAGE_DUPLICATE_ENTRY = "This entry already exists in the entry book";
 
     private static final Logger logger = LogsCenter.getLogger(AddCommand.class);
 
@@ -77,7 +77,7 @@ public class AddCommand extends Command {
         );
 
         if (model.hasEntry(updatedEntry)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+            throw new CommandException(MESSAGE_DUPLICATE_ENTRY);
         }
 
         model.addListEntry(updatedEntry, articleContent);
