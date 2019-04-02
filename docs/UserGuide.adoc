@@ -103,7 +103,7 @@ Whenever you find a web page you want to read later, add it to your reading list
 To help you organize the mountain of content, README lets you tag link so you can always find what you're looking for,
 and archive or delete links you've finished reading so your reading list won't become cluttered.
 
-==== Web Feeds Subscription - Read
+==== Web Feeds Subscription - Read More
 README keeps you up to date with your favourite websites.
 
 Integrations with Bing Web Search and Google News mean you'll never run out of things to read.
@@ -119,7 +119,7 @@ This gives you the convenience of viewing your saved links anywhere, anytime, ev
 If you still want to keep a link but no longer need to view it offline, you can archive it.
 This will delete its downloaded web page from your personal computer.
 
-==== Reader View - Read More
+==== Reader View - Read Better
 README makes your long reading sessions so much more comfortable.
 
 Reader View strips out all the visual clutter from web pages and presents content in a perfectly formatted, clean layout,
@@ -209,9 +209,9 @@ Stop adding any new Entries from the website to your Reading List.
 ====
 * Words in `UPPER_CASE` are the parameters you need to supply.
 ** For example, in `add l/URL`, `URL` is a parameter which can be used as `add l/https://nus-cs2103-ay1819s2.github.io/cs2103-website`.
-* Items in square brackets are optional.
+* Parameters in square brackets are optional.
 ** For example, `l/URL [ti/TITLE]` can be used as `l/https://nus-cs2103-ay1819s2.github.io/cs2103-website/ ti/CS2103 Website` or as `l/https://nus-cs2103-ay1819s2.github.io/cs2103-website/`.
-* Items with `…`​ after them can be used multiple times including zero times.
+* Parameters with `…`​ after them can be used multiple times including zero times.
 ** For example, `[t/TAG]…​` can be used as `{nbsp}` (i.e. 0 times), `t/tech`, `t/tech t/business` etc.
 * Parameters can be in any order.
 ** For example, if a command specifies `ti/TITLE d/DESCRIPTION`, `d/DESCRIPTION ti/TITLE` is also acceptable.
@@ -286,6 +286,7 @@ Exits the program.
 
 Format: `exit`
 
+// tag::contextcommands[]
 === Context-switching commands
 
 ====
@@ -397,6 +398,7 @@ Shows helpful and fun statistics about your reading progress and habits.
 
 Format: `stats`
 
+// end::contextcommands[]
 [[List-Context]]
 === `Reading List` Context Commands
 
@@ -826,20 +828,22 @@ Examples:
 
 ==== Selecting a feed: `select`
 
-Selects the feed identified by the index number used in the displayed feed list and displays its entries.
+Selects the feed identified by the index number used in the displayed feed list.
+// and displays its entries.
 
 Format: `select INDEX`
 
 ****
-- Selects the feed and displays its entries.
-- Equivalent to `search [URL_OF_INDEXED_FEED]`
+- Selects the feed.
+//- Equivalent to `search [URL_OF_INDEXED_FEED]`
 - The index refers to the index number shown in the displayed feed list.
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
 
 Examples:
 
-- `select 2` Selects the 2nd feed in the manager and displays its entries
+- `select 2` Selects the 2nd feed in the manager.
+// and displays its entries
 
 == FAQ
 
