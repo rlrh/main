@@ -52,8 +52,9 @@ public class EntryUtil {
      */
     public static String getEditEntryDescriptorDetails(EditEntryDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
-        descriptor.getTitle().ifPresent(name -> sb.append(PREFIX_TITLE).append(name.fullTitle).append(" "));
-        descriptor.getDescription().ifPresent(phone -> sb.append(PREFIX_DESCRIPTION).append(phone.value).append(" "));
+        descriptor.getTitle().ifPresent(title -> sb.append(PREFIX_TITLE).append(title.fullTitle).append(" "));
+        descriptor.getDescription().ifPresent(
+            description -> sb.append(PREFIX_DESCRIPTION).append(description.value).append(" "));
         descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();

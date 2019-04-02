@@ -8,7 +8,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelContext;
 
 /**
- * Lists all persons in the address book to the user.
+ * Lists all entries in the entry book to the user.
  */
 public class ListCommand extends Command {
 

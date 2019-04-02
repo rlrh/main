@@ -77,13 +77,13 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_duplicatePerson_throwsCommandException() throws Exception {
+    public void execute_duplicateEntry_throwsCommandException() throws Exception {
         Entry validEntry = new EntryBuilder().build();
         AddCommand addCommand = new AddCommand(validEntry);
         ModelStub modelStub = new ModelStubWithEntry(validEntry);
 
         thrown.expect(CommandException.class);
-        thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_PERSON);
+        thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_ENTRY);
         addCommand.execute(modelStub, commandHistory);
     }
 
