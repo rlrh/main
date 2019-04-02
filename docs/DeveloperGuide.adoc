@@ -320,6 +320,7 @@ _{Explain here how the data encryption feature will be implemented}_
 
 // end::dataencryption[]
 
+//tag::contextcommands[]
 === Context-specific commands
 
 ==== Planned implementation
@@ -382,6 +383,7 @@ to Parser classes.
 state for the `Logic` module.
 ** Cons: making this work will involve architectural changes since only the `UI` module has
 a reference to `Logic` module class (Parser).
+// end::contextcommands[]
 
 // tag::autofill[]
 === Autofill missing title or description when adding a link
