@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
-import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -36,6 +35,8 @@ public class ModelManager implements Model {
 
     private final EntryBook listEntryBook;
     private final EntryBook archivesEntryBook;
+    private final EntryBook searchEntryBook = new EntryBook();
+    private final EntryBook feedsEntryBook;
     private final UserPrefs userPrefs;
 
     private final SimpleListProperty<Entry> displayedEntryList;
@@ -52,6 +53,7 @@ public class ModelManager implements Model {
      */
     public ModelManager(ReadOnlyEntryBook listEntryBook,
                         ReadOnlyEntryBook archivesEntryBook,
+                        ReadOnlyEntryBook feedEntryBook,
                         ReadOnlyUserPrefs userPrefs,
                         Storage storage) {
         super();
@@ -61,6 +63,7 @@ public class ModelManager implements Model {
 
         this.listEntryBook = new EntryBook(listEntryBook);
         this.archivesEntryBook = new EntryBook(archivesEntryBook);
+        this.feedsEntryBook = new EntryBook(feedEntryBook);
         this.userPrefs = new UserPrefs(userPrefs);
         this.storage = storage;
 
@@ -71,11 +74,10 @@ public class ModelManager implements Model {
     }
 
     private void setUpListeners() {
-        // Save the list entry book to storage whenever it is modified.
-        listEntryBook.addListener(this::saveListEntryBookToStorageListener);
-
-        // Save the archives entry book to storage whenever it is modified.
-        archivesEntryBook.addListener(this::saveArchivesEntryBookToStorageListener);
+        // Save the relevant entry books to storage whenever they are modified.
+        listEntryBook.addListener(observable -> saveListEntryBookToStorageListener());
+        archivesEntryBook.addListener(observable -> saveArchivesEntryBookToStorageListener());
+        feedsEntryBook.addListener(obserable -> saveFeedsEntryBookToStorageListener());
 
         // Updates selected entry to a valid selection (or none) whenever filtered entries is modified.
         filteredEntries.addListener(this::ensureSelectedEntryIsValid);
@@ -89,8 +91,15 @@ public class ModelManager implements Model {
                 case CONTEXT_ARCHIVES:
                     displayEntryBook(archivesEntryBook);
                     break;
+                case CONTEXT_SEARCH:
+                    displayEntryBook(searchEntryBook);
+                    break;
+                case CONTEXT_FEEDS:
+                    displayEntryBook(feedsEntryBook);
+                    break;
                 default:
                 }
+                updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
             }
         );
     }
@@ -152,6 +161,12 @@ public class ModelManager implements Model {
         userPrefs.setArchivesEntryBookFilePath(archivesEntryBookFilePath);
     }
 
+    @Override
+    public Optional<String> getOfflineLink(String url) {
+        return storage.getOfflineLink(url)
+                .map(path -> path.toUri().toString());
+    }
+
     //=========== EntryBook ================================================================================
 
     @Override
@@ -175,7 +190,7 @@ public class ModelManager implements Model {
     @Override
     public boolean hasListEntry(Entry listEntry) {
         requireNonNull(listEntry);
-        return listEntryBook.hasPerson(listEntry);
+        return listEntryBook.hasEntry(listEntry);
     }
 
     @Override
@@ -188,7 +203,7 @@ public class ModelManager implements Model {
             // the file didn't exist to begin with
             // or we are in some really deep OS-related system error.
         }
-        listEntryBook.removePerson(target);
+        listEntryBook.removeEntry(target);
     }
 
     @Override
@@ -208,7 +223,7 @@ public class ModelManager implements Model {
     public void setListEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
-        listEntryBook.setPerson(target, editedEntry);
+        listEntryBook.setEntry(target, editedEntry);
     }
 
     @Override
@@ -231,12 +246,12 @@ public class ModelManager implements Model {
     @Override
     public boolean hasArchivesEntry(Entry archiveEntry) {
         requireNonNull(archiveEntry);
-        return archivesEntryBook.hasPerson(archiveEntry);
+        return archivesEntryBook.hasEntry(archiveEntry);
     }
 
     @Override
     public void deleteArchivesEntry(Entry target) {
-        archivesEntryBook.removePerson(target);
+        archivesEntryBook.removeEntry(target);
     }
 
     @Override
@@ -248,6 +263,41 @@ public class ModelManager implements Model {
     @Override
     public void clearArchivesEntryBook() {
         archivesEntryBook.clear();
+    }
+
+    //=========== Feeds EntryBook ============================================================================
+
+    @Override
+    public ReadOnlyEntryBook getFeedsEntryBook() {
+        return feedsEntryBook;
+    }
+
+    @Override
+    public boolean hasFeedsEntry(Entry feed) {
+        requireNonNull(feed);
+        return feedsEntryBook.hasEntry(feed);
+    }
+
+    @Override
+    public void deleteFeedsEntry(Entry target) {
+        feedsEntryBook.removeEntry(target);
+    }
+
+    @Override
+    public void addFeedsEntry(Entry feed) {
+        feedsEntryBook.addEntry(feed);
+    }
+
+    @Override
+    public void clearFeedsEntryBook() {
+        feedsEntryBook.clear();
+    }
+
+    //=========== Search EntryBook ==========================================================================
+
+    @Override
+    public void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook) {
+        this.searchEntryBook.resetData(searchEntryBook);
     }
 
     //=========== Storage ===================================================================================
@@ -269,8 +319,7 @@ public class ModelManager implements Model {
 
     //=========== Displayed Entry List ================================================================================
 
-    @Override
-    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+    private void displayEntryBook(ReadOnlyEntryBook entryBook) {
         displayedEntryList.set(entryBook.getEntryList());
     }
 
@@ -411,7 +460,7 @@ public class ModelManager implements Model {
     /**
      * Ensures that storage is updated whenever list entry book is modified.
      */
-    private void saveListEntryBookToStorageListener(Observable observable) {
+    private void saveListEntryBookToStorageListener() {
         logger.info("Entry book modified, saving to file.");
         try {
             storage.saveListEntryBook(listEntryBook);
@@ -423,10 +472,22 @@ public class ModelManager implements Model {
     /**
      * Ensures that storage is updated whenever archives entry book is modified.
      */
-    private void saveArchivesEntryBookToStorageListener(Observable observable) {
+    private void saveArchivesEntryBookToStorageListener() {
         logger.info("Archives modified, saving to file.");
         try {
             storage.saveArchivesEntryBook(archivesEntryBook);
+        } catch (IOException ioe) {
+            setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
+        }
+    }
+
+    /**
+     * Ensures that storage is updated whenever archives entry book is modified.
+     */
+    private void saveFeedsEntryBookToStorageListener() {
+        logger.info("Feed list modified, saving to file.");
+        try {
+            storage.saveFeedsEntryBook(feedsEntryBook);
         } catch (IOException ioe) {
             setException(new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe));
         }
@@ -449,9 +510,12 @@ public class ModelManager implements Model {
 
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
                 && archivesEntryBook.equals(other.archivesEntryBook)
+                && searchEntryBook.equals(other.searchEntryBook)
+                && feedsEntryBook.equals(other.feedsEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
+                && Objects.equals(context.get(), other.context.get())
                 && Objects.equals(selectedEntry.get(), other.selectedEntry.get())
                 && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
                 && Objects.equals(commandResult.get(), other.commandResult.get());
@@ -469,7 +533,8 @@ public class ModelManager implements Model {
 
     @Override
     public Model clone() {
-        Model clonedModel = new ModelManager(this.listEntryBook, this.archivesEntryBook, this.userPrefs, this.storage);
+        Model clonedModel = new ModelManager(this.listEntryBook, this.archivesEntryBook, this.feedsEntryBook,
+                this.userPrefs, this.storage);
         clonedModel.setContext(this.getContext());
         return clonedModel;
     }

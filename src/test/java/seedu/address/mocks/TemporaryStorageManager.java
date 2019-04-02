@@ -18,6 +18,7 @@ public class TemporaryStorageManager extends StorageManager {
         super(
                 new JsonEntryBookStorage(temporaryFolder.newFile().toPath()),
                 new JsonEntryBookStorage(temporaryFolder.newFile().toPath()),
+                new JsonEntryBookStorage(temporaryFolder.newFile().toPath()),
                 new JsonUserPrefsStorage(temporaryFolder.newFile().toPath()),
                 new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath())
         );

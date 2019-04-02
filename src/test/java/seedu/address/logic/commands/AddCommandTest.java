@@ -249,6 +249,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public Optional<String> getOfflineLink(String url) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public boolean hasEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
@@ -319,7 +324,32 @@ public class AddCommandTest {
         }
 
         @Override
-        public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+        public ReadOnlyEntryBook getFeedsEntryBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasFeedsEntry(Entry feed) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteFeedsEntry(Entry target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addFeedsEntry(Entry feed) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearFeedsEntryBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook) {
             throw new AssertionError("This method should not be called.");
         }
 

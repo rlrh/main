@@ -19,6 +19,7 @@ public class StorageManager implements Storage {
     private static final Logger logger = LogsCenter.getLogger(StorageManager.class);
     private EntryBookStorage listEntryBookStorage;
     private EntryBookStorage archivesEntryBookStorage;
+    private EntryBookStorage feedsEntryBookStorage;
     private UserPrefsStorage userPrefsStorage;
     private ArticleStorage articleStorage;
 
@@ -26,6 +27,7 @@ public class StorageManager implements Storage {
     public StorageManager(
         EntryBookStorage listEntryBookStorage,
         EntryBookStorage archivesEntryBookStorage,
+        EntryBookStorage feedsEntryBookStorage,
         UserPrefsStorage userPrefsStorage,
         ArticleStorage articleStorage) {
         super();
@@ -33,6 +35,7 @@ public class StorageManager implements Storage {
         this.userPrefsStorage = userPrefsStorage;
         this.articleStorage = articleStorage;
         this.archivesEntryBookStorage = archivesEntryBookStorage;
+        this.feedsEntryBookStorage = feedsEntryBookStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -52,6 +55,26 @@ public class StorageManager implements Storage {
         userPrefsStorage.saveUserPrefs(userPrefs);
     }
 
+    // ================= General EntryBook methods ========================
+
+    /** Saves an entryBook to the given entryBookStorage. */
+    private static void saveEntryBook(ReadOnlyEntryBook entryBook, EntryBookStorage entryBookStorage)
+            throws IOException {
+
+        Path filePath = entryBookStorage.getEntryBookFilePath();
+        logger.fine("Attempting to write to data file: " + filePath);
+        entryBookStorage.saveEntryBook(entryBook, filePath);
+    }
+
+    /** Reads an EntryBook from the EntryBookStorage. */
+    private static Optional<ReadOnlyEntryBook> readEntryBook(EntryBookStorage entryBookStorage)
+            throws IOException, DataConversionException {
+
+        Path filePath = entryBookStorage.getEntryBookFilePath();
+        logger.fine("Attempting to read data from file: " + filePath);
+        return entryBookStorage.readEntryBook(filePath);
+    }
+
 
     // ================ List EntryBook methods ==============================
 
@@ -62,22 +85,12 @@ public class StorageManager implements Storage {
 
     @Override
     public Optional<ReadOnlyEntryBook> readListEntryBook() throws DataConversionException, IOException {
-        return readListEntryBook(listEntryBookStorage.getEntryBookFilePath());
-    }
-
-    private Optional<ReadOnlyEntryBook> readListEntryBook(Path filePath) throws DataConversionException, IOException {
-        logger.fine("Attempting to read data from file: " + filePath);
-        return listEntryBookStorage.readEntryBook(filePath);
+        return readEntryBook(listEntryBookStorage);
     }
 
     @Override
     public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) throws IOException {
-        saveListEntryBook(listEntryBook, listEntryBookStorage.getEntryBookFilePath());
-    }
-
-    private void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
-        logger.fine("Attempting to write to data file: " + filePath);
-        listEntryBookStorage.saveEntryBook(listEntryBook, filePath);
+        saveEntryBook(listEntryBook, listEntryBookStorage);
     }
 
     // ================ Archives EntryBook methods ==============================
@@ -89,24 +102,29 @@ public class StorageManager implements Storage {
 
     @Override
     public Optional<ReadOnlyEntryBook> readArchivesEntryBook() throws DataConversionException, IOException {
-        return readArchivesEntryBook(archivesEntryBookStorage.getEntryBookFilePath());
-    }
-
-    private Optional<ReadOnlyEntryBook> readArchivesEntryBook(Path filePath)
-        throws DataConversionException, IOException {
-        logger.fine("Attempting to read data from file: " + filePath);
-        return archivesEntryBookStorage.readEntryBook(filePath);
+        return readEntryBook(archivesEntryBookStorage);
     }
 
     @Override
     public void saveArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook) throws IOException {
-        saveArchivesEntryBook(archivesEntryBook,
-            archivesEntryBookStorage.getEntryBookFilePath());
+        saveEntryBook(archivesEntryBook, archivesEntryBookStorage);
     }
 
-    private void saveArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook, Path filePath) throws IOException {
-        logger.fine("Attempting to write to data file: " + filePath);
-        archivesEntryBookStorage.saveEntryBook(archivesEntryBook, filePath);
+    // ================ Feeds EntryBook methods ===================================
+
+    @Override
+    public Path getFeedsEntryBookFilePath() {
+        return feedsEntryBookStorage.getEntryBookFilePath();
+    }
+
+    @Override
+    public Optional<ReadOnlyEntryBook> readFeedsEntryBook() throws DataConversionException, IOException {
+        return readEntryBook(feedsEntryBookStorage);
+    }
+
+    @Override
+    public void saveFeedsEntryBook(ReadOnlyEntryBook feedsEntryBook) throws IOException {
+        saveEntryBook(feedsEntryBook, feedsEntryBookStorage);
     }
 
     // ================ Article methods ================================
@@ -129,5 +147,10 @@ public class StorageManager implements Storage {
     @Override
     public Path getArticlePath(String url) {
         return articleStorage.getArticlePath(url);
+    }
+
+    @Override
+    public Optional<Path> getOfflineLink(String url) {
+        return articleStorage.getOfflineLink(url);
     }
 }

@@ -72,6 +72,13 @@ public interface Model {
     Path getArticleDataDirectoryPath();
 
     /**
+     * Returns the link to the offline copy of the url given if it exists.
+     *
+     * @see seedu.address.model.Model#getOfflineLink(String url)
+     */
+    Optional<String> getOfflineLink(String url);
+
+    /**
      * Sets the user prefs' article data directory path.
      */
     void setArticleDataDirectoryPath(Path articleDataDirectoryPath);
@@ -150,14 +157,33 @@ public interface Model {
      */
     void clearArchivesEntryBook();
 
+    /** Returns the feeds entry book. */
+    ReadOnlyEntryBook getFeedsEntryBook();
+
+    /** Returns whether feed is in the feeds entry book. */
+    boolean hasFeedsEntry(Entry feed);
+
+    /**
+     * Removes the target from feed entry book.
+     * Target must exist in feed entry book.
+     */
+    void deleteFeedsEntry(Entry target);
+
+    /** Adds feed to the feed entry book. It should not already be there. */
+    void addFeedsEntry(Entry feed);
+
+    /** Clears the entire feed entry book. */
+    void clearFeedsEntryBook();
+
     /** Deletes article associated with {@code url}. */
     void deleteArticle(String url) throws IOException;
+
+    /** Sets the search context entry book. */
+    void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook);
 
     /** Adds article with {@code articleContent} associated with {@code url}. */
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 
-    /** Displays a given entryBook without touching storage. */
-    void displayEntryBook(ReadOnlyEntryBook entryBook);
 
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();
