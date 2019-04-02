@@ -30,7 +30,7 @@ Responsibilities: Offline support feature, Storage component
 
 === Qi Ji
 image::qjqqyy.png[width="150", align="left"]
-{empty}[https://github.com/qjqqyy[github]]
+{empty}[https://github.com/qjqqyy[github]] [<<qjqqyy#, portfolio>>]
 
 Role: Quality Assurance Lead, Developer +
 Responsibilities: Web feed subscription feature, Model component
@@ -39,7 +39,7 @@ Responsibilities: Web feed subscription feature, Model component
 
 === Jonathan Cheng
 image::epicfailname.png[width="150", align="left"]
-{empty}[https://github.com/epicfailname[github]]
+{empty}[https://github.com/epicfailname[github]] [<<jonathancheng#, portfolio>>]
 
 Role: Technical Lead, Developer +
 Responsibilities: Entry management feature, Logic component

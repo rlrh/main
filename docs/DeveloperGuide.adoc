@@ -292,6 +292,7 @@ to Parser classes. This causes more coupling.
 state for the `Logic` module, which is also responsible for parsing commands.
 ** Cons: making this work will involve architectural changes since only the `UI` module has
 a reference to `Logic` module class (Parser).
+// end::contextcommands[]
 
 Ultimately, Alternative 1 was chosen because we later decided that context should have a one-to-one
 correspondence to which entrybook to display to the user (refer to <<Multiple-EntryBooks>>),
