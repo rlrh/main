@@ -85,7 +85,7 @@ public class MainApp extends Application {
             if (!listEntryBookOptional.isPresent()) {
                 logger.info("Data file not found. Will be starting with a sample EntryBook");
             }
-            initialListEntryBookData = listEntryBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
+            initialListEntryBookData = listEntryBookOptional.orElseGet(SampleDataUtil::getSampleEntryBook);
         } catch (DataConversionException e) {
             logger.warning("Data file not in the correct format. Will be starting with an empty EntryBook");
             initialListEntryBookData = new EntryBook();

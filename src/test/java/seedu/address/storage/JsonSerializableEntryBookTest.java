@@ -28,9 +28,9 @@ public class JsonSerializableEntryBookTest {
     public void toModelType_typicalEntriesFile_success() throws Exception {
         JsonSerializableEntryBook dataFromFile = JsonUtil.readJsonFile(TYPICAL_ENTRIES_FILE,
                 JsonSerializableEntryBook.class).get();
-        EntryBook addressBookFromFile = dataFromFile.toModelType();
+        EntryBook entryBookFromFile = dataFromFile.toModelType();
         EntryBook typicalEntriesAddressBook = TypicalEntries.getTypicalListEntryBook();
-        assertEquals(addressBookFromFile, typicalEntriesAddressBook);
+        assertEquals(entryBookFromFile, typicalEntriesAddressBook);
     }
 
     @Test

@@ -58,7 +58,7 @@ public class SampleDataUtil {
         };
     }
 
-    public static ReadOnlyEntryBook getSampleAddressBook() {
+    public static ReadOnlyEntryBook getSampleEntryBook() {
         EntryBook sampleAb = new EntryBook();
         for (Entry sampleEntry : getSampleEntries()) {
             sampleAb.addEntry(sampleEntry);

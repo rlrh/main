@@ -107,10 +107,10 @@ public class JsonEntryBookStorageTest {
     /**
      * Saves {@code addressBook} at the specified {@code filePath}.
      */
-    private void saveAddressBook(ReadOnlyEntryBook addressBook, String filePath) {
+    private void saveAddressBook(ReadOnlyEntryBook entryBook, String filePath) {
         try {
             new JsonEntryBookStorage(Paths.get(filePath))
-                    .saveEntryBook(addressBook, addToTestDataPathIfNotNull(filePath));
+                    .saveEntryBook(entryBook, addToTestDataPathIfNotNull(filePath));
         } catch (IOException ioe) {
             throw new AssertionError("There should not be an error writing to the file.", ioe);
         }
