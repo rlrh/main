@@ -36,12 +36,13 @@ public class ModelManager implements Model {
 
     private final EntryBook listEntryBook;
     private final EntryBook archivesEntryBook;
+    private final EntryBook searchEntryBook = new EntryBook();
     private final UserPrefs userPrefs;
 
     private final SimpleListProperty<Entry> displayedEntryList;
     private final FilteredList<Entry> filteredEntries;
     private final SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
+    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(new ViewMode());
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<ModelContext> context = new SimpleObjectProperty<>(ModelContext.CONTEXT_LIST);
@@ -89,8 +90,12 @@ public class ModelManager implements Model {
                 case CONTEXT_ARCHIVES:
                     displayEntryBook(archivesEntryBook);
                     break;
+                case CONTEXT_SEARCH:
+                    displayEntryBook(searchEntryBook);
+                    break;
                 default:
                 }
+                updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
             }
         );
     }
@@ -152,6 +157,12 @@ public class ModelManager implements Model {
         userPrefs.setArchivesEntryBookFilePath(archivesEntryBookFilePath);
     }
 
+    @Override
+    public Optional<String> getOfflineLink(String url) {
+        return storage.getOfflineLink(url)
+                .map(path -> path.toUri().toString());
+    }
+
     //=========== EntryBook ================================================================================
 
     @Override
@@ -175,16 +186,31 @@ public class ModelManager implements Model {
     @Override
     public boolean hasListEntry(Entry listEntry) {
         requireNonNull(listEntry);
-        return listEntryBook.hasPerson(listEntry);
+        return listEntryBook.hasEntry(listEntry);
     }
 
     @Override
     public void deleteListEntry(Entry target) {
-        listEntryBook.removePerson(target);
+        try {
+            this.deleteArticle(target.getLink().value);
+        } catch (IOException ioe) {
+            // If there was a problem deleting the file,
+            // do nothing because that either means
+            // the file didn't exist to begin with
+            // or we are in some really deep OS-related system error.
+        }
+        listEntryBook.removeEntry(target);
     }
 
     @Override
-    public void addListEntry(Entry entry) {
+    public void addListEntry(Entry entry, Optional<byte[]> articleContent) {
+        if (articleContent.isPresent()) {
+            try {
+                this.addArticle(entry.getLink().value, articleContent.get());
+            } catch (IOException ioe) {
+                // Do nothing if failed to save content to disk
+            }
+        }
         listEntryBook.addEntry(entry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
@@ -193,7 +219,7 @@ public class ModelManager implements Model {
     public void setListEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
-        listEntryBook.setPerson(target, editedEntry);
+        listEntryBook.setEntry(target, editedEntry);
     }
 
     @Override
@@ -216,12 +242,12 @@ public class ModelManager implements Model {
     @Override
     public boolean hasArchivesEntry(Entry archiveEntry) {
         requireNonNull(archiveEntry);
-        return archivesEntryBook.hasPerson(archiveEntry);
+        return archivesEntryBook.hasEntry(archiveEntry);
     }
 
     @Override
     public void deleteArchivesEntry(Entry target) {
-        archivesEntryBook.removePerson(target);
+        archivesEntryBook.removeEntry(target);
     }
 
     @Override
@@ -235,11 +261,23 @@ public class ModelManager implements Model {
         archivesEntryBook.clear();
     }
 
+    //=========== Search EntryBook ==========================================================================
+
+    @Override
+    public void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook) {
+        this.searchEntryBook.resetData(searchEntryBook);
+    }
+
     //=========== Storage ===================================================================================
 
     @Override
     public Storage getStorage() {
         return storage;
+    }
+
+    @Override
+    public void deleteArticle(String url) throws IOException {
+        storage.deleteArticle(url);
     }
 
     @Override
@@ -249,8 +287,7 @@ public class ModelManager implements Model {
 
     //=========== Displayed Entry List ================================================================================
 
-    @Override
-    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+    private void displayEntryBook(ReadOnlyEntryBook entryBook) {
         displayedEntryList.set(entryBook.getEntryList());
     }
 
@@ -429,9 +466,11 @@ public class ModelManager implements Model {
 
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
                 && archivesEntryBook.equals(other.archivesEntryBook)
+                && searchEntryBook.equals(other.searchEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
+                && Objects.equals(context.get(), other.context.get())
                 && Objects.equals(selectedEntry.get(), other.selectedEntry.get())
                 && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
                 && Objects.equals(commandResult.get(), other.commandResult.get());
@@ -461,8 +500,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void unarchiveEntry(Entry entry) {
+    public void unarchiveEntry(Entry entry, Optional<byte[]> articleContent) {
         deleteArchivesEntry(entry);
-        addListEntry(entry);
+        addListEntry(entry, articleContent);
     }
 }
