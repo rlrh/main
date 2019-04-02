@@ -84,10 +84,10 @@ public class CommandTestUtil {
 
     static {
         DESC_AMY = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_AMY)
-                .withDescription(VALID_DESCRIPTION_AMY).withLink(VALID_LINK_AMY).withAddress(VALID_ADDRESS_AMY)
+                .withDescription(VALID_DESCRIPTION_AMY).withAddress(VALID_ADDRESS_AMY)
                 .withTags(VALID_TAG_TECH).build();
         DESC_BOB = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB)
-                .withDescription(VALID_DESCRIPTION_BOB).withLink(VALID_LINK_BOB).withAddress(VALID_ADDRESS_BOB)
+                .withDescription(VALID_DESCRIPTION_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH).build();
     }
 
