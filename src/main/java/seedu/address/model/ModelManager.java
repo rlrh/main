@@ -19,7 +19,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.commons.util.FileUtil;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.entry.Entry;
@@ -160,12 +159,8 @@ public class ModelManager implements Model {
 
     @Override
     public Optional<String> getOfflineLink(String url) {
-        Path offlineLink = storage.getArticlePath(url);
-        if (FileUtil.isFileExists(offlineLink)) {
-            return Optional.of(offlineLink.toUri().toString());
-        } else {
-            return Optional.empty();
-        }
+        return storage.getOfflineLink(url)
+                .map(path -> path.toUri().toString());
     }
 
     //=========== EntryBook ================================================================================

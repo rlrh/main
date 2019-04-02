@@ -26,6 +26,9 @@ public interface Storage extends UserPrefsStorage, ArticleStorage {
     @Override
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 
+    @Override
+    Optional<Path> getOfflineLink(String url);
+
     Path getListEntryBookFilePath();
 
     Optional<ReadOnlyEntryBook> readListEntryBook() throws DataConversionException, IOException;

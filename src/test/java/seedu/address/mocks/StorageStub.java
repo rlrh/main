@@ -77,4 +77,9 @@ public class StorageStub implements Storage {
     public Path getArticlePath(String url) {
         return null;
     }
+
+    @Override
+    public Optional<Path> getOfflineLink(String url) {
+        return Optional.empty();
+    }
 }

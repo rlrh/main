@@ -130,4 +130,9 @@ public class StorageManager implements Storage {
     public Path getArticlePath(String url) {
         return articleStorage.getArticlePath(url);
     }
+
+    @Override
+    public Optional<Path> getOfflineLink(String url) {
+        return articleStorage.getOfflineLink(url);
+    }
 }

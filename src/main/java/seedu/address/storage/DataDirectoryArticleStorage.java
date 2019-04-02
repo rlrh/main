@@ -77,4 +77,13 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
         }
     }
 
+    public Optional<Path> getOfflineLink(String url) {
+        Path offlineLink = getArticlePath(url);
+        if (FileUtil.isFileExists(offlineLink)) {
+            return Optional.of(offlineLink);
+        } else {
+            return Optional.empty();
+        }
+    }
+
 }

@@ -1,6 +1,8 @@
 package seedu.address.storage;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -57,13 +59,24 @@ public class DataDirectoryArticleStorageTest {
     public void addArticle_addingTwiceOverwritesContent() throws IOException {
         DataDirectoryArticleStorage ddas = new DataDirectoryArticleStorage(testFolder.getRoot().toPath());
 
-        // Save a bunch of articles then fetch them. They shouldn't overwrite each other.
+        // If re-adding an article, the content should be overwritten.
 
         ddas.addArticle("https://test.com", "test1".getBytes());
         assertFetchSuccess(ddas, "https://test.com", "test1".getBytes());
 
         ddas.addArticle("https://test.com", "test2".getBytes());
         assertFetchSuccess(ddas, "https://test.com", "test2".getBytes());
+    }
+
+    @Test
+    public void getOfflineLink() throws IOException {
+        DataDirectoryArticleStorage ddas = new DataDirectoryArticleStorage(testFolder.getRoot().toPath());
+
+        ddas.addArticle("https://test.com", "test1".getBytes());
+
+        // Test that getting an offline link returns Optional.empty() if article was not added.
+        assertTrue(ddas.getOfflineLink("https://test.com").isPresent());
+        assertFalse(ddas.getOfflineLink("http://test.com").isPresent());
     }
 
     /**
