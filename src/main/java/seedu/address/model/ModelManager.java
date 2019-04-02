@@ -41,7 +41,7 @@ public class ModelManager implements Model {
     private final SimpleListProperty<Entry> displayedEntryList;
     private final FilteredList<Entry> filteredEntries;
     private final SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
+    private final SimpleObjectProperty<ViewMode> currentViewMode = new SimpleObjectProperty<>(new ViewMode());
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<ModelContext> context = new SimpleObjectProperty<>(ModelContext.CONTEXT_LIST);
