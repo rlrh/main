@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.address.logic.commands.CommandTestUtil.STYLE_DESC_DARK;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_VIEWTYPE_BROWSER;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_VIEWTYPE_READER;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import java.util.Arrays;
@@ -36,7 +39,9 @@ import seedu.address.model.entry.TitleContainsKeywordsPredicate;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
+import seedu.address.ui.ReaderViewStyle;
 import seedu.address.ui.ViewMode;
+import seedu.address.ui.ViewType;
 
 public class EntryBookListParserTest {
     @Rule
@@ -165,11 +170,11 @@ public class EntryBookListParserTest {
     @Test
     public void parseCommand_view() throws Exception {
         ViewModeCommand command = (ViewModeCommand) parser.parseCommand(
-                ViewModeCommand.COMMAND_WORD + " " + ViewMode.values()[0].toString());
-        assertEquals(new ViewModeCommand(ViewMode.values()[0]), command);
+                ViewModeCommand.COMMAND_WORD + " " + VALID_VIEWTYPE_BROWSER);
+        assertEquals(new ViewModeCommand(new ViewMode(ViewType.BROWSER)), command);
         ViewModeCommand aliasCommand = (ViewModeCommand) parser.parseCommand(
-                ViewModeCommand.COMMAND_ALIAS + " " + ViewMode.values()[1].toString());
-        assertEquals(new ViewModeCommand(ViewMode.values()[1]), aliasCommand);
+                ViewModeCommand.COMMAND_ALIAS + " " + VALID_VIEWTYPE_READER + STYLE_DESC_DARK);
+        assertEquals(new ViewModeCommand(new ViewMode(ViewType.READER, ReaderViewStyle.DARK)), aliasCommand);
     }
 
     @Test
