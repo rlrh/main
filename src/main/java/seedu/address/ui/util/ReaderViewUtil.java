@@ -118,7 +118,7 @@ public class ReaderViewUtil {
     }
 
     /**
-     * Resolves relative links to absolute links.
+     * Makes all images responsive.
      * @param document Jsoup document parsed from raw HTML
      */
     private static Document makeImagesResponsive(Document document) {
@@ -193,7 +193,7 @@ public class ReaderViewUtil {
         Optional.ofNullable(article.getTextContent())
                 .filter(text -> !text.isEmpty())
                 .map(StringUtil::getNumberOfWords)
-                .map(wordCount -> Math.max(1, Math.ceil(wordCount / (float) AVERAGE_WORDS_PER_MINUTE)))
+                .map(wordCount -> Math.max(1, (int) Math.ceil(wordCount / (float) AVERAGE_WORDS_PER_MINUTE)))
                 .map(minutes -> new Element(Tag.valueOf(SMALL_TAG), "")
                         .text(minutes + " minute read")
                         .addClass(METADATA_STYLE_CLASS))
@@ -218,7 +218,7 @@ public class ReaderViewUtil {
     }
 
     /**
-     * Attempts to create a excerpt element.
+     * Attempts to create an excerpt element.
      * @param article Readability4J article
      * @return optional excerpt element
      */

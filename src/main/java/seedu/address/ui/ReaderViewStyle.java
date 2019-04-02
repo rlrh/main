@@ -5,16 +5,14 @@ import static java.util.Objects.requireNonNull;
 import java.net.URL;
 import java.util.Locale;
 
-import seedu.address.MainApp;
-
 /**
  * Available reader view styles.
  */
 public enum ReaderViewStyle {
-    DEFAULT(requireNonNull(MainApp.class.getResource(Constants.STYLESHEETS_FILE_FOLDER + "default.css"))),
-    SEPIA(requireNonNull(MainApp.class.getResource(Constants.STYLESHEETS_FILE_FOLDER + "sepia.css"))),
-    DARK(requireNonNull(MainApp.class.getResource(Constants.STYLESHEETS_FILE_FOLDER + "dark.css"))),
-    BLACK(requireNonNull(MainApp.class.getResource(Constants.STYLESHEETS_FILE_FOLDER + "black.css")));
+    DEFAULT(requireNonNull(ReaderViewStyle.class.getResource(Constants.STYLESHEETS_FILE_FOLDER + "default.css"))),
+    SEPIA(requireNonNull(ReaderViewStyle.class.getResource(Constants.STYLESHEETS_FILE_FOLDER + "sepia.css"))),
+    DARK(requireNonNull(ReaderViewStyle.class.getResource(Constants.STYLESHEETS_FILE_FOLDER + "dark.css"))),
+    BLACK(requireNonNull(ReaderViewStyle.class.getResource(Constants.STYLESHEETS_FILE_FOLDER + "black.css")));
 
     private URL stylesheetLocation;
 
