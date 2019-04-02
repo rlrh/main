@@ -323,6 +323,20 @@ Examples:
 
 - `bing Trump` Returns entries containing the `Trump` keyword
 
+==== Searching for news: `googlenews` `[since v1.3]`
+
+Searches https://news.google.com/[Google News] for entries that you can subsequently add.
+
+This command also enters the Search Results context.
+Refer to <<Results-Context>> for available commands in this context.
+
+Format: `googlenews [KEYWORD]...`
+
+Examples:
+
+- `googlenews` Returns top stories
+- `googlenews Trump` Returns news articles containing the `Trump` keyword
+
 ==== Searching a web feed: `feed` `[since v1.2]`
 
 Opens a web feed at the URL for previewing.
