@@ -8,9 +8,9 @@ import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY_BAS
 import static seedu.address.testutil.TypicalEntries.INVALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
-import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY_BASE_URL;
 
 import java.net.URL;
+import java.util.Optional;
 import javax.xml.transform.TransformerException;
 
 import org.jsoup.Jsoup;
@@ -23,17 +23,18 @@ import guitests.guihandles.BrowserPanelHandle;
 import javafx.beans.property.SimpleObjectProperty;
 import seedu.address.commons.util.XmlUtil;
 import seedu.address.model.entry.Entry;
+import seedu.address.ui.util.ReaderViewUtil;
 
 public class BrowserPanelTest extends GuiUnitTest {
     private SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
-    private SimpleObjectProperty<ViewMode> viewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
+    private SimpleObjectProperty<ViewMode> viewMode = new SimpleObjectProperty<>(new ViewMode());
     private BrowserPanel browserPanel;
     private BrowserPanelHandle browserPanelHandle;
 
     @Before
     public void setUp() {
         guiRobot.interact(() -> {
-            browserPanel = new BrowserPanel(selectedPerson, viewMode);
+            browserPanel = new BrowserPanel(selectedPerson, viewMode, (url) -> Optional.empty());
         });
         uiPartRule.setUiPart(browserPanel);
 
@@ -70,7 +71,26 @@ public class BrowserPanelTest extends GuiUnitTest {
 
     @Test
     public void displayReaderViewOnWikipediaPage() {
-        assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_ENTRY_BASE_URL);
+        assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_ENTRY.getLink().value);
+    }
+
+    @Test
+    public void displayReaderViewStyle() {
+
+        // load associated web page of a Wikipedia entry
+        guiRobot.interact(() -> selectedPerson.set(WIKIPEDIA_ENTRY));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // set reader view mode with specified style
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER, ReaderViewStyle.DARK)));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // check actual stylesheet is the same as specified stylesheet
+        assertEquals(
+                ReaderViewStyle.DARK.getStylesheetLocation().toExternalForm(),
+                browserPanelHandle.getUserStyleSheetLocation()
+        );
+
     }
 
     /**
@@ -84,24 +104,26 @@ public class BrowserPanelTest extends GuiUnitTest {
         guiRobot.interact(() -> selectedPerson.set(entry));
         waitUntilBrowserLoaded(browserPanelHandle);
 
-        // process loaded content through Crux
+        // generate reader view by processing loaded content
         String originalHtml = "";
         try {
-            originalHtml = XmlUtil.convertDocumentToString(browserPanel.getWebEngine().getDocument());
+            originalHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
         } catch (TransformerException te) {
             fail();
         }
-        Document doc = browserPanel.getReaderDocumentFrom(baseUrl, originalHtml);
+
+        Document originalDoc = Jsoup.parse(originalHtml, baseUrl);
+        Document doc = ReaderViewUtil.generateReaderViewFrom(originalDoc);
         String expectedText = doc.text();
 
-        // set reader mode and reload
-        guiRobot.interact(() -> viewMode.set(ViewMode.READER));
+        // set reader view mode
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER)));
         waitUntilBrowserLoaded(browserPanelHandle);
 
         // extract loaded content
         String readerHtml = "";
         try {
-            readerHtml = XmlUtil.convertDocumentToString(browserPanel.getWebEngine().getDocument());
+            readerHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
         } catch (TransformerException te) {
             fail();
         }

@@ -51,8 +51,8 @@ public class FeedCommand extends Command {
             throw new CommandException("Some other problem: " + StringUtil.getDetails(e), e);
         }*/
 
+        model.setSearchEntryBook(toBeDisplayed);
         model.setContext(ModelContext.CONTEXT_SEARCH);
-        model.displayEntryBook(toBeDisplayed);
         model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, feedUrl));

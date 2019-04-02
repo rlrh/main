@@ -4,13 +4,13 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_COMPLETE;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_DESCRIPTION_COMPLETE;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_DESCRIPTION_INCOMPLETE;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_COMPLETE;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_INCOMPLETE;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE;
-import static seedu.address.testutil.TypicalEntries.CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_DESCRIPTION_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_INCOMPLETE;
+import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE;
+import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE;
 import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_DESCRIPTION_COMPLETE;
 import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_DESCRIPTION_INCOMPLETE;
 import static seedu.address.testutil.TypicalEntries.REAL_LINK_NO_TITLE_COMPLETE;
@@ -122,22 +122,23 @@ public class AddCommandTest {
     @Test
     public void execute_cruxEntryHasNoTitleAndNoDescription_titleAndDescriptionReplaced() throws Exception {
         assertInitialEntryBecomesFinalEntry(
-                CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE, CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
+                READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE, READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
     }
 
     @Test
     public void execute_cruxEntryHasNoTitle_onlyTitleReplaced() throws Exception {
-        assertInitialEntryBecomesFinalEntry(CRUX_LINK_NO_TITLE_INCOMPLETE, CRUX_LINK_NO_TITLE_COMPLETE);
+        assertInitialEntryBecomesFinalEntry(READABILITY_LINK_NO_TITLE_INCOMPLETE, READABILITY_LINK_NO_TITLE_COMPLETE);
     }
 
     @Test
     public void execute_cruxEntryHasNoDescription_onlyDescriptionReplaced() throws Exception {
-        assertInitialEntryBecomesFinalEntry(CRUX_LINK_NO_DESCRIPTION_INCOMPLETE, CRUX_LINK_NO_DESCRIPTION_COMPLETE);
+        assertInitialEntryBecomesFinalEntry(READABILITY_LINK_NO_DESCRIPTION_INCOMPLETE,
+                READABILITY_LINK_NO_DESCRIPTION_COMPLETE);
     }
 
     @Test
     public void execute_entryHasTitleAndDescription_noChange() throws Exception {
-        assertInitialEntryBecomesFinalEntry(CRUX_LINK_COMPLETE, CRUX_LINK_COMPLETE);
+        assertInitialEntryBecomesFinalEntry(READABILITY_LINK_COMPLETE, READABILITY_LINK_COMPLETE);
     }
 
     @Test
@@ -197,6 +198,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void deleteArticle(String url) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public Optional<Path> addArticle(String url, byte[] articleContent) {
             throw new AssertionError("This method should not be called.");
         }
@@ -243,12 +249,17 @@ public class AddCommandTest {
         }
 
         @Override
+        public Optional<String> getOfflineLink(String url) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public boolean hasEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void addListEntry(Entry entry) {
+        public void addListEntry(Entry entry, Optional<byte[]> articleContent) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -313,7 +324,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+        public void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -413,7 +424,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void unarchiveEntry(Entry entry) {
+        public void unarchiveEntry(Entry entry, Optional<byte[]> articleContent) {
             throw new AssertionError("This method should not be called.");
         }
     }
@@ -454,7 +465,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addListEntry(Entry entry) {
+        public void addListEntry(Entry entry, Optional<byte[]> articleContent) {
             requireNonNull(entry);
             entriesAdded.add(entry);
         }

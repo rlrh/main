@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.beans.property.ReadOnlyProperty;
@@ -50,6 +51,11 @@ public class LogicManager implements Logic {
     @Override
     public ReadOnlyEntryBook getListEntryBook() {
         return model.getListEntryBook();
+    }
+
+    @Override
+    public Optional<String> getOfflineLink(String url) {
+        return model.getOfflineLink(url);
     }
 
     @Override
