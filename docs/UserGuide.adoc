@@ -812,20 +812,22 @@ Examples:
 
 ==== Selecting a feed: `select`
 
-Selects the feed identified by the index number used in the displayed feed list and displays its entries.
+Selects the feed identified by the index number used in the displayed feed list.
+// and displays its entries.
 
 Format: `select INDEX`
 
 ****
-- Selects the feed and displays its entries.
-- Equivalent to `search [URL_OF_INDEXED_FEED]`
+- Selects the feed.
+//- Equivalent to `search [URL_OF_INDEXED_FEED]`
 - The index refers to the index number shown in the displayed feed list.
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
 
 Examples:
 
-- `select 2` Selects the 2nd feed in the manager and displays its entries
+- `select 2` Selects the 2nd feed in the manager.
+// and displays its entries
 
 == FAQ
 
