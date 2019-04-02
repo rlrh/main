@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -123,13 +124,13 @@ public class ModelManagerTest {
 
     @Test
     public void hasEntry_entryInEntryBook_returnsTrue() {
-        modelManager.addListEntry(ALICE);
+        modelManager.addListEntry(ALICE, Optional.empty());
         assertTrue(modelManager.hasEntry(ALICE));
     }
 
     @Test
     public void deleteEntry_entryIsSelectedAndFirstEntryInFilteredEntryList_selectionCleared() {
-        modelManager.addListEntry(ALICE);
+        modelManager.addListEntry(ALICE, Optional.empty());
         modelManager.setSelectedEntry(ALICE);
         modelManager.deleteListEntry(ALICE);
         assertEquals(null, modelManager.getSelectedEntry());
@@ -137,8 +138,8 @@ public class ModelManagerTest {
 
     @Test
     public void deleteEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
-        modelManager.addListEntry(ALICE);
-        modelManager.addListEntry(BOB);
+        modelManager.addListEntry(ALICE, Optional.empty());
+        modelManager.addListEntry(BOB, Optional.empty());
         assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(BOB);
         modelManager.deleteListEntry(BOB);
@@ -147,7 +148,7 @@ public class ModelManagerTest {
 
     @Test
     public void setEntry_entryIsSelected_selectedEntryUpdated() {
-        modelManager.addListEntry(ALICE);
+        modelManager.addListEntry(ALICE, Optional.empty());
         modelManager.setSelectedEntry(ALICE);
         Entry updatedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
         modelManager.setListEntry(ALICE, updatedAlice);
@@ -168,7 +169,7 @@ public class ModelManagerTest {
 
     @Test
     public void setSelectedEntry_entryInFilteredEntryList_setsSelectedEntry() {
-        modelManager.addListEntry(ALICE);
+        modelManager.addListEntry(ALICE, Optional.empty());
         assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(ALICE);
         assertEquals(ALICE, modelManager.getSelectedEntry());
