@@ -72,6 +72,13 @@ public interface Model {
     Path getArticleDataDirectoryPath();
 
     /**
+     * Returns the link to the offline copy of the url given if it exists.
+     *
+     * @see seedu.address.model.Model#getOfflineLink(String url)
+     */
+    Optional<String> getOfflineLink(String url);
+
+    /**
      * Sets the user prefs' article data directory path.
      */
     void setArticleDataDirectoryPath(Path articleDataDirectoryPath);
@@ -104,7 +111,7 @@ public interface Model {
      * Adds the given entry.
      * {@code entry} must not already exist in the list entry book.
      */
-    void addListEntry(Entry entry);
+    void addListEntry(Entry entry, Optional<byte[]> articleContent);
 
     /**
      * Replaces the given entry {@code target} with {@code editedEntry}.
@@ -150,6 +157,8 @@ public interface Model {
      */
     void clearArchivesEntryBook();
 
+    /** Deletes article associated with {@code url}. */
+    void deleteArticle(String url) throws IOException;
 
     /** Sets the search context entry book. */
     void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook);
@@ -267,5 +276,5 @@ public interface Model {
      * Un-archives the given entry.
      * The entry must exist in the entry book archives.
      */
-    void unarchiveEntry(Entry entry);
+    void unarchiveEntry(Entry entry, Optional<byte[]> articleContent);
 }

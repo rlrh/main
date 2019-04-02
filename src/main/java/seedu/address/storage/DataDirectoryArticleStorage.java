@@ -31,6 +31,13 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
     }
 
     @Override
+    public void deleteArticle(String url) throws IOException {
+        Path targetPath = getArticlePath(url);
+
+        FileUtil.deleteFile(targetPath);
+    }
+
+    @Override
     public Optional<Path> addArticle(String url, byte[] articleContent) throws IOException {
         Path targetPath = getArticlePath(url);
 
@@ -67,6 +74,15 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
             return directoryPath.resolve(urlToFilename(url));
         } catch (NoSuchAlgorithmException nsae) {
             throw new RuntimeException(nsae);
+        }
+    }
+
+    public Optional<Path> getOfflineLink(String url) {
+        Path offlineLink = getArticlePath(url);
+        if (FileUtil.isFileExists(offlineLink)) {
+            return Optional.of(offlineLink);
+        } else {
+            return Optional.empty();
         }
     }
 

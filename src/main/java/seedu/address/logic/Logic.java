@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.ObservableList;
@@ -35,6 +36,13 @@ public interface Logic {
 
     /** Returns an unmodifiable view of the filtered list of entries */
     ObservableList<Entry> getFilteredEntryList();
+
+    /**
+     * Returns the link to the offline copy of the url given if it exists.
+     *
+     * @see seedu.address.model.Model#getOfflineLink(String url)
+     */
+    Optional<String> getOfflineLink(String url);
 
     /**
      * Returns an unmodifiable view of the list of commands entered by the user.

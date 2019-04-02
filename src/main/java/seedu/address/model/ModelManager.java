@@ -157,6 +157,12 @@ public class ModelManager implements Model {
         userPrefs.setArchivesEntryBookFilePath(archivesEntryBookFilePath);
     }
 
+    @Override
+    public Optional<String> getOfflineLink(String url) {
+        return storage.getOfflineLink(url)
+                .map(path -> path.toUri().toString());
+    }
+
     //=========== EntryBook ================================================================================
 
     @Override
@@ -185,11 +191,26 @@ public class ModelManager implements Model {
 
     @Override
     public void deleteListEntry(Entry target) {
+        try {
+            this.deleteArticle(target.getLink().value);
+        } catch (IOException ioe) {
+            // If there was a problem deleting the file,
+            // do nothing because that either means
+            // the file didn't exist to begin with
+            // or we are in some really deep OS-related system error.
+        }
         listEntryBook.removeEntry(target);
     }
 
     @Override
-    public void addListEntry(Entry entry) {
+    public void addListEntry(Entry entry, Optional<byte[]> articleContent) {
+        if (articleContent.isPresent()) {
+            try {
+                this.addArticle(entry.getLink().value, articleContent.get());
+            } catch (IOException ioe) {
+                // Do nothing if failed to save content to disk
+            }
+        }
         listEntryBook.addEntry(entry);
         updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
@@ -252,6 +273,11 @@ public class ModelManager implements Model {
     @Override
     public Storage getStorage() {
         return storage;
+    }
+
+    @Override
+    public void deleteArticle(String url) throws IOException {
+        storage.deleteArticle(url);
     }
 
     @Override
@@ -474,8 +500,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void unarchiveEntry(Entry entry) {
+    public void unarchiveEntry(Entry entry, Optional<byte[]> articleContent) {
         deleteArchivesEntry(entry);
-        addListEntry(entry);
+        addListEntry(entry, articleContent);
     }
 }
