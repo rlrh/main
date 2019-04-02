@@ -55,7 +55,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_zeroKeywords_noPersonFound() {
+    public void execute_zeroKeywords_noEntryFound() {
         String expectedMessage = String.format(MESSAGE_ENTRIES_LISTED_OVERVIEW, 0);
         TitleContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
@@ -65,7 +65,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleKeywords_multiplePersonsFound() {
+    public void execute_multipleKeywords_multipleEntriesFound() {
         String expectedMessage = String.format(MESSAGE_ENTRIES_LISTED_OVERVIEW, 3);
         TitleContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
         FindCommand command = new FindCommand(predicate);

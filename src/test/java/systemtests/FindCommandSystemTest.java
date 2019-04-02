@@ -121,16 +121,16 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find while a entry is selected -> selected card deselected */
-        showAllPersons();
-        selectPerson(Index.fromOneBased(1));
-        assertFalse(getPersonListPanel().getHandleToSelectedCard().getTitle().equals(DANIEL.getTitle().fullTitle));
+        showAllEntries();
+        selectEntry(Index.fromOneBased(1));
+        assertFalse(getEntryListPanel().getHandleToSelectedCard().getTitle().equals(DANIEL.getTitle().fullTitle));
         command = FindCommand.COMMAND_WORD + " Daniel";
         ModelHelper.setFilteredList(expectedModel, DANIEL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardDeselected();
 
         /* Case: find entry in empty address book -> 0 persons found */
-        deleteAllPersons();
+        deleteAllEntries();
         command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
         expectedModel = getModel();
         ModelHelper.setFilteredList(expectedModel, DANIEL);

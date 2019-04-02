@@ -126,7 +126,7 @@ public abstract class AddressBookSystemTest {
         return mainWindowHandle.getCommandBox();
     }
 
-    public EntryListPanelHandle getPersonListPanel() {
+    public EntryListPanelHandle getEntryListPanel() {
         return mainWindowHandle.getEntryListPanel();
     }
 
@@ -164,7 +164,7 @@ public abstract class AddressBookSystemTest {
     /**
      * Displays all persons in the address book.
      */
-    protected void showAllPersons() {
+    protected void showAllEntries() {
         executeCommand(ListCommand.COMMAND_WORD);
         assertEquals(getModel().getListEntryBook().getEntryList().size(), getModel().getFilteredEntryList().size());
     }
@@ -172,7 +172,7 @@ public abstract class AddressBookSystemTest {
     /**
      * Displays all persons with any parts of their names matching {@code keyword} (case-insensitive).
      */
-    protected void showPersonsWithName(String keyword) {
+    protected void showEntriesWithName(String keyword) {
         executeCommand(FindCommand.COMMAND_WORD + " " + keyword);
         assertTrue(getModel().getFilteredEntryList().size() < getModel().getListEntryBook().getEntryList().size());
     }
@@ -180,15 +180,15 @@ public abstract class AddressBookSystemTest {
     /**
      * Selects the entry at {@code index} of the displayed list.
      */
-    protected void selectPerson(Index index) {
+    protected void selectEntry(Index index) {
         executeCommand(SelectCommand.COMMAND_WORD + " " + index.getOneBased());
-        assertEquals(index.getZeroBased(), getPersonListPanel().getSelectedCardIndex());
+        assertEquals(index.getZeroBased(), getEntryListPanel().getSelectedCardIndex());
     }
 
     /**
      * Deletes all persons in the address book.
      */
-    protected void deleteAllPersons() {
+    protected void deleteAllEntries() {
         executeCommand(ClearCommand.COMMAND_WORD);
         assertEquals(0, getModel().getListEntryBook().getEntryList().size());
     }
@@ -205,7 +205,7 @@ public abstract class AddressBookSystemTest {
         assertEquals(new EntryBook(expectedModel.getListEntryBook()), testApp.readStorageListEntryBook());
         assertEquals(new EntryBook(expectedModel.getArchivesEntryBook()), testApp.readStorageArchivesEntryBook());
         assertEquals(expectedModel.getContext(), testApp.getModel().getContext());
-        assertListMatching(getPersonListPanel(), expectedModel.getFilteredEntryList());
+        assertListMatching(getEntryListPanel(), expectedModel.getFilteredEntryList());
     }
 
     /**
@@ -217,7 +217,7 @@ public abstract class AddressBookSystemTest {
         getBrowserPanel().rememberUrl();
         statusBarFooterHandle.rememberSaveLocation();
         statusBarFooterHandle.rememberSyncStatus();
-        getPersonListPanel().rememberSelectedEntryCard();
+        getEntryListPanel().rememberSelectedEntryCard();
     }
 
     /**
@@ -227,7 +227,7 @@ public abstract class AddressBookSystemTest {
      */
     protected void assertSelectedCardDeselected() {
         assertEquals(BrowserPanel.DEFAULT_PAGE, getBrowserPanel().getLoadedUrl());
-        assertFalse(getPersonListPanel().isAnyCardSelected());
+        assertFalse(getEntryListPanel().isAnyCardSelected());
     }
 
     /**
@@ -237,8 +237,8 @@ public abstract class AddressBookSystemTest {
      * @see EntryListPanelHandle#isSelectedEntryCardChanged()
      */
     protected void assertSelectedCardChanged(Index expectedSelectedCardIndex) {
-        getPersonListPanel().navigateToCard(getPersonListPanel().getSelectedCardIndex());
-        String selectedCardLink = getPersonListPanel().getHandleToSelectedCard().getLink();
+        getEntryListPanel().navigateToCard(getEntryListPanel().getSelectedCardIndex());
+        String selectedCardLink = getEntryListPanel().getHandleToSelectedCard().getLink();
         URL expectedUrl;
         try {
             expectedUrl = new URL(selectedCardLink);
@@ -248,7 +248,7 @@ public abstract class AddressBookSystemTest {
         // assertEquals(expectedUrl, getBrowserPanel().getLoadedUrl());
         // TODO: make tests work consistently independent of Internet access and installation directory
 
-        assertEquals(expectedSelectedCardIndex.getZeroBased(), getPersonListPanel().getSelectedCardIndex());
+        assertEquals(expectedSelectedCardIndex.getZeroBased(), getEntryListPanel().getSelectedCardIndex());
     }
 
     /**
@@ -258,7 +258,7 @@ public abstract class AddressBookSystemTest {
      */
     protected void assertSelectedCardUnchanged() {
         assertFalse(getBrowserPanel().isUrlChanged());
-        assertFalse(getPersonListPanel().isSelectedEntryCardChanged());
+        assertFalse(getEntryListPanel().isSelectedEntryCardChanged());
     }
 
     /**
@@ -316,7 +316,7 @@ public abstract class AddressBookSystemTest {
     private void assertApplicationStartingStateIsCorrect() {
         assertEquals("", getCommandBox().getInput());
         assertEquals("", getResultDisplay().getText());
-        assertListMatching(getPersonListPanel(), getModel().getFilteredEntryList());
+        assertListMatching(getEntryListPanel(), getModel().getFilteredEntryList());
         assertEquals(BrowserPanel.DEFAULT_PAGE, getBrowserPanel().getLoadedUrl());
         assertEquals(Paths.get(".").resolve(testApp.getListEntryBookStorageSaveLocation()).toString(),
                 getStatusBarFooter().getSaveLocation());

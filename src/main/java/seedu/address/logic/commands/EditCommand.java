@@ -75,7 +75,7 @@ public class EditCommand extends Command {
         }
 
         Entry entryToEdit = lastShownList.get(index.getZeroBased());
-        Entry editedEntry = createEditedPerson(entryToEdit, editEntryDescriptor);
+        Entry editedEntry = createEditedEntry(entryToEdit, editEntryDescriptor);
 
         if (!entryToEdit.isSameEntry(editedEntry) && model.hasEntry(editedEntry)) {
             throw new CommandException(MESSAGE_DUPLICATE_ENTRY);
@@ -90,7 +90,7 @@ public class EditCommand extends Command {
      * Creates and returns a {@code Entry} with the details of {@code entryToEdit}
      * edited with {@code editEntryDescriptor}.
      */
-    private static Entry createEditedPerson(Entry entryToEdit, EditEntryDescriptor editEntryDescriptor) {
+    private static Entry createEditedEntry(Entry entryToEdit, EditEntryDescriptor editEntryDescriptor) {
         assert entryToEdit != null;
 
         Title updatedTitle = editEntryDescriptor.getTitle().orElse(entryToEdit.getTitle());

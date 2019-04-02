@@ -1,7 +1,7 @@
 package systemtests;
 
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
-import static seedu.address.testutil.TestUtil.getPerson;
+import static seedu.address.testutil.TestUtil.getEntry;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import java.util.Optional;
@@ -61,7 +61,7 @@ public class ContextSwitchSystemTest extends AddressBookSystemTest {
      * @return the archived entry
      */
     private Entry archiveEntry(Model model, Index index) {
-        Entry targetEntry = getPerson(model, index);
+        Entry targetEntry = getEntry(model, index);
         model.archiveEntry(targetEntry);
         return targetEntry;
     }
@@ -71,7 +71,7 @@ public class ContextSwitchSystemTest extends AddressBookSystemTest {
      * @return the un-archived entry
      */
     private Entry unarchiveEntry(Model model, Index index) {
-        Entry targetEntry = getPerson(model, index);
+        Entry targetEntry = getEntry(model, index);
         model.unarchiveEntry(targetEntry, Optional.empty());
         return targetEntry;
     }

@@ -87,7 +87,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* ------------------ Performing edit operation while a filtered list is being shown ------------------------ */
 
         /* Case: filtered entry list, edit index within bounds of entry book and entry list -> edited */
-        showPersonsWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithName(KEYWORD_MATCHING_MEIER);
         index = INDEX_FIRST_ENTRY;
         assertTrue(index.getZeroBased() < getModel().getFilteredEntryList().size());
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + TITLE_DESC_BOB;
@@ -98,7 +98,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: filtered entry list, edit index within bounds of entry book but out of bounds of entry list
          * -> rejected
          */
-        showPersonsWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithName(KEYWORD_MATCHING_MEIER);
         int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + TITLE_DESC_BOB,
                 Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
@@ -108,9 +108,9 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: selects second card in the entry list, edit a entry -> edited, card selection remains unchanged but
          * browser url changes
          */
-        showAllPersons();
+        showAllEntries();
         Index indexSelected = INDEX_SECOND_ENTRY;
-        selectPerson(indexSelected);
+        selectEntry(indexSelected);
         index = INDEX_FIRST_ENTRY;
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
                 + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB

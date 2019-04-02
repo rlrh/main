@@ -4,9 +4,9 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.DeleteCommand.MESSAGE_DELETE_ENTRY_SUCCESS;
+import static seedu.address.testutil.TestUtil.getEntry;
 import static seedu.address.testutil.TestUtil.getLastIndex;
 import static seedu.address.testutil.TestUtil.getMidIndex;
-import static seedu.address.testutil.TestUtil.getPerson;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
@@ -30,23 +30,23 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         /* Case: delete the first entry in the list, command with leading spaces and trailing spaces -> deleted */
         Model expectedModel = getModel();
         String command = "     " + DeleteCommand.COMMAND_WORD + "      " + INDEX_FIRST_ENTRY.getOneBased() + "       ";
-        Entry deletedEntry = removePerson(expectedModel, INDEX_FIRST_ENTRY);
+        Entry deletedEntry = removeEntry(expectedModel, INDEX_FIRST_ENTRY);
         String expectedResultMessage = String.format(MESSAGE_DELETE_ENTRY_SUCCESS, deletedEntry);
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
 
         /* Case: delete the last entry in the list -> deleted */
         Model modelBeforeDeletingLast = getModel();
-        Index lastPersonIndex = getLastIndex(modelBeforeDeletingLast);
-        assertCommandSuccess(lastPersonIndex);
+        Index lastEntryIndex = getLastIndex(modelBeforeDeletingLast);
+        assertCommandSuccess(lastEntryIndex);
 
         /* Case: delete the middle entry in the list -> deleted */
-        Index middlePersonIndex = getMidIndex(getModel());
-        assertCommandSuccess(middlePersonIndex);
+        Index middleEntryIndex = getMidIndex(getModel());
+        assertCommandSuccess(middleEntryIndex);
 
         /* ------------------ Performing delete operation while a filtered list is being shown ---------------------- */
 
         /* Case: filtered entry list, delete index within bounds of address book and entry list -> deleted */
-        showPersonsWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithName(KEYWORD_MATCHING_MEIER);
         Index index = INDEX_FIRST_ENTRY;
         assertTrue(index.getZeroBased() < getModel().getFilteredEntryList().size());
         assertCommandSuccess(index);
@@ -54,7 +54,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         /* Case: filtered entry list, delete index within bounds of address book but out of bounds of entry list
          * -> rejected
          */
-        showPersonsWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithName(KEYWORD_MATCHING_MEIER);
         int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         command = DeleteCommand.COMMAND_WORD + " " + invalidIndex;
         assertCommandFailure(command, MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
@@ -62,13 +62,13 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         /* --------------------- Performing delete operation while a entry card is selected ------------------------ */
 
         /* Case: delete the selected entry -> entry list panel selects the entry before the deleted entry */
-        showAllPersons();
+        showAllEntries();
         expectedModel = getModel();
         Index selectedIndex = getLastIndex(expectedModel);
         Index expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);
-        selectPerson(selectedIndex);
+        selectEntry(selectedIndex);
         command = DeleteCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
-        deletedEntry = removePerson(expectedModel, selectedIndex);
+        deletedEntry = removeEntry(expectedModel, selectedIndex);
         expectedResultMessage = String.format(MESSAGE_DELETE_ENTRY_SUCCESS, deletedEntry);
         assertCommandSuccess(command, expectedModel, expectedResultMessage, expectedIndex);
 
@@ -102,8 +102,8 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
      * Removes the {@code Entry} at the specified {@code index} in {@code model}'s address book.
      * @return the removed entry
      */
-    private Entry removePerson(Model model, Index index) {
-        Entry targetEntry = getPerson(model, index);
+    private Entry removeEntry(Model model, Index index) {
+        Entry targetEntry = getEntry(model, index);
         model.deleteListEntry(targetEntry);
         return targetEntry;
     }
@@ -115,7 +115,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
      */
     private void assertCommandSuccess(Index toDelete) {
         Model expectedModel = getModel();
-        Entry deletedEntry = removePerson(expectedModel, toDelete);
+        Entry deletedEntry = removeEntry(expectedModel, toDelete);
         String expectedResultMessage = String.format(MESSAGE_DELETE_ENTRY_SUCCESS, deletedEntry);
 
         assertCommandSuccess(

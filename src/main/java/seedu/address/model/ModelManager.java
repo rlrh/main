@@ -406,18 +406,18 @@ public class ModelManager implements Model {
                 return;
             }
 
-            boolean wasSelectedPersonReplaced = change.wasReplaced() && change.getAddedSize() == change.getRemovedSize()
+            boolean wasSelectedEntryReplaced = change.wasReplaced() && change.getAddedSize() == change.getRemovedSize()
                     && change.getRemoved().contains(selectedEntry.getValue());
-            if (wasSelectedPersonReplaced) {
+            if (wasSelectedEntryReplaced) {
                 // Update selectedEntry to its new value.
                 int index = change.getRemoved().indexOf(selectedEntry.getValue());
                 selectedEntry.setValue(change.getAddedSubList().get(index));
                 continue;
             }
 
-            boolean wasSelectedPersonRemoved = change.getRemoved().stream()
-                    .anyMatch(removedPerson -> selectedEntry.getValue().isSameEntry(removedPerson));
-            if (wasSelectedPersonRemoved) {
+            boolean wasSelectedEntryRemoved = change.getRemoved().stream()
+                    .anyMatch(removedEntry -> selectedEntry.getValue().isSameEntry(removedEntry));
+            if (wasSelectedEntryRemoved) {
                 // Select the entry that came before it in the list,
                 // or clear the selection if there is no such entry.
                 selectedEntry.setValue(change.getFrom() > 0 ? change.getList().get(change.getFrom() - 1) : null);

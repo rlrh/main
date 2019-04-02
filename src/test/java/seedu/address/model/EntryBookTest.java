@@ -51,7 +51,7 @@ public class EntryBookTest {
     }
 
     @Test
-    public void resetData_withDuplicatePersons_throwsDuplicatePersonException() {
+    public void resetData_withDuplicateEntries_throwsDuplicateEntryException() {
         // Two entries with the same identity fields
         Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
                 .build();
@@ -63,24 +63,24 @@ public class EntryBookTest {
     }
 
     @Test
-    public void hasPerson_nullPerson_throwsNullPointerException() {
+    public void hasEntry_nullEntry_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
         addressBook.hasEntry(null);
     }
 
     @Test
-    public void hasPerson_personNotInAddressBook_returnsFalse() {
+    public void hasEntry_entryNotInAddressBook_returnsFalse() {
         assertFalse(addressBook.hasEntry(ALICE));
     }
 
     @Test
-    public void hasPerson_personInAddressBook_returnsTrue() {
+    public void hasEntry_entryInAddressBook_returnsTrue() {
         addressBook.addEntry(ALICE);
         assertTrue(addressBook.hasEntry(ALICE));
     }
 
     @Test
-    public void hasPerson_personWithSameIdentityFieldsInAddressBook_returnsTrue() {
+    public void hasEntry_entryWithSameIdentityFieldsInAddressBook_returnsTrue() {
         addressBook.addEntry(ALICE);
         Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
                 .build();
@@ -88,7 +88,7 @@ public class EntryBookTest {
     }
 
     @Test
-    public void getPersonList_modifyList_throwsUnsupportedOperationException() {
+    public void getEntryList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
         addressBook.getEntryList().remove(0);
     }

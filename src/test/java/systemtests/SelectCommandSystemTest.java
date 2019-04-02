@@ -28,9 +28,9 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, INDEX_FIRST_ENTRY);
 
         /* Case: select the last card in the entry list -> selected */
-        Index personCount = getLastIndex(getModel());
-        command = SelectCommand.COMMAND_WORD + " " + personCount.getOneBased();
-        assertCommandSuccess(command, personCount);
+        Index entryCount = getLastIndex(getModel());
+        command = SelectCommand.COMMAND_WORD + " " + entryCount.getOneBased();
+        assertCommandSuccess(command, entryCount);
 
         /* Case: select the middle card in the entry list -> selected */
         Index middleIndex = getMidIndex(getModel());
@@ -45,7 +45,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         /* Case: filtered entry list, select index within bounds of address book but out of bounds of entry list
          * -> rejected
          */
-        showPersonsWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithName(KEYWORD_MATCHING_MEIER);
         int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
 
@@ -81,7 +81,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         assertCommandFailure("SeLeCt 1", MESSAGE_UNKNOWN_COMMAND);
 
         /* Case: select from empty address book -> rejected */
-        deleteAllPersons();
+        deleteAllEntries();
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased(),
                 MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
     }
@@ -104,7 +104,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         Model expectedModel = getModel();
         String expectedResultMessage = String.format(
                 MESSAGE_SELECT_ENTRY_SUCCESS, expectedSelectedCardIndex.getOneBased());
-        int preExecutionSelectedCardIndex = getPersonListPanel().getSelectedCardIndex();
+        int preExecutionSelectedCardIndex = getEntryListPanel().getSelectedCardIndex();
 
         executeCommand(command);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);

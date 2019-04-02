@@ -61,13 +61,13 @@ public class JsonEntryBookStorageTest {
     }
 
     @Test
-    public void readAddressBook_invalidPersonAddressBook_throwDataConversionException() throws Exception {
+    public void readAddressBook_invalidEntryAddressBook_throwDataConversionException() throws Exception {
         thrown.expect(DataConversionException.class);
         readAddressBook("invalidEntryEntryBook.json");
     }
 
     @Test
-    public void readAddressBook_invalidAndValidPersonAddressBook_throwDataConversionException() throws Exception {
+    public void readAddressBook_invalidAndValidEntryAddressBook_throwDataConversionException() throws Exception {
         thrown.expect(DataConversionException.class);
         readAddressBook("invalidAndValidEntryEntryBook.json");
     }

@@ -79,7 +79,7 @@ public class UniqueEntryList implements Iterable<Entry> {
         }
     }
 
-    public void setPersons(UniqueEntryList replacement) {
+    public void setEntries(UniqueEntryList replacement) {
         requireNonNull(replacement);
         internalList.setAll(replacement.internalList);
     }
@@ -88,7 +88,7 @@ public class UniqueEntryList implements Iterable<Entry> {
      * Replaces the contents of this list with {@code entries}.
      * {@code entries} must not contain duplicate entries.
      */
-    public void setPersons(List<Entry> entries) {
+    public void setEntries(List<Entry> entries) {
         requireAllNonNull(entries);
         if (!entriesAreUnique(entries)) {
             throw new DuplicateEntryException();

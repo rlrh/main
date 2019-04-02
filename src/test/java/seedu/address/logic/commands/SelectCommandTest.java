@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.address.logic.commands.CommandTestUtil.showEntryAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_ENTRY;
 import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_ENTRY;
@@ -27,11 +27,11 @@ public class SelectCommandTest {
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
-        Index lastPersonIndex = Index.fromOneBased(model.getFilteredEntryList().size());
+        Index lastEntryIndex = Index.fromOneBased(model.getFilteredEntryList().size());
 
         assertExecutionSuccess(INDEX_FIRST_ENTRY);
         assertExecutionSuccess(INDEX_THIRD_ENTRY);
-        assertExecutionSuccess(lastPersonIndex);
+        assertExecutionSuccess(lastEntryIndex);
     }
 
     @Test
@@ -43,16 +43,16 @@ public class SelectCommandTest {
 
     @Test
     public void execute_validIndexFilteredList_success() {
-        showPersonAtIndex(model, INDEX_FIRST_ENTRY);
-        showPersonAtIndex(expectedModel, INDEX_FIRST_ENTRY);
+        showEntryAtIndex(model, INDEX_FIRST_ENTRY);
+        showEntryAtIndex(expectedModel, INDEX_FIRST_ENTRY);
 
         assertExecutionSuccess(INDEX_FIRST_ENTRY);
     }
 
     @Test
     public void execute_invalidIndexFilteredList_failure() {
-        showPersonAtIndex(model, INDEX_FIRST_ENTRY);
-        showPersonAtIndex(expectedModel, INDEX_FIRST_ENTRY);
+        showEntryAtIndex(model, INDEX_FIRST_ENTRY);
+        showEntryAtIndex(expectedModel, INDEX_FIRST_ENTRY);
 
         Index outOfBoundsIndex = INDEX_SECOND_ENTRY;
         // ensures that outOfBoundIndex is still in bounds of address book list

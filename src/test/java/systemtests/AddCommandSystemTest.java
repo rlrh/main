@@ -80,7 +80,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         */
 
         /* Case: add to empty entry book -> added */
-        deleteAllPersons();
+        deleteAllEntries();
         assertCommandSuccess(ALICE);
 
         /* Case: add a entry with tags, command with parameters in random order -> added */
@@ -95,13 +95,13 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         /* -------------------------- Perform add operation on the shown filtered list ------------------------------ */
 
         /* Case: filters the entry list before adding -> added */
-        showPersonsWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithName(KEYWORD_MATCHING_MEIER);
         assertCommandSuccess(IDA);
 
         /* ------------------------ Perform add operation while a entry card is selected --------------------------- */
 
         /* Case: selects first card in the entry list, add a entry -> added, card selection remains unchanged */
-        selectPerson(Index.fromOneBased(1));
+        selectEntry(Index.fromOneBased(1));
         assertCommandSuccess(CARL);
 
         /* ----------------------------------- Perform invalid add operations --------------------------------------- */
@@ -176,7 +176,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         /* ----------------------------------- Perform invalid add operations --------------------------------------- */
 
-        deleteAllPersons();
+        deleteAllEntries();
 
         /* Case: using alias to add a entry without tags to a non-empty entry book -> added */
         command = "   " + AddCommand.COMMAND_ALIAS + "  " + TITLE_DESC_AMY + "  " + DESCRIPTION_DESC_AMY + " "

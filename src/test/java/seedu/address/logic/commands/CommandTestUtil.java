@@ -153,7 +153,7 @@ public class CommandTestUtil {
      * Updates {@code model}'s filtered list to show only the entry at the given {@code targetIndex} in the
      * {@code model}'s address book.
      */
-    public static void showPersonAtIndex(Model model, Index targetIndex) {
+    public static void showEntryAtIndex(Model model, Index targetIndex) {
         assertTrue(targetIndex.getZeroBased() < model.getFilteredEntryList().size());
 
         Entry entry = model.getFilteredEntryList().get(targetIndex.getZeroBased());
@@ -166,7 +166,7 @@ public class CommandTestUtil {
     /**
      * Deletes the first entry in {@code model}'s filtered list from {@code model}'s address book.
      */
-    public static void deleteFirstPerson(Model model) {
+    public static void deleteFirstEntry(Model model) {
         Entry firstEntry = model.getFilteredEntryList().get(0);
         model.deleteListEntry(firstEntry);
     }
