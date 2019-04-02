@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
@@ -22,7 +21,6 @@ import seedu.address.model.Model;
 import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.tag.Tag;
 
@@ -36,15 +34,15 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the entry identified "
             + "by the index number used in the displayed entry list. "
-            + "Existing values will be overwritten by the input values.\n"
+            + "Existing values will be overwritten by the input values. "
+            + "Links cannot be editted.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_TITLE + "TITLE] "
             + "[" + PREFIX_DESCRIPTION + "COMMENT] "
-            + "[" + PREFIX_LINK + "LINK] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_DESCRIPTION + "New description "
-            + PREFIX_LINK + "https://new-link.com";
+            + PREFIX_TITLE + "New title "
+            + PREFIX_DESCRIPTION + "New description ";
 
     public static final String MESSAGE_EDIT_ENTRY_SUCCESS = "Edited Entry: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -95,11 +93,10 @@ public class EditCommand extends Command {
 
         Title updatedTitle = editEntryDescriptor.getTitle().orElse(entryToEdit.getTitle());
         Description updatedDescription = editEntryDescriptor.getDescription().orElse(entryToEdit.getDescription());
-        Link updatedLink = editEntryDescriptor.getLink().orElse(entryToEdit.getLink());
         Address updatedAddress = editEntryDescriptor.getAddress().orElse(entryToEdit.getAddress());
         Set<Tag> updatedTags = editEntryDescriptor.getTags().orElse(entryToEdit.getTags());
 
-        return new Entry(updatedTitle, updatedDescription, updatedLink, updatedAddress, updatedTags);
+        return new Entry(updatedTitle, updatedDescription, entryToEdit.getLink(), updatedAddress, updatedTags);
     }
 
     @Override
@@ -127,7 +124,6 @@ public class EditCommand extends Command {
     public static class EditEntryDescriptor {
         private Title title;
         private Description description;
-        private Link link;
         private Address address;
         private Set<Tag> tags;
 
@@ -140,7 +136,6 @@ public class EditCommand extends Command {
         public EditEntryDescriptor(EditEntryDescriptor toCopy) {
             setTitle(toCopy.title);
             setDescription(toCopy.description);
-            setLink(toCopy.link);
             setAddress(toCopy.address);
             setTags(toCopy.tags);
         }
@@ -149,7 +144,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(title, description, link, address, tags);
+            return CollectionUtil.isAnyNonNull(title, description, address, tags);
         }
 
         public void setTitle(Title title) {
@@ -166,14 +161,6 @@ public class EditCommand extends Command {
 
         public Optional<Description> getDescription() {
             return Optional.ofNullable(description);
-        }
-
-        public void setLink(Link link) {
-            this.link = link;
-        }
-
-        public Optional<Link> getLink() {
-            return Optional.ofNullable(link);
         }
 
         public void setAddress(Address address) {
@@ -218,7 +205,6 @@ public class EditCommand extends Command {
 
             return getTitle().equals(e.getTitle())
                     && getDescription().equals(e.getDescription())
-                    && getLink().equals(e.getLink())
                     && getAddress().equals(e.getAddress())
                     && getTags().equals(e.getTags());
         }
