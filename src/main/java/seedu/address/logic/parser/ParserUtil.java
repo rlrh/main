@@ -152,6 +152,10 @@ public class ParserUtil {
         return tagSet;
     }
 
+    /**
+     * Tries to parse an entry from args.
+     * @throws ParseException with usageMessage if the parse failed
+     */
     public static Entry parseEntryFromArgs(String args, String usageMessage) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
