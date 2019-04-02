@@ -45,14 +45,14 @@ public class JsonEntryBookStorage implements EntryBookStorage {
     public Optional<ReadOnlyEntryBook> readEntryBook(Path filePath) throws DataConversionException {
         requireNonNull(filePath);
 
-        Optional<JsonSerializableEntryBook> jsonAddressBook = JsonUtil.readJsonFile(
+        Optional<JsonSerializableEntryBook> jsonEntryBook = JsonUtil.readJsonFile(
                 filePath, JsonSerializableEntryBook.class);
-        if (!jsonAddressBook.isPresent()) {
+        if (!jsonEntryBook.isPresent()) {
             return Optional.empty();
         }
 
         try {
-            return Optional.of(jsonAddressBook.get().toModelType());
+            return Optional.of(jsonEntryBook.get().toModelType());
         } catch (IllegalValueException ive) {
             logger.info("Illegal values found in " + filePath + ": " + ive.getMessage());
             throw new DataConversionException(ive);

@@ -57,17 +57,17 @@ public class TestApp extends MainApp {
 
         // If some initial local data has been provided, write those to the file
         if (initialListEntryBookDataSupplier.get() != null) {
-            JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocationListEntryBook);
+            JsonEntryBookStorage jsonEntryBookStorage = new JsonEntryBookStorage(saveFileLocationListEntryBook);
             try {
-                jsonAddressBookStorage.saveEntryBook(initialListEntryBookDataSupplier.get());
+                jsonEntryBookStorage.saveEntryBook(initialListEntryBookDataSupplier.get());
             } catch (IOException ioe) {
                 throw new AssertionError(ioe);
             }
         }
         if (initialArchivesEntryBookDataSupplier.get() != null) {
-            JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocationArchivesEntryBook);
+            JsonEntryBookStorage jsonEntryBookStorage = new JsonEntryBookStorage(saveFileLocationArchivesEntryBook);
             try {
-                jsonAddressBookStorage.saveEntryBook(initialArchivesEntryBookDataSupplier.get());
+                jsonEntryBookStorage.saveEntryBook(initialArchivesEntryBookDataSupplier.get());
             } catch (IOException ioe) {
                 throw new AssertionError(ioe);
             }

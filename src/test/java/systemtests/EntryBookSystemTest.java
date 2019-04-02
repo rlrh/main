@@ -46,7 +46,7 @@ import seedu.address.ui.ResultDisplay;
  * A system test class for EntryBook, which provides access to handles of GUI components and helper methods
  * for test verification.
  */
-public abstract class AddressBookSystemTest {
+public abstract class EntryBookSystemTest {
     @ClassRule
     public static ClockRule clockRule = new ClockRule();
 

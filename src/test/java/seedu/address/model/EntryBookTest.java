@@ -44,7 +44,7 @@ public class EntryBookTest {
     }
 
     @Test
-    public void resetData_withValidReadOnlyAddressBook_replacesData() {
+    public void resetData_withValidReadOnlyEntryBook_replacesData() {
         EntryBook newData = getTypicalListEntryBook();
         entryBook.resetData(newData);
         assertEquals(newData, entryBook);
@@ -69,18 +69,18 @@ public class EntryBookTest {
     }
 
     @Test
-    public void hasEntry_entryNotInAddressBook_returnsFalse() {
+    public void hasEntry_entryNotInEntryBook_returnsFalse() {
         assertFalse(entryBook.hasEntry(ALICE));
     }
 
     @Test
-    public void hasEntry_entryInAddressBook_returnsTrue() {
+    public void hasEntry_entryInEntryBook_returnsTrue() {
         entryBook.addEntry(ALICE);
         assertTrue(entryBook.hasEntry(ALICE));
     }
 
     @Test
-    public void hasEntry_entryWithSameIdentityFieldsInAddressBook_returnsTrue() {
+    public void hasEntry_entryWithSameIdentityFieldsInEntryBook_returnsTrue() {
         entryBook.addEntry(ALICE);
         Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
                 .build();

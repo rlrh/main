@@ -29,8 +29,8 @@ public class JsonSerializableEntryBookTest {
         JsonSerializableEntryBook dataFromFile = JsonUtil.readJsonFile(TYPICAL_ENTRIES_FILE,
                 JsonSerializableEntryBook.class).get();
         EntryBook entryBookFromFile = dataFromFile.toModelType();
-        EntryBook typicalEntriesAddressBook = TypicalEntries.getTypicalListEntryBook();
-        assertEquals(entryBookFromFile, typicalEntriesAddressBook);
+        EntryBook typicalEntriesEntryBook = TypicalEntries.getTypicalListEntryBook();
+        assertEquals(entryBookFromFile, typicalEntriesEntryBook);
     }
 
     @Test
