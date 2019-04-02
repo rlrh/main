@@ -12,17 +12,17 @@ README is a desktop bookmark manager/rss feed reader application.
 == Summary of contributions
 
 === *Major enhancement*: Entry management system
-** What it does: A collection of several commands that allow users to manage a large number of entries in the entrybook.
+I implemented a collection of several commands that allow users to manage a large number of entries in the entrybook.
 ** Justification: Essential for heavy users so that they can navigate large numbers of entries efficiently, and allows
 them to partition their entries into groups using tags and the archive.
-** Highlights:
-*** Find command: Users can search for links in the list of currently displayed entries using any of the fields and/or tags.
+** Highlights: Updated commands from addressbook application and added new ones.
 *** Archives command: Users can archive links they have read.
+*** Find command: Updated so users can search for links in the list of currently displayed entries using any of the fields and/or tags.
 *** Context switching: Users can make the application display different entries (archive entries, search result entries etc.)
 via context-switching commands.
 
 === *Minor enhancement*: Morphing addressbook to entrybook
-** Significantly contributed to refactors and renames of codebase to fit the context of our application.
+** I contributed significantly to refactors and renames of codebase to fit the context of our application.
 
 === *Code contributed*:
 ** https://github.com/CS2103-AY1819S2-W10-1/main/pull/106[Archives]
@@ -44,9 +44,7 @@ via context-switching commands.
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-// include::../UserGuide.adoc[tag=undoredo]
-
-// include::../UserGuide.adoc[tag=dataencryption]
+include::../UserGuide.adoc[tag=contextcommands]
 
 == Contributions to the Developer Guide
 
