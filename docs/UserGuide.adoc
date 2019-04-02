@@ -1,6 +1,7 @@
 = README - User Guide
 :site-section: UserGuide
 :toc:
+:toclevels: 3
 :toc-title:
 :toc-placement: preamble
 :sectnums:
@@ -34,8 +35,25 @@ If you can type fast, README can make you more efficient at consuming content th
 Jump to <<Quick Start>> to get started!
 
 == How To Use This Guide
-
 This User Guide contains everything you need to know in order to use README.
+You don't need to read this Guide from start to finish - it is designed to help you find exactly what you need.
+
+See <<Quick Start>> to get up and running quickly.
+
+See <<Features>> to learn about how README works.
+
+See <<Commands>> to find out what each command does and the parameters you need to supply.
+
+Here are icons we use and what they mean:
+
+[NOTE]
+Useful but non-crucial information.
+
+[TIP]
+Helpful information that may make your experience better.
+
+[WARNING]
+Important information about potential issues that may occur.
 
 // TODO: Describe special formatting, notation, icons etc.
 
@@ -253,7 +271,7 @@ Examples:
 Lists all the commands that you have entered in reverse chronological order. +
 Format: `history`
 
-[NOTE]
+[TIP]
 ====
 Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
 ====
@@ -278,6 +296,7 @@ These commands can be used from any context but change the context in which only
 
 Shows your Reading List of all saved entries.
 
+This command also enters the Reading List context.
 Refer to <<List-Context>> for available commands in this context.
 
 Format: `list`
@@ -286,14 +305,16 @@ Format: `list`
 
 Shows your Archives of all archived entries.
 
+This command also enters the Archives context.
 Refer to <<Archives-Context>> for available commands in this context.
 
 Format: `archives`
 
-==== Searching the Web: `bing` `[since v1.3]`
+==== Searching the web: `bing` `[since v1.3]`
 
 Searches https://www.bing.com[Bing] for entries that you can subsequently add.
 
+This command also enters the Search Results context.
 Refer to <<Results-Context>> for available commands in this context.
 
 Format: `bing [KEYWORD]...`
@@ -304,8 +325,9 @@ Examples:
 
 ==== Searching a web feed: `feed` `[since v1.2]`
 
-Opens a web feed at the URL for previewing. This command also enters the Search Results context.
+Opens a web feed at the URL for previewing.
 
+This command also enters the Search Results context.
 Refer to <<Results-Context>> for available commands in this context.
 
 Format: `feed [FEED URL]`
@@ -316,7 +338,10 @@ Examples:
 
 ==== Searching a web page for links: `links` `[coming in v2.0]`
 
-Lists all the links in a URL, or the currently displayed web page. This command also enters the Search Results context.
+Lists all the links in a URL, or the currently displayed web page.
+
+This command also enters the Search Results context.
+Refer to <<Results-Context>> for available commands in this context.
 
 Format: `links`
 Format: `links [URL]`
@@ -324,10 +349,11 @@ Format: `links [URL]`
 - `links`
 - `links https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Shows all entries from this article
 
-==== Showing feeds: `feeds` `[coming in v2.0]`
+==== Showing feeds: `feeds` `[since v1.3]`
 
 Shows a list of feeds being followed.
 
+This command also enters the Feeds context.
 Refer to <<Feeds-Context>> for available commands in this context.
 
 Format: `feeds`
@@ -341,6 +367,7 @@ Examples:
 
 Searches online for feeds that you can subsequently follow.
 
+This command also enters the Feed Search context.
 Refer to <<Searchfeeds-Context>> for available commands in this context.
 
 Format: `searchfeeds [KEYWORD]...`
@@ -357,7 +384,7 @@ Shows helpful and fun statistics about your reading progress and habits.
 Format: `stats`
 
 [[List-Context]]
-=== `list` Context Commands
+=== `Reading List` Context Commands
 
 ==== Adding a single entry: `add` `[updated v1.2]`
 
@@ -401,7 +428,7 @@ Clears all existing tags from the 2nd entry.
 
 Finds entries whose titles contain any of the given keyphrases. +
 
-Format: `find KEYPHRASE [, MORE_KEYPHRASE]`
+Format: `find KEYPHRASE [MORE_KEYPHRASES]...`
 
 ****
 * The search is case insensitive. e.g `hans` will match `Hans`
@@ -513,7 +540,7 @@ Shares the specified entry through connected social media.
 
 Format: `share INDEX`
 
-==== Archiving an entry: `archive` `[coming in v2.0]`
+==== Archiving an entry: `archive` `[since v1.3]`
 
 Moves the specified entry to the archive and removes its downloaded content.
 
@@ -531,9 +558,9 @@ Examples:
 `archive 2` +
 Moves the 2nd entry in the reading list to the archive and removes its downloaded content.
 
-==== Deleting an entry: `delete`
+==== Deleting an entry: `delete` `[updated v1.3]`
 
-Deletes the specified entry from the reading list.
+Deletes the specified entry from the reading list and removes its downloaded content.
 
 Format: `delete INDEX`
 
@@ -559,7 +586,7 @@ Clears all saved entries from the manager.
 Format: `clear`
 
 [[Archives-Context]]
-=== `archives` Context Commands
+=== `Archives` Context Commands
 
 ==== Unarchiving an entry: `unarchive` `[since v1.3]`
 
@@ -579,7 +606,7 @@ Examples:
 `unarchive 2` +
 Moves the 2nd entry in the archives to the reading list.
 
-==== Deleting an entry: `delete`
+==== Deleting an entry: `delete` `[since v1.3]`
 
 Deletes the specified entry from the archives.
 
@@ -597,23 +624,23 @@ Examples:
 `delete 2` +
 Deletes the 2nd entry in the archives.
 
-==== Clearing all entries : `clear`
+==== Clearing all entries : `clear` `[coming in v2.0]`
 Clears all archived entries from the manager.
 
 Format: `clear`
 
 [[Results-Context]]
-=== `Results` Context Commands
+=== `Search Results` Context Commands
 
-==== Adding entries: `add`
+==== Adding entries: `add` `[since v1.3]`
 
 Adds entries from results to the reading list. Content is automatically downloaded to disk.
 
-Format: `add INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+Format: `add INDEX`
 
-Format: `add INDICES [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+Format: `add INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
 
-Format: `add all`
+Format: `add all` `[coming in v2.0]`
 
 [TIP]
 ====
@@ -623,10 +650,10 @@ Title will be automatically filled by parsing the entry if you do not provide it
 
 Examples:
 
-- `add 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business”
-- `add 4-6 d/read by Monday t/School` Adds the 4th to 6th entries with the same description and tagged with “School"
+- `add 3` Adds the 3rd entry.
+- `add 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business” `[coming in v2.0]`
 
-==== Selecting an entry: `select`
+==== Selecting an entry: `select` `[since v1.3]`
 
 Selects the entry identified by the index number used in the displayed entry list for viewing.
 
@@ -658,14 +685,14 @@ Switches to a clean and clutter-free reader view mode for a more comfortable rea
 Switches to reader view mode with dark style colour scheme
 
 [[Feeds-Context]]
-=== `feeds` Context Commands
+=== `Feeds` Context Commands
 
-==== Subscribing to a feed: `subscribe`
+==== Subscribing to a feed: `subscribe` `[since v1.3]`
 
 Adds a feed to the manager and subscribes to updates.
 All entries in the subscribed feed will be added to the reading list.
 
-Format: `subscribe URL [n/NAME] [t/TAG]...`
+Format: `subscribe l/URL [ti/TITLE] [d/COMMENT] [t/TAG]...`
 
 [TIP]
 ====
@@ -674,32 +701,33 @@ A feed can have any number of tags (including 0)
 
 Examples:
 
-- `add https://www.engadget.com/rss.xml n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with “Tech”
+- `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` Adds a feed whose name is “Engadget”.
+-  The imported entries will be tagged with “Tech” `[coming in v2.0]`
 
 [WARNING]
 ====
 The application may be unresponsive for a short while when adding entries from a large feed.
 ====
 
-==== Updating entries from feeds: `update`
+==== Updating entries from feeds: `refresh` `[since v1.3]`
 
-Refreshes all feeds.
+Refreshes a feed.
 
-Format: `update INDEX`
+Format: `refresh INDEX`
 
-Format: `update all` `[coming in v2.0]`
+Format: `refesh all` `[coming in v2.0]`
 
 Examples:
 
-- `update all` Updates entries from all feeds `[coming in v2.0]`
-- `update 2` Updates entries from the 2nd feed
+- `refresh all` Updates entries from all feeds `[coming in v2.0]`
+- `refresh 2` Updates entries from the 2nd feed
 
 [WARNING]
 ====
 The application may be unresponsive for a short while when adding entries from a large feed.
 ====
 
-==== Selecting a feed: `select`
+==== Selecting a feed: `select` `[since v1.3]`
 
 Selects the feed identified by the index number used in the displayed feed list and displays its entries.
 
@@ -716,7 +744,7 @@ Examples:
 
 - `select 2` Selects the 2nd feed in the manager and displays its entries
 
-==== Editing a feed: `edit`
+==== Editing a feed: `edit` `[coming in v2.0]`
 
 Edits an existing feed in the manager.
 
@@ -735,7 +763,7 @@ Examples:
 - `edit 1 n/HackerNews` Edits the name of the 1st feed
 - `edit 2 t/` Clears all existing tags from the 2nd feed
 
-==== Unsubscribing from a feed: `unsubscribe`
+==== Unsubscribing from a feed: `unsubscribe` `[since v1.3]`
 
 Deletes the specified feeds from the manager and unsubscribes from them, but existing entries obtained from that feed will not be deleted.
 
@@ -747,30 +775,29 @@ Format: `unsubscribe INDEX`
 - The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Format: `unsubscribe INDEX`
-
 Examples:
 
 - `unsubscribe all` Deletes all shown feeds `[coming in v2.0]`
 - `unsubscribe 2` Deletes the 2nd shown feed
 
-==== Clearing all feeds : `clear`
+==== Clearing all feeds : `clear` `[coming in v2.0]`
+
 Clears all followed feeds from the manager.
 
 Format: `clear`
 
 [[Searchfeeds-Context]]
-=== `searchfeeds` Context Commands `[coming in v2.0]`
+=== `Feeds Search` Context Commands `[coming in v2.0]`
 
-==== Adding a feed: `add`
+==== Subscribing to a feed: `subscribe`
 
 Adds a feed from the search results to the manager and subscribes to updates.
 
-Format: `add INDEX [n/NAME] [t/TAG]...`
+Format: `subscribe INDEX [n/NAME] [t/TAG]...`
 
-Format: `add INDICES [t/TAG]...`
+Format: `subscribe INDICES [t/TAG]...`
 
-Format: `add all`
+Format: `subscribe all`
 
 [TIP]
 ====
@@ -779,9 +806,9 @@ A feed can have any number of tags (including 0)
 
 Examples:
 
-- `add all` Adds all shown feeds
-- `add 1 n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with `Tech`
-- `add 5-9 t/Work` Adds the 5th to 9th feeds whose entries will be tagged with `Work`
+- `subscribe all` Adds all shown feeds
+- `subscribe 1 n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with `Tech`
+- `subscribe 5-9 t/Work` Adds the 5th to 9th feeds whose entries will be tagged with `Work`
 
 ==== Selecting a feed: `select`
 
@@ -802,12 +829,16 @@ Examples:
 
 == FAQ
 
+// TODO: fill this up
+
 ////
 *Q*: How do I transfer my data to another Computer? +
 *A*: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Address Book folder.
 ////
 
 == Command Summary
+
+// TODO: fill this up
 
 ////
 * *Add* `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
