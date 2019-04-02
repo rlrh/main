@@ -30,28 +30,28 @@ public class EntryBookTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private final EntryBook addressBook = new EntryBook();
+    private final EntryBook entryBook = new EntryBook();
 
     @Test
     public void constructor() {
-        assertEquals(Collections.emptyList(), addressBook.getEntryList());
+        assertEquals(Collections.emptyList(), entryBook.getEntryList());
     }
 
     @Test
     public void resetData_null_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        addressBook.resetData(null);
+        entryBook.resetData(null);
     }
 
     @Test
-    public void resetData_withValidReadOnlyAddressBook_replacesData() {
+    public void resetData_withValidReadOnlyEntryBook_replacesData() {
         EntryBook newData = getTypicalListEntryBook();
-        addressBook.resetData(newData);
-        assertEquals(newData, addressBook);
+        entryBook.resetData(newData);
+        assertEquals(newData, entryBook);
     }
 
     @Test
-    public void resetData_withDuplicatePersons_throwsDuplicatePersonException() {
+    public void resetData_withDuplicateEntries_throwsDuplicateEntryException() {
         // Two entries with the same identity fields
         Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
                 .build();
@@ -59,46 +59,46 @@ public class EntryBookTest {
         EntryBookStub newData = new EntryBookStub(newEntries);
 
         thrown.expect(DuplicateEntryException.class);
-        addressBook.resetData(newData);
+        entryBook.resetData(newData);
     }
 
     @Test
-    public void hasPerson_nullPerson_throwsNullPointerException() {
+    public void hasEntry_nullEntry_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        addressBook.hasEntry(null);
+        entryBook.hasEntry(null);
     }
 
     @Test
-    public void hasPerson_personNotInAddressBook_returnsFalse() {
-        assertFalse(addressBook.hasEntry(ALICE));
+    public void hasEntry_entryNotInEntryBook_returnsFalse() {
+        assertFalse(entryBook.hasEntry(ALICE));
     }
 
     @Test
-    public void hasPerson_personInAddressBook_returnsTrue() {
-        addressBook.addEntry(ALICE);
-        assertTrue(addressBook.hasEntry(ALICE));
+    public void hasEntry_entryInEntryBook_returnsTrue() {
+        entryBook.addEntry(ALICE);
+        assertTrue(entryBook.hasEntry(ALICE));
     }
 
     @Test
-    public void hasPerson_personWithSameIdentityFieldsInAddressBook_returnsTrue() {
-        addressBook.addEntry(ALICE);
+    public void hasEntry_entryWithSameIdentityFieldsInEntryBook_returnsTrue() {
+        entryBook.addEntry(ALICE);
         Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
                 .build();
-        assertTrue(addressBook.hasEntry(editedAlice));
+        assertTrue(entryBook.hasEntry(editedAlice));
     }
 
     @Test
-    public void getPersonList_modifyList_throwsUnsupportedOperationException() {
+    public void getEntryList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
-        addressBook.getEntryList().remove(0);
+        entryBook.getEntryList().remove(0);
     }
 
     @Test
     public void addListener_withInvalidationListener_listenerAdded() {
         SimpleIntegerProperty counter = new SimpleIntegerProperty();
         InvalidationListener listener = observable -> counter.set(counter.get() + 1);
-        addressBook.addListener(listener);
-        addressBook.addEntry(ALICE);
+        entryBook.addListener(listener);
+        entryBook.addEntry(ALICE);
         assertEquals(1, counter.get());
     }
 
@@ -106,9 +106,9 @@ public class EntryBookTest {
     public void removeListener_withInvalidationListener_listenerRemoved() {
         SimpleIntegerProperty counter = new SimpleIntegerProperty();
         InvalidationListener listener = observable -> counter.set(counter.get() + 1);
-        addressBook.addListener(listener);
-        addressBook.removeListener(listener);
-        addressBook.addEntry(ALICE);
+        entryBook.addListener(listener);
+        entryBook.removeListener(listener);
+        entryBook.addEntry(ALICE);
         assertEquals(0, counter.get());
     }
 

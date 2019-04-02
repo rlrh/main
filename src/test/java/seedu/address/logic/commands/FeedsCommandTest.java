@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.address.logic.commands.CommandTestUtil.showEntryAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import org.junit.Before;
@@ -31,7 +31,7 @@ public class FeedsCommandTest {
 
     @Test
     public void execute_feedsIsFiltered_showsEverything() {
-        showPersonAtIndex(model, INDEX_FIRST_ENTRY);
+        showEntryAtIndex(model, INDEX_FIRST_ENTRY);
         assertCommandSuccess(new FeedsCommand(), model, commandHistory,
                 FeedsCommand.MESSAGE_SUCCESS, expectedModel);
     }
