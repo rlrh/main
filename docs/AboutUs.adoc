@@ -30,7 +30,7 @@ Responsibilities: Offline support feature, Storage component
 
 === Qi Ji
 image::qjqqyy.png[width="150", align="left"]
-{empty}[https://github.com/qjqqyy[github]]
+{empty}[https://github.com/qjqqyy[github]] [<<qjqqyy#, portfolio>>]
 
 Role: Quality Assurance Lead, Developer +
 Responsibilities: Web feed subscription feature, Model component
