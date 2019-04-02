@@ -26,6 +26,7 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FeedCommand;
+import seedu.address.logic.commands.FeedsCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
@@ -106,6 +107,12 @@ public class EntryBookListParserTest {
     @Test
     public void parseCommand_feed() throws Exception {
         assertTrue(parser.parseCommand(FeedCommand.COMMAND_WORD + " https://url.com/a.xml") instanceof FeedCommand);
+    }
+
+    @Test
+    public void parseCommand_feeds() throws Exception {
+        assertTrue(parser.parseCommand(FeedsCommand.COMMAND_WORD) instanceof FeedsCommand);
+        assertTrue(parser.parseCommand(FeedsCommand.COMMAND_WORD + " 3") instanceof FeedsCommand);
     }
 
     @Test

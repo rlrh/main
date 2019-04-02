@@ -39,7 +39,7 @@ public class StorageStub implements Storage {
     }
 
     @Override
-    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) {
+    public void saveListEntryBook(ReadOnlyEntryBook entryBook) {
         // Do nothing
     }
 
@@ -54,7 +54,22 @@ public class StorageStub implements Storage {
     }
 
     @Override
-    public void saveArchivesEntryBook(ReadOnlyEntryBook listEntryBook) {
+    public void saveArchivesEntryBook(ReadOnlyEntryBook entryBook) {
+        // Do nothing
+    }
+
+    @Override
+    public Path getFeedsEntryBookFilePath() {
+        return null;
+    }
+
+    @Override
+    public Optional<ReadOnlyEntryBook> readFeedsEntryBook() {
+        return Optional.empty();
+    }
+
+    @Override
+    public void saveFeedsEntryBook(ReadOnlyEntryBook entryBook) {
         // Do nothing
     }
 
