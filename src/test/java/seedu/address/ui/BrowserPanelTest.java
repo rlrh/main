@@ -3,12 +3,14 @@ package seedu.address.ui;
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY;
+import static seedu.address.testutil.TypicalEntries.BROWSER_PANEL_TEST_ENTRY_BASE_URL;
 import static seedu.address.testutil.TypicalEntries.INVALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
-import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
-import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK_BASE_URL;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
 
 import java.net.URL;
+import java.util.Optional;
 import javax.xml.transform.TransformerException;
 
 import org.jsoup.Jsoup;
@@ -21,17 +23,18 @@ import guitests.guihandles.BrowserPanelHandle;
 import javafx.beans.property.SimpleObjectProperty;
 import seedu.address.commons.util.XmlUtil;
 import seedu.address.model.entry.Entry;
+import seedu.address.ui.util.ReaderViewUtil;
 
 public class BrowserPanelTest extends GuiUnitTest {
-    private SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
-    private SimpleObjectProperty<ViewMode> viewMode = new SimpleObjectProperty<>(ViewMode.BROWSER);
+    private SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<ViewMode> viewMode = new SimpleObjectProperty<>(new ViewMode());
     private BrowserPanel browserPanel;
     private BrowserPanelHandle browserPanelHandle;
 
     @Before
     public void setUp() {
         guiRobot.interact(() -> {
-            browserPanel = new BrowserPanel(selectedPerson, viewMode);
+            browserPanel = new BrowserPanel(selectedEntry, viewMode, (url) -> Optional.empty());
         });
         uiPartRule.setUiPart(browserPanel);
 
@@ -47,45 +50,80 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Test
     public void displayCorrectPage() throws Exception {
         // associated web page of a entry with valid link
-        guiRobot.interact(() -> selectedPerson.set(VALID_FILE_LINK));
-        URL expectedPersonUrl = new URL(VALID_FILE_LINK.getLink().value);
+        guiRobot.interact(() -> selectedEntry.set(VALID_FILE_LINK));
+        URL expectedEntryUrl = new URL(VALID_FILE_LINK.getLink().value);
         waitUntilBrowserLoaded(browserPanelHandle);
-        assertEquals(expectedPersonUrl, browserPanelHandle.getLoadedUrl());
+        assertEquals(expectedEntryUrl, browserPanelHandle.getLoadedUrl());
     }
 
     @Test
     public void displayErrorPage() {
         // associated web page of a entry with invalid link
-        guiRobot.interact(() -> selectedPerson.set(INVALID_FILE_LINK));
+        guiRobot.interact(() -> selectedEntry.set(INVALID_FILE_LINK));
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(BrowserPanel.ERROR_PAGE, browserPanelHandle.getLoadedUrl());
     }
 
     @Test
-    public void displayReader() {
+    public void displayReaderViewOnTestPage() {
+        assertReaderViewWorksOn(BROWSER_PANEL_TEST_ENTRY, BROWSER_PANEL_TEST_ENTRY_BASE_URL);
+    }
+
+    @Test
+    public void displayReaderViewOnWikipediaPage() {
+        assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_ENTRY.getLink().value);
+    }
+
+    @Test
+    public void displayReaderViewStyle() {
 
         // load associated web page of a Wikipedia entry
-        guiRobot.interact(() -> selectedPerson.set(WIKIPEDIA_LINK));
+        guiRobot.interact(() -> selectedEntry.set(WIKIPEDIA_ENTRY));
         waitUntilBrowserLoaded(browserPanelHandle);
 
-        // process loaded content through Crux
+        // set reader view mode with specified style
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER, ReaderViewStyle.DARK)));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // check actual stylesheet is the same as specified stylesheet
+        assertEquals(
+                ReaderViewStyle.DARK.getStylesheetLocation().toExternalForm(),
+                browserPanelHandle.getUserStyleSheetLocation()
+        );
+
+    }
+
+    /**
+     * Asserts that reader view works as expected on the given Entry
+     * @param entry Entry to test reader view on
+     * @param baseUrl base url
+     */
+    private void assertReaderViewWorksOn(Entry entry, String baseUrl) {
+
+        // load associated web page of a Wikipedia entry
+        guiRobot.interact(() -> selectedEntry.set(entry));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // generate reader view by processing loaded content
         String originalHtml = "";
         try {
-            originalHtml = XmlUtil.convertDocumentToString(browserPanel.getWebEngine().getDocument());
+            originalHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
         } catch (TransformerException te) {
             fail();
         }
-        Document doc = browserPanel.getReaderDocumentFrom(WIKIPEDIA_LINK_BASE_URL, originalHtml);
+
+        Document originalDoc = Jsoup.parse(originalHtml, baseUrl);
+        Document doc = ReaderViewUtil.generateReaderViewFrom(originalDoc);
         String expectedText = doc.text();
 
-        // set reader mode and reload
-        guiRobot.interact(() -> viewMode.set(ViewMode.READER));
+        // set reader view mode
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER)));
         waitUntilBrowserLoaded(browserPanelHandle);
 
         // extract loaded content
         String readerHtml = "";
         try {
-            readerHtml = XmlUtil.convertDocumentToString(browserPanel.getWebEngine().getDocument());
+            readerHtml = XmlUtil.convertDocumentToString(browserPanelHandle.getDocument());
         } catch (TransformerException te) {
             fail();
         }

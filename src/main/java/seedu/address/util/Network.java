@@ -1,8 +1,9 @@
-package seedu.address.network;
+package seedu.address.util;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Optional;
 
 /**
  * Manager of Network component
@@ -36,5 +37,30 @@ public abstract class Network {
      */
     public static byte[] fetchAsBytes(String url) throws IOException {
         return new URL(url).openStream().readAllBytes();
+    }
+
+    /**
+     * Fetches the article linked at the URL and returns it,
+     * but first pre-processing it by converting all links to absolute form.
+     */
+    public static Optional<byte[]> fetchArticleOptional(String url) {
+        try {
+            return Optional.of(fetchArticle(url));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Fetches the article linked at the URL and returns it,
+     * but first pre-processing it by converting all links to absolute form.
+     */
+    public static byte[] fetchArticle(String url) throws IOException {
+        // Download article content to local storage
+        byte[] articleContent = Network.fetchAsBytes(url);
+        // Convert all links in article to absolute links
+        return AbsoluteUrlDocumentConverter.convert(
+                new URL(url),
+                articleContent);
     }
 }

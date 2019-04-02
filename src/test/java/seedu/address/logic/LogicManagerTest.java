@@ -2,7 +2,7 @@ package seedu.address.logic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static seedu.address.commons.core.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
@@ -12,6 +12,7 @@ import static seedu.address.testutil.TypicalEntries.AMY;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,6 +27,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.mocks.ModelManagerStub;
+import seedu.address.mocks.TemporaryStorageManager;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -54,11 +56,8 @@ public class LogicManagerTest {
 
     @Before
     public void setUp() throws Exception {
-        JsonEntryBookStorage addressBookStorage = new JsonEntryBookStorage(temporaryFolder.newFile().toPath());
-        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
-        ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        model = new ModelManager(new EntryBook(), new UserPrefs(), storage);
+        StorageManager storage = new TemporaryStorageManager(temporaryFolder);
+        model = new ModelManager(new EntryBook(), new EntryBook(), new EntryBook(), new UserPrefs(), storage);
         logic = new LogicManager(model);
     }
 
@@ -72,7 +71,7 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandException(deleteCommand, MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
         assertHistoryCorrect(deleteCommand);
     }
 
@@ -93,12 +92,18 @@ public class LogicManagerTest {
     @Test
     public void execute_storageThrowsIoException_throwsCommandException() throws Exception {
         // Setup LogicManager with JsonEntryBookIoExceptionThrowingStub
-        JsonEntryBookStorage addressBookStorage =
+        JsonEntryBookStorage listEntryBookStorage =
+                new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
+        JsonEntryBookStorage archivesEntryBookStorage =
+                new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
+        JsonEntryBookStorage feedsEntryBookStorage =
                 new JsonEntryBookIoExceptionThrowingStub(temporaryFolder.newFile().toPath());
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.newFile().toPath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(temporaryFolder.newFolder().toPath());
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, articleStorage);
-        model = new ModelManager(model.getListEntryBook(), model.getUserPrefs(), storage);
+        StorageManager storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage,
+                feedsEntryBookStorage, userPrefsStorage, articleStorage);
+        model = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(), model.getFeedsEntryBook(),
+                model.getUserPrefs(), storage);
         logic = new LogicManager(model);
 
         // Execute add command
@@ -108,7 +113,7 @@ public class LogicManagerTest {
         Model expectedModel = new ModelManagerStub();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
         String expectedFinalMessage = ModelManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
-        expectedModel.addEntry(expectedEntry);
+        expectedModel.addListEntry(expectedEntry, Optional.empty());
         expectedModel.setException(new CommandException(expectedFinalMessage));
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
         assertManualExceptionPropagated(CommandException.class, expectedFinalMessage);
@@ -132,7 +137,7 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
+    public void getFilteredEntryList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
         logic.getFilteredEntryList().remove(0);
     }
@@ -167,7 +172,8 @@ public class LogicManagerTest {
      * @see #assertCommandBehavior(Class, String, String, Model)
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getListEntryBook(), model.getUserPrefs(), model.getStorage());
+        Model expectedModel = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
+            model.getFeedsEntryBook(), model.getUserPrefs(), model.getStorage());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 
@@ -235,7 +241,7 @@ public class LogicManagerTest {
         }
 
         @Override
-        public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) throws IOException {
+        public void saveEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
             throw DUMMY_IO_EXCEPTION;
         }
     }

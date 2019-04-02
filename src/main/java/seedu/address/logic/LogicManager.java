@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.beans.property.ReadOnlyProperty;
@@ -12,6 +13,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.entry.Entry;
 import seedu.address.ui.ViewMode;
@@ -47,8 +49,13 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public ReadOnlyEntryBook getEntryBook() {
+    public ReadOnlyEntryBook getListEntryBook() {
         return model.getListEntryBook();
+    }
+
+    @Override
+    public Optional<String> getOfflineLink(String url) {
+        return model.getOfflineLink(url);
     }
 
     @Override
@@ -62,8 +69,8 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public Path getEntryBookFilePath() {
-        return model.getEntryBookFilePath();
+    public Path getListEntryBookFilePath() {
+        return model.getListEntryBookFilePath();
     }
 
     @Override
@@ -114,6 +121,16 @@ public class LogicManager implements Logic {
     @Override
     public void setCommandResult(CommandResult commandResult) {
         model.setCommandResult(commandResult);
+    }
+
+    @Override
+    public ReadOnlyProperty<ModelContext> contextProperty() {
+        return model.contextProperty();
+    }
+
+    @Override
+    public void setContext(ModelContext context) {
+        model.setContext(context);
     }
 
 }

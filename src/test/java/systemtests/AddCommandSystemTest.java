@@ -31,6 +31,8 @@ import static seedu.address.testutil.TypicalEntries.HOON;
 import static seedu.address.testutil.TypicalEntries.IDA;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 
+import java.util.Optional;
+
 import org.junit.Test;
 
 import seedu.address.commons.core.Messages;
@@ -45,7 +47,7 @@ import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
 
-public class AddCommandSystemTest extends AddressBookSystemTest {
+public class AddCommandSystemTest extends EntryBookSystemTest {
 
     @Test
     public void add() {
@@ -78,7 +80,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         */
 
         /* Case: add to empty entry book -> added */
-        deleteAllPersons();
+        deleteAllEntries();
         assertCommandSuccess(ALICE);
 
         /* Case: add a entry with tags, command with parameters in random order -> added */
@@ -93,54 +95,38 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         /* -------------------------- Perform add operation on the shown filtered list ------------------------------ */
 
         /* Case: filters the entry list before adding -> added */
-        showPersonsWithName(KEYWORD_MATCHING_MEIER);
+        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
         assertCommandSuccess(IDA);
 
         /* ------------------------ Perform add operation while a entry card is selected --------------------------- */
 
         /* Case: selects first card in the entry list, add a entry -> added, card selection remains unchanged */
-        selectPerson(Index.fromOneBased(1));
+        selectEntry(Index.fromOneBased(1));
         assertCommandSuccess(CARL);
 
         /* ----------------------------------- Perform invalid add operations --------------------------------------- */
 
         /* Case: add a duplicate entry -> rejected */
         command = EntryUtil.getAddCommand(HOON);
-        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_ENTRY);
 
         /* Case: add a duplicate entry except with different description -> rejected */
         toAdd = new EntryBuilder(HOON).withDescription(VALID_DESCRIPTION_BOB).build();
         command = EntryUtil.getAddCommand(toAdd);
-        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_ENTRY);
 
         /* Case: add a duplicate entry except with different title -> rejected */
         toAdd = new EntryBuilder(HOON).withTitle(VALID_TITLE_BOB).build();
         command = EntryUtil.getAddCommand(toAdd);
-        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_ENTRY);
 
         /* Case: add a duplicate entry except with different tags -> rejected */
         command = EntryUtil.getAddCommand(HOON) + " " + PREFIX_TAG.getPrefix() + "friends";
-        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_ENTRY);
 
         /* Case: missing link -> rejected */
         command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        // To be deprecated
-        /* Case: missing name -> rejected
-        command = AddCommand.COMMAND_WORD + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-        */
-
-        /* Case: missing phone -> rejected
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-        */
-
-        /* Case: missing address -> rejected
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-        */
 
         /* Case: invalid keyword -> rejected */
         command = "adds " + EntryUtil.getEntryDetails(toAdd);
@@ -174,7 +160,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         /* ----------------------------------- Perform invalid add operations --------------------------------------- */
 
-        deleteAllPersons();
+        deleteAllEntries();
 
         /* Case: using alias to add a entry without tags to a non-empty entry book -> added */
         command = "   " + AddCommand.COMMAND_ALIAS + "  " + TITLE_DESC_AMY + "  " + DESCRIPTION_DESC_AMY + " "
@@ -198,8 +184,8 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
      * 5. Browser url and selected card remain unchanged.<br>
      * 6. Status bar's sync status changes.<br>
      * Verifications 1, 3 and 4 are performed by
-     * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
-     * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
+     * {@code EntryBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
+     * @see EntryBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
      */
     private void assertCommandSuccess(Entry toAdd) {
         assertCommandSuccess(EntryUtil.getAddCommand(toAdd), toAdd);
@@ -212,7 +198,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
      */
     private void assertCommandSuccess(String command, Entry toAdd) {
         Model expectedModel = getModel();
-        expectedModel.addEntry(toAdd);
+        expectedModel.addListEntry(toAdd, Optional.empty());
         String expectedResultMessage = String.format(AddCommand.MESSAGE_SUCCESS, toAdd);
 
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
@@ -243,8 +229,8 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
      * 4. {@code Storage} and {@code EntryListPanel} remain unchanged.<br>
      * 5. Browser url, selected card and status bar excluding count remain unchanged.<br>
      * Verifications 1, 3 and 4 are performed by
-     * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
-     * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
+     * {@code EntryBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
+     * @see EntryBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
      */
     private void assertCommandFailure(String command, String expectedResultMessage) {
         Model expectedModel = getModel();

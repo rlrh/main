@@ -46,7 +46,7 @@ import seedu.address.ui.ResultDisplay;
  * A system test class for EntryBook, which provides access to handles of GUI components and helper methods
  * for test verification.
  */
-public abstract class AddressBookSystemTest {
+public abstract class EntryBookSystemTest {
     @ClassRule
     public static ClockRule clockRule = new ClockRule();
 
@@ -72,7 +72,11 @@ public abstract class AddressBookSystemTest {
     @Before
     public void setUp() {
         setupHelper = new SystemTestSetupHelper();
-        testApp = setupHelper.setupApplication(this::getInitialData, getDataFileLocation());
+        testApp = setupHelper.setupApplication(
+                                this::getInitialDataListEntryBook,
+                                this::getInitialDataArchivesEntryBook,
+                                getDataFileLocationListEntryBook(),
+                                getDataFileLocationArchivesEntryBook());
         mainWindowHandle = setupHelper.setupMainWindowHandle();
 
         waitUntilBrowserLoaded(getBrowserPanel());
@@ -85,17 +89,33 @@ public abstract class AddressBookSystemTest {
     }
 
     /**
-     * Returns the data to be loaded into the file in {@link #getDataFileLocation()}.
+     * Returns the data for the list entry book to be loaded into the file in
+     * {@link #getDataFileLocationListEntryBook()}.
      */
-    protected EntryBook getInitialData() {
-        return TypicalEntries.getTypicalEntryBook();
+    protected EntryBook getInitialDataListEntryBook() {
+        return TypicalEntries.getTypicalListEntryBook();
     }
 
     /**
-     * Returns the directory of the data file.
+     * Returns the data for the archives entry book to be loaded into the file in
+     * {@link #getDataFileLocationListEntryBook()}.
      */
-    protected Path getDataFileLocation() {
-        return TestApp.SAVE_LOCATION_FOR_TESTING;
+    protected EntryBook getInitialDataArchivesEntryBook() {
+        return TypicalEntries.getTypicalArchivesEntryBook();
+    }
+
+    /**
+     * Returns the directory of the data file for the list entry book.
+     */
+    protected Path getDataFileLocationListEntryBook() {
+        return TestApp.SAVE_LOCATION_LIST_ENTRYBOOK_FOR_TESTING;
+    }
+
+    /**
+     * Returns the directory of the data file for the archives entry book.
+     */
+    protected Path getDataFileLocationArchivesEntryBook() {
+        return TestApp.SAVE_LOCATION_ARCHIVES_ENTRYBOOK_FOR_TESTING;
     }
 
     public MainWindowHandle getMainWindowHandle() {
@@ -106,7 +126,7 @@ public abstract class AddressBookSystemTest {
         return mainWindowHandle.getCommandBox();
     }
 
-    public EntryListPanelHandle getPersonListPanel() {
+    public EntryListPanelHandle getEntryListPanel() {
         return mainWindowHandle.getEntryListPanel();
     }
 
@@ -142,17 +162,17 @@ public abstract class AddressBookSystemTest {
     }
 
     /**
-     * Displays all persons in the address book.
+     * Displays all entries in the address book.
      */
-    protected void showAllPersons() {
+    protected void showAllEntries() {
         executeCommand(ListCommand.COMMAND_WORD);
         assertEquals(getModel().getListEntryBook().getEntryList().size(), getModel().getFilteredEntryList().size());
     }
 
     /**
-     * Displays all persons with any parts of their names matching {@code keyword} (case-insensitive).
+     * Displays all entries with any parts of their titles matching {@code keyword} (case-insensitive).
      */
-    protected void showPersonsWithName(String keyword) {
+    protected void showEntriesWithTitle(String keyword) {
         executeCommand(FindCommand.COMMAND_WORD + " " + keyword);
         assertTrue(getModel().getFilteredEntryList().size() < getModel().getListEntryBook().getEntryList().size());
     }
@@ -160,15 +180,15 @@ public abstract class AddressBookSystemTest {
     /**
      * Selects the entry at {@code index} of the displayed list.
      */
-    protected void selectPerson(Index index) {
+    protected void selectEntry(Index index) {
         executeCommand(SelectCommand.COMMAND_WORD + " " + index.getOneBased());
-        assertEquals(index.getZeroBased(), getPersonListPanel().getSelectedCardIndex());
+        assertEquals(index.getZeroBased(), getEntryListPanel().getSelectedCardIndex());
     }
 
     /**
-     * Deletes all persons in the address book.
+     * Deletes all entries in the address book.
      */
-    protected void deleteAllPersons() {
+    protected void deleteAllEntries() {
         executeCommand(ClearCommand.COMMAND_WORD);
         assertEquals(0, getModel().getListEntryBook().getEntryList().size());
     }
@@ -176,15 +196,16 @@ public abstract class AddressBookSystemTest {
     /**
      * Asserts that the {@code CommandBox} displays {@code expectedCommandInput}, the {@code ResultDisplay} displays
      * {@code expectedResultMessage}, the storage contains the same entry objects as {@code expectedModel}
-     * and the entry list panel displays the persons in the model correctly.
+     * and the entry list panel displays the entries in the model correctly.
      */
     protected void assertApplicationDisplaysExpected(String expectedCommandInput, String expectedResultMessage,
             Model expectedModel) {
         assertEquals(expectedCommandInput, getCommandBox().getInput());
         assertEquals(expectedResultMessage, getResultDisplay().getText());
-        assertEquals(new EntryBook(expectedModel.getListEntryBook()), testApp.readStorageAddressBook());
+        assertEquals(new EntryBook(expectedModel.getListEntryBook()), testApp.readStorageListEntryBook());
+        assertEquals(new EntryBook(expectedModel.getArchivesEntryBook()), testApp.readStorageArchivesEntryBook());
         assertEquals(expectedModel.getContext(), testApp.getModel().getContext());
-        assertListMatching(getPersonListPanel(), expectedModel.getFilteredEntryList());
+        assertListMatching(getEntryListPanel(), expectedModel.getFilteredEntryList());
     }
 
     /**
@@ -196,7 +217,7 @@ public abstract class AddressBookSystemTest {
         getBrowserPanel().rememberUrl();
         statusBarFooterHandle.rememberSaveLocation();
         statusBarFooterHandle.rememberSyncStatus();
-        getPersonListPanel().rememberSelectedEntryCard();
+        getEntryListPanel().rememberSelectedEntryCard();
     }
 
     /**
@@ -206,7 +227,7 @@ public abstract class AddressBookSystemTest {
      */
     protected void assertSelectedCardDeselected() {
         assertEquals(BrowserPanel.DEFAULT_PAGE, getBrowserPanel().getLoadedUrl());
-        assertFalse(getPersonListPanel().isAnyCardSelected());
+        assertFalse(getEntryListPanel().isAnyCardSelected());
     }
 
     /**
@@ -216,8 +237,8 @@ public abstract class AddressBookSystemTest {
      * @see EntryListPanelHandle#isSelectedEntryCardChanged()
      */
     protected void assertSelectedCardChanged(Index expectedSelectedCardIndex) {
-        getPersonListPanel().navigateToCard(getPersonListPanel().getSelectedCardIndex());
-        String selectedCardLink = getPersonListPanel().getHandleToSelectedCard().getLink();
+        getEntryListPanel().navigateToCard(getEntryListPanel().getSelectedCardIndex());
+        String selectedCardLink = getEntryListPanel().getHandleToSelectedCard().getLink();
         URL expectedUrl;
         try {
             expectedUrl = new URL(selectedCardLink);
@@ -227,7 +248,7 @@ public abstract class AddressBookSystemTest {
         // assertEquals(expectedUrl, getBrowserPanel().getLoadedUrl());
         // TODO: make tests work consistently independent of Internet access and installation directory
 
-        assertEquals(expectedSelectedCardIndex.getZeroBased(), getPersonListPanel().getSelectedCardIndex());
+        assertEquals(expectedSelectedCardIndex.getZeroBased(), getEntryListPanel().getSelectedCardIndex());
     }
 
     /**
@@ -237,7 +258,7 @@ public abstract class AddressBookSystemTest {
      */
     protected void assertSelectedCardUnchanged() {
         assertFalse(getBrowserPanel().isUrlChanged());
-        assertFalse(getPersonListPanel().isSelectedEntryCardChanged());
+        assertFalse(getEntryListPanel().isSelectedEntryCardChanged());
     }
 
     /**
@@ -295,9 +316,9 @@ public abstract class AddressBookSystemTest {
     private void assertApplicationStartingStateIsCorrect() {
         assertEquals("", getCommandBox().getInput());
         assertEquals("", getResultDisplay().getText());
-        assertListMatching(getPersonListPanel(), getModel().getFilteredEntryList());
+        assertListMatching(getEntryListPanel(), getModel().getFilteredEntryList());
         assertEquals(BrowserPanel.DEFAULT_PAGE, getBrowserPanel().getLoadedUrl());
-        assertEquals(Paths.get(".").resolve(testApp.getStorageSaveLocation()).toString(),
+        assertEquals(Paths.get(".").resolve(testApp.getListEntryBookStorageSaveLocation()).toString(),
                 getStatusBarFooter().getSaveLocation());
         assertEquals(SYNC_STATUS_INITIAL, getStatusBarFooter().getSyncStatus());
     }
@@ -324,4 +345,5 @@ public abstract class AddressBookSystemTest {
     protected void setExceptionInApp(Exception e) {
         testApp.setException(e);
     }
+
 }

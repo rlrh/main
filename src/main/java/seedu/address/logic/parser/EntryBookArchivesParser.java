@@ -5,6 +5,7 @@ import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT
 import java.util.regex.Matcher;
 
 import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.DeleteArchiveEntryCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.UnarchiveCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -23,6 +24,7 @@ public class EntryBookArchivesParser extends EntryBookParser {
      * @return the command based on the user input
      * @throws ParseException if the user input does not conform the expected format
      */
+    @Override
     public Command parseCommand(String userInput) throws ParseException {
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
@@ -32,6 +34,9 @@ public class EntryBookArchivesParser extends EntryBookParser {
         final String commandWord = matcher.group("commandWord");
         final String arguments = matcher.group("arguments");
         switch (commandWord) {
+
+        case DeleteArchiveEntryCommand.COMMAND_WORD:
+            return new DeleteArchiveEntryCommandParser().parse(arguments);
 
         case UnarchiveCommand.COMMAND_WORD:
         case UnarchiveCommand.COMMAND_ALIAS:

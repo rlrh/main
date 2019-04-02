@@ -27,32 +27,32 @@ public class JsonEntryBookStorage implements EntryBookStorage {
         this.filePath = filePath;
     }
 
-    public Path getAddressBookFilePath() {
+    public Path getEntryBookFilePath() {
         return filePath;
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook() throws DataConversionException {
-        return readAddressBook(filePath);
+    public Optional<ReadOnlyEntryBook> readEntryBook() throws DataConversionException {
+        return readEntryBook(filePath);
     }
 
     /**
-     * Similar to {@link #readAddressBook()}.
+     * Similar to {@link #readEntryBook()}.
      *
      * @param filePath location of the data. Cannot be null.
      * @throws DataConversionException if the file is not in the correct format.
      */
-    public Optional<ReadOnlyEntryBook> readAddressBook(Path filePath) throws DataConversionException {
+    public Optional<ReadOnlyEntryBook> readEntryBook(Path filePath) throws DataConversionException {
         requireNonNull(filePath);
 
-        Optional<JsonSerializableEntryBook> jsonAddressBook = JsonUtil.readJsonFile(
+        Optional<JsonSerializableEntryBook> jsonEntryBook = JsonUtil.readJsonFile(
                 filePath, JsonSerializableEntryBook.class);
-        if (!jsonAddressBook.isPresent()) {
+        if (!jsonEntryBook.isPresent()) {
             return Optional.empty();
         }
 
         try {
-            return Optional.of(jsonAddressBook.get().toModelType());
+            return Optional.of(jsonEntryBook.get().toModelType());
         } catch (IllegalValueException ive) {
             logger.info("Illegal values found in " + filePath + ": " + ive.getMessage());
             throw new DataConversionException(ive);
@@ -60,21 +60,21 @@ public class JsonEntryBookStorage implements EntryBookStorage {
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook) throws IOException {
-        saveAddressBook(addressBook, filePath);
+    public void saveEntryBook(ReadOnlyEntryBook entryBook) throws IOException {
+        saveEntryBook(entryBook, filePath);
     }
 
     /**
-     * Similar to {@link #saveAddressBook(ReadOnlyEntryBook)}.
+     * Similar to {@link #saveEntryBook(ReadOnlyEntryBook)}.
      *
      * @param filePath location of the data. Cannot be null.
      */
-    public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) throws IOException {
-        requireNonNull(addressBook);
+    public void saveEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
+        requireNonNull(listEntryBook);
         requireNonNull(filePath);
 
         FileUtil.createIfMissing(filePath);
-        JsonUtil.saveJsonFile(new JsonSerializableEntryBook(addressBook), filePath);
+        JsonUtil.saveJsonFile(new JsonSerializableEntryBook(listEntryBook), filePath);
     }
 
 }

@@ -4,28 +4,15 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import com.rometools.rome.feed.synd.SyndEntry;
-import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
-import com.rometools.rome.io.SyndFeedInput;
-import com.rometools.rome.io.XmlReader;
 
-import seedu.address.commons.util.StringUtil;
+import seedu.address.commons.util.FeedUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
-import seedu.address.model.entry.Address;
-import seedu.address.model.entry.Description;
-import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.Link;
-import seedu.address.model.entry.Title;
-import seedu.address.network.Network;
+import seedu.address.model.ModelContext;
 
 /**
  * Shows a feed given an URL.
@@ -42,7 +29,6 @@ public class FeedCommand extends Command {
             + ": Opens a link as an RSS feed and adds all its entries.\n"
             + "Parameters: LINK\n"
             + "Example: " + COMMAND_WORD + " https://open.kattis.com/rss/new-problems";
-    public static final String DEFAULT_DESCRIPTION_TEXT = "imported from %s";
 
     private String feedUrl;
     public FeedCommand(String feedUrl) {
@@ -53,51 +39,23 @@ public class FeedCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
+        EntryBook toBeDisplayed;
+
         try {
-            InputStream inputStream = Network.fetchAsStream(feedUrl);
-            SyndFeed syndFeed = new SyndFeedInput().build(new XmlReader(inputStream));
-
-            EntryBook toBeDisplayed = new EntryBook();
-            toBeDisplayed.setPersons(convertToEntryList(syndFeed)); // todo: test for dupes
-
-            model.displayEntryBook(toBeDisplayed);
-            model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
-
+            toBeDisplayed = FeedUtil.fromFeedUrl(feedUrl);
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e), e);
         } catch (FeedException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_XML, feedUrl), e);
-        } catch (Exception e) {
+        } /*catch (Exception e) {
             throw new CommandException("Some other problem: " + StringUtil.getDetails(e), e);
-        }
+        }*/
+
+        model.setSearchEntryBook(toBeDisplayed);
+        model.setContext(ModelContext.CONTEXT_SEARCH);
+        model.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, feedUrl));
-    }
-
-    private List<Entry> convertToEntryList(SyndFeed syndFeed) {
-        return syndFeed.getEntries().stream()
-                .map(this::syndEntryToEntryBookEntry)
-                .collect(Collectors.toList());
-    }
-
-    /** Converts a SyndEntry into an EntryBook Entry. */
-    private Entry syndEntryToEntryBookEntry(SyndEntry syndEntry) {
-        return new Entry(
-                new Title(syndEntry.getTitle().trim()),
-                extractDescription(syndEntry),
-                new Link(syndEntry.getLink()),
-                new Address("unused"),
-                Collections.emptySet()
-        );
-    }
-
-    /** Extracts a useful description from a SyndEntry. */
-    private Description extractDescription(SyndEntry syndEntry) {
-        String description = syndEntry.getDescription().getValue().replace('\n', ' ').trim();
-        if (description.isEmpty()) {
-            description = String.format(DEFAULT_DESCRIPTION_TEXT, feedUrl);
-        }
-        return new Description(description);
     }
 
     @Override

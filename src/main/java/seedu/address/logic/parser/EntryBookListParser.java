@@ -10,10 +10,8 @@ import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.FeedCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
-import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -31,6 +29,7 @@ public class EntryBookListParser extends EntryBookParser {
      * @return the command based on the user input
      * @throws ParseException if the user input does not conform the expected format
      */
+    @Override
     public Command parseCommand(String userInput) throws ParseException {
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
@@ -53,10 +52,6 @@ public class EntryBookListParser extends EntryBookParser {
         case EditCommand.COMMAND_ALIAS:
             return new EditCommandParser().parse(arguments);
 
-        case SelectCommand.COMMAND_WORD:
-        case SelectCommand.COMMAND_ALIAS:
-            return new SelectCommandParser().parse(arguments);
-
         case DeleteCommand.COMMAND_WORD:
             return new DeleteCommandParser().parse(arguments);
 
@@ -70,9 +65,6 @@ public class EntryBookListParser extends EntryBookParser {
         case ViewModeCommand.COMMAND_WORD:
         case ViewModeCommand.COMMAND_ALIAS:
             return new ViewModeCommandParser().parse(arguments);
-
-        case FeedCommand.COMMAND_WORD:
-            return new FeedCommandParser().parse(arguments);
 
         default:
             return super.parseCommand(userInput);

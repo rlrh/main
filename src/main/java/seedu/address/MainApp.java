@@ -3,6 +3,7 @@ package seedu.address;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
@@ -23,6 +24,7 @@ import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.ArticleStorage;
+import seedu.address.storage.DataConversionAndIoExceptionsThrowingSupplier;
 import seedu.address.storage.DataDirectoryArticleStorage;
 import seedu.address.storage.EntryBookStorage;
 import seedu.address.storage.JsonEntryBookStorage;
@@ -38,7 +40,7 @@ import seedu.address.ui.UiManager;
  */
 public class MainApp extends Application {
 
-    public static final Version VERSION = new Version(1, 2, 0, false);
+    public static final Version VERSION = new Version(1, 2, 1, true);
 
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
 
@@ -58,9 +60,13 @@ public class MainApp extends Application {
 
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
-        EntryBookStorage entryBookStorage = new JsonEntryBookStorage(userPrefs.getAddressBookFilePath());
+        EntryBookStorage listEntryBookStorage = new JsonEntryBookStorage(userPrefs.getListEntryBookFilePath());
+        EntryBookStorage archivesEntryBookStorage = new JsonEntryBookStorage(userPrefs.getArchivesEntryBookFilePath());
+        EntryBookStorage feedsEntryBookStorage = new JsonEntryBookStorage(userPrefs.getFeedsEntryBookFilePath());
         ArticleStorage articleStorage = new DataDirectoryArticleStorage(userPrefs.getArticleDataDirectoryPath());
-        storage = new StorageManager(entryBookStorage, userPrefsStorage, articleStorage);
+
+        storage = new StorageManager(listEntryBookStorage, archivesEntryBookStorage, feedsEntryBookStorage,
+                userPrefsStorage, articleStorage);
 
         initLogging(config);
 
@@ -77,23 +83,42 @@ public class MainApp extends Application {
      * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
      */
     private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
-        Optional<ReadOnlyEntryBook> addressBookOptional;
-        ReadOnlyEntryBook initialData;
-        try {
-            addressBookOptional = storage.readAddressBook();
-            if (!addressBookOptional.isPresent()) {
-                logger.info("Data file not found. Will be starting with a sample EntryBook");
-            }
-            initialData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
-        } catch (DataConversionException e) {
-            logger.warning("Data file not in the correct format. Will be starting with an empty EntryBook");
-            initialData = new EntryBook();
-        } catch (IOException e) {
-            logger.warning("Problem while reading from the file. Will be starting with an empty EntryBook");
-            initialData = new EntryBook();
-        }
 
-        return new ModelManager(initialData, userPrefs, storage);
+        ReadOnlyEntryBook initialListEntryBook = initEntryBook(storage::readListEntryBook,
+                SampleDataUtil::getSampleEntryBook, "reading list");
+        ReadOnlyEntryBook initialArchivesEntryBook = initEntryBook(storage::readArchivesEntryBook, EntryBook::new,
+                "archives");
+        ReadOnlyEntryBook initialFeedEntryBook = initEntryBook(storage::readFeedsEntryBook, EntryBook::new,
+                "feed list");
+
+        return new ModelManager(initialListEntryBook, initialArchivesEntryBook, initialFeedEntryBook, userPrefs,
+                storage);
+    }
+
+
+    /**
+     * Returns an initialized EntryBook given a method reference which reads it from storage and another function
+     * which returns a sample EntryBook.
+     * Also takes in the name of the EntryBook initialized for logging messages.
+     */
+    private ReadOnlyEntryBook initEntryBook(
+            DataConversionAndIoExceptionsThrowingSupplier<Optional<ReadOnlyEntryBook>> storageFetcher,
+            Supplier<ReadOnlyEntryBook> sampleEntryBookSupplier,
+            String entryBookName) {
+
+        try {
+            Optional<ReadOnlyEntryBook> fetchedEntryBook = storageFetcher.get();
+            if (!fetchedEntryBook.isPresent()) {
+                logger.info("Data file not found. Will be starting with a default " + entryBookName);
+            }
+            return fetchedEntryBook.orElseGet(sampleEntryBookSupplier);
+        } catch (DataConversionException e) {
+            logger.warning("Data file not in the correct format. Will be starting with an empty " + entryBookName);
+            return new EntryBook();
+        } catch (IOException e) {
+            logger.warning("Problem while reading from the file. Will be starting with an empty " + entryBookName);
+            return new EntryBook();
+        }
     }
 
     private void initLogging(Config config) {

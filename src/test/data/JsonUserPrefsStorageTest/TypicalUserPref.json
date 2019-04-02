@@ -7,6 +7,6 @@
       "y" : 100
     }
   },
-  "addressBookFilePath" : "addressbook.json",
+  "listEntryBookFilePath" : "entrybook.json",
   "articleDataDirectoryPath" : "data"
 }

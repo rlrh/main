@@ -17,7 +17,7 @@ public class ClearCommand extends Command {
     @Override
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
-        model.clearEntryBook();
+        model.clearListEntryBook();
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

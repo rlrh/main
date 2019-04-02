@@ -16,7 +16,7 @@ import seedu.address.model.entry.UniqueEntryList;
  */
 public class EntryBook implements ReadOnlyEntryBook {
 
-    private final UniqueEntryList persons;
+    private final UniqueEntryList entries;
     private final InvalidationListenerManager invalidationListenerManager = new InvalidationListenerManager();
 
     /*
@@ -27,13 +27,13 @@ public class EntryBook implements ReadOnlyEntryBook {
      *   among constructors.
      */
     {
-        persons = new UniqueEntryList();
+        entries = new UniqueEntryList();
     }
 
     public EntryBook() {}
 
     /**
-     * Creates an EntryBook using the Persons in the {@code toBeCopied}
+     * Creates an EntryBook using the Entries in the {@code toBeCopied}
      */
     public EntryBook(ReadOnlyEntryBook toBeCopied) {
         this();
@@ -46,8 +46,8 @@ public class EntryBook implements ReadOnlyEntryBook {
      * Replaces the contents of the entry list with {@code entries}.
      * {@code entries} must not contain duplicate entries.
      */
-    public void setPersons(List<Entry> entries) {
-        this.persons.setPersons(entries);
+    public void setEntries(List<Entry> entries) {
+        this.entries.setEntries(entries);
         indicateModified();
     }
 
@@ -57,7 +57,7 @@ public class EntryBook implements ReadOnlyEntryBook {
     public void resetData(ReadOnlyEntryBook newData) {
         requireNonNull(newData);
 
-        setPersons(newData.getEntryList());
+        setEntries(newData.getEntryList());
     }
 
     //// entry-level operations
@@ -65,9 +65,9 @@ public class EntryBook implements ReadOnlyEntryBook {
     /**
      * Returns true if a entry with the same identity as {@code entry} exists in the address book.
      */
-    public boolean hasPerson(Entry entry) {
+    public boolean hasEntry(Entry entry) {
         requireNonNull(entry);
-        return persons.contains(entry);
+        return entries.contains(entry);
     }
 
     /**
@@ -75,7 +75,7 @@ public class EntryBook implements ReadOnlyEntryBook {
      * The entry must not already exist in the address book.
      */
     public void addEntry(Entry p) {
-        persons.add(p);
+        entries.add(p);
         indicateModified();
     }
 
@@ -84,10 +84,10 @@ public class EntryBook implements ReadOnlyEntryBook {
      * {@code target} must exist in the address book.
      * The entry identity of {@code editedEntry} must not be the same as another existing entry in the address book.
      */
-    public void setPerson(Entry target, Entry editedEntry) {
+    public void setEntry(Entry target, Entry editedEntry) {
         requireNonNull(editedEntry);
 
-        persons.setPerson(target, editedEntry);
+        entries.setEntry(target, editedEntry);
         indicateModified();
     }
 
@@ -95,8 +95,8 @@ public class EntryBook implements ReadOnlyEntryBook {
      * Removes {@code key} from this {@code EntryBook}.
      * {@code key} must exist in the address book.
      */
-    public void removePerson(Entry key) {
-        persons.remove(key);
+    public void removeEntry(Entry key) {
+        entries.remove(key);
         indicateModified();
     }
 
@@ -130,24 +130,24 @@ public class EntryBook implements ReadOnlyEntryBook {
 
     @Override
     public String toString() {
-        return persons.asUnmodifiableObservableList().size() + " persons";
+        return entries.asUnmodifiableObservableList().size() + " entries";
         // TODO: refine later
     }
 
     @Override
     public ObservableList<Entry> getEntryList() {
-        return persons.asUnmodifiableObservableList();
+        return entries.asUnmodifiableObservableList();
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof EntryBook // instanceof handles nulls
-                && persons.equals(((EntryBook) other).persons));
+                && entries.equals(((EntryBook) other).entries));
     }
 
     @Override
     public int hashCode() {
-        return persons.hashCode();
+        return entries.hashCode();
     }
 }

@@ -12,9 +12,9 @@ import seedu.address.model.entry.exceptions.DuplicateEntryException;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 
 /**
- * A list of persons that enforces uniqueness between its elements and does not allow nulls.
+ * A list of entries that enforces uniqueness between its elements and does not allow nulls.
  * A entry is considered unique by comparing using {@code Entry#isSameEntry(Entry)}. As such, adding and updating of
- * persons uses Entry#isSameEntry(Entry) for equality so as to ensure that the entry being added or updated is
+ * entries uses Entry#isSameEntry(Entry) for equality so as to ensure that the entry being added or updated is
  * unique in terms of identity in the UniqueEntryList. However, the removal of a entry uses Entry#equals(Object) so
  * as to ensure that the entry with exactly the same fields will be removed.
  *
@@ -53,7 +53,7 @@ public class UniqueEntryList implements Iterable<Entry> {
      * {@code target} must exist in the list.
      * The entry identity of {@code editedEntry} must not be the same as another existing entry in the list.
      */
-    public void setPerson(Entry target, Entry editedEntry) {
+    public void setEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
         int index = internalList.indexOf(target);
@@ -79,7 +79,7 @@ public class UniqueEntryList implements Iterable<Entry> {
         }
     }
 
-    public void setPersons(UniqueEntryList replacement) {
+    public void setEntries(UniqueEntryList replacement) {
         requireNonNull(replacement);
         internalList.setAll(replacement.internalList);
     }
@@ -88,9 +88,9 @@ public class UniqueEntryList implements Iterable<Entry> {
      * Replaces the contents of this list with {@code entries}.
      * {@code entries} must not contain duplicate entries.
      */
-    public void setPersons(List<Entry> entries) {
+    public void setEntries(List<Entry> entries) {
         requireAllNonNull(entries);
-        if (!personsAreUnique(entries)) {
+        if (!entriesAreUnique(entries)) {
             throw new DuplicateEntryException();
         }
 
@@ -124,7 +124,7 @@ public class UniqueEntryList implements Iterable<Entry> {
     /**
      * Returns true if {@code entries} contains only unique entries.
      */
-    private boolean personsAreUnique(List<Entry> entries) {
+    private boolean entriesAreUnique(List<Entry> entries) {
         for (int i = 0; i < entries.size() - 1; i++) {
             for (int j = i + 1; j < entries.size(); j++) {
                 if (entries.get(i).isSameEntry(entries.get(j))) {

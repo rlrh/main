@@ -8,12 +8,16 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.BOB;
-import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_LINK;
+import static seedu.address.testutil.TypicalEntries.CARL;
+import static seedu.address.testutil.TypicalEntries.DANIEL;
+import static seedu.address.testutil.TypicalEntries.KATTIS_FEED_ENTRY;
+import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,7 +60,7 @@ public class ModelManagerTest {
     @Test
     public void setUserPrefs_validUserPrefs_copiesUserPrefs() {
         UserPrefs userPrefs = new UserPrefs();
-        userPrefs.setAddressBookFilePath(Paths.get("address/book/file/path"));
+        userPrefs.setListEntryBookFilePath(Paths.get("address/book/file/path"));
         userPrefs.setArticleDataDirectoryPath(Paths.get("article/data/directory/path"));
         userPrefs.setGuiSettings(new GuiSettings(1, 2, 3, 4));
         modelManager.setUserPrefs(userPrefs);
@@ -64,7 +68,7 @@ public class ModelManagerTest {
 
         // Modifying userPrefs should not modify modelManager's userPrefs
         UserPrefs oldUserPrefs = new UserPrefs(userPrefs);
-        userPrefs.setAddressBookFilePath(Paths.get("new/address/book/file/path"));
+        userPrefs.setListEntryBookFilePath(Paths.get("new/address/book/file/path"));
         userPrefs.setArticleDataDirectoryPath(Paths.get("new/article/data/directory/path"));
         assertEquals(oldUserPrefs, modelManager.getUserPrefs());
     }
@@ -85,14 +89,14 @@ public class ModelManagerTest {
     @Test
     public void setEntryBookFilePath_nullPath_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        modelManager.setEntryBookFilePath(null);
+        modelManager.setListEntryBookFilePath(null);
     }
 
     @Test
-    public void setEntryBookFilePath_validPath_setsAddressBookFilePath() {
+    public void setEntryBookFilePath_validPath_setsEntryBookFilePath() {
         Path path = Paths.get("address/book/file/path");
-        modelManager.setEntryBookFilePath(path);
-        assertEquals(path, modelManager.getEntryBookFilePath());
+        modelManager.setListEntryBookFilePath(path);
+        assertEquals(path, modelManager.getListEntryBookFilePath());
     }
 
     @Test
@@ -102,7 +106,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setArticleDataDirectoryPath_validPath_setsAddressBookFilePath() {
+    public void setArticleDataDirectoryPath_validPath_setsEntryBookFilePath() {
         Path path = Paths.get("article/data/directory/path");
         modelManager.setArticleDataDirectoryPath(path);
         assertEquals(path, modelManager.getArticleDataDirectoryPath());
@@ -121,34 +125,34 @@ public class ModelManagerTest {
 
     @Test
     public void hasEntry_entryInEntryBook_returnsTrue() {
-        modelManager.addEntry(ALICE);
+        modelManager.addListEntry(ALICE, Optional.empty());
         assertTrue(modelManager.hasEntry(ALICE));
     }
 
     @Test
     public void deleteEntry_entryIsSelectedAndFirstEntryInFilteredEntryList_selectionCleared() {
-        modelManager.addEntry(ALICE);
+        modelManager.addListEntry(ALICE, Optional.empty());
         modelManager.setSelectedEntry(ALICE);
-        modelManager.deleteEntry(ALICE);
+        modelManager.deleteListEntry(ALICE);
         assertEquals(null, modelManager.getSelectedEntry());
     }
 
     @Test
     public void deleteEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
-        modelManager.addEntry(ALICE);
-        modelManager.addEntry(BOB);
+        modelManager.addListEntry(ALICE, Optional.empty());
+        modelManager.addListEntry(BOB, Optional.empty());
         assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(BOB);
-        modelManager.deleteEntry(BOB);
+        modelManager.deleteListEntry(BOB);
         assertEquals(ALICE, modelManager.getSelectedEntry());
     }
 
     @Test
     public void setEntry_entryIsSelected_selectedEntryUpdated() {
-        modelManager.addEntry(ALICE);
+        modelManager.addListEntry(ALICE, Optional.empty());
         modelManager.setSelectedEntry(ALICE);
         Entry updatedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
-        modelManager.setEntry(ALICE, updatedAlice);
+        modelManager.setListEntry(ALICE, updatedAlice);
         assertEquals(updatedAlice, modelManager.getSelectedEntry());
     }
 
@@ -166,7 +170,7 @@ public class ModelManagerTest {
 
     @Test
     public void setSelectedEntry_entryInFilteredEntryList_setsSelectedEntry() {
-        modelManager.addEntry(ALICE);
+        modelManager.addListEntry(ALICE, Optional.empty());
         assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(ALICE);
         assertEquals(ALICE, modelManager.getSelectedEntry());
@@ -174,14 +178,21 @@ public class ModelManagerTest {
 
     @Test
     public void equals() {
-        EntryBook entryBook = new EntryBookBuilder().withEntry(ALICE).withEntry(BENSON).build();
-        EntryBook differentEntryBook = new EntryBook();
+        EntryBook listEntryBook = new EntryBookBuilder().withEntry(ALICE).withEntry(BENSON).build();
+        EntryBook archivesEntryBook = new EntryBookBuilder().withEntry(CARL).withEntry(DANIEL).build();
+        EntryBook searchEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_ENTRY).build();
+        EntryBook feedsEntryBook = new EntryBookBuilder().withEntry(KATTIS_FEED_ENTRY).build();
+        EntryBook differentListEntryBook = new EntryBook();
+        EntryBook differentArchivesEntryBook = new EntryBook();
+        EntryBook differentFeedsEntryBook = new EntryBook();
+
         UserPrefs userPrefs = new UserPrefs();
         Storage storage = new StorageStub();
 
         // same values -> returns true
-        modelManager = new ModelManager(entryBook, userPrefs, storage);
-        ModelManager modelManagerCopy = new ModelManager(entryBook, userPrefs, storage);
+        modelManager = new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook, userPrefs, storage);
+        ModelManager modelManagerCopy = new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook, userPrefs,
+                storage);
         assertTrue(modelManager.equals(modelManagerCopy));
 
         // same object -> returns true
@@ -193,31 +204,54 @@ public class ModelManagerTest {
         // different types -> returns false
         assertFalse(modelManager.equals(5));
 
-        // different entryBook -> returns false
-        assertFalse(modelManager.equals(new ModelManager(differentEntryBook, userPrefs, storage)));
+        // different context -> returns false
+        modelManager.setContext(ModelContext.CONTEXT_ARCHIVES); // default context is LIST
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook, userPrefs,
+                storage)));
+        modelManager.setContext(ModelContext.CONTEXT_LIST);
+
+        // different listEntryBook -> returns false
+        assertFalse(modelManager.equals(new ModelManager(differentListEntryBook, archivesEntryBook, feedsEntryBook,
+            userPrefs, storage)));
+
+        // different archivesEntryBook -> returns false
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, differentArchivesEntryBook, feedsEntryBook,
+            userPrefs, storage)));
+
+        // different searchEntryBook -> returns false
+        modelManagerCopy.setSearchEntryBook(searchEntryBook);
+        assertFalse(modelManager.equals(modelManagerCopy));
+
+        // different feedsEntryBook -> returns false
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, differentFeedsEntryBook,
+                userPrefs, storage)));
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getTitle().fullTitle.split("\\s+");
         modelManager.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(keywords)));
-        assertFalse(modelManager.equals(new ModelManager(entryBook, userPrefs, storage)));
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook, userPrefs,
+                storage)));
 
         // resets modelManager to initial state for upcoming tests
+        modelManager.setContext(ModelContext.CONTEXT_LIST);
         modelManager.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();
-        differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
-        assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs, storage)));
+        differentUserPrefs.setListEntryBookFilePath(Paths.get("differentFilePath"));
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook,
+            differentUserPrefs, storage)));
 
         UserPrefs differentUserPrefs2 = new UserPrefs();
         differentUserPrefs2.setArticleDataDirectoryPath(Paths.get("differentFilePath"));
-        assertFalse(modelManager.equals(new ModelManager(entryBook, differentUserPrefs2, storage)));
+        assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook,
+            differentUserPrefs2, storage)));
 
-        // different displayedEntryList -> returns false
-        EntryBook differentDisplayedEntryBook = new EntryBookBuilder().withEntry(WIKIPEDIA_LINK).build();
-        ModelManager differentDisplayedModelManager = new ModelManager(entryBook, userPrefs, storage);
-        differentDisplayedModelManager.displayEntryBook(differentDisplayedEntryBook);
-        assertFalse(modelManager.equals(differentDisplayedModelManager));
+        // different context -> returns false
+        ModelManager differentContextModelManager = new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook,
+            userPrefs, storage);
+        differentContextModelManager.setContext(ModelContext.CONTEXT_ARCHIVES);
+        assertFalse(modelManager.equals(differentContextModelManager));
     }
 
     private Path getTempFilePath(String fileName) {

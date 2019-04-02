@@ -38,10 +38,10 @@ public class ArchiveCommand extends Command {
         List<Entry> lastShownList = model.getFilteredEntryList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
         }
-
         Entry entryToArchive = lastShownList.get(targetIndex.getZeroBased());
+        model.archiveEntry(entryToArchive);
         return new CommandResult(String.format(MESSAGE_ARCHIVE_ENTRY_SUCCESS, entryToArchive));
     }
 

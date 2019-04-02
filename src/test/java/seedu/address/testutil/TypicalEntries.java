@@ -69,6 +69,31 @@ public class TypicalEntries {
             .withLink("https://anna.example.com")
             .withAddress("4th street")
             .build();
+    public static final Entry HANS = new EntryBuilder()
+        .withTitle("Hans Solo")
+        .withDescription("Description place-holder")
+        .withLink("https://bobo.example.com")
+        .withAddress("10th street")
+        .withTags("friends")
+        .build();
+    public static final Entry ISABELLE = new EntryBuilder()
+        .withTitle("Isabelle Toh")
+        .withDescription("Description place-holder")
+        .withLink("https://koko.example.com")
+        .withAddress("michegan ave")
+        .build();
+    public static final Entry JONATHAN = new EntryBuilder()
+        .withTitle("Jonathan Cheng")
+        .withDescription("Description place-holder")
+        .withLink("https://lolo.example.com")
+        .withAddress("little tokyo")
+        .build();
+    public static final Entry KEVIN = new EntryBuilder()
+        .withTitle("Kevin Hart")
+        .withDescription("Description place-holder")
+        .withLink("https://dodo.example.com")
+        .withAddress("4th street")
+        .build();
 
     // Manually added
     public static final Entry HOON = new EntryBuilder()
@@ -113,15 +138,20 @@ public class TypicalEntries {
     public static final String REAL_LINK_URL = MainApp.class
             .getResource("/ModelManagerTest/NUS_School_of_Computing.html").toExternalForm();
     public static final String REAL_LINK_TITLE = "NUS School of Computing - Wikipedia";
-    public static final String REAL_LINK_DESCRIPTION = "NUS School of Computing is a faculty within the National "
-            + "University of Singapore (NUS). The School was established in 1998, although its history reaches…";
+    public static final String REAL_LINK_DESCRIPTION = "COM1. The Computing Dean's Office "
+            + "and Department of Computer Science are located in this building.";
 
-    public static final String CRUX_LINK_URL = MainApp.class
+    public static final String READABILITY_LINK_URL = MainApp.class
             .getResource("/ModelManagerTest/ProPublica.html").toExternalForm();
-    public static final String CRUX_LINK_TITLE = "Our Reporting on Michael Cohen: A Reading Guide — ProPublica";
-    public static final String CRUX_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s former "
-            + "personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie and "
-            + "hundreds of threats. Many of those assertions had been explored before, as these articles show.";
+    public static final String READABILITY_LINK_TITLE = "A Reading Guide — ProPublica";
+    public static final String READABILITY_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s "
+            + "former personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie "
+            + "and hundreds of threats. Many of those assertions had…";
+
+    public static final String RELATIVE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/relativeLinkedArticle.html").toExternalForm();
+    public static final String ABSOLUTE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/absoluteLinkedArticle.html").toExternalForm();
 
     public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
@@ -189,43 +219,54 @@ public class TypicalEntries {
             .withLink(REAL_LINK_URL)
             .build();
 
-    public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription("")
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
-            .withTitle(CRUX_LINK_TITLE)
-            .withDescription(CRUX_LINK_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+    public static final Entry READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+            .withTitle(READABILITY_LINK_TITLE)
+            .withDescription(READABILITY_LINK_DESCRIPTION)
+            .withLink(READABILITY_LINK_URL)
             .build();
 
-    public static final Entry CRUX_LINK_NO_TITLE_INCOMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_TITLE_INCOMPLETE = new EntryBuilder()
             .withTitle("")
             .withDescription(DUMMY_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_TITLE_COMPLETE = new EntryBuilder()
-            .withTitle(CRUX_LINK_TITLE)
+    public static final Entry READABILITY_LINK_NO_TITLE_COMPLETE = new EntryBuilder()
+            .withTitle(READABILITY_LINK_TITLE)
             .withDescription(DUMMY_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
 
-    public static final Entry CRUX_LINK_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
             .withDescription("")
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
             .build();
-    public static final Entry CRUX_LINK_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_NO_DESCRIPTION_COMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
-            .withDescription(CRUX_LINK_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withDescription(READABILITY_LINK_DESCRIPTION)
+            .withLink(READABILITY_LINK_URL)
             .build();
 
-    public static final Entry CRUX_LINK_COMPLETE = new EntryBuilder()
+    public static final Entry READABILITY_LINK_COMPLETE = new EntryBuilder()
             .withTitle(DUMMY_TITLE)
             .withDescription(DUMMY_DESCRIPTION)
-            .withLink(CRUX_LINK_URL)
+            .withLink(READABILITY_LINK_URL)
+            .build();
+
+    public static final Entry ENTRY_WITH_RELATIVE_LINK = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(RELATIVE_LINK_ARTICLE_URL)
+            .build();
+    public static final Entry ENTRY_WITH_ABSOLUTE_LINK = new EntryBuilder()
+            .withTitle(DUMMY_TITLE)
+            .withDescription(DUMMY_DESCRIPTION)
+            .withLink(ABSOLUTE_LINK_ARTICLE_URL)
             .build();
 
     // For testing of networking
@@ -257,23 +298,58 @@ public class TypicalEntries {
     public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
 
     // For BrowserPanelTest
-    public static final Entry WIKIPEDIA_LINK = new EntryBuilder()
+    public static final String BROWSER_PANEL_TEST_ENTRY_BASE_URL =
+            "file://" + MainApp.class.getResource("/view/BrowserPanelTest/test.html")
+                    .toExternalForm().substring(5);
+    public static final Entry BROWSER_PANEL_TEST_ENTRY = new EntryBuilder()
+            .withTitle("Browser Panel Test Web Page")
+            .withDescription("Browser panel test web page")
+            .withLink(BROWSER_PANEL_TEST_ENTRY_BASE_URL)
+            .withAddress("Browser panel test web page")
+            .build();
+    public static final String WIKIPEDIA_ENTRY_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
+    public static final Entry WIKIPEDIA_ENTRY = new EntryBuilder()
             .withTitle("Wikipedia Test Web Page")
             .withDescription("Wikipedia test web page")
-            .withLink("file://" + MainApp.class.getResource(
-                    "/view/BrowserPanelTest/wikipedia.html").toExternalForm().substring(5))
+            .withLink("file://" + MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html")
+                    .toExternalForm().substring(5))
             .withAddress("Wikipedia test web page")
             .build();
-    public static final String WIKIPEDIA_LINK_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
 
+    // bunch of RSS feeds
+    public static final Entry KATTIS_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Kattis - new problems")
+            .withDescription("kattis the kat")
+            .withLink("https://open.kattis.com/rss/new-problems")
+            .withAddress("kattis")
+            .build();
 
+    public static final Entry LOCAL_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Tsutsukakushi's anime reviews - local copy")
+            .withDescription("anime reviews")
+            .withLink(MainApp.class.getResource("/RssFeedTest/rss.xml").toExternalForm())
+            .withAddress("somewhere in Finland")
+            .build();
+
+    public static final Entry ANIMEREVIEW_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Tsutsukakushi's anime reviews - remote mirror")
+            .withDescription("anime reviews!")
+            .withLink("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml")
+            .withAddress("also finland")
+            .build();
+
+    public static final Entry ENGADGET_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Engadget RSS")
+            .withLink("https://live.engadget.com/rss.xml")
+            .withAddress("engadget")
+            .build();
 
     private TypicalEntries() {} // prevents instantiation
 
     /**
-     * Returns an {@code EntryBook} with all the typical persons.
+     * Returns an {@code EntryBook} with all the typical entries.
      */
-    public static EntryBook getTypicalEntryBook() {
+    public static EntryBook getTypicalListEntryBook() {
         EntryBook ab = new EntryBook();
         for (Entry entry : getTypicalEntries()) {
             ab.addEntry(entry);
@@ -281,7 +357,33 @@ public class TypicalEntries {
         return ab;
     }
 
+    /**
+     * Returns an {@code EntryBook} with all the typical archive entries.
+     */
+    public static EntryBook getTypicalArchivesEntryBook() {
+        EntryBook ab = new EntryBook();
+        for (Entry entry : getTypicalArchivesEntries()) {
+            ab.addEntry(entry);
+        }
+        return ab;
+    }
+
+    /** Returns a typical EntryBook with typical feed subscriptions. */
+    public static EntryBook getTypicalFeedsEntryBook() {
+        EntryBook eb = new EntryBook();
+        eb.setEntries(getTypicalFeedsEntries());
+        return eb;
+    }
+
     public static List<Entry> getTypicalEntries() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+    }
+
+    public static List<Entry> getTypicalArchivesEntries() {
+        return new ArrayList<>(Arrays.asList(HANS, ISABELLE, JONATHAN, KEVIN));
+    }
+
+    public static List<Entry> getTypicalFeedsEntries() {
+        return List.of(LOCAL_FEED_ENTRY, KATTIS_FEED_ENTRY);
     }
 }

@@ -27,26 +27,47 @@ import systemtests.ModelHelper;
  */
 public class TestApp extends MainApp {
 
-    public static final Path SAVE_LOCATION_FOR_TESTING = TestUtil.getFilePathInSandboxFolder("sampleData.json");
+    public static final Path SAVE_LOCATION_LIST_ENTRYBOOK_FOR_TESTING =
+        TestUtil.getFilePathInSandboxFolder("sampleListEntryBookData.json");
+
+    public static final Path SAVE_LOCATION_ARCHIVES_ENTRYBOOK_FOR_TESTING =
+        TestUtil.getFilePathInSandboxFolder("sampleArchiveEntryBookData.json");
 
     protected static final Path DEFAULT_PREF_FILE_LOCATION_FOR_TESTING =
             TestUtil.getFilePathInSandboxFolder("pref_testing.json");
-    protected Supplier<ReadOnlyEntryBook> initialDataSupplier = () -> null;
-    protected Path saveFileLocation = SAVE_LOCATION_FOR_TESTING;
+
+    protected Supplier<ReadOnlyEntryBook> initialListEntryBookDataSupplier = () -> null;
+    protected Supplier<ReadOnlyEntryBook> initialArchivesEntryBookDataSupplier = () -> null;
+    protected Path saveFileLocationListEntryBook = SAVE_LOCATION_LIST_ENTRYBOOK_FOR_TESTING;
+    protected Path saveFileLocationArchivesEntryBook = SAVE_LOCATION_ARCHIVES_ENTRYBOOK_FOR_TESTING;
 
     public TestApp() {
     }
 
-    public TestApp(Supplier<ReadOnlyEntryBook> initialDataSupplier, Path saveFileLocation) {
+    public TestApp(
+        Supplier<ReadOnlyEntryBook> initialListEntryBookDataSupplier,
+        Supplier<ReadOnlyEntryBook> initialArchivesEntryBookDataSupplier,
+        Path saveFileLocationListEntryBook,
+        Path saveFileLocationArchivesEntryBook) {
         super();
-        this.initialDataSupplier = initialDataSupplier;
-        this.saveFileLocation = saveFileLocation;
+        this.initialListEntryBookDataSupplier = initialListEntryBookDataSupplier;
+        this.initialArchivesEntryBookDataSupplier = initialArchivesEntryBookDataSupplier;
+        this.saveFileLocationListEntryBook = saveFileLocationListEntryBook;
+        this.saveFileLocationArchivesEntryBook = saveFileLocationArchivesEntryBook;
 
         // If some initial local data has been provided, write those to the file
-        if (initialDataSupplier.get() != null) {
-            JsonEntryBookStorage jsonAddressBookStorage = new JsonEntryBookStorage(saveFileLocation);
+        if (initialListEntryBookDataSupplier.get() != null) {
+            JsonEntryBookStorage jsonEntryBookStorage = new JsonEntryBookStorage(saveFileLocationListEntryBook);
             try {
-                jsonAddressBookStorage.saveAddressBook(initialDataSupplier.get());
+                jsonEntryBookStorage.saveEntryBook(initialListEntryBookDataSupplier.get());
+            } catch (IOException ioe) {
+                throw new AssertionError(ioe);
+            }
+        }
+        if (initialArchivesEntryBookDataSupplier.get() != null) {
+            JsonEntryBookStorage jsonEntryBookStorage = new JsonEntryBookStorage(saveFileLocationArchivesEntryBook);
+            try {
+                jsonEntryBookStorage.saveEntryBook(initialArchivesEntryBookDataSupplier.get());
             } catch (IOException ioe) {
                 throw new AssertionError(ioe);
             }
@@ -66,16 +87,17 @@ public class TestApp extends MainApp {
         double x = Screen.getPrimary().getVisualBounds().getMinX();
         double y = Screen.getPrimary().getVisualBounds().getMinY();
         userPrefs.setGuiSettings(new GuiSettings(600.0, 600.0, (int) x, (int) y));
-        userPrefs.setAddressBookFilePath(saveFileLocation);
+        userPrefs.setListEntryBookFilePath(saveFileLocationListEntryBook);
+        userPrefs.setArchivesEntryBookFilePath(saveFileLocationArchivesEntryBook);
         return userPrefs;
     }
 
     /**
-     * Returns a defensive copy of the address book data stored inside the storage file.
+     * Returns a defensive copy of the list entry book data stored inside the storage file.
      */
-    public EntryBook readStorageAddressBook() {
+    public EntryBook readStorageListEntryBook() {
         try {
-            return new EntryBook(storage.readAddressBook().get());
+            return new EntryBook(storage.readListEntryBook().get());
         } catch (DataConversionException dce) {
             throw new AssertionError("Data is not in the EntryBook format.", dce);
         } catch (IOException ioe) {
@@ -84,17 +106,38 @@ public class TestApp extends MainApp {
     }
 
     /**
-     * Returns the file path of the storage file.
+     * Returns a defensive copy of the archives entry book data stored inside the storage file.
      */
-    public Path getStorageSaveLocation() {
-        return storage.getAddressBookFilePath();
+    public EntryBook readStorageArchivesEntryBook() {
+        try {
+            return new EntryBook(storage.readArchivesEntryBook().get());
+        } catch (DataConversionException dce) {
+            throw new AssertionError("Data is not in the EntryBook format.", dce);
+        } catch (IOException ioe) {
+            throw new AssertionError("Storage file cannot be found.", ioe);
+        }
+    }
+
+    /**
+     * Returns the file path of the storage file for the list entry book.
+     */
+    public Path getListEntryBookStorageSaveLocation() {
+        return storage.getListEntryBookFilePath();
+    }
+
+    /**
+     * Returns the file path of the storage file for the archives entry book.
+     */
+    public Path getArchivesEntryBookStorageSaveLocation() {
+        return storage.getArchivesEntryBookFilePath();
     }
 
     /**
      * Returns a defensive copy of the model.
      */
     public Model getModel() {
-        Model copy = new ModelManager(model.getListEntryBook(), new UserPrefs(), new StorageStub());
+        Model copy = new ModelManager(model.getListEntryBook(), model.getArchivesEntryBook(),
+                model.getFeedsEntryBook(), new UserPrefs(), new StorageStub());
         copy.setContext(model.getContext());
         ModelHelper.setFilteredList(copy, model.getFilteredEntryList());
         return copy;

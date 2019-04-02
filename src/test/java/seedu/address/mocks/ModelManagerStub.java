@@ -10,7 +10,7 @@ import seedu.address.model.UserPrefs;
 public class ModelManagerStub extends ModelManager {
 
     public ModelManagerStub() {
-        super(new EntryBook(), new UserPrefs(), new StorageStub());
+        super(new EntryBook(), new EntryBook(), new EntryBook(), new UserPrefs(), new StorageStub());
     }
 
 }
