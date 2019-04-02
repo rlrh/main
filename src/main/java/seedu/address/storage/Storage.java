@@ -21,7 +21,13 @@ public interface Storage extends UserPrefsStorage, ArticleStorage {
     void saveUserPrefs(ReadOnlyUserPrefs userPrefs) throws IOException;
 
     @Override
+    void deleteArticle(String url) throws IOException;
+
+    @Override
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
+
+    @Override
+    Optional<Path> getOfflineLink(String url);
 
     Path getListEntryBookFilePath();
 

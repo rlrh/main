@@ -4,6 +4,8 @@ import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.TestUtil.getPerson;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
+import java.util.Optional;
+
 import org.junit.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -75,7 +77,7 @@ public class ContextSwitchSystemTest extends AddressBookSystemTest {
      */
     private Entry unarchiveEntry(Model model, Index index) {
         Entry targetEntry = getPerson(model, index);
-        model.unarchiveEntry(targetEntry);
+        model.unarchiveEntry(targetEntry, Optional.empty());
         return targetEntry;
     }
 

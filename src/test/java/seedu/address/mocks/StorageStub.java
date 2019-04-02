@@ -79,6 +79,11 @@ public class StorageStub implements Storage {
     }
 
     @Override
+    public void deleteArticle(String url) {
+        // Do nothing
+    }
+
+    @Override
     public Optional<Path> addArticle(String url, byte[] content) {
         return Optional.empty();
     }
@@ -86,5 +91,10 @@ public class StorageStub implements Storage {
     @Override
     public Path getArticlePath(String url) {
         return null;
+    }
+
+    @Override
+    public Optional<Path> getOfflineLink(String url) {
+        return Optional.empty();
     }
 }

@@ -12,6 +12,7 @@ import static seedu.address.testutil.TypicalEntries.AMY;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -112,7 +113,7 @@ public class LogicManagerTest {
         Model expectedModel = new ModelManagerStub();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
         String expectedFinalMessage = ModelManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
-        expectedModel.addListEntry(expectedEntry);
+        expectedModel.addListEntry(expectedEntry, Optional.empty());
         expectedModel.setException(new CommandException(expectedFinalMessage));
         assertCommandSuccess(addCommand, expectedInitialMessage, expectedModel);
         assertManualExceptionPropagated(CommandException.class, expectedFinalMessage);
