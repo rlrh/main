@@ -103,7 +103,7 @@ Whenever you find a web page you want to read later, add it to your reading list
 To help you organize the mountain of content, README lets you tag link so you can always find what you're looking for,
 and archive or delete links you've finished reading so your reading list won't become cluttered.
 
-==== Web Feeds Subscription - Read
+==== Web Feeds Subscription - Read More
 README keeps you up to date with your favourite websites.
 
 Integrations with Bing Web Search and Google News mean you'll never run out of things to read.
@@ -119,7 +119,7 @@ This gives you the convenience of viewing your saved links anywhere, anytime, ev
 If you still want to keep a link but no longer need to view it offline, you can archive it.
 This will delete its downloaded web page from your personal computer.
 
-==== Reader View - Read More
+==== Reader View - Read Better
 README makes your long reading sessions so much more comfortable.
 
 Reader View strips out all the visual clutter from web pages and presents content in a perfectly formatted, clean layout,
@@ -286,6 +286,7 @@ Exits the program.
 
 Format: `exit`
 
+// tag::contextcommands[]
 === Context-switching commands
 
 ====
@@ -383,6 +384,7 @@ Shows helpful and fun statistics about your reading progress and habits.
 
 Format: `stats`
 
+// end::contextcommands[]
 [[List-Context]]
 === `Reading List` Context Commands
 
