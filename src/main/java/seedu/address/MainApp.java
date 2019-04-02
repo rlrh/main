@@ -85,7 +85,7 @@ public class MainApp extends Application {
     private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
 
         ReadOnlyEntryBook initialListEntryBook = initEntryBook(storage::readListEntryBook,
-                SampleDataUtil::getSampleAddressBook, "reading list");
+                SampleDataUtil::getSampleEntryBook, "reading list");
         ReadOnlyEntryBook initialArchivesEntryBook = initEntryBook(storage::readArchivesEntryBook, EntryBook::new,
                 "archives");
         ReadOnlyEntryBook initialFeedEntryBook = initEntryBook(storage::readFeedsEntryBook, EntryBook::new,

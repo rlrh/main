@@ -56,15 +56,15 @@ public class AddCommandParserTest {
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
 
-        // multiple names - last name accepted
+        // multiple titles - last title accepted
         assertParseSuccess(parser, TITLE_DESC_AMY + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
 
-        // multiple phones - last phone accepted
+        // multiple descriptions - last description accepted
         assertParseSuccess(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_AMY + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
 
-        // multiple emails - last email accepted
+        // multiple links - last link accepted
         assertParseSuccess(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_AMY + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
 
@@ -95,21 +95,6 @@ public class AddCommandParserTest {
         assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + VALID_LINK_BOB,
                 expectedMessage);
 
-        // To be deprecated
-        /*
-        // missing name prefix
-        assertParseFailure(parser, VALID_TITLE_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
-
-        // missing phone prefix
-        assertParseFailure(parser, TITLE_DESC_BOB + VALID_DESCRIPTION_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
-
-        // missing address prefix
-        assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + VALID_ADDRESS_BOB,
-                expectedMessage);
-                */
-
         // all prefixes missing
         assertParseFailure(parser, VALID_TITLE_BOB + VALID_DESCRIPTION_BOB + VALID_LINK_BOB + VALID_ADDRESS_BOB,
                 expectedMessage);
@@ -117,15 +102,15 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_invalidValue_failure() {
-        // invalid name
+        // invalid title
         assertParseFailure(parser, INVALID_TITLE_DESC + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB
                 + TAG_DESC_SCIENCE + TAG_DESC_TECH, Title.formExceptionMessage(INVALID_TITLE.trim()));
 
-        // invalid phone
+        // invalid description
         assertParseFailure(parser, TITLE_DESC_BOB + INVALID_DESCRIPTION_DESC + LINK_DESC_BOB + ADDRESS_DESC_BOB
                 + TAG_DESC_SCIENCE + TAG_DESC_TECH, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
-        // invalid email
+        // invalid link
         assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + INVALID_LINK_DESC + ADDRESS_DESC_BOB
                 + TAG_DESC_SCIENCE + TAG_DESC_TECH, Link.formExceptionMessage(INVALID_LINK.trim()));
 

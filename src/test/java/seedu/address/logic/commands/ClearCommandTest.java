@@ -15,7 +15,7 @@ public class ClearCommandTest {
     private CommandHistory commandHistory = new CommandHistory();
 
     @Test
-    public void execute_emptyAddressBook_success() {
+    public void execute_emptyEntryBook_success() {
         Model model = new ModelManagerStub();
         Model expectedModel = new ModelManagerStub();
 
@@ -23,7 +23,7 @@ public class ClearCommandTest {
     }
 
     @Test
-    public void execute_nonEmptyAddressBook_success() {
+    public void execute_nonEmptyEntryBook_success() {
         Model model = new TypicalModelManagerStub();
         Model expectedModel = new TypicalModelManagerStub();
         expectedModel.setListEntryBook(new EntryBook());

@@ -8,7 +8,7 @@ import seedu.address.model.Model;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
 
 /**
- * Finds and lists all persons in address book whose name contains any of the argument keywords.
+ * Finds and lists all entries in entry book whose title contains any of the argument keywords.
  * Keyword matching is case insensitive.
  */
 public class FindCommand extends Command {
@@ -32,7 +32,7 @@ public class FindCommand extends Command {
         requireNonNull(model);
         model.updateFilteredEntryList(predicate);
         return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredEntryList().size()));
+                String.format(Messages.MESSAGE_ENTRIES_LISTED_OVERVIEW, model.getFilteredEntryList().size()));
     }
 
     @Override

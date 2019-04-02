@@ -10,25 +10,25 @@ import seedu.address.model.entry.Entry;
  */
 public class EntryBookBuilder {
 
-    private EntryBook addressBook;
+    private EntryBook entryBook;
 
     public EntryBookBuilder() {
-        addressBook = new EntryBook();
+        entryBook = new EntryBook();
     }
 
-    public EntryBookBuilder(EntryBook addressBook) {
-        this.addressBook = addressBook;
+    public EntryBookBuilder(EntryBook entryBook) {
+        this.entryBook = entryBook;
     }
 
     /**
      * Adds a new {@code Entry} to the {@code EntryBook} that we are building.
      */
     public EntryBookBuilder withEntry(Entry entry) {
-        addressBook.addEntry(entry);
+        entryBook.addEntry(entry);
         return this;
     }
 
     public EntryBook build() {
-        return addressBook;
+        return entryBook;
     }
 }

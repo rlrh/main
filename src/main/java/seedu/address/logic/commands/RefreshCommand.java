@@ -45,7 +45,7 @@ public class RefreshCommand extends Command {
         List<Entry> lastShownList = model.getFilteredEntryList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
         }
 
         Entry feedToRefresh = lastShownList.get(targetIndex.getZeroBased());
