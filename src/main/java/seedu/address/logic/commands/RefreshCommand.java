@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import com.rometools.rome.io.FeedException;
 
@@ -15,6 +16,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
+import seedu.address.util.Network;
 
 /**
  * Refreshes from a feed identified using its displayed index.
@@ -59,9 +61,13 @@ public class RefreshCommand extends Command {
             throw new CommandException(String.format(MESSAGE_FAILURE_XML));
         }
 
+
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
-                .forEach(model::addListEntry);
+                .forEach(entry -> {
+                    Optional<byte[]> articleContent = Network.fetchArticleOptional(entry.getLink().value);
+                    model.addListEntry(entry, articleContent);
+                });
 
 
         return new CommandResult(String.format(MESSAGE_REFRESH_FEED_SUCCESS, feedToRefresh));

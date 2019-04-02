@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import com.rometools.rome.io.FeedException;
 
@@ -15,6 +16,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
+import seedu.address.util.Network;
 
 /** Subscribes to a feed and adds the feed to the feedEntryBook. */
 public class SubscribeCommand extends Command {
@@ -66,7 +68,10 @@ public class SubscribeCommand extends Command {
         // initial import into reading list
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
-                .forEach(model::addListEntry);
+                .forEach(entry -> {
+                    Optional<byte[]> articleContent = Network.fetchArticleOptional(entry.getLink().value);
+                    model.addListEntry(entry, articleContent);
+                });
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, toSubscribe));
     }
