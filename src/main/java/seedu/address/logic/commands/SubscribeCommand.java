@@ -5,8 +5,14 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
+import java.io.IOException;
+
+import com.rometools.rome.io.FeedException;
+
+import seedu.address.commons.util.FeedUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
 
@@ -27,8 +33,11 @@ public class SubscribeCommand extends Command {
             + PREFIX_DESCRIPTION + "Example Description "
             + PREFIX_TAG + "programming "
             + PREFIX_TAG + "tech";
+
     public static final String MESSAGE_SUCCESS = "New feed added: %1$s";
     public static final String MESSAGE_DUPLICATE_FEED = "This feed already exists in the feed list";
+    public static final String MESSAGE_FAILURE_NET = "Feed not subscribed! Fetching resource failed:\n%s";
+    public static final String MESSAGE_FAILURE_XML = "Feed not subscribed! %s is not a valid RSS/Atom feed!";
 
     private final Entry toSubscribe;
 
@@ -42,8 +51,23 @@ public class SubscribeCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_FEED);
         }
 
+        EntryBook feedEntries;
+        try {
+            // we ensure the link is a feed here
+            feedEntries = FeedUtil.fromFeedUrl(toSubscribe.getLink().value);
+        } catch (IOException e) {
+            throw new CommandException(String.format(MESSAGE_FAILURE_NET, e));
+        } catch (FeedException e) {
+            throw new CommandException(String.format(MESSAGE_FAILURE_XML));
+        }
+
         model.addFeedsEntry(toSubscribe);
-        // todo: import to reading list
+
+        // initial import into reading list
+        feedEntries.getEntryList().stream()
+                .filter(entry -> !model.hasEntry(entry))
+                .forEach(model::addListEntry);
+
         return new CommandResult(String.format(MESSAGE_SUCCESS, toSubscribe));
     }
 
