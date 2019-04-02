@@ -15,7 +15,7 @@ public class SubscribeCommand extends Command {
     public static final String COMMAND_WORD = "subscribe";
     public static final String COMMAND_ALIAS = "sub";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a feed to the feed list. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a feed subscription to the feed list. "
             + "Parameters: "
             + PREFIX_LINK + "FEED_LINK "
             + "[" + PREFIX_TITLE + "TITLE] "
@@ -32,8 +32,8 @@ public class SubscribeCommand extends Command {
 
     private final Entry toSubscribe;
 
-    public SubscribeCommand(Entry feedToAdd) {
-        toSubscribe = feedToAdd;
+    public SubscribeCommand(Entry feedToSubscribe) {
+        toSubscribe = feedToSubscribe;
     }
 
     @Override

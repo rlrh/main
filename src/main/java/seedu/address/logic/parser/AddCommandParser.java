@@ -17,7 +17,7 @@ public class AddCommandParser implements Parser<AddCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public AddCommand parse(String args) throws ParseException {
-        Entry entry = parseEntryFromArgs(args);
+        Entry entry = parseEntryFromArgs(args, AddCommand.MESSAGE_USAGE);
 
         return new AddCommand(entry);
     }
