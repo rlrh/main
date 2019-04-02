@@ -15,7 +15,7 @@ public class DescriptionTest {
     }
 
     @Test
-    public void constructor_invalidPhone_throwsIllegalArgumentException() {
+    public void constructor_invalidDescription_throwsIllegalArgumentException() {
         String invalidDescription = " ";
         Assert.assertThrows(IllegalArgumentException.class, () -> new Description(invalidDescription));
     }
