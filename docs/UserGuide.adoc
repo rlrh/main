@@ -230,6 +230,7 @@ Examples:
 - `archives t/Tech` Lists archived entries tagged with “Tech”
 - `archives t/` Lists untagged archived entries
 
+//tag::bingfeedfeeds[]
 === Searching the web: `bing` `[since v1.3]`
 
 Searches https://www.bing.com[Bing] for entries that you can subsequently add.
@@ -266,6 +267,7 @@ Examples:
 
 - `feeds` Lists all feeds
 - `feeds t/Business` Lists all feeds tagged with “Business” `[coming in v2.0]`
+//end::bingfeedfeeds[]
 
 === Searching online for feeds: `searchfeeds` `[coming in v2.0]`
 
@@ -548,11 +550,11 @@ Format: `clear`
 
 Adds entries from results to the reading list. Content is automatically downloaded to disk.
 
-Format: `add INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+Format: `add INDEX`
 
-Format: `add INDICES [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+Format: `add INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
 
-Format: `add all`
+Format: `add all` `[coming in v2.0]`
 
 [TIP]
 ====
@@ -562,8 +564,9 @@ Title will be automatically filled by parsing the entry if you do not provide it
 
 Examples:
 
-- `add 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business”
-- `add 4-6 d/read by Monday t/School` Adds the 4th to 6th entries with the same description and tagged with “School"
+- `add 3` Adds the 3rd entry.
+- `add 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business” `[coming in v2.0]`
+- `add 4-6 d/read by Monday t/School` Adds the 4th to 6th entries with the same description and tagged with “School" `[coming in v2.0]`
 
 === Selecting a entry: `select`
 
@@ -603,7 +606,7 @@ Examples:
 Adds a feed to the manager and subscribes to updates.
 All entries in the subscribed feed will be added to the reading list.
 
-Format: `subscribe URL [n/NAME] [t/TAG]...`
+Format: `subscribe l/URL [ti/TITLE] [d/COMMENT] [t/TAG]...`
 
 [TIP]
 ====
@@ -612,25 +615,26 @@ A feed can have any number of tags (including 0)
 
 Examples:
 
-- `add https://www.engadget.com/rss.xml n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with “Tech”
+- `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` Adds a feed whose name is “Engadget”.
+-  The imported entries will be tagged with “Tech” `[coming in v2.0]`
 
 [WARNING]
 ====
 The application may be unresponsive for a short while when adding entries from a large feed.
 ====
 
-=== Updating entries from feeds: `update`
+=== Updating entries from feeds: `refresh`
 
-Refreshes all feeds.
+Refreshes a feed.
 
-Format: `update INDEX`
+Format: `refresh INDEX`
 
-Format: `update all` `[coming in v2.0]`
+Format: `refesh all` `[coming in v2.0]`
 
 Examples:
 
-- `update all` Updates entries from all feeds `[coming in v2.0]`
-- `update 2` Updates entries from the 2nd feed
+- `refresh all` Updates entries from all feeds `[coming in v2.0]`
+- `refresh 2` Updates entries from the 2nd feed
 
 [WARNING]
 ====
@@ -654,7 +658,7 @@ Examples:
 
 - `select 2` Selects the 2nd feed in the manager and displays its entries
 
-=== Editing a feed: `edit`
+=== Editing a feed: `edit` `[coming in v2.0]`
 
 Edits an existing feed in the manager.
 
@@ -692,7 +696,7 @@ Examples:
 - `unsubscribe all` Deletes all shown feeds `[coming in v2.0]`
 - `unsubscribe 2` Deletes the 2nd shown feed
 
-=== Clearing all feeds : `clear`
+=== Clearing all feeds : `clear` `[coming in v2.0]`
 Clears all followed feeds from the manager.
 
 Format: `clear`
