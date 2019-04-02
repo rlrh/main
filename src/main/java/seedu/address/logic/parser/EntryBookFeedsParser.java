@@ -8,6 +8,7 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.SubscribeCommand;
+import seedu.address.logic.commands.UnsubscribeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -35,6 +36,10 @@ public class EntryBookFeedsParser extends EntryBookParser {
         case SubscribeCommand.COMMAND_WORD:
         case SubscribeCommand.COMMAND_ALIAS:
             return new SubscribeCommandParser().parse(arguments);
+
+        case UnsubscribeCommand.COMMAND_WORD:
+        case UnsubscribeCommand.COMMAND_ALIAS:
+            return new UnsubscribeCommandParser().parse(arguments);
 
         default:
             return super.parseCommand(userInput);
