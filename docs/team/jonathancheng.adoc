@@ -1,0 +1,54 @@
+= Jonathan Cheng - Project Portfolio for R
+:site-section: AboutUs
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== PROJECT: README
+
+---
+
+== Overview
+
+README is a desktop bookmark manager/rss feed reader application.
+
+== Summary of contributions
+
+* *Major enhancement*: enhance *entry management system*
+** What it does:
+** Justification:
+** Highlights:
+** Credits:
+
+* *Code contributed*:
+**
+
+* *Other contributions*:
+
+** Project management:
+*** Set up issue tracker
+** Enhancements to existing features:
+*** .
+** Documentation:
+*** .
+** Community:
+*** PRs reviewed (with non-trivial review comments): https://github.com/CS2103-AY1819S2-W10-1/main/pull/9[#0]
+
+== Contributions to the User Guide
+
+|===
+|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|===
+
+// include::../UserGuide.adoc[tag=undoredo]
+
+// include::../UserGuide.adoc[tag=dataencryption]
+
+== Contributions to the Developer Guide
+
+|===
+|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|===
+
+// include::../DeveloperGuide.adoc[tag=undoredo]
+
+// include::../DeveloperGuide.adoc[tag=dataencryption]
