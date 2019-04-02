@@ -49,7 +49,7 @@ class JsonSerializableEntryBook {
         EntryBook addressBook = new EntryBook();
         for (JsonAdaptedEntry jsonAdaptedEntry : entries) {
             Entry entry = jsonAdaptedEntry.toModelType();
-            if (addressBook.hasPerson(entry)) {
+            if (addressBook.hasEntry(entry)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_ENTRY);
             }
             addressBook.addEntry(entry);

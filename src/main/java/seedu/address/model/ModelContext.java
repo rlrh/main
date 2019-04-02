@@ -3,13 +3,15 @@ package seedu.address.model;
 import seedu.address.logic.parser.EntryBookArchivesParser;
 import seedu.address.logic.parser.EntryBookListParser;
 import seedu.address.logic.parser.EntryBookParser;
+import seedu.address.logic.parser.EntryBookSearchParser;
 
 /**
  * Enums for contexts Model can take
  */
 public enum ModelContext {
     CONTEXT_LIST(new EntryBookListParser(), "Reading List"),
-    CONTEXT_ARCHIVES(new EntryBookArchivesParser(), "Archives");
+    CONTEXT_ARCHIVES(new EntryBookArchivesParser(), "Archives"),
+    CONTEXT_SEARCH(new EntryBookSearchParser(), "Results");
 
     private EntryBookParser parser;
     private String friendlyName;

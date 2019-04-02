@@ -17,6 +17,7 @@ import static seedu.address.testutil.TypicalEntries.READABILITY_LINK_NO_TITLE_NO
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class AddCommandIntegrationTest {
         Entry validEntry = new EntryBuilder().build();
 
         Model expectedModel = model.clone();
-        expectedModel.addListEntry(validEntry);
+        expectedModel.addListEntry(validEntry, Optional.empty());
 
         assertCommandSuccess(new AddCommand(validEntry), model, commandHistory,
                 String.format(AddCommand.MESSAGE_SUCCESS, validEntry), expectedModel);
@@ -55,7 +56,7 @@ public class AddCommandIntegrationTest {
     @Test
     public void execute_newEntryHasNoTitleAndNoDescription_titleAndDescriptionReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addListEntry(READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE);
+        expectedModel.addListEntry(READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE, Optional.empty());
         assertCommandSuccess(new AddCommand(READABILITY_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE),
                 model,
                 commandHistory,
@@ -66,7 +67,7 @@ public class AddCommandIntegrationTest {
     @Test
     public void execute_newEntryHasNoTitle_titleReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addListEntry(READABILITY_LINK_NO_TITLE_COMPLETE);
+        expectedModel.addListEntry(READABILITY_LINK_NO_TITLE_COMPLETE, Optional.empty());
         assertCommandSuccess(new AddCommand(READABILITY_LINK_NO_TITLE_INCOMPLETE), model, commandHistory,
                 String.format(AddCommand.MESSAGE_SUCCESS, READABILITY_LINK_NO_TITLE_COMPLETE), expectedModel);
     }
@@ -74,7 +75,7 @@ public class AddCommandIntegrationTest {
     @Test
     public void execute_newEntryHasNoDescription_descriptionReplacedSuccess() {
         Model expectedModel = model.clone();
-        expectedModel.addListEntry(READABILITY_LINK_NO_DESCRIPTION_COMPLETE);
+        expectedModel.addListEntry(READABILITY_LINK_NO_DESCRIPTION_COMPLETE, Optional.empty());
         assertCommandSuccess(new AddCommand(READABILITY_LINK_NO_DESCRIPTION_INCOMPLETE), model, commandHistory,
                 String.format(AddCommand.MESSAGE_SUCCESS, READABILITY_LINK_NO_DESCRIPTION_COMPLETE), expectedModel);
     }

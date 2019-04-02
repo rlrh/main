@@ -10,6 +10,7 @@ import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
 
 import java.net.URL;
+import java.util.Optional;
 import javax.xml.transform.TransformerException;
 
 import org.jsoup.Jsoup;
@@ -33,7 +34,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Before
     public void setUp() {
         guiRobot.interact(() -> {
-            browserPanel = new BrowserPanel(selectedPerson, viewMode);
+            browserPanel = new BrowserPanel(selectedPerson, viewMode, (url) -> Optional.empty());
         });
         uiPartRule.setUiPart(browserPanel);
 
