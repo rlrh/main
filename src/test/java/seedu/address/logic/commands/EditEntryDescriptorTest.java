@@ -6,7 +6,6 @@ import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
 
@@ -41,10 +40,6 @@ public class EditEntryDescriptorTest {
 
         // different phone -> returns false
         editedAmy = new EditEntryDescriptorBuilder(DESC_AMY).withDescription(VALID_DESCRIPTION_BOB).build();
-        assertFalse(DESC_AMY.equals(editedAmy));
-
-        // different email -> returns false
-        editedAmy = new EditEntryDescriptorBuilder(DESC_AMY).withLink(VALID_LINK_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different address -> returns false

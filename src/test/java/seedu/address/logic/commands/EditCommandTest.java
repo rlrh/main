@@ -35,11 +35,12 @@ public class EditCommandTest {
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
-        Entry editedEntry = new EntryBuilder().build();
+        Entry entryToEdit = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
+        Entry editedEntry = new EntryBuilder().withLink(entryToEdit.getLink().value).build();
         EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(editedEntry).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
         expectedModel.setListEntry(model.getFilteredEntryList().get(0), editedEntry);
@@ -60,7 +61,7 @@ public class EditCommandTest {
                 .withDescription(VALID_DESCRIPTION_BOB).withTags(VALID_TAG_SCIENCE).build();
         EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
         expectedModel.setListEntry(lastEntry, editedEntry);
@@ -73,7 +74,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY, new EditCommand.EditEntryDescriptor());
         Entry editedEntry = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
 
@@ -89,33 +90,12 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY,
                 new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB).build());
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry);
 
         Model expectedModel = model.clone();
         expectedModel.setListEntry(model.getFilteredEntryList().get(0), editedEntry);
 
         assertCommandSuccess(editCommand, model, commandHistory, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_duplicatePersonUnfilteredList_failure() {
-        Entry firstEntry = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
-        EditCommand.EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(firstEntry).build();
-        EditCommand editCommand = new EditCommand(INDEX_SECOND_ENTRY, descriptor);
-
-        assertCommandFailure(editCommand, model, commandHistory, EditCommand.MESSAGE_DUPLICATE_PERSON);
-    }
-
-    @Test
-    public void execute_duplicatePersonFilteredList_failure() {
-        showPersonAtIndex(model, INDEX_FIRST_ENTRY);
-
-        // edit entry in filtered list into a duplicate in address book
-        Entry entryInList = model.getListEntryBook().getEntryList().get(INDEX_SECOND_ENTRY.getZeroBased());
-        EditCommand editCommand = new EditCommand(INDEX_FIRST_ENTRY,
-                new EditEntryDescriptorBuilder(entryInList).build());
-
-        assertCommandFailure(editCommand, model, commandHistory, EditCommand.MESSAGE_DUPLICATE_PERSON);
     }
 
     @Test

@@ -1,0 +1,85 @@
+package seedu.address.logic.commands;
+
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
+
+import java.io.IOException;
+import java.util.Optional;
+
+import com.rometools.rome.io.FeedException;
+
+import seedu.address.commons.util.FeedUtil;
+import seedu.address.logic.CommandHistory;
+import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.EntryBook;
+import seedu.address.model.Model;
+import seedu.address.model.entry.Entry;
+import seedu.address.util.Network;
+
+/** Subscribes to a feed and adds the feed to the feedEntryBook. */
+public class SubscribeCommand extends Command {
+    public static final String COMMAND_WORD = "subscribe";
+    public static final String COMMAND_ALIAS = "sub";
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a feed subscription to the feed list. "
+            + "Parameters: "
+            + PREFIX_LINK + "FEED_LINK "
+            + "[" + PREFIX_TITLE + "TITLE] "
+            + "[" + PREFIX_DESCRIPTION + "COMMENT] "
+            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "Example: " + COMMAND_WORD + " "
+            + PREFIX_LINK + "https://open.kattis.com/rss/new-problems "
+            + PREFIX_TITLE + "Example Title "
+            + PREFIX_DESCRIPTION + "Example Description "
+            + PREFIX_TAG + "programming "
+            + PREFIX_TAG + "tech";
+
+    public static final String MESSAGE_SUCCESS = "New feed added: %1$s";
+    public static final String MESSAGE_DUPLICATE_FEED = "This feed already exists in the feed list";
+    public static final String MESSAGE_FAILURE_NET = "Feed not subscribed! Fetching resource failed:\n%s";
+    public static final String MESSAGE_FAILURE_XML = "Feed not subscribed! %s is not a valid RSS/Atom feed!";
+
+    private final Entry toSubscribe;
+
+    public SubscribeCommand(Entry feedToSubscribe) {
+        toSubscribe = feedToSubscribe;
+    }
+
+    @Override
+    public CommandResult execute(Model model, CommandHistory history) throws CommandException {
+        if (model.hasFeedsEntry(toSubscribe)) {
+            throw new CommandException(MESSAGE_DUPLICATE_FEED);
+        }
+
+        EntryBook feedEntries;
+        try {
+            // we ensure the link is a feed here
+            feedEntries = FeedUtil.fromFeedUrl(toSubscribe.getLink().value);
+        } catch (IOException e) {
+            throw new CommandException(String.format(MESSAGE_FAILURE_NET, e));
+        } catch (FeedException e) {
+            throw new CommandException(String.format(MESSAGE_FAILURE_XML));
+        }
+
+        model.addFeedsEntry(toSubscribe);
+
+        // initial import into reading list
+        feedEntries.getEntryList().stream()
+                .filter(entry -> !model.hasEntry(entry))
+                .forEach(entry -> {
+                    Optional<byte[]> articleContent = Network.fetchArticleOptional(entry.getLink().value);
+                    model.addListEntry(entry, articleContent);
+                });
+
+        return new CommandResult(String.format(MESSAGE_SUCCESS, toSubscribe));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof SubscribeCommand // instanceof handles nulls
+                && toSubscribe.equals(((SubscribeCommand) other).toSubscribe));
+    }
+}

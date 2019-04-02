@@ -11,6 +11,7 @@ import seedu.address.logic.commands.BingWebSearchCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FeedCommand;
+import seedu.address.logic.commands.FeedsCommand;
 import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
@@ -71,6 +72,9 @@ public class EntryBookParser {
 
         case FeedCommand.COMMAND_WORD:
             return new FeedCommandParser().parse(arguments);
+
+        case FeedsCommand.COMMAND_WORD:
+            return new FeedsCommand();
 
         case HistoryCommand.COMMAND_WORD:
         case HistoryCommand.COMMAND_ALIAS:

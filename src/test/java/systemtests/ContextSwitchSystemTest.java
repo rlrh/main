@@ -11,6 +11,7 @@ import org.junit.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.ArchiveCommand;
 import seedu.address.logic.commands.ArchivesCommand;
+import seedu.address.logic.commands.FeedsCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.UnarchiveCommand;
 import seedu.address.model.Model;
@@ -54,6 +55,10 @@ public class ContextSwitchSystemTest extends AddressBookSystemTest {
         /* Case: view entry book, model should not change */
         command = ListCommand.COMMAND_WORD;
         assertListCommandSuccess(command);
+
+        /* Case: view feeds, model should not change */
+        command = FeedsCommand.COMMAND_WORD;
+        assertFeedsCommandSuccess(command);
     }
 
     /**
@@ -140,6 +145,18 @@ public class ContextSwitchSystemTest extends AddressBookSystemTest {
         Model expectedModel = getModel();
         expectedModel.setContext(ModelContext.CONTEXT_ARCHIVES);
         String expectedResultMessage = String.format(ArchivesCommand.MESSAGE_SUCCESS);
+
+        assertNonUpdatingCommandSuccess(command, expectedModel, expectedResultMessage);
+    }
+
+    /**
+     * Asserts that a feeds command successfully switches context of the Model.
+     * @see ContextSwitchSystemTest#assertUpdatingCommandSuccess(String, Model, String)
+     */
+    private void assertFeedsCommandSuccess(String command) {
+        Model expectedModel = getModel();
+        expectedModel.setContext(ModelContext.CONTEXT_FEEDS);
+        String expectedResultMessage = String.format(FeedsCommand.MESSAGE_SUCCESS);
 
         assertNonUpdatingCommandSuccess(command, expectedModel, expectedResultMessage);
     }
