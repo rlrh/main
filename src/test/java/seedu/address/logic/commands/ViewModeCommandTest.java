@@ -9,7 +9,9 @@ import org.junit.Test;
 import seedu.address.logic.CommandHistory;
 import seedu.address.mocks.TypicalModelManagerStub;
 import seedu.address.model.Model;
+import seedu.address.ui.ReaderViewStyle;
 import seedu.address.ui.ViewMode;
+import seedu.address.ui.ViewType;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code ViewModeCommand}.
@@ -21,21 +23,27 @@ public class ViewModeCommandTest {
 
     @Test
     public void execute_viewMode_success() {
-        for (ViewMode viewMode: ViewMode.values()) {
-            assertExecutionSuccess(viewMode);
+        // test view types success
+        for (ViewType viewType: ViewType.values()) {
+            assertExecutionSuccess(new ViewMode(viewType));
+        }
+
+        // test reader view styles success
+        for (ReaderViewStyle viewStyle: ReaderViewStyle.values()) {
+            assertExecutionSuccess(new ViewMode(ViewType.READER, viewStyle));
         }
     }
 
     @Test
     public void equals() {
-        ViewModeCommand viewModeFirstCommand = new ViewModeCommand(ViewMode.values()[0]);
-        ViewModeCommand viewModeSecondCommand = new ViewModeCommand(ViewMode.values()[1]);
+        ViewModeCommand viewModeFirstCommand = new ViewModeCommand(new ViewMode(ViewType.BROWSER));
+        ViewModeCommand viewModeSecondCommand = new ViewModeCommand(new ViewMode(ViewType.READER));
 
         // same object -> returns true
         assertEquals(viewModeFirstCommand, viewModeFirstCommand);
 
         // same values -> returns true
-        ViewModeCommand viewModeFirstCommandCopy = new ViewModeCommand(ViewMode.values()[0]);
+        ViewModeCommand viewModeFirstCommandCopy = new ViewModeCommand(new ViewMode(ViewType.BROWSER));
         assertEquals(viewModeFirstCommand, viewModeFirstCommandCopy);
 
         // different types -> returns false
