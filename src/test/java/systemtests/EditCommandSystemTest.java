@@ -177,32 +177,32 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
                 + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_ENTRY);
 
         /* Case: edit a entry with new values same as another entry's values but with different tags -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
                 + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_SCIENCE;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_ENTRY);
 
         /* Case: edit a entry with new values same as another entry's values but with different title -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
             + TITLE_DESC_AMY + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
             + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_ENTRY);
 
         /* Case: edit entry with new values same as another entry's values but with different description -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
             + TITLE_DESC_BOB + DESCRIPTION_DESC_AMY + LINK_DESC_BOB
             + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_ENTRY);
 
         // To be deprecated
         /* Case: edit a entry with new values same as another entry's values but with different link -> rejected
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
                 + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_AMY
                 + ADDRESS_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_ENTRY);
         */
     }
 
@@ -231,7 +231,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         expectedModel.updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
 
         assertCommandSuccess(command, expectedModel,
-                String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, editedEntry), expectedSelectedCardIndex);
+                String.format(EditCommand.MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry), expectedSelectedCardIndex);
     }
 
     /**
