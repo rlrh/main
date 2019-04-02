@@ -29,33 +29,43 @@ public class StorageStub implements Storage {
     }
 
     @Override
-    public Path getAddressBookFilePath() {
+    public Path getListEntryBookFilePath() {
         return null;
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook() {
+    public Optional<ReadOnlyEntryBook> readListEntryBook() {
         return Optional.empty();
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook(Path filePath) {
-        return Optional.empty();
-    }
-
-    @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook) {
+    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) {
         // Do nothing
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) {
+    public Path getArchivesEntryBookFilePath() {
+        return null;
+    }
+
+    @Override
+    public Optional<ReadOnlyEntryBook> readArchivesEntryBook() {
+        return Optional.empty();
+    }
+
+    @Override
+    public void saveArchivesEntryBook(ReadOnlyEntryBook listEntryBook) {
         // Do nothing
     }
 
     @Override
     public Path getArticleDataDirectoryPath() {
         return null;
+    }
+
+    @Override
+    public void deleteArticle(String url) {
+        // Do nothing
     }
 
     @Override
@@ -66,5 +76,10 @@ public class StorageStub implements Storage {
     @Override
     public Path getArticlePath(String url) {
         return null;
+    }
+
+    @Override
+    public Optional<Path> getOfflineLink(String url) {
+        return Optional.empty();
     }
 }

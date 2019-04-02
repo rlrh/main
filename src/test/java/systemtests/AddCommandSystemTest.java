@@ -31,6 +31,8 @@ import static seedu.address.testutil.TypicalEntries.HOON;
 import static seedu.address.testutil.TypicalEntries.IDA;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 
+import java.util.Optional;
+
 import org.junit.Test;
 
 import seedu.address.commons.core.Messages;
@@ -212,7 +214,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
      */
     private void assertCommandSuccess(String command, Entry toAdd) {
         Model expectedModel = getModel();
-        expectedModel.addEntry(toAdd);
+        expectedModel.addListEntry(toAdd, Optional.empty());
         String expectedResultMessage = String.format(AddCommand.MESSAGE_SUCCESS, toAdd);
 
         assertCommandSuccess(command, expectedModel, expectedResultMessage);

@@ -17,19 +17,22 @@ import seedu.address.model.UserPrefs;
 public class StorageManager implements Storage {
 
     private static final Logger logger = LogsCenter.getLogger(StorageManager.class);
-    private EntryBookStorage entryBookStorage;
+    private EntryBookStorage listEntryBookStorage;
+    private EntryBookStorage archivesEntryBookStorage;
     private UserPrefsStorage userPrefsStorage;
     private ArticleStorage articleStorage;
 
 
     public StorageManager(
-            EntryBookStorage entryBookStorage,
-            UserPrefsStorage userPrefsStorage,
-            ArticleStorage articleStorage) {
+        EntryBookStorage listEntryBookStorage,
+        EntryBookStorage archivesEntryBookStorage,
+        UserPrefsStorage userPrefsStorage,
+        ArticleStorage articleStorage) {
         super();
-        this.entryBookStorage = entryBookStorage;
+        this.listEntryBookStorage = listEntryBookStorage;
         this.userPrefsStorage = userPrefsStorage;
         this.articleStorage = articleStorage;
+        this.archivesEntryBookStorage = archivesEntryBookStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -50,40 +53,72 @@ public class StorageManager implements Storage {
     }
 
 
-    // ================ EntryBook methods ==============================
+    // ================ List EntryBook methods ==============================
 
     @Override
-    public Path getAddressBookFilePath() {
-        return entryBookStorage.getAddressBookFilePath();
+    public Path getListEntryBookFilePath() {
+        return listEntryBookStorage.getEntryBookFilePath();
     }
 
     @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook() throws DataConversionException, IOException {
-        return readAddressBook(entryBookStorage.getAddressBookFilePath());
+    public Optional<ReadOnlyEntryBook> readListEntryBook() throws DataConversionException, IOException {
+        return readListEntryBook(listEntryBookStorage.getEntryBookFilePath());
     }
 
-    @Override
-    public Optional<ReadOnlyEntryBook> readAddressBook(Path filePath) throws DataConversionException, IOException {
+    private Optional<ReadOnlyEntryBook> readListEntryBook(Path filePath) throws DataConversionException, IOException {
         logger.fine("Attempting to read data from file: " + filePath);
-        return entryBookStorage.readAddressBook(filePath);
+        return listEntryBookStorage.readEntryBook(filePath);
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook) throws IOException {
-        saveAddressBook(addressBook, entryBookStorage.getAddressBookFilePath());
+    public void saveListEntryBook(ReadOnlyEntryBook listEntryBook) throws IOException {
+        saveListEntryBook(listEntryBook, listEntryBookStorage.getEntryBookFilePath());
     }
 
-    @Override
-    public void saveAddressBook(ReadOnlyEntryBook addressBook, Path filePath) throws IOException {
+    private void saveListEntryBook(ReadOnlyEntryBook listEntryBook, Path filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
-        entryBookStorage.saveAddressBook(addressBook, filePath);
+        listEntryBookStorage.saveEntryBook(listEntryBook, filePath);
     }
 
-    // ================ article methods ================================
+    // ================ Archives EntryBook methods ==============================
+
+    @Override
+    public Path getArchivesEntryBookFilePath() {
+        return archivesEntryBookStorage.getEntryBookFilePath();
+    }
+
+    @Override
+    public Optional<ReadOnlyEntryBook> readArchivesEntryBook() throws DataConversionException, IOException {
+        return readArchivesEntryBook(archivesEntryBookStorage.getEntryBookFilePath());
+    }
+
+    private Optional<ReadOnlyEntryBook> readArchivesEntryBook(Path filePath)
+        throws DataConversionException, IOException {
+        logger.fine("Attempting to read data from file: " + filePath);
+        return archivesEntryBookStorage.readEntryBook(filePath);
+    }
+
+    @Override
+    public void saveArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook) throws IOException {
+        saveArchivesEntryBook(archivesEntryBook,
+            archivesEntryBookStorage.getEntryBookFilePath());
+    }
+
+    private void saveArchivesEntryBook(ReadOnlyEntryBook archivesEntryBook, Path filePath) throws IOException {
+        logger.fine("Attempting to write to data file: " + filePath);
+        archivesEntryBookStorage.saveEntryBook(archivesEntryBook, filePath);
+    }
+
+    // ================ Article methods ================================
 
     @Override
     public Path getArticleDataDirectoryPath() {
         return articleStorage.getArticleDataDirectoryPath();
+    }
+
+    @Override
+    public void deleteArticle(String url) throws IOException {
+        articleStorage.deleteArticle(url);
     }
 
     @Override
@@ -94,5 +129,10 @@ public class StorageManager implements Storage {
     @Override
     public Path getArticlePath(String url) {
         return articleStorage.getArticlePath(url);
+    }
+
+    @Override
+    public Optional<Path> getOfflineLink(String url) {
+        return articleStorage.getOfflineLink(url);
     }
 }

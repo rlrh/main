@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.testutil.TypicalEntries.ALICE;
-import static seedu.address.testutil.TypicalEntries.getTypicalEntryBook;
+import static seedu.address.testutil.TypicalEntries.getTypicalListEntryBook;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,7 +45,7 @@ public class EntryBookTest {
 
     @Test
     public void resetData_withValidReadOnlyAddressBook_replacesData() {
-        EntryBook newData = getTypicalEntryBook();
+        EntryBook newData = getTypicalListEntryBook();
         addressBook.resetData(newData);
         assertEquals(newData, addressBook);
     }
@@ -65,18 +65,18 @@ public class EntryBookTest {
     @Test
     public void hasPerson_nullPerson_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        addressBook.hasPerson(null);
+        addressBook.hasEntry(null);
     }
 
     @Test
     public void hasPerson_personNotInAddressBook_returnsFalse() {
-        assertFalse(addressBook.hasPerson(ALICE));
+        assertFalse(addressBook.hasEntry(ALICE));
     }
 
     @Test
     public void hasPerson_personInAddressBook_returnsTrue() {
         addressBook.addEntry(ALICE);
-        assertTrue(addressBook.hasPerson(ALICE));
+        assertTrue(addressBook.hasEntry(ALICE));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class EntryBookTest {
         addressBook.addEntry(ALICE);
         Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
                 .build();
-        assertTrue(addressBook.hasPerson(editedAlice));
+        assertTrue(addressBook.hasEntry(editedAlice));
     }
 
     @Test

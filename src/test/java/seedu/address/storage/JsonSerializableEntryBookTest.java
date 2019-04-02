@@ -29,7 +29,7 @@ public class JsonSerializableEntryBookTest {
         JsonSerializableEntryBook dataFromFile = JsonUtil.readJsonFile(TYPICAL_PERSONS_FILE,
                 JsonSerializableEntryBook.class).get();
         EntryBook addressBookFromFile = dataFromFile.toModelType();
-        EntryBook typicalPersonsAddressBook = TypicalEntries.getTypicalEntryBook();
+        EntryBook typicalPersonsAddressBook = TypicalEntries.getTypicalListEntryBook();
         assertEquals(addressBookFromFile, typicalPersonsAddressBook);
     }
 
@@ -46,7 +46,7 @@ public class JsonSerializableEntryBookTest {
         JsonSerializableEntryBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_PERSON_FILE,
                 JsonSerializableEntryBook.class).get();
         thrown.expect(IllegalValueException.class);
-        thrown.expectMessage(JsonSerializableEntryBook.MESSAGE_DUPLICATE_PERSON);
+        thrown.expectMessage(JsonSerializableEntryBook.MESSAGE_DUPLICATE_ENTRY);
         dataFromFile.toModelType();
     }
 

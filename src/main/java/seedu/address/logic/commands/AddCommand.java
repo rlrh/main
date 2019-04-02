@@ -6,10 +6,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -17,11 +15,13 @@ import org.apache.commons.text.WordUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.chimbori.crux.articles.Article;
-import com.chimbori.crux.articles.ArticleExtractor;
 import com.google.common.io.Files;
 
+import net.dankito.readability4j.Article;
+import net.dankito.readability4j.Readability4J;
+
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.util.Candidate;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -30,10 +30,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
-import seedu.address.model.util.Candidate;
-import seedu.address.network.Network;
+import seedu.address.util.Network;
 
 /**
  * Adds a entry to the address book.
@@ -82,20 +80,21 @@ public class AddCommand extends Command {
         final String urlString = toAdd.getLink().value;
 
         // Candidates to replace empty title and description
-        Candidate<Title> candidateTitle = new Candidate<>(new Title("Untitled"), (String s) -> {
+        Candidate<String, Title> candidateTitle = new Candidate<>(new Title("Untitled"), string -> {
             try {
-                return Optional.of(ParserUtil.parseTitle(Optional.of(s)));
+                return Optional.of(ParserUtil.parseTitle(Optional.of(string)));
             } catch (ParseException pe) {
                 return Optional.empty();
             }
         });
-        Candidate<Description> candidateDescription = new Candidate<>(new Description("No description"), (String s) -> {
-            try {
-                return Optional.of(ParserUtil.parseDescription(Optional.of(s)));
-            } catch (ParseException pe) {
-                return Optional.empty();
-            }
-        });
+        Candidate<String, Description> candidateDescription =
+                new Candidate<>(new Description("No description"), string -> {
+                    try {
+                        return Optional.of(ParserUtil.parseDescription(Optional.of(string)));
+                    } catch (ParseException pe) {
+                        return Optional.empty();
+                    }
+                });
 
         // First try - extract candidates just from URL
         if (noTitleOrNoDescription) {
@@ -107,49 +106,34 @@ public class AddCommand extends Command {
                         .replaceAll("[^a-zA-Z0-9]+", " ") // replace special chars with spaces
                         .trim();
                 candidateTitle.tryout(WordUtils.capitalizeFully(baseName)); // title 3rd choice - cleaned up base name
-                candidateDescription.tryout(url.getHost().trim()); // desc 4th choice - host name
+                candidateDescription.tryout(url.getHost()); // desc 4th choice - host name
             } catch (MalformedURLException mue) {
                 // Skip if URL is malformed
                 logger.warning("Malformed URL: " + urlString);
             }
         }
 
-        Optional<Link> offlineLink = Optional.empty();
+        Optional<byte[]> articleContent = Network.fetchArticleOptional(urlString);
 
-        try {
+        if (noTitleOrNoDescription && articleContent.isPresent()) {
 
-            // Download article content to local storage
-            byte[] articleContent = Network.fetchAsBytes(urlString);
-            Optional<Path> articlePath = model.addArticle(urlString, articleContent);
-            if (articlePath.isPresent()) {
-                offlineLink = Optional.of(new Link(articlePath.get().toUri().toASCIIString()));
-            }
+            // Second try - extract candidates by parsing through Jsoup
+            String html = new String(articleContent.get());
+            Document document = Jsoup.parse(html);
+            candidateTitle.tryout(document.title().trim()); // title 2nd choice - document title element
+            candidateDescription.tryout(StringUtil.getFirstNWordsWithEllipsis(document.body().text(), 24)
+                    .trim()); // desc 3rd choice - first N words of raw document body text
 
-            if (noTitleOrNoDescription) {
+            // Third try - extract candidates by processing through Readability4J
+            Readability4J readability4J = new Readability4J(urlString, document);
+            Article article = readability4J.parse();
+            candidateTitle.tryout(StringUtil.nullSafeOf(article.getTitle())); // title 1st choice - extract title
+            candidateDescription
+                    .tryout(StringUtil.getFirstNWordsWithEllipsis(
+                            StringUtil.nullSafeOf(article.getTextContent()), 24)
+                            .trim()) // desc 2nd choice - first N words of cleaned-up document body text
+                    .tryout(StringUtil.nullSafeOf(article.getExcerpt())); // desc 1st choice - extract description
 
-                // Second try - extract candidates by parsing through Jsoup
-                String html = new String(articleContent);
-                Document document = Jsoup.parse(html);
-                candidateTitle.tryout(document.title().trim()); // title 2nd choice - document title element
-                candidateDescription.tryout(StringUtil.getFirstNWordsWithEllipsis(document.body().text(), 24)
-                        .trim()); // desc 3rd choice - first N words of raw document body text
-
-                // Third try - extract candidates by processing through Crux
-                Article article = ArticleExtractor.with(urlString, document)
-                        .extractMetadata()
-                        .extractContent()
-                        .article();
-                candidateTitle.tryout(article.title.trim()); // title 1st choice - extract title
-                candidateDescription
-                        .tryout(StringUtil.getFirstNWordsWithEllipsis(article.document.text(), 24)
-                                .trim()) // desc 2nd choice - first N words of cleaned-up document body text
-                        .tryout(article.description.trim()); // desc 1st choice - extract description
-
-            }
-
-        } catch (IOException ioe) {
-            // Do nothing if fail to fetch the page
-            logger.warning("Failed to fetch URL: " + urlString);
         }
 
         // Attempt to add updated entry to entry book
@@ -157,7 +141,6 @@ public class AddCommand extends Command {
                 title.isEmpty() ? candidateTitle.get() : title, // replace title if empty
                 description.isEmpty() ? candidateDescription.get() : description, // replace description if empty
                 toAdd.getLink(),
-                offlineLink,
                 toAdd.getAddress(),
                 toAdd.getTags()
         );
@@ -166,7 +149,7 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.addEntry(updatedEntry);
+        model.addListEntry(updatedEntry, articleContent);
         return new CommandResult(String.format(MESSAGE_SUCCESS, updatedEntry));
     }
 
@@ -176,4 +159,5 @@ public class AddCommand extends Command {
                 || (other instanceof AddCommand // instanceof handles nulls
                 && toAdd.equals(((AddCommand) other).toAdd));
     }
+
 }

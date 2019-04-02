@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STYLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
@@ -20,6 +21,8 @@ import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.TitleContainsKeywordsPredicate;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
+import seedu.address.ui.ReaderViewStyle;
+import seedu.address.ui.ViewType;
 
 /**
  * Contains helper methods for testing commands.
@@ -36,6 +39,9 @@ public class CommandTestUtil {
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
     public static final String VALID_TAG_SCIENCE = "science";
     public static final String VALID_TAG_TECH = "tech";
+    public static final String VALID_VIEWTYPE_BROWSER = ViewType.BROWSER.toString();
+    public static final String VALID_VIEWTYPE_READER = ViewType.READER.toString();
+    public static final String VALID_STYLE_DARK = ReaderViewStyle.DARK.toString();
 
     public static final String TITLE_DESC_AMY = " " + PREFIX_TITLE + VALID_TITLE_AMY;
     public static final String TITLE_DESC_BOB = " " + PREFIX_TITLE + VALID_TITLE_BOB;
@@ -47,6 +53,7 @@ public class CommandTestUtil {
     public static final String ADDRESS_DESC_BOB = " " + PREFIX_ADDRESS + VALID_ADDRESS_BOB;
     public static final String TAG_DESC_TECH = " " + PREFIX_TAG + VALID_TAG_TECH;
     public static final String TAG_DESC_SCIENCE = " " + PREFIX_TAG + VALID_TAG_SCIENCE;
+    public static final String STYLE_DESC_DARK = " " + PREFIX_STYLE + VALID_STYLE_DARK;
 
     // string starting with space not allowed
     public static final String INVALID_TITLE = " ";
@@ -63,6 +70,11 @@ public class CommandTestUtil {
     // '*' not allowed in tags
     public static final String INVALID_TAG = "tech*";
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + INVALID_TAG;
+    // invalid view types
+    public static final String INVALID_VIEWTYPE = "nonsense";
+    // invalid reader view styles
+    public static final String INVALID_STYLE = "nonsense";
+    public static final String INVALID_STYLE_DESC = " " + PREFIX_STYLE + INVALID_STYLE;
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
@@ -72,10 +84,10 @@ public class CommandTestUtil {
 
     static {
         DESC_AMY = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_AMY)
-                .withDescription(VALID_DESCRIPTION_AMY).withLink(VALID_LINK_AMY).withAddress(VALID_ADDRESS_AMY)
+                .withDescription(VALID_DESCRIPTION_AMY).withAddress(VALID_ADDRESS_AMY)
                 .withTags(VALID_TAG_TECH).build();
         DESC_BOB = new EditEntryDescriptorBuilder().withTitle(VALID_TITLE_BOB)
-                .withDescription(VALID_DESCRIPTION_BOB).withLink(VALID_LINK_BOB).withAddress(VALID_ADDRESS_BOB)
+                .withDescription(VALID_DESCRIPTION_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH).build();
     }
 
@@ -156,7 +168,7 @@ public class CommandTestUtil {
      */
     public static void deleteFirstPerson(Model model) {
         Entry firstEntry = model.getFilteredEntryList().get(0);
-        model.deleteEntry(firstEntry);
+        model.deleteListEntry(firstEntry);
     }
 
 }

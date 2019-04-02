@@ -2,6 +2,8 @@ package guitests.guihandles;
 
 import java.net.URL;
 
+import org.w3c.dom.Document;
+
 import guitests.GuiRobot;
 import javafx.concurrent.Worker;
 import javafx.scene.Node;
@@ -19,11 +21,13 @@ public class BrowserPanelHandle extends NodeHandle<Node> {
 
     private URL lastRememberedUrl;
 
+    private WebEngine engine;
+
     public BrowserPanelHandle(Node browserPanelNode) {
         super(browserPanelNode);
 
         WebView webView = getChildNode(BROWSER_ID);
-        WebEngine engine = webView.getEngine();
+        engine = webView.getEngine();
         new GuiRobot().interact(() -> engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
             if (newState == Worker.State.RUNNING) {
                 isWebViewLoaded = false;
@@ -60,5 +64,19 @@ public class BrowserPanelHandle extends NodeHandle<Node> {
      */
     public boolean isLoaded() {
         return isWebViewLoaded;
+    }
+
+    /**
+     * Returns the Document object for the current web page.
+     */
+    public Document getDocument() {
+        return engine.getDocument();
+    }
+
+    /**
+     * Returns the location of the user stylesheet.
+     */
+    public String getUserStyleSheetLocation() {
+        return engine.getUserStyleSheetLocation();
     }
 }
