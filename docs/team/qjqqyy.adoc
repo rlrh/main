@@ -59,4 +59,4 @@ include::../UserGuide.adoc[tag=bingfeedfeeds]
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-include::../DEveloperGuide.adoc[tag=feedsubscription]
+include::../DeveloperGuide.adoc[tag=feedsubscription]
