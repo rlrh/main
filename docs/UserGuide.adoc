@@ -209,9 +209,9 @@ Stop adding any new Entries from the website to your Reading List.
 ====
 * Words in `UPPER_CASE` are the parameters you need to supply.
 ** For example, in `add l/URL`, `URL` is a parameter which can be used as `add l/https://nus-cs2103-ay1819s2.github.io/cs2103-website`.
-* Items in square brackets are optional.
+* Parameters in square brackets are optional.
 ** For example, `l/URL [ti/TITLE]` can be used as `l/https://nus-cs2103-ay1819s2.github.io/cs2103-website/ ti/CS2103 Website` or as `l/https://nus-cs2103-ay1819s2.github.io/cs2103-website/`.
-* Items with `…`​ after them can be used multiple times including zero times.
+* Parameters with `…`​ after them can be used multiple times including zero times.
 ** For example, `[t/TAG]…​` can be used as `{nbsp}` (i.e. 0 times), `t/tech`, `t/tech t/business` etc.
 * Parameters can be in any order.
 ** For example, if a command specifies `ti/TITLE d/DESCRIPTION`, `d/DESCRIPTION ti/TITLE` is also acceptable.
@@ -814,20 +814,22 @@ Examples:
 
 ==== Selecting a feed: `select`
 
-Selects the feed identified by the index number used in the displayed feed list and displays its entries.
+Selects the feed identified by the index number used in the displayed feed list.
+// and displays its entries.
 
 Format: `select INDEX`
 
 ****
-- Selects the feed and displays its entries.
-- Equivalent to `search [URL_OF_INDEXED_FEED]`
+- Selects the feed.
+//- Equivalent to `search [URL_OF_INDEXED_FEED]`
 - The index refers to the index number shown in the displayed feed list.
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
 
 Examples:
 
-- `select 2` Selects the 2nd feed in the manager and displays its entries
+- `select 2` Selects the 2nd feed in the manager.
+// and displays its entries
 
 == FAQ
 
