@@ -150,11 +150,13 @@ public interface Model {
      */
     void clearArchivesEntryBook();
 
+
+    /** Sets the search context entry book. */
+    void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook);
+
     /** Adds article with {@code articleContent} associated with {@code url}. */
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 
-    /** Displays a given entryBook without touching storage. */
-    void displayEntryBook(ReadOnlyEntryBook entryBook);
 
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();

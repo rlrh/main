@@ -36,6 +36,7 @@ public class ModelManager implements Model {
 
     private final EntryBook listEntryBook;
     private final EntryBook archivesEntryBook;
+    private final EntryBook searchEntryBook = new EntryBook();
     private final UserPrefs userPrefs;
 
     private final SimpleListProperty<Entry> displayedEntryList;
@@ -89,8 +90,12 @@ public class ModelManager implements Model {
                 case CONTEXT_ARCHIVES:
                     displayEntryBook(archivesEntryBook);
                     break;
+                case CONTEXT_SEARCH:
+                    displayEntryBook(searchEntryBook);
+                    break;
                 default:
                 }
+                updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
             }
         );
     }
@@ -175,12 +180,12 @@ public class ModelManager implements Model {
     @Override
     public boolean hasListEntry(Entry listEntry) {
         requireNonNull(listEntry);
-        return listEntryBook.hasPerson(listEntry);
+        return listEntryBook.hasEntry(listEntry);
     }
 
     @Override
     public void deleteListEntry(Entry target) {
-        listEntryBook.removePerson(target);
+        listEntryBook.removeEntry(target);
     }
 
     @Override
@@ -193,7 +198,7 @@ public class ModelManager implements Model {
     public void setListEntry(Entry target, Entry editedEntry) {
         requireAllNonNull(target, editedEntry);
 
-        listEntryBook.setPerson(target, editedEntry);
+        listEntryBook.setEntry(target, editedEntry);
     }
 
     @Override
@@ -216,12 +221,12 @@ public class ModelManager implements Model {
     @Override
     public boolean hasArchivesEntry(Entry archiveEntry) {
         requireNonNull(archiveEntry);
-        return archivesEntryBook.hasPerson(archiveEntry);
+        return archivesEntryBook.hasEntry(archiveEntry);
     }
 
     @Override
     public void deleteArchivesEntry(Entry target) {
-        archivesEntryBook.removePerson(target);
+        archivesEntryBook.removeEntry(target);
     }
 
     @Override
@@ -233,6 +238,13 @@ public class ModelManager implements Model {
     @Override
     public void clearArchivesEntryBook() {
         archivesEntryBook.clear();
+    }
+
+    //=========== Search EntryBook ==========================================================================
+
+    @Override
+    public void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook) {
+        this.searchEntryBook.resetData(searchEntryBook);
     }
 
     //=========== Storage ===================================================================================
@@ -249,8 +261,7 @@ public class ModelManager implements Model {
 
     //=========== Displayed Entry List ================================================================================
 
-    @Override
-    public void displayEntryBook(ReadOnlyEntryBook entryBook) {
+    private void displayEntryBook(ReadOnlyEntryBook entryBook) {
         displayedEntryList.set(entryBook.getEntryList());
     }
 
@@ -429,9 +440,11 @@ public class ModelManager implements Model {
 
         boolean stateCheck = listEntryBook.equals(other.listEntryBook)
                 && archivesEntryBook.equals(other.archivesEntryBook)
+                && searchEntryBook.equals(other.searchEntryBook)
                 && userPrefs.equals(other.userPrefs)
                 && displayedEntryList.equals(other.displayedEntryList)
                 && filteredEntries.equals(other.filteredEntries)
+                && Objects.equals(context.get(), other.context.get())
                 && Objects.equals(selectedEntry.get(), other.selectedEntry.get())
                 && Objects.equals(currentViewMode.get(), other.currentViewMode.get())
                 && Objects.equals(commandResult.get(), other.commandResult.get());
