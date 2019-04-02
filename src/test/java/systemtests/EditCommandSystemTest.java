@@ -126,7 +126,7 @@ public class EditCommandSystemTest extends EntryBookSystemTest {
             .withAddress(entryToEdit.getAddress().value)
             .build();
         // this can be misleading: card selection actually remains unchanged but the
-        // browser's url is updated to reflect the new entry's name
+        // browser's url is updated to reflect the new entry's title
         assertCommandSuccess(command, index, editedEntry, indexSelected);
 
         /* --------------------------------- Performing invalid edit operation -------------------------------------- */

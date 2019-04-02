@@ -77,18 +77,18 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find entry in address book, keyword is same as name but of different case -> 1 entry found */
+        /* Case: find entry in address book, keyword is same as title but of different case -> 1 entry found */
         command = FindCommand.COMMAND_WORD + " MeIeR";
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find entry in address book, keyword is substring of name -> 0 persons found */
+        /* Case: find entry in address book, keyword is substring of title -> 0 persons found */
         command = FindCommand.COMMAND_WORD + " Mei";
         ModelHelper.setFilteredList(expectedModel);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find entry in address book, name is substring of keyword -> 0 persons found */
+        /* Case: find entry in address book, title is substring of keyword -> 0 persons found */
         command = FindCommand.COMMAND_WORD + " Meiers";
         ModelHelper.setFilteredList(expectedModel);
         assertCommandSuccess(command, expectedModel);

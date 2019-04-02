@@ -128,22 +128,6 @@ public class AddCommandSystemTest extends EntryBookSystemTest {
         command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
-        // To be deprecated
-        /* Case: missing name -> rejected
-        command = AddCommand.COMMAND_WORD + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-        */
-
-        /* Case: missing phone -> rejected
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-        */
-
-        /* Case: missing address -> rejected
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-        */
-
         /* Case: invalid keyword -> rejected */
         command = "adds " + EntryUtil.getEntryDetails(toAdd);
         assertCommandFailure(command, Messages.MESSAGE_UNKNOWN_COMMAND);

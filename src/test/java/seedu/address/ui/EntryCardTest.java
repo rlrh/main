@@ -47,7 +47,7 @@ public class EntryCardTest extends GuiUnitTest {
         assertFalse(entryCard.equals(0));
 
         // different entry, same index -> returns false
-        Entry differentEntry = new EntryBuilder().withTitle("differentName").build();
+        Entry differentEntry = new EntryBuilder().withTitle("differentTitle").build();
         assertFalse(entryCard.equals(new EntryCard(differentEntry, 0)));
 
         // same entry, different index -> returns false

@@ -170,7 +170,7 @@ public abstract class EntryBookSystemTest {
     }
 
     /**
-     * Displays all persons with any parts of their names matching {@code keyword} (case-insensitive).
+     * Displays all persons with any parts of their titles matching {@code keyword} (case-insensitive).
      */
     protected void showEntriesWithTitle(String keyword) {
         executeCommand(FindCommand.COMMAND_WORD + " " + keyword);
