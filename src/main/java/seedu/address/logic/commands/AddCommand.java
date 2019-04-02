@@ -141,7 +141,6 @@ public class AddCommand extends Command {
                 title.isEmpty() ? candidateTitle.get() : title, // replace title if empty
                 description.isEmpty() ? candidateDescription.get() : description, // replace description if empty
                 toAdd.getLink(),
-                Optional.empty(),
                 toAdd.getAddress(),
                 toAdd.getTags()
         );

@@ -72,6 +72,13 @@ public interface Model {
     Path getArticleDataDirectoryPath();
 
     /**
+     * Returns the link to the offline copy of the url given if it exists.
+     *
+     * @see seedu.address.model.Model#getOfflineLink(String url)
+     */
+    Optional<String> getOfflineLink(String url);
+
+    /**
      * Sets the user prefs' article data directory path.
      */
     void setArticleDataDirectoryPath(Path articleDataDirectoryPath);

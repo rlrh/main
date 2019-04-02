@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
 
@@ -52,8 +53,11 @@ public class BrowserPanel extends UiPart<Region> {
     private boolean isLoadingReaderView; //  flag - whether reader view is loading
     private boolean hasLoadedReaderView; // status - whether reader view has loaded
     private ViewMode viewMode; // current view mode
+    private final Function<String, Optional<String>> getOfflineLink; // asks logic what the offline link for a url is
 
-    public BrowserPanel(ObservableValue<Entry> selectedEntry, ObservableValue<ViewMode> viewMode) {
+    public BrowserPanel(ObservableValue<Entry> selectedEntry,
+                        ObservableValue<ViewMode> viewMode,
+                        Function<String, Optional<String>> getOfflineLink) {
 
         super(FXML);
 
@@ -62,6 +66,7 @@ public class BrowserPanel extends UiPart<Region> {
         this.isLoadingReaderView = false;
         this.hasLoadedReaderView = false;
         this.viewMode = viewMode.getValue();
+        this.getOfflineLink = getOfflineLink;
 
         // To prevent triggering events for typing inside the loaded Web page.
         getRoot().setOnKeyPressed(Event::consume);
@@ -165,8 +170,10 @@ public class BrowserPanel extends UiPart<Region> {
      * @param entry entry to load
      */
     private void loadEntryPage(Entry entry) {
-        currentBaseUrl = entry.getLink().value;
-        currentLocation = entry.getOfflineOrOriginalLink().value;
+        String onlineLink = entry.getLink().value;
+        Optional<String> offlineLink = getOfflineLink.apply(onlineLink);
+        currentBaseUrl = onlineLink;
+        currentLocation = offlineLink.orElse(onlineLink);
         loadPage(currentLocation);
     }
 

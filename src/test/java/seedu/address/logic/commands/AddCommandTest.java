@@ -249,6 +249,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public Optional<String> getOfflineLink(String url) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public boolean hasEntry(Entry entry) {
             throw new AssertionError("This method should not be called.");
         }
