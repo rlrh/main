@@ -162,7 +162,7 @@ public abstract class EntryBookSystemTest {
     }
 
     /**
-     * Displays all persons in the address book.
+     * Displays all entries in the address book.
      */
     protected void showAllEntries() {
         executeCommand(ListCommand.COMMAND_WORD);
@@ -170,7 +170,7 @@ public abstract class EntryBookSystemTest {
     }
 
     /**
-     * Displays all persons with any parts of their titles matching {@code keyword} (case-insensitive).
+     * Displays all entries with any parts of their titles matching {@code keyword} (case-insensitive).
      */
     protected void showEntriesWithTitle(String keyword) {
         executeCommand(FindCommand.COMMAND_WORD + " " + keyword);
@@ -186,7 +186,7 @@ public abstract class EntryBookSystemTest {
     }
 
     /**
-     * Deletes all persons in the address book.
+     * Deletes all entries in the address book.
      */
     protected void deleteAllEntries() {
         executeCommand(ClearCommand.COMMAND_WORD);
@@ -196,7 +196,7 @@ public abstract class EntryBookSystemTest {
     /**
      * Asserts that the {@code CommandBox} displays {@code expectedCommandInput}, the {@code ResultDisplay} displays
      * {@code expectedResultMessage}, the storage contains the same entry objects as {@code expectedModel}
-     * and the entry list panel displays the persons in the model correctly.
+     * and the entry list panel displays the entries in the model correctly.
      */
     protected void assertApplicationDisplaysExpected(String expectedCommandInput, String expectedResultMessage,
             Model expectedModel) {

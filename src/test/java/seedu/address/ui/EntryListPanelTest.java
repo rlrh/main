@@ -59,7 +59,7 @@ public class EntryListPanelTest extends GuiUnitTest {
     }
 
     /**
-     * Verifies that creating and deleting large number of persons in {@code EntryListPanel} requires lesser than
+     * Verifies that creating and deleting large number of entries in {@code EntryListPanel} requires lesser than
      * {@code CARD_CREATION_AND_DELETION_TIMEOUT} milliseconds to execute.
      */
     @Test
@@ -73,7 +73,7 @@ public class EntryListPanelTest extends GuiUnitTest {
     }
 
     /**
-     * Returns a list of persons containing {@code personCount} persons that is used to populate the
+     * Returns a list of entries containing {@code entryCount} entries that is used to populate the
      * {@code EntryListPanel}.
      */
     private ObservableList<Entry> createBackingList(int entryCount) {

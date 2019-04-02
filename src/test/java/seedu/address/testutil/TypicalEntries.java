@@ -330,7 +330,7 @@ public class TypicalEntries {
     }
 
     /**
-     * Returns an {@code EntryBook} with all the typical persons.
+     * Returns an {@code EntryBook} with all the typical entries.
      */
     public static EntryBook getTypicalArchivesEntryBook() {
         EntryBook ab = new EntryBook();

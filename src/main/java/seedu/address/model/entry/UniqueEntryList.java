@@ -12,9 +12,9 @@ import seedu.address.model.entry.exceptions.DuplicateEntryException;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 
 /**
- * A list of persons that enforces uniqueness between its elements and does not allow nulls.
+ * A list of entries that enforces uniqueness between its elements and does not allow nulls.
  * A entry is considered unique by comparing using {@code Entry#isSameEntry(Entry)}. As such, adding and updating of
- * persons uses Entry#isSameEntry(Entry) for equality so as to ensure that the entry being added or updated is
+ * entries uses Entry#isSameEntry(Entry) for equality so as to ensure that the entry being added or updated is
  * unique in terms of identity in the UniqueEntryList. However, the removal of a entry uses Entry#equals(Object) so
  * as to ensure that the entry with exactly the same fields will be removed.
  *

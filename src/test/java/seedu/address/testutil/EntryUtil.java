@@ -54,7 +54,7 @@ public class EntryUtil {
         StringBuilder sb = new StringBuilder();
         descriptor.getTitle().ifPresent(title -> sb.append(PREFIX_TITLE).append(title.fullTitle).append(" "));
         descriptor.getDescription().ifPresent(
-                description -> sb.append(PREFIX_DESCRIPTION).append(description.value).append(" "));
+            description -> sb.append(PREFIX_DESCRIPTION).append(description.value).append(" "));
         descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
