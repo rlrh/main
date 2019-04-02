@@ -146,7 +146,7 @@ public class TypicalEntries {
     public static final String READABILITY_LINK_TITLE = "A Reading Guide — ProPublica";
     public static final String READABILITY_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s "
             + "former personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie "
-            + "and hundreds of threats. Many of those assertions had been explored before, as these articles show.";
+            + "and hundreds of threats. Many of those assertions had…";
 
     public static final String RELATIVE_LINK_ARTICLE_URL = MainApp.class
             .getResource("/util/relativeLinkedArticle.html").toExternalForm();
