@@ -6,6 +6,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Helper functions for handling strings.
@@ -87,6 +89,26 @@ public class StringUtil {
             firstNWords.append(" ");
         }
         return firstNWords.toString().trim().concat("…");
+    }
+
+    /**
+     * Gets the number of words in a string. Method is null-safe.
+     * @param string any string, can be empty or null
+     * @return number of words in string, 0 if string is empty or null
+     */
+    public static long getNumberOfWords(String string) {
+        return Stream.ofNullable(string)
+                .flatMap(text -> Arrays.stream(text.split("\\s+")))
+                .count();
+    }
+
+    /**
+     * Gets a null-safe version of a string.
+     * @param string possibly null string
+     * @return string if non-null, empty string if null
+     */
+    public static String nullSafeOf(String string) {
+        return Optional.ofNullable(string).orElse("");
     }
 
 }
