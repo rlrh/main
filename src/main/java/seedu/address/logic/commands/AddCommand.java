@@ -6,10 +6,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -32,9 +30,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
-import seedu.address.util.AbsoluteUrlDocumentConverter;
 import seedu.address.util.Network;
 
 /**
@@ -117,45 +113,27 @@ public class AddCommand extends Command {
             }
         }
 
-        Optional<Link> offlineLink = Optional.empty();
+        Optional<byte[]> articleContent = Network.fetchArticleOptional(urlString);
 
-        try {
+        if (noTitleOrNoDescription && articleContent.isPresent()) {
 
-            // Download article content to local storage
-            byte[] articleContent = Network.fetchAsBytes(urlString);
-            // Convert all links in article to absolute links
-            byte[] absoluteLinkedArticleContent = AbsoluteUrlDocumentConverter.convert(
-                    new URL(urlString),
-                    articleContent);
-            Optional<Path> articlePath = model.addArticle(urlString, absoluteLinkedArticleContent);
-            if (articlePath.isPresent()) {
-                offlineLink = Optional.of(new Link(articlePath.get().toUri().toASCIIString()));
-            }
+            // Second try - extract candidates by parsing through Jsoup
+            String html = new String(articleContent.get());
+            Document document = Jsoup.parse(html);
+            candidateTitle.tryout(document.title().trim()); // title 2nd choice - document title element
+            candidateDescription.tryout(StringUtil.getFirstNWordsWithEllipsis(document.body().text(), 24)
+                    .trim()); // desc 3rd choice - first N words of raw document body text
 
-            if (noTitleOrNoDescription) {
+            // Third try - extract candidates by processing through Readability4J
+            Readability4J readability4J = new Readability4J(urlString, document);
+            Article article = readability4J.parse();
+            candidateTitle.tryout(StringUtil.nullSafeOf(article.getTitle())); // title 1st choice - extract title
+            candidateDescription
+                    .tryout(StringUtil.getFirstNWordsWithEllipsis(
+                            StringUtil.nullSafeOf(article.getTextContent()), 24)
+                            .trim()) // desc 2nd choice - first N words of cleaned-up document body text
+                    .tryout(StringUtil.nullSafeOf(article.getExcerpt())); // desc 1st choice - extract description
 
-                // Second try - extract candidates by parsing through Jsoup
-                String html = new String(articleContent);
-                Document document = Jsoup.parse(html);
-                candidateTitle.tryout(document.title().trim()); // title 2nd choice - document title element
-                candidateDescription.tryout(StringUtil.getFirstNWordsWithEllipsis(document.body().text(), 24)
-                        .trim()); // desc 3rd choice - first N words of raw document body text
-
-                // Third try - extract candidates by processing through Readability4J
-                Readability4J readability4J = new Readability4J(urlString, document);
-                Article article = readability4J.parse();
-                candidateTitle.tryout(StringUtil.nullSafeOf(article.getTitle())); // title 1st choice - extract title
-                candidateDescription
-                        .tryout(StringUtil.getFirstNWordsWithEllipsis(
-                                StringUtil.nullSafeOf(article.getTextContent()), 24)
-                                .trim()) // desc 2nd choice - first N words of cleaned-up document body text
-                        .tryout(StringUtil.nullSafeOf(article.getExcerpt())); // desc 1st choice - extract description
-
-            }
-
-        } catch (IOException ioe) {
-            // Do nothing if fail to fetch the page
-            logger.warning("Failed to fetch URL: " + urlString);
         }
 
         // Attempt to add updated entry to entry book
@@ -163,7 +141,6 @@ public class AddCommand extends Command {
                 title.isEmpty() ? candidateTitle.get() : title, // replace title if empty
                 description.isEmpty() ? candidateDescription.get() : description, // replace description if empty
                 toAdd.getLink(),
-                offlineLink,
                 toAdd.getAddress(),
                 toAdd.getTags()
         );
@@ -172,7 +149,7 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.addListEntry(updatedEntry);
+        model.addListEntry(updatedEntry, articleContent);
         return new CommandResult(String.format(MESSAGE_SUCCESS, updatedEntry));
     }
 
