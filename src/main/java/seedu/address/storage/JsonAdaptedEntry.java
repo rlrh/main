@@ -3,7 +3,6 @@ package seedu.address.storage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,6 @@ class JsonAdaptedEntry {
     private final String title;
     private final String description;
     private final String link;
-    private final String offlineLink;
     private final String address;
     private final List<JsonAdaptedTag> tagged = new ArrayList<>();
 
@@ -36,14 +34,14 @@ class JsonAdaptedEntry {
      * Constructs a {@code JsonAdaptedEntry} with the given entry details.
      */
     @JsonCreator
-    public JsonAdaptedEntry(@JsonProperty("title") String title, @JsonProperty("description") String description,
-                            @JsonProperty("link") String link, @JsonProperty("offlineLink") String offlineLink,
+    public JsonAdaptedEntry(@JsonProperty("title") String title,
+                            @JsonProperty("description") String description,
+                            @JsonProperty("link") String link,
                             @JsonProperty("address") String address,
                             @JsonProperty("tagged") List<JsonAdaptedTag> tagged) {
         this.title = title;
         this.description = description;
         this.link = link;
-        this.offlineLink = offlineLink;
         this.address = address;
         if (tagged != null) {
             this.tagged.addAll(tagged);
@@ -57,7 +55,6 @@ class JsonAdaptedEntry {
         title = source.getTitle().fullTitle;
         description = source.getDescription().value;
         link = source.getLink().value;
-        offlineLink = source.getOfflineLink().isPresent() ? source.getOfflineLink().get().value : "";
         address = source.getAddress().value;
         tagged.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -100,17 +97,6 @@ class JsonAdaptedEntry {
         }
         final Link modelLink = new Link(link);
 
-        if (offlineLink == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Link.class.getSimpleName()));
-        }
-        if (!offlineLink.isEmpty() && !Link.isValidConstructionLink(offlineLink)) {
-            throw new IllegalValueException(Link.formExceptionMessage(offlineLink));
-        }
-        final Optional<Link> modelOfflineLink =
-                offlineLink.isEmpty()
-                        ? Optional.empty()
-                        : Optional.of(new Link(offlineLink));
-
         if (address == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
         }
@@ -120,7 +106,7 @@ class JsonAdaptedEntry {
         final Address modelAddress = new Address(address);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Entry(modelTitle, modelDescription, modelLink, modelOfflineLink, modelAddress, modelTags);
+        return new Entry(modelTitle, modelDescription, modelLink, modelAddress, modelTags);
     }
 
 }
