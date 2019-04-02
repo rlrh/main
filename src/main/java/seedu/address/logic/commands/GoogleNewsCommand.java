@@ -8,15 +8,15 @@ import java.net.URLEncoder;
  */
 public class GoogleNewsCommand extends FeedCommand {
 
-    private static final String GOOGLE_NEWS_TOP_STORIES_RSS_LINK = "https://news.google.com/rss";
-    private static final String GOOGLE_NEWS_SEARCH_RSS_LINK = "https://news.google.com/rss/search?q=%s";
-
     public static final String COMMAND_WORD = "googlenews";
     public static final String COMMAND_ALIAS = "gnews";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Gets top stories or searches for given keywords on Google News.\n"
             + "Parameters: [KEYWORDS]...\n"
             + "Example: " + COMMAND_WORD;
+
+    private static final String GOOGLE_NEWS_TOP_STORIES_RSS_LINK = "https://news.google.com/rss";
+    private static final String GOOGLE_NEWS_SEARCH_RSS_LINK = "https://news.google.com/rss/search?q=%s";
 
     public GoogleNewsCommand() {
         super(GOOGLE_NEWS_TOP_STORIES_RSS_LINK);
