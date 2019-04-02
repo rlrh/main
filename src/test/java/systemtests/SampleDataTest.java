@@ -13,7 +13,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.testutil.TestUtil;
 
-public class SampleDataTest extends AddressBookSystemTest {
+public class SampleDataTest extends EntryBookSystemTest {
     /**
      * Returns null to force test app to load data of the file in {@code getDataFileLocationListEntryBook()}.
      */
@@ -44,8 +44,8 @@ public class SampleDataTest extends AddressBookSystemTest {
     }
 
     @Test
-    public void addressBook_dataFileDoesNotExist_loadSampleData() {
-        Entry[] expectedList = SampleDataUtil.getSamplePersons();
-        assertListMatching(getPersonListPanel(), expectedList);
+    public void entryBook_dataFileDoesNotExist_loadSampleData() {
+        Entry[] expectedList = SampleDataUtil.getSampleEntries();
+        assertListMatching(getEntryListPanel(), expectedList);
     }
 }

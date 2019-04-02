@@ -44,12 +44,12 @@ public class StatusBarFooter extends UiPart<Region> {
     private Label contextEntryCountStatus;
 
     public StatusBarFooter(Path saveLocation,
-                           ReadOnlyEntryBook addressBook,
+                           ReadOnlyEntryBook entryBook,
                            ObservableList<Entry> entryList,
                            ObservableValue<ModelContext> context) {
         super(FXML);
 
-        addressBook.addListener(observable -> updateSyncStatus());
+        entryBook.addListener(observable -> updateSyncStatus());
         syncStatus.setText(SYNC_STATUS_INITIAL);
 
         saveLocationStatus.setText(Paths.get(".").resolve(saveLocation).toString());

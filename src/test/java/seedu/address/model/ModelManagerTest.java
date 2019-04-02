@@ -93,7 +93,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setEntryBookFilePath_validPath_setsAddressBookFilePath() {
+    public void setEntryBookFilePath_validPath_setsEntryBookFilePath() {
         Path path = Paths.get("address/book/file/path");
         modelManager.setListEntryBookFilePath(path);
         assertEquals(path, modelManager.getListEntryBookFilePath());
@@ -106,7 +106,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setArticleDataDirectoryPath_validPath_setsAddressBookFilePath() {
+    public void setArticleDataDirectoryPath_validPath_setsEntryBookFilePath() {
         Path path = Paths.get("article/data/directory/path");
         modelManager.setArticleDataDirectoryPath(path);
         assertEquals(path, modelManager.getArticleDataDirectoryPath());

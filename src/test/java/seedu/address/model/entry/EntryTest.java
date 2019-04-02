@@ -74,15 +74,15 @@ public class EntryTest {
         // different entry -> returns false
         assertFalse(ALICE.equals(BOB));
 
-        // different name -> returns false
+        // different title -> returns false
         Entry editedAlice = new EntryBuilder(ALICE).withTitle(VALID_TITLE_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different phone -> returns false
+        // different description -> returns false
         editedAlice = new EntryBuilder(ALICE).withDescription(VALID_DESCRIPTION_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different email -> returns false
+        // different link -> returns false
         editedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 

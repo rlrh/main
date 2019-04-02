@@ -46,15 +46,15 @@ class JsonSerializableEntryBook {
      * @throws IllegalValueException if there were any data constraints violated.
      */
     public EntryBook toModelType() throws IllegalValueException {
-        EntryBook addressBook = new EntryBook();
+        EntryBook entryBook = new EntryBook();
         for (JsonAdaptedEntry jsonAdaptedEntry : entries) {
             Entry entry = jsonAdaptedEntry.toModelType();
-            if (addressBook.hasEntry(entry)) {
+            if (entryBook.hasEntry(entry)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_ENTRY);
             }
-            addressBook.addEntry(entry);
+            entryBook.addEntry(entry);
         }
-        return addressBook;
+        return entryBook;
     }
 
 }

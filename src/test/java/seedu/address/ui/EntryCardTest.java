@@ -3,7 +3,7 @@ package seedu.address.ui;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.ui.testutil.GuiTestAssert.assertCardDisplaysPerson;
+import static seedu.address.ui.testutil.GuiTestAssert.assertCardDisplaysEntry;
 
 import org.junit.Test;
 
@@ -47,7 +47,7 @@ public class EntryCardTest extends GuiUnitTest {
         assertFalse(entryCard.equals(0));
 
         // different entry, same index -> returns false
-        Entry differentEntry = new EntryBuilder().withTitle("differentName").build();
+        Entry differentEntry = new EntryBuilder().withTitle("differentTitle").build();
         assertFalse(entryCard.equals(new EntryCard(differentEntry, 0)));
 
         // same entry, different index -> returns false
@@ -67,6 +67,6 @@ public class EntryCardTest extends GuiUnitTest {
         assertEquals(Integer.toString(expectedId) + ". ", entryCardHandle.getId());
 
         // verify entry details are displayed correctly
-        assertCardDisplaysPerson(expectedEntry, entryCardHandle);
+        assertCardDisplaysEntry(expectedEntry, entryCardHandle);
     }
 }

@@ -26,7 +26,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.ui.util.ReaderViewUtil;
 
 public class BrowserPanelTest extends GuiUnitTest {
-    private SimpleObjectProperty<Entry> selectedPerson = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<Entry> selectedEntry = new SimpleObjectProperty<>();
     private SimpleObjectProperty<ViewMode> viewMode = new SimpleObjectProperty<>(new ViewMode());
     private BrowserPanel browserPanel;
     private BrowserPanelHandle browserPanelHandle;
@@ -34,7 +34,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Before
     public void setUp() {
         guiRobot.interact(() -> {
-            browserPanel = new BrowserPanel(selectedPerson, viewMode, (url) -> Optional.empty());
+            browserPanel = new BrowserPanel(selectedEntry, viewMode, (url) -> Optional.empty());
         });
         uiPartRule.setUiPart(browserPanel);
 
@@ -50,16 +50,16 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Test
     public void displayCorrectPage() throws Exception {
         // associated web page of a entry with valid link
-        guiRobot.interact(() -> selectedPerson.set(VALID_FILE_LINK));
-        URL expectedPersonUrl = new URL(VALID_FILE_LINK.getLink().value);
+        guiRobot.interact(() -> selectedEntry.set(VALID_FILE_LINK));
+        URL expectedEntryUrl = new URL(VALID_FILE_LINK.getLink().value);
         waitUntilBrowserLoaded(browserPanelHandle);
-        assertEquals(expectedPersonUrl, browserPanelHandle.getLoadedUrl());
+        assertEquals(expectedEntryUrl, browserPanelHandle.getLoadedUrl());
     }
 
     @Test
     public void displayErrorPage() {
         // associated web page of a entry with invalid link
-        guiRobot.interact(() -> selectedPerson.set(INVALID_FILE_LINK));
+        guiRobot.interact(() -> selectedEntry.set(INVALID_FILE_LINK));
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(BrowserPanel.ERROR_PAGE, browserPanelHandle.getLoadedUrl());
     }
@@ -78,7 +78,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     public void displayReaderViewStyle() {
 
         // load associated web page of a Wikipedia entry
-        guiRobot.interact(() -> selectedPerson.set(WIKIPEDIA_ENTRY));
+        guiRobot.interact(() -> selectedEntry.set(WIKIPEDIA_ENTRY));
         waitUntilBrowserLoaded(browserPanelHandle);
 
         // set reader view mode with specified style
@@ -101,7 +101,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     private void assertReaderViewWorksOn(Entry entry, String baseUrl) {
 
         // load associated web page of a Wikipedia entry
-        guiRobot.interact(() -> selectedPerson.set(entry));
+        guiRobot.interact(() -> selectedEntry.set(entry));
         waitUntilBrowserLoaded(browserPanelHandle);
 
         // generate reader view by processing loaded content

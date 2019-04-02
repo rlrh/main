@@ -47,7 +47,7 @@ public class EntryBook implements ReadOnlyEntryBook {
      * {@code entries} must not contain duplicate entries.
      */
     public void setEntries(List<Entry> entries) {
-        this.entries.setPersons(entries);
+        this.entries.setEntries(entries);
         indicateModified();
     }
 
