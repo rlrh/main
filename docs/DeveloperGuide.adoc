@@ -363,6 +363,7 @@ These are combined into a new HTML document, which is styled using Bootstrap and
 ** Cons: Will save redundant data and use more disk space.
 // end::readerview[]
 
+// tag::feedsubscription[]
 === Feed subscription
 
 ==== Current implementation
@@ -414,6 +415,7 @@ modifiers overloaded to be context-sensitive
 state change will either involve an extra accessor (basically
 Alternative 1), or changing state (specifically `Model#setContext`),
 which is not robust.
+// end::feedsubscription[]
 
 // tag::network-design[]
 === `Network` design
