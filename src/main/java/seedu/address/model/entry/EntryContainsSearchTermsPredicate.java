@@ -25,17 +25,20 @@ public class EntryContainsSearchTermsPredicate implements Predicate<Entry> {
                 .stream()
                 .anyMatch((tag) -> entry.getTags().contains(tag));
 
-        } else if (!result && findEntryDescriptor.getTitle().isPresent()) {
+        }
+        if (!result && findEntryDescriptor.getTitle().isPresent()) {
             result = StringUtil.containsPhraseIgnoreCase(
                 entry.getTitle().fullTitle,
                 findEntryDescriptor.getTitle().get());
 
-        } else if (!result && findEntryDescriptor.getLink().isPresent()) {
+        }
+        if (!result && findEntryDescriptor.getLink().isPresent()) {
             result = StringUtil.containsPhraseIgnoreCase(
                 entry.getLink().value,
                 findEntryDescriptor.getLink().get());
 
-        } else if (!result && findEntryDescriptor.getDescription().isPresent()) {
+        }
+        if (!result && findEntryDescriptor.getDescription().isPresent()) {
             result = StringUtil.containsPhraseIgnoreCase(
                 entry.getDescription().value,
                 findEntryDescriptor.getDescription().get());
