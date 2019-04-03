@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.showEntryAtIndex;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
@@ -12,6 +13,7 @@ import static seedu.address.testutil.TypicalEntries.CARL;
 import static seedu.address.testutil.TypicalEntries.DANIEL;
 import static seedu.address.testutil.TypicalEntries.KATTIS_FEED_ENTRY;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,7 +30,6 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.mocks.ModelManagerStub;
 import seedu.address.mocks.StorageStub;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 import seedu.address.storage.Storage;
 import seedu.address.testutil.EntryBookBuilder;
@@ -227,8 +228,7 @@ public class ModelManagerTest {
                 userPrefs, storage)));
 
         // different filteredList -> returns false
-        String[] keywords = ALICE.getTitle().fullTitle.split("\\s+");
-        modelManager.updateFilteredEntryList(new EntryContainsSearchTermsPredicate(Arrays.asList(keywords)));
+        showEntryAtIndex(modelManager, INDEX_FIRST_ENTRY);
         assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook, userPrefs,
                 storage)));
 
