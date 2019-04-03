@@ -28,7 +28,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.mocks.ModelManagerStub;
 import seedu.address.mocks.StorageStub;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.TitleContainsKeywordsPredicate;
+import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 import seedu.address.storage.Storage;
 import seedu.address.testutil.EntryBookBuilder;
@@ -228,7 +228,7 @@ public class ModelManagerTest {
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getTitle().fullTitle.split("\\s+");
-        modelManager.updateFilteredEntryList(new TitleContainsKeywordsPredicate(Arrays.asList(keywords)));
+        modelManager.updateFilteredEntryList(new EntryContainsSearchTermsPredicate(Arrays.asList(keywords)));
         assertFalse(modelManager.equals(new ModelManager(listEntryBook, archivesEntryBook, feedsEntryBook, userPrefs,
                 storage)));
 

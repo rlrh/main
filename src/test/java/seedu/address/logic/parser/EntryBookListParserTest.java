@@ -35,7 +35,7 @@ import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.TitleContainsKeywordsPredicate;
+import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
@@ -120,10 +120,10 @@ public class EntryBookListParserTest {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommand(
                 FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new TitleContainsKeywordsPredicate(keywords)), command);
+        assertEquals(new FindCommand(new EntryContainsSearchTermsPredicate(keywords)), command);
         FindCommand aliasCommand = (FindCommand) parser.parseCommand(
                 FindCommand.COMMAND_ALIAS + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new TitleContainsKeywordsPredicate(keywords)), aliasCommand);
+        assertEquals(new FindCommand(new EntryContainsSearchTermsPredicate(keywords)), aliasCommand);
     }
 
     @Test

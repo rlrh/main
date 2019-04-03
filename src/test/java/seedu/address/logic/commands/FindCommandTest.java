@@ -17,7 +17,7 @@ import org.junit.Test;
 import seedu.address.logic.CommandHistory;
 import seedu.address.mocks.TypicalModelManagerStub;
 import seedu.address.model.Model;
-import seedu.address.model.entry.TitleContainsKeywordsPredicate;
+import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
@@ -29,10 +29,10 @@ public class FindCommandTest {
 
     @Test
     public void equals() {
-        TitleContainsKeywordsPredicate firstPredicate =
-                new TitleContainsKeywordsPredicate(Collections.singletonList("first"));
-        TitleContainsKeywordsPredicate secondPredicate =
-                new TitleContainsKeywordsPredicate(Collections.singletonList("second"));
+        EntryContainsSearchTermsPredicate firstPredicate =
+                new EntryContainsSearchTermsPredicate(Collections.singletonList("first"));
+        EntryContainsSearchTermsPredicate secondPredicate =
+                new EntryContainsSearchTermsPredicate(Collections.singletonList("second"));
 
         FindCommand findFirstCommand = new FindCommand(firstPredicate);
         FindCommand findSecondCommand = new FindCommand(secondPredicate);
@@ -57,7 +57,7 @@ public class FindCommandTest {
     @Test
     public void execute_zeroKeywords_noEntryFound() {
         String expectedMessage = String.format(MESSAGE_ENTRIES_LISTED_OVERVIEW, 0);
-        TitleContainsKeywordsPredicate predicate = preparePredicate(" ");
+        EntryContainsSearchTermsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredEntryList(predicate);
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
@@ -67,7 +67,7 @@ public class FindCommandTest {
     @Test
     public void execute_multipleKeywords_multipleEntriesFound() {
         String expectedMessage = String.format(MESSAGE_ENTRIES_LISTED_OVERVIEW, 3);
-        TitleContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
+        EntryContainsSearchTermsPredicate predicate = preparePredicate("Kurz Elle Kunz");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredEntryList(predicate);
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
@@ -75,9 +75,9 @@ public class FindCommandTest {
     }
 
     /**
-     * Parses {@code userInput} into a {@code TitleContainsKeywordsPredicate}.
+     * Parses {@code userInput} into a {@code EntryContainsSearchTermsPredicate}.
      */
-    private TitleContainsKeywordsPredicate preparePredicate(String userInput) {
-        return new TitleContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
+    private EntryContainsSearchTermsPredicate preparePredicate(String userInput) {
+        return new EntryContainsSearchTermsPredicate(Arrays.asList(userInput.split("\\s+")));
     }
 }

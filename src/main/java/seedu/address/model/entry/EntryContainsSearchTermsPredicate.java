@@ -1,31 +1,54 @@
 package seedu.address.model.entry;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.StringUtil;
+import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.commands.FindCommand.FindEntryDescriptor;
 
 /**
  * Tests that a {@code Entry}'s {@code Title} matches any of the keywords given.
  */
-public class TitleContainsKeywordsPredicate implements Predicate<Entry> {
-    private final List<String> keywords;
+public class EntryContainsSearchTermsPredicate implements Predicate<Entry> {
+    private final FindCommand.FindEntryDescriptor findEntryDescriptor;
 
-    public TitleContainsKeywordsPredicate(List<String> keywords) {
-        this.keywords = keywords;
+    public EntryContainsSearchTermsPredicate(FindEntryDescriptor findEntryDescriptor) {
+        this.findEntryDescriptor = findEntryDescriptor;
     }
 
     @Override
     public boolean test(Entry entry) {
-        return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(entry.getTitle().fullTitle, keyword));
+        boolean result = false;
+
+        if (findEntryDescriptor.getTags().isPresent()) {
+            result = findEntryDescriptor.getTags().get()
+                .stream()
+                .anyMatch((tag) -> entry.getTags().contains(tag));
+
+        } else if (!result && findEntryDescriptor.getTitle().isPresent()) {
+            result = StringUtil.containsPhraseIgnoreCase(
+                entry.getTitle().fullTitle,
+                findEntryDescriptor.getTitle().get());
+
+        } else if (!result && findEntryDescriptor.getLink().isPresent()) {
+            result = StringUtil.containsPhraseIgnoreCase(
+                entry.getLink().value,
+                findEntryDescriptor.getLink().get());
+
+        } else if (!result && findEntryDescriptor.getDescription().isPresent()) {
+            result = StringUtil.containsPhraseIgnoreCase(
+                entry.getDescription().value,
+                findEntryDescriptor.getDescription().get());
+        }
+
+        return result;
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof TitleContainsKeywordsPredicate // instanceof handles nulls
-                && keywords.equals(((TitleContainsKeywordsPredicate) other).keywords)); // state check
+                || (other instanceof EntryContainsSearchTermsPredicate // instanceof handles nulls
+                && findEntryDescriptor.equals(((EntryContainsSearchTermsPredicate) other).findEntryDescriptor)); //state
     }
 
 }
