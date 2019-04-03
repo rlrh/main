@@ -10,7 +10,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
@@ -21,6 +20,7 @@ import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
+import seedu.address.testutil.FindEntryDescriptorBuilder;
 import seedu.address.ui.ReaderViewStyle;
 import seedu.address.ui.ViewType;
 
@@ -157,8 +157,10 @@ public class CommandTestUtil {
         assertTrue(targetIndex.getZeroBased() < model.getFilteredEntryList().size());
 
         Entry entry = model.getFilteredEntryList().get(targetIndex.getZeroBased());
-        final String[] splitTitle = entry.getTitle().fullTitle.split("\\s+");
-        model.updateFilteredEntryList(new EntryContainsSearchTermsPredicate(Arrays.asList(splitTitle[0])));
+        model.updateFilteredEntryList(new EntryContainsSearchTermsPredicate(
+                                                new FindEntryDescriptorBuilder()
+                                                    .withLink(entry.getLink().value)
+                                                    .build()));
 
         assertEquals(1, model.getFilteredEntryList().size());
     }
