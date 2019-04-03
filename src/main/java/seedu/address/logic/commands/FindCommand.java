@@ -1,6 +1,10 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,11 +27,20 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
     public static final String COMMAND_ALIAS = "f";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all entries whose title contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " trump amazon";
-    public static final String MESSAGE_NO_SEARCH_TERMS = "At least one field to edit must be provided.";
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all entries whose fields contain any of "
+            + "the specified keyphrases and displays them as a list with index numbers.\n"
+            + "Search is case-insensitive for all fields except tags.\n"
+            + "Search is exact for tags.\n"
+            + "Parameters: INDEX (must be a positive integer) "
+            + "[" + PREFIX_TITLE + "TITLE] "
+            + "[" + PREFIX_DESCRIPTION + "DESCRIPTION] "
+            + "[" + PREFIX_LINK + "LINK:] "
+            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "Example: " + COMMAND_WORD
+            + PREFIX_TITLE + "Search this phrase in title"
+            + PREFIX_DESCRIPTION + "Search this phrase in desc";
+    public static final String MESSAGE_NO_SEARCH_TERMS = "At least one search term must be provided.";
 
     private final EntryContainsSearchTermsPredicate predicate;
 
