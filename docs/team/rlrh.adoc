@@ -1,0 +1,65 @@
+= Rayner Lim - Project Portfolio
+:site-section: AboutUs
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== PROJECT: README
+
+---
+
+== Overview
+
+README is a desktop integrated bookmark manager and web feed reader application.
+Users interact with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+
+== Summary of contributions
+
+* *Major enhancement*: added the *Reader View* feature
+** What it does: Strips out all the visual clutter from web pages and presents content in a perfectly formatted, clean layout, with user-selectable colour schemes
+** Justification: This feature improves the user experience significantly because users can focus on the content without any unnecessary distractions and read more comfortably.
+** Highlights: This enhancement is designed to be used by many other commands. It required an in-depth analysis of design alternatives to enable this. The implementation was challenging as it required understanding exactly how the JavaFX WebView works.
+** Credits: Jsoup, Readability4J
+
+* *Minor enhancement*: added an autofill utility that lets users specify just a link when adding a new entry and have the title and description fields automatically filled.
+
+* *Code contributed*:
+** https://github.com/CS2103-AY1819S2-W10-1/main/pull/44[Reader view]
+** https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[Reader view styles]
+** https://github.com/CS2103-AY1819S2-W10-1/main/pull/98[Reader view test]
+** https://github.com/CS2103-AY1819S2-W10-1/main/pull/76[Autofill entry]
+** https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[Status bar]
+
+* *Other contributions*:
+
+** Project management:
+*** Managed release `v1.2` on GitHub
+** Enhancements to existing features:
+*** Updated the status bar footer with context information (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
+** Documentation:
+*** Restructured the User Guide to be more reader-friendly: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#96]
+** Community:
+*** PRs reviewed (with non-trivial review comments):
+*** Contributed to forum discussions (example:  https://github.com/nus-cs2103-AY1819S2/forum/issues/39[1], https://github.com/nus-cs2103-AY1819S2/forum/issues/43[2])
+** Tools:
+*** Integrated a third party libraries Jsoup and Readability4J to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111])
+
+== Contributions to the User Guide
+
+
+|===
+|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|===
+
+// include::../UserGuide.adoc[tag=undoredo]
+
+// include::../UserGuide.adoc[tag=dataencryption]
+
+== Contributions to the Developer Guide
+
+|===
+|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|===
+
+// include::../DeveloperGuide.adoc[tag=undoredo]
+
+// include::../DeveloperGuide.adoc[tag=dataencryption]
