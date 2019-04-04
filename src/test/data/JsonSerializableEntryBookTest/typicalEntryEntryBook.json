@@ -9,11 +9,11 @@
     "tagged" : [ "friends" ]
   }, {
     "title" : "Benson Meier",
-    "description" : "Description place-holder",
+    "description" : "Description place-holder Benson",
     "link" : "https://johnd.example.com",
     "offlineLink" : "",
     "address" : "311, Clementi Ave 2, #02-25",
-    "tagged" : [ "owesMoney", "friends" ]
+    "tagged" : [ "owesMoney" ]
   }, {
     "title" : "Carl Kurz",
     "description" : "Description place-holder",

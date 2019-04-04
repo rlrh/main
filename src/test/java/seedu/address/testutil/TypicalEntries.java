@@ -35,8 +35,8 @@ public class TypicalEntries {
             .withTitle("Benson Meier")
             .withAddress("311, Clementi Ave 2, #02-25")
             .withLink("https://johnd.example.com")
-            .withDescription("Description place-holder")
-            .withTags("owesMoney", "friends")
+            .withDescription("Description place-holder Benson")
+            .withTags("owesMoney")
             .build();
     public static final Entry CARL = new EntryBuilder()
             .withTitle("Carl Kurz")
@@ -126,6 +126,7 @@ public class TypicalEntries {
             .build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
+    public static final String KEYPHRASE_NOT_MATCHING_ANYWHERE = "THISSTRINGISNOTMATCHINGANYENTRYANYFIELD";
 
     // For AddCommandTest
     public static final String DUMMY_TITLE = "Dummy Title";

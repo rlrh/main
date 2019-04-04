@@ -77,6 +77,13 @@ public class FindEntryDescriptorBuilder {
         return this;
     }
 
+    /**
+     * Resets all the fields to empty.
+     */
+    public FindEntryDescriptorBuilder reset() {
+        return new FindEntryDescriptorBuilder();
+    }
+
     public FindEntryDescriptor build() {
         return descriptor;
     }
