@@ -2,7 +2,7 @@
   "_comment": "AddressBook save file which contains the same Person values as in TypicalPersons#getTypicalAddressBook()",
   "entries" : [ {
     "title" : "Alice Pauline",
-    "description" : "Description place-holder",
+    "description" : "Description place-holder Carl",
     "link" : "https://alice.example.com",
     "offlineLink" : "",
     "address" : "123, Jurong West Ave 6, #08-111",
@@ -27,11 +27,11 @@
     "link" : "https://cornelia.example.com",
     "offlineLink" : "",
     "address" : "10th street",
-    "tagged" : [ "friends" ]
+    "tagged" : [ "friends", "Carl" ]
   }, {
     "title" : "Elle Meyer",
     "description" : "Description place-holder",
-    "link" : "https://werner.example.com",
+    "link" : "https://werner.Carl.example.com",
     "offlineLink" : "",
     "address" : "michegan ave",
     "tagged" : [ ]

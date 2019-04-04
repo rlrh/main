@@ -28,7 +28,7 @@ public class TypicalEntries {
             .withTitle("Alice Pauline")
             .withAddress("123, Jurong West Ave 6, #08-111")
             .withLink("https://alice.example.com")
-            .withDescription("Description place-holder")
+            .withDescription("Description place-holder Carl")
             .withTags("friends")
             .build();
     public static final Entry BENSON = new EntryBuilder()
@@ -49,12 +49,12 @@ public class TypicalEntries {
             .withDescription("Description place-holder")
             .withLink("https://cornelia.example.com")
             .withAddress("10th street")
-            .withTags("friends")
+            .withTags("friends", "Carl")
             .build();
     public static final Entry ELLE = new EntryBuilder()
             .withTitle("Elle Meyer")
             .withDescription("Description place-holder")
-            .withLink("https://werner.example.com")
+            .withLink("https://werner.Carl.example.com")
             .withAddress("michegan ave")
             .build();
     public static final Entry FIONA = new EntryBuilder()

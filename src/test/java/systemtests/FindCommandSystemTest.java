@@ -4,9 +4,11 @@ import static org.junit.Assert.assertFalse;
 import static seedu.address.commons.core.Messages.MESSAGE_ENTRIES_LISTED_OVERVIEW;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.EntryUtil.getFindEntryDescriptorDetails;
+import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.CARL;
 import static seedu.address.testutil.TypicalEntries.DANIEL;
+import static seedu.address.testutil.TypicalEntries.ELLE;
 import static seedu.address.testutil.TypicalEntries.KEYPHRASE_NOT_MATCHING_ANYWHERE;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 
@@ -98,6 +100,22 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
                 .withTags(bensonTags)
                 .build());
         ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find all of entry in entry book -> 4 entries found, one for each field */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withAll("Carl").build());
+        ModelHelper.setFilteredList(expectedModel, ALICE, CARL, DANIEL, ELLE);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: same as above, but non-exact matching tag -> 3 entries found */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withAll("Car").build());
+        ModelHelper.setFilteredList(expectedModel, ALICE, CARL, ELLE);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
