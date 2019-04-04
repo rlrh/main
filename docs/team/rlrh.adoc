@@ -9,39 +9,53 @@
 
 == Overview
 
-README is a desktop integrated bookmark manager and web feed reader application.
-Users interact with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+My team and I were tasked with enhancing a basic address book desktop application with a command line interface (CLI) for our Software Engineering project. We decided to morph it into an integrated bookmark manager and web feed aggregator called README.
+
+This product helps heavy web content consumers read more efficiently by keeping everything they want to read in one place.
+
+Feature highlights:
+
+* Powerful organization options enable users to effectively manage all their content
+* Offline support frees users to read anywhere and anytime
+* Web feed aggregation keeps users up to date with the all the content that matters to them
+* Clean, minimalist reading experience lets users focus on content without distractions
+
+Users interact with it using a command line interface (CLI), and it has a graphical user interface (GUI) created with JavaFX. It is written in Java, and has about 10,000 lines of code.
+
+My role was to design and implement the Reader View feature as well as the user interface (UI). 
+The following sections illustrate these enhancements in more detail, as well as the relevant sections I have added to the user and developer guides in relation to these enhancements.
 
 == Summary of contributions
 
-* *Major enhancement*: added the *Reader View* feature
-** What it does: Strips out all the visual clutter from web pages and presents content in a perfectly formatted, clean layout, with user-selectable colour schemes
-** Justification: This feature improves the user experience significantly because users can focus on the content without any unnecessary distractions and read more comfortably.
-** Highlights: This enhancement is designed to be used by many other commands. It required an in-depth analysis of design alternatives to enable this. The implementation was challenging as it required understanding exactly how the JavaFX WebView works.
-** Credits: Jsoup, Readability4J
+* *Major enhancement*: I added the *Reader View* feature
+** What it does: The *Reader View* provides a clean, minimalist reading experience by stripping out all the visual clutter from web pages and presents content in a perfectly formatted, clean layout, with user-selectable colour schemes.
+** Justification: This feature improves the user experience significantly because it lets users focus on consuming content without any unnecessary distractions and helps them read more comfortably, thus improving productivity.
+** Highlights: This enhancement required analysis of design alternatives to open it up for usage in as many scenarios as possible. The implementation was challenging as it required an in-depth understanding of the JavaFX WebView component, as well as knowledge of the HTML Document Object Model and CSS styling.
+** Credits: The https://github.com/dankito/Readability4J[Readability4J] library does the heavy lifting of extracting a web page‘s relevant content and removing clutter from it. I used the https://jsoup.org/[Jsoup] library to extract additional useful metadata, and combined this with the results from Readability4J into a new web page, where I used the https://getbootstrap.com/[Bootstrap] framework to layout content and adapted the https://bootswatch.com/litera/[Bootswatch Litera] theme into different colour schemes for presenting content. 
 
-* *Minor enhancement*: added an autofill utility that lets users specify just a link when adding a new entry and have the title and description fields automatically filled.
+* *Minor enhancement*: I added an autofill utility that lets users specify just a link when adding a new entry and have the title and description fields automatically filled. This makes adding links to our application very convenient for users.
+
+* *Minor enhancement*: I modified the existing design from supporting only synchronous commands to supporting asynchronous commands that can return an initial result first, do some long-running work, and then return another final result. This keeps the user interface responsive while a command is in the progress of doing some work.
 
 * *Code contributed*:
-** https://github.com/CS2103-AY1819S2-W10-1/main/pull/44[Reader view]
-** https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[Reader view styles]
-** https://github.com/CS2103-AY1819S2-W10-1/main/pull/98[Reader view test]
-** https://github.com/CS2103-AY1819S2-W10-1/main/pull/76[Autofill entry]
-** https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[Status bar]
+** Reader View: https://github.com/CS2103-AY1819S2-W10-1/main/pull/44[#44], https://github.com/CS2103-AY1819S2-W10-1/main/pull/98[#98], https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111]
+** Autofill Entry: https://github.com/CS2103-AY1819S2-W10-1/main/pull/76[#76], https://github.com/CS2103-AY1819S2-W10-1/main/pull/116[#116]
+** Design change: https://github.com/CS2103-AY1819S2-W10-1/main/pull/31[#31]
+** Status bar footer: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101]
 
 * *Other contributions*:
 
 ** Project management:
-*** Managed release `v1.2` on GitHub
+*** There were a total of 5 releases, from version `1.1` to `1.4`. I managed release `v1.2` on https://github.com/CS2103-AY1819S2-W10-1/main/releases/tag/v1.2[GitHub].
 ** Enhancements to existing features:
-*** Updated the status bar footer with context information (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
+*** Redesigned the status bar footer to include context information (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
 ** Documentation:
 *** Restructured the User Guide to be more reader-friendly: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#96]
 ** Community:
-*** PRs reviewed (with non-trivial review comments):
+*** PRs reviewed (with non-trivial review comments): https://github.com/CS2103-AY1819S2-W10-1/main/pull/21[#21], https://github.com/CS2103-AY1819S2-W10-1/main/pull/33[#33], https://github.com/CS2103-AY1819S2-W10-1/main/pull/35[#35], https://github.com/CS2103-AY1819S2-W10-1/main/pull/80[#80],
 *** Contributed to forum discussions (example:  https://github.com/nus-cs2103-AY1819S2/forum/issues/39[1], https://github.com/nus-cs2103-AY1819S2/forum/issues/43[2])
 ** Tools:
-*** Integrated a third party libraries Jsoup and Readability4J to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111])
+*** Integrated a third party library Readability4J to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111])
 
 == Contributions to the User Guide
 
