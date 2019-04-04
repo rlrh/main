@@ -442,14 +442,14 @@ Clears all existing tags from the 2nd entry.
 
 ==== Finding entries by title: `find`
 
-Finds entries whose titles contain any of the given keyphrases. +
+Finds entries whose fields contain any of the given keyphrases. +
 
-Format: `find KEYPHRASE [MORE_KEYPHRASES]...`
+Format: `edit [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
 
 ****
 * The search is case insensitive. e.g `hans` will match `Hans`
-* The order of the keyphrases does not matter. e.g. `Hans, Bo` will match `Bo Hans`
-* Only the title is searched.
+* The search matches anywhere for title, description and link. e.g. `ans B` will match `Hans Bo`
+* The search matches exactly for tags. e.g. 'science' will match 'science', but not 'scienceandtech'
 * Entries matching at least one keyphrase will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
 ****
 
