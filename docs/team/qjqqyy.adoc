@@ -51,7 +51,7 @@ https://github.com/CS2103-AY1819S2-W10-1/main/pull/33[#33]
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::../UserGuide.adoc[tag=bingfeedfeeds]
+// include::../UserGuide.adoc[tag=bingfeedfeeds]
 
 == Contributions to the Developer Guide
 
@@ -59,4 +59,4 @@ include::../UserGuide.adoc[tag=bingfeedfeeds]
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-include::../DeveloperGuide.adoc[tag=feedsubscription]
+include::../DeveloperGuide.adoc[tag=multiple-entrybooks]
