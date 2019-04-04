@@ -1,6 +1,7 @@
 package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ALL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -81,6 +82,8 @@ public class EntryUtil {
             address -> sb.append(PREFIX_ADDRESS).append(address).append(" "));
         descriptor.getLink().ifPresent(
             link -> sb.append(PREFIX_LINK).append(link).append(" "));
+        descriptor.getAll().ifPresent(
+            all -> sb.append(PREFIX_ALL).append(all).append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
             if (tags.isEmpty()) {

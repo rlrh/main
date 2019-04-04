@@ -90,12 +90,29 @@ public class EntryContainsSearchTermsPredicateTest {
     }
 
     @Test
+    public void equalsAll() {
+        EntryContainsSearchTermsPredicate firstPredicate = new EntryContainsSearchTermsPredicate(
+            new FindEntryDescriptorBuilder().withAll("first").build());
+        EntryContainsSearchTermsPredicate secondPredicate = new EntryContainsSearchTermsPredicate(
+            new FindEntryDescriptorBuilder().withAll("second").build());
+
+        // same values -> returns true
+        EntryContainsSearchTermsPredicate firstPredicateCopy = new EntryContainsSearchTermsPredicate(
+            new FindEntryDescriptorBuilder().withAll("first").build());
+        assertTrue(firstPredicate.equals(firstPredicateCopy));
+
+        // different entry -> returns false
+        assertFalse(firstPredicate.equals(secondPredicate));
+    }
+
+    @Test
     public void equalsTerms() {
         EntryContainsSearchTermsPredicate firstPredicate = new EntryContainsSearchTermsPredicate(
             new FindEntryDescriptorBuilder()
                 .withTitle("qwerty")
                 .withDescription("dvorak")
                 .withLink("dijkstra")
+                .withAll("all")
                 .withTags("first", "second").build());
         EntryContainsSearchTermsPredicate secondPredicate;
         FindEntryDescriptorBuilder secondBuilder =
@@ -103,6 +120,7 @@ public class EntryContainsSearchTermsPredicateTest {
                 .withTitle("qwerty")
                 .withDescription("dvorak")
                 .withLink("dijkstra")
+                .withAll("all")
                 .withTags("first", "second");
 
         // same values -> returns true
@@ -111,6 +129,7 @@ public class EntryContainsSearchTermsPredicateTest {
                 .withTitle("qwerty")
                 .withDescription("dvorak")
                 .withLink("dijkstra")
+                .withAll("all")
                 .withTags("first", "second").build());
         assertTrue(firstPredicate.equals(firstPredicateCopy));
 
@@ -138,9 +157,17 @@ public class EntryContainsSearchTermsPredicateTest {
                 .build());
         assertFalse(firstPredicate.equals(secondPredicate));
 
+        // different different all
+        secondPredicate = new EntryContainsSearchTermsPredicate(
+            secondBuilder
+                .withLink("dijkstra")
+                .withAll("dumb")
+                .build());
+        assertFalse(firstPredicate.equals(secondPredicate));
+
         // different tags
         secondPredicate = new EntryContainsSearchTermsPredicate(secondBuilder
-            .withLink("dijkstra")
+            .withAll("all")
             .withTags("dumb")
             .build());
         assertFalse(firstPredicate.equals(secondPredicate));
@@ -361,6 +388,44 @@ public class EntryContainsSearchTermsPredicateTest {
         builder
             .withLink("https://dumb.com")
             .withTags("first");
+        assertTrue(predicate.test(builder.build()));
+    }
+
+    @Test
+    public void test_atLeastOneFieldMatchesAllField_returnsTrue() {
+        EntryContainsSearchTermsPredicate predicate = new EntryContainsSearchTermsPredicate(
+            new FindEntryDescriptorBuilder()
+                .withAll("dumb")
+                .build());
+
+        EntryBuilder builder =
+            new EntryBuilder()
+                .withTitle("title")
+                .withDescription("desc")
+                .withLink("https://link.com")
+                .withTags("tag");
+
+        // only title match -> returns true
+        builder
+            .withTitle("dumb");
+        assertTrue(predicate.test(builder.build()));
+
+        // only description match -> returns true
+        builder
+            .withTitle("title")
+            .withDescription("dumb");
+        assertTrue(predicate.test(builder.build()));
+
+        // only link match -> returns true
+        builder
+            .withDescription("desc")
+            .withLink("https://dumb.com");
+        assertTrue(predicate.test(builder.build()));
+
+        // only tag match -> returns true
+        builder
+            .withLink("https://link.com")
+            .withTags("dumb");
         assertTrue(predicate.test(builder.build()));
     }
 }

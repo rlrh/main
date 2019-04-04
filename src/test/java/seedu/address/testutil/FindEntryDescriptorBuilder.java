@@ -78,6 +78,14 @@ public class FindEntryDescriptorBuilder {
     }
 
     /**
+     * Sets the {@code String} keyphrase for all field of the {@code FindEntryDescriptor} that we are building.
+     */
+    public FindEntryDescriptorBuilder withAll(String all) {
+        descriptor.setAll(all);
+        return this;
+    }
+
+    /**
      * Resets all the fields to empty.
      */
     public FindEntryDescriptorBuilder reset() {
