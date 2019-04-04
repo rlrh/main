@@ -60,7 +60,7 @@ public class SubscribeCommand extends Command {
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e));
         } catch (FeedException e) {
-            throw new CommandException(String.format(MESSAGE_FAILURE_XML));
+            throw new CommandException(String.format(MESSAGE_FAILURE_XML, toSubscribe.getLink().value));
         }
 
         model.addFeedsEntry(toSubscribe);

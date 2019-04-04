@@ -58,7 +58,7 @@ public class RefreshCommand extends Command {
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e));
         } catch (FeedException e) {
-            throw new CommandException(String.format(MESSAGE_FAILURE_XML));
+            throw new CommandException(String.format(MESSAGE_FAILURE_XML, feedToRefresh.getLink().value));
         }
 
 
