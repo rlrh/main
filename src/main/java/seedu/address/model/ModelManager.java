@@ -231,6 +231,15 @@ public class ModelManager implements Model {
         listEntryBook.clear();
     }
 
+    @Override
+    public void refreshEntry(Entry entry, byte[] articleContent) {
+        try {
+            this.addArticle(entry.getLink().value, articleContent);
+        } catch (IOException ioe) {
+            // Do nothing if failed to savve content to disk for now
+        }
+    }
+
     //=========== Archives EntryBook ================================================================================
 
     @Override
