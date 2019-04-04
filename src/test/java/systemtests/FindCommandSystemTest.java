@@ -7,8 +7,8 @@ import static seedu.address.testutil.EntryUtil.getFindEntryDescriptorDetails;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.CARL;
 import static seedu.address.testutil.TypicalEntries.DANIEL;
-import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 import static seedu.address.testutil.TypicalEntries.KEYPHRASE_NOT_MATCHING_ANYWHERE;
+import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 
 import java.util.ArrayList;
 
