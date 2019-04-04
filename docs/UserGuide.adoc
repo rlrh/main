@@ -442,7 +442,7 @@ Clears all existing tags from the 2nd entry.
 
 ==== Finding entries by title: `find`
 
-Finds entries whose titles contain any of the given keyphrases. +
+Finds entries whose fields contain any of the given keyphrases. +
 
 Format: `find KEYPHRASE [MORE_KEYPHRASES]...`
 
