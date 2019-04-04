@@ -21,7 +21,7 @@ import seedu.address.util.Network;
 /**
  * Refreshes from a feed identified using its displayed index.
  */
-public class RefreshCommand extends Command {
+public class RefreshFeedCommand extends Command {
     public static final String COMMAND_WORD = "refresh";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -35,7 +35,7 @@ public class RefreshCommand extends Command {
 
     private final Index targetIndex;
 
-    public RefreshCommand(Index targetIndex) {
+    public RefreshFeedCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
@@ -76,7 +76,7 @@ public class RefreshCommand extends Command {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof RefreshCommand // instanceof handles nulls
-                && targetIndex.equals(((RefreshCommand) other).targetIndex)); // state check
+                || (other instanceof RefreshFeedCommand // instanceof handles nulls
+                && targetIndex.equals(((RefreshFeedCommand) other).targetIndex)); // state check
     }
 }
