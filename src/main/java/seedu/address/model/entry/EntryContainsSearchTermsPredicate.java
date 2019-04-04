@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.FindCommand.FindEntryDescriptor;
+import seedu.address.model.tag.Tag;
 
 /**
  * Tests that a {@code Entry}'s {@code Title} matches any of the keywords given.
@@ -24,24 +25,28 @@ public class EntryContainsSearchTermsPredicate implements Predicate<Entry> {
             result = findEntryDescriptor.getTags().get()
                 .stream()
                 .anyMatch((tag) -> entry.getTags().contains(tag));
-
         }
         if (!result && findEntryDescriptor.getTitle().isPresent()) {
             result = StringUtil.containsPhraseIgnoreCase(
                 entry.getTitle().fullTitle,
                 findEntryDescriptor.getTitle().get());
-
         }
         if (!result && findEntryDescriptor.getLink().isPresent()) {
             result = StringUtil.containsPhraseIgnoreCase(
                 entry.getLink().value,
                 findEntryDescriptor.getLink().get());
-
         }
         if (!result && findEntryDescriptor.getDescription().isPresent()) {
             result = StringUtil.containsPhraseIgnoreCase(
                 entry.getDescription().value,
                 findEntryDescriptor.getDescription().get());
+        }
+        if (!result && findEntryDescriptor.getAll().isPresent()) {
+            result = result
+                || entry.getTags().contains(new Tag(findEntryDescriptor.getAll().get()))
+                || StringUtil.containsPhraseIgnoreCase(entry.getTitle().fullTitle, findEntryDescriptor.getAll().get())
+                || StringUtil.containsPhraseIgnoreCase(entry.getDescription().value, findEntryDescriptor.getAll().get())
+                || StringUtil.containsPhraseIgnoreCase(entry.getLink().value, findEntryDescriptor.getAll().get());
         }
 
         return result;
