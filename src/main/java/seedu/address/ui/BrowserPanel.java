@@ -19,6 +19,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
+import org.w3c.dom.NodeList;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.EventTarget;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.XmlUtil;
@@ -50,6 +53,7 @@ public class BrowserPanel extends UiPart<Region> {
 
     private String currentLocation; // location of selected entry, regardless of reader view, error page etc
     private String currentBaseUrl; // original URL, even if offline file is loaded
+    private Optional<String> offlineLink;
     private boolean isLoadingReaderView; //  flag - whether reader view is loading
     private boolean hasLoadedReaderView; // status - whether reader view has loaded
     private ViewMode viewMode; // current view mode
@@ -63,6 +67,7 @@ public class BrowserPanel extends UiPart<Region> {
 
         this.currentLocation = "";
         this.currentBaseUrl = "";
+        this.offlineLink = Optional.empty();
         this.isLoadingReaderView = false;
         this.hasLoadedReaderView = false;
         this.viewMode = viewMode.getValue();
@@ -79,10 +84,10 @@ public class BrowserPanel extends UiPart<Region> {
         // Reload when view mode changes.
         viewMode.addListener((observable, oldViewMode, newViewMode) -> {
             this.viewMode = newViewMode;
-            if (!Strings.isNullOrEmpty(webEngine.getLocation())) {
-                loadPage(webEngine.getLocation());
-            } else if (!Strings.isNullOrEmpty(currentLocation)) {
+            if (!Strings.isNullOrEmpty(currentLocation)) {
                 loadPage(currentLocation);
+            } else if (!Strings.isNullOrEmpty(webEngine.getLocation())) {
+                loadPage(webEngine.getLocation());
             }
         });
 
@@ -140,9 +145,7 @@ public class BrowserPanel extends UiPart<Region> {
         isLoadingReaderView = false;
 
         // Load reader view if reader view mode is selected but not loaded
-        if (viewMode.getViewType().equals(ViewType.READER)
-                && !hasLoadedReaderView
-                && currentLocation.equals(webEngine.getLocation())) {
+        if (viewMode.getViewType().equals(ViewType.READER) && !hasLoadedReaderView) {
             try {
                 URL url = new URL(webEngine.getLocation());
                 if (url.equals(DEFAULT_PAGE) || url.equals(ERROR_PAGE) || url.equals(READER_VIEW_FAILURE_PAGE)) {
@@ -171,7 +174,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void loadEntryPage(Entry entry) {
         String onlineLink = entry.getLink().value;
-        Optional<String> offlineLink = getOfflineLink.apply(onlineLink);
+        offlineLink = getOfflineLink.apply(onlineLink);
         currentBaseUrl = onlineLink;
         currentLocation = offlineLink.orElse(onlineLink);
         loadPage(currentLocation);
