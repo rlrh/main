@@ -295,4 +295,10 @@ public interface Model {
      * The entry must exist in the entry book archives.
      */
     void unarchiveEntry(Entry entry, Optional<byte[]> articleContent);
+
+    /**
+     * Refreshes the given entry (re-downloads its saved content).
+     * The entry must exist in the entry book list.
+     */
+    void refreshEntry(Entry entry, byte[] articleContent);
 }

@@ -9,10 +9,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_VIEWTYPE_BROWSE
 import static seedu.address.logic.commands.CommandTestUtil.VALID_VIEWTYPE_READER;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -28,6 +24,7 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FeedCommand;
 import seedu.address.logic.commands.FeedsCommand;
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.commands.FindCommand.FindEntryDescriptor;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -35,10 +32,11 @@ import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.entry.Entry;
-import seedu.address.model.entry.TitleContainsKeywordsPredicate;
+import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.testutil.EntryUtil;
+import seedu.address.testutil.FindEntryDescriptorBuilder;
 import seedu.address.ui.ReaderViewStyle;
 import seedu.address.ui.ViewMode;
 import seedu.address.ui.ViewType;
@@ -117,13 +115,18 @@ public class EntryBookListParserTest {
 
     @Test
     public void parseCommand_find() throws Exception {
-        List<String> keywords = Arrays.asList("foo", "bar", "baz");
+        Entry entry = new EntryBuilder().build();
+        FindEntryDescriptor descriptor = new FindEntryDescriptorBuilder(entry).build();
+
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new TitleContainsKeywordsPredicate(keywords)), command);
+                FindCommand.COMMAND_WORD + " " + EntryUtil.getFindEntryDescriptorDetails(descriptor));
+        assertEquals(new FindCommand(new EntryContainsSearchTermsPredicate(
+            new FindEntryDescriptor(descriptor))), command);
+
         FindCommand aliasCommand = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_ALIAS + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new TitleContainsKeywordsPredicate(keywords)), aliasCommand);
+            FindCommand.COMMAND_ALIAS + " " + EntryUtil.getFindEntryDescriptorDetails(descriptor));
+        assertEquals(new FindCommand(new EntryContainsSearchTermsPredicate(
+            new FindEntryDescriptor(descriptor))), aliasCommand);
     }
 
     @Test

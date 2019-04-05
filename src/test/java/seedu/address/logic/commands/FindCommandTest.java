@@ -7,7 +7,6 @@ import static seedu.address.commons.core.Messages.MESSAGE_ENTRIES_LISTED_OVERVIE
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalEntries.CARL;
 import static seedu.address.testutil.TypicalEntries.ELLE;
-import static seedu.address.testutil.TypicalEntries.FIONA;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +16,8 @@ import org.junit.Test;
 import seedu.address.logic.CommandHistory;
 import seedu.address.mocks.TypicalModelManagerStub;
 import seedu.address.model.Model;
-import seedu.address.model.entry.TitleContainsKeywordsPredicate;
+import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
+import seedu.address.testutil.FindEntryDescriptorBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
@@ -29,10 +29,12 @@ public class FindCommandTest {
 
     @Test
     public void equals() {
-        TitleContainsKeywordsPredicate firstPredicate =
-                new TitleContainsKeywordsPredicate(Collections.singletonList("first"));
-        TitleContainsKeywordsPredicate secondPredicate =
-                new TitleContainsKeywordsPredicate(Collections.singletonList("second"));
+        EntryContainsSearchTermsPredicate firstPredicate =
+                new EntryContainsSearchTermsPredicate(
+                    new FindEntryDescriptorBuilder().withLink("first").build());
+        EntryContainsSearchTermsPredicate secondPredicate =
+            new EntryContainsSearchTermsPredicate(
+                new FindEntryDescriptorBuilder().withLink("second").build());
 
         FindCommand findFirstCommand = new FindCommand(firstPredicate);
         FindCommand findSecondCommand = new FindCommand(secondPredicate);
@@ -57,7 +59,8 @@ public class FindCommandTest {
     @Test
     public void execute_zeroKeywords_noEntryFound() {
         String expectedMessage = String.format(MESSAGE_ENTRIES_LISTED_OVERVIEW, 0);
-        TitleContainsKeywordsPredicate predicate = preparePredicate(" ");
+        EntryContainsSearchTermsPredicate predicate = new EntryContainsSearchTermsPredicate(
+                                                            new FindEntryDescriptorBuilder().build());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredEntryList(predicate);
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
@@ -65,19 +68,13 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleKeywords_multipleEntriesFound() {
-        String expectedMessage = String.format(MESSAGE_ENTRIES_LISTED_OVERVIEW, 3);
-        TitleContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
+    public void execute_multipleSearchTerms_multipleEntriesFound() {
+        String expectedMessage = String.format(MESSAGE_ENTRIES_LISTED_OVERVIEW, 2);
+        EntryContainsSearchTermsPredicate predicate = new EntryContainsSearchTermsPredicate(
+            new FindEntryDescriptorBuilder().withTitle("Kurz").withLink("werner").build());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredEntryList(predicate);
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
-        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredEntryList());
-    }
-
-    /**
-     * Parses {@code userInput} into a {@code TitleContainsKeywordsPredicate}.
-     */
-    private TitleContainsKeywordsPredicate preparePredicate(String userInput) {
-        return new TitleContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
+        assertEquals(Arrays.asList(CARL, ELLE), model.getFilteredEntryList());
     }
 }

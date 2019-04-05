@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -38,6 +39,27 @@ public class StringUtil {
 
         return Arrays.stream(wordsInPreppedSentence)
                 .anyMatch(preppedWord::equalsIgnoreCase);
+    }
+
+    /**
+     * Returns true if the {@code sentence} contains the {@code phrase}.
+     *   Ignores case, but a full phrase match is required.
+     *   <br>examples:<pre>
+     *       containsPhraseIgnoreCase("ABc def hij", "dEf hij") == true
+     *       containsPhraseIgnoreCase("ABc def", "bc d") == true
+     *       containsPhraseIgnoreCase("ABc def", "b def") == false //phrase not in sentence
+     *       </pre>
+     * @param sentence cannot be null
+     * @param phrase cannot be null, cannot be empty
+     */
+    public static boolean containsPhraseIgnoreCase(String sentence, String phrase) {
+        requireNonNull(sentence);
+        requireNonNull(phrase);
+
+        String preppedPhrase = phrase.trim();
+        checkArgument(!preppedPhrase.isEmpty(), "Phrase parameter cannot be empty");
+
+        return Pattern.compile(Pattern.quote(preppedPhrase), Pattern.CASE_INSENSITIVE).matcher(sentence).find();
     }
 
     /**
