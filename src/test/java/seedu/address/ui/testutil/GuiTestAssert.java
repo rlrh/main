@@ -130,6 +130,9 @@ public class GuiTestAssert {
         case "amazon":
             return "gray";
 
+        case "Carl":
+            return "lightBlue";
+
         default:
             throw new AssertionError(tagName + " does not have a color assigned.");
         }

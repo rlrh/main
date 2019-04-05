@@ -1,6 +1,7 @@
 package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ALL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
+import seedu.address.logic.commands.FindCommand.FindEntryDescriptor;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.tag.Tag;
 
@@ -56,6 +58,32 @@ public class EntryUtil {
         descriptor.getDescription().ifPresent(
             description -> sb.append(PREFIX_DESCRIPTION).append(description.value).append(" "));
         descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
+        if (descriptor.getTags().isPresent()) {
+            Set<Tag> tags = descriptor.getTags().get();
+            if (tags.isEmpty()) {
+                sb.append(PREFIX_TAG);
+            } else {
+                tags.forEach(s -> sb.append(PREFIX_TAG).append(s.tagName).append(" "));
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Returns the part of command string for the given {@code FindEntryDescriptor}'s details.
+     */
+    public static String getFindEntryDescriptorDetails(FindEntryDescriptor descriptor) {
+        StringBuilder sb = new StringBuilder();
+        descriptor.getTitle().ifPresent(
+            title -> sb.append(PREFIX_TITLE).append(title).append(" "));
+        descriptor.getDescription().ifPresent(
+            description -> sb.append(PREFIX_DESCRIPTION).append(description).append(" "));
+        descriptor.getAddress().ifPresent(
+            address -> sb.append(PREFIX_ADDRESS).append(address).append(" "));
+        descriptor.getLink().ifPresent(
+            link -> sb.append(PREFIX_LINK).append(link).append(" "));
+        descriptor.getAll().ifPresent(
+            all -> sb.append(PREFIX_ALL).append(all).append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
             if (tags.isEmpty()) {
