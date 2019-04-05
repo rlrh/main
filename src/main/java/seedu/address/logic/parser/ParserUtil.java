@@ -153,6 +153,18 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code String keyphrase}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code keyphrase} is empty or {@code keyphrase}'s value is invalid.
+     */
+    public static String parseKeyphrase(String keyphrase) {
+        requireNonNull(keyphrase);
+        String trimmedLink = keyphrase.trim();
+        return trimmedLink;
+    }
+
+    /**
      * Tries to parse an entry from args.
      * @throws ParseException with usageMessage if the parse failed
      */

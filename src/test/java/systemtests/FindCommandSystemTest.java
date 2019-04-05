@@ -3,13 +3,16 @@ package systemtests;
 import static org.junit.Assert.assertFalse;
 import static seedu.address.commons.core.Messages.MESSAGE_ENTRIES_LISTED_OVERVIEW;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.address.testutil.EntryUtil.getFindEntryDescriptorDetails;
+import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BENSON;
 import static seedu.address.testutil.TypicalEntries.CARL;
 import static seedu.address.testutil.TypicalEntries.DANIEL;
+import static seedu.address.testutil.TypicalEntries.ELLE;
+import static seedu.address.testutil.TypicalEntries.KEYPHRASE_NOT_MATCHING_ANYWHERE;
 import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -17,128 +20,239 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.Model;
-import seedu.address.model.tag.Tag;
+import seedu.address.testutil.FindEntryDescriptorBuilder;
 
 public class FindCommandSystemTest extends EntryBookSystemTest {
 
     @Test
     public void find() {
-        /* Case: find multiple entries in address book, command with leading spaces and trailing spaces
+        FindEntryDescriptorBuilder builder = new FindEntryDescriptorBuilder();
+        Model expectedModel = getModel();
+
+        /* Case: find title of entry in entry book -> 1 entry found */
+        showAllEntries();
+        String command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle(BENSON.getTitle().fullTitle).build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find title (substring) of entry in entry book -> 1 entry found */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle("enson Me").build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find description of entry in entry book -> 1 entry found */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withDescription(BENSON.getDescription().value).build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find description (substring) of entry in entry book -> 1 entry found */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withDescription("older Bens").build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find link of entry in entry book -> 1 entry found */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withLink(BENSON.getLink().value).build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find tags of entry in entry book -> 1 entry found */
+        showAllEntries();
+        String[] bensonTags = new ArrayList<>(BENSON.getTags())
+            .stream()
+            .map(t -> t.tagName)
+            .toArray(String[]::new);
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTags(bensonTags).build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find tags (substring) of entry in entry book -> 0 entries found */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTags("wesMon").build());
+        ModelHelper.setFilteredList(expectedModel);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: only one field matching for one entry in entry book -> 1 entry found */
+        // Only matching tag
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder
+                .withTitle(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+                .withLink(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+                .withDescription(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+                .withTags(bensonTags)
+                .build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find all of entry in entry book -> 4 entries found, one for each field */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withAll("Carl").build());
+        ModelHelper.setFilteredList(expectedModel, ALICE, CARL, DANIEL, ELLE);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: same as above, but non-exact matching tag -> 3 entries found */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withAll("Car").build());
+        ModelHelper.setFilteredList(expectedModel, ALICE, CARL, ELLE);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        // Only matching title
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder
+                .withTitle(BENSON.getTitle().fullTitle)
+                .withLink(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+                .withDescription(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+                .withTags(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+                .build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        // Only matching description
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder
+            .withTitle(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .withLink(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .withDescription(BENSON.getDescription().value)
+            .withTags(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        // Only matching link
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder
+            .withTitle(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .withLink(BENSON.getLink().value)
+            .withDescription(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .withTags(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .build());
+        ModelHelper.setFilteredList(expectedModel, BENSON);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: no fields matching any entries -> 0 entries found */
+        showAllEntries();
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder
+            .withTitle(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .withLink(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .withDescription(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .withTags(KEYPHRASE_NOT_MATCHING_ANYWHERE)
+            .build());
+        ModelHelper.setFilteredList(expectedModel);
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find multiple entries in entry book, command with leading spaces and trailing spaces
          * -> 2 entries found
          */
-        String command = "   " + FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER + "   ";
-        Model expectedModel = getModel();
-        ModelHelper.setFilteredList(expectedModel, BENSON, DANIEL); // first names of Benson and Daniel are "Meier"
+        command = "   "
+            + FindCommand.COMMAND_WORD
+            + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle(KEYWORD_MATCHING_MEIER).build())
+            + "   ";
+        ModelHelper.setFilteredList(expectedModel, BENSON, DANIEL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
         /* Case: repeat previous find command where entry list is displaying the entries we are finding
          * -> 2 entries found
          */
-        command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle(KEYWORD_MATCHING_MEIER).build());
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find entry where entry list is not displaying the entry we are finding -> 1 entry found */
-        command = FindCommand.COMMAND_WORD + " Carl";
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle(CARL.getTitle().fullTitle).build());
         ModelHelper.setFilteredList(expectedModel, CARL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find multiple entries in address book, 2 keywords -> 2 entries found */
-        command = FindCommand.COMMAND_WORD + " Benson Daniel";
-        ModelHelper.setFilteredList(expectedModel, BENSON, DANIEL);
+        /* Case: find multiple entries in entry book, 2 search terms -> 2 entries found */
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder
+                .reset()
+                .withTitle(CARL.getTitle().fullTitle)
+                .withTags(bensonTags)
+                .build());
+        ModelHelper.setFilteredList(expectedModel, BENSON, CARL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find multiple entries in address book, 2 keywords in reversed order -> 2 entries found */
-        command = FindCommand.COMMAND_WORD + " Daniel Benson";
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find multiple entries in address book, 2 keywords with 1 repeat -> 2 entries found */
-        command = FindCommand.COMMAND_WORD + " Daniel Benson Daniel";
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find multiple entries in address book, 2 matching keywords and 1 non-matching keyword
-         * -> 2 entries found
-         */
-        command = FindCommand.COMMAND_WORD + " Daniel Benson NonMatchingKeyWord";
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find same entries in address book after deleting 1 of them -> 1 entry found */
+        /* Case: find same entries in entry book after deleting 1 of them -> 1 entry found */
         executeCommand(DeleteCommand.COMMAND_WORD + " 1");
         assertFalse(getModel().getListEntryBook().getEntryList().contains(BENSON));
-        command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle(KEYWORD_MATCHING_MEIER).build());
         expectedModel = getModel();
         ModelHelper.setFilteredList(expectedModel, DANIEL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find entry in address book, keyword is same as title but of different case -> 1 entry found */
-        command = FindCommand.COMMAND_WORD + " MeIeR";
+        /* Case: find entry in entry book, keyword is same as title but of different case -> 1 entry found */
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle("MeIeR").build());
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find entry in address book, keyword is substring of title -> 0 entries found */
-        command = FindCommand.COMMAND_WORD + " Mei";
+        /* Case: find entry not in entry book -> 0 entries found */
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle("Mark").build());
         ModelHelper.setFilteredList(expectedModel);
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find entry in address book, title is substring of keyword -> 0 entries found */
-        command = FindCommand.COMMAND_WORD + " Meiers";
-        ModelHelper.setFilteredList(expectedModel);
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find entry not in address book -> 0 entries found */
-        command = FindCommand.COMMAND_WORD + " Mark";
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find phone number of entry in address book -> 0 entries found */
-        command = FindCommand.COMMAND_WORD + " " + DANIEL.getDescription().value;
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find address of entry in address book -> 0 entries found */
-        command = FindCommand.COMMAND_WORD + " " + DANIEL.getAddress().value;
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find email of entry in address book -> 0 entries found */
-        command = FindCommand.COMMAND_WORD + " " + DANIEL.getLink().value;
-        assertCommandSuccess(command, expectedModel);
-        assertSelectedCardUnchanged();
-
-        /* Case: find tags of entry in address book -> 0 entries found */
-        List<Tag> tags = new ArrayList<>(DANIEL.getTags());
-        command = FindCommand.COMMAND_WORD + " " + tags.get(0).tagName;
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
         /* Case: find while a entry is selected -> selected card deselected */
         showAllEntries();
         selectEntry(Index.fromOneBased(1));
-        assertFalse(getEntryListPanel().getHandleToSelectedCard().getTitle().equals(DANIEL.getTitle().fullTitle));
-        command = FindCommand.COMMAND_WORD + " Daniel";
+        assertFalse(getEntryListPanel().getHandleToSelectedCard().getLink().equals(DANIEL.getLink().value));
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withLink(DANIEL.getLink().value).build());
         ModelHelper.setFilteredList(expectedModel, DANIEL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardDeselected();
 
-        /* Case: find entry in empty address book -> 0 entries found */
+        /* Case: find entry in empty entry book -> 0 entries found */
         deleteAllEntries();
-        command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
+        command = FindCommand.COMMAND_WORD + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle(KEYWORD_MATCHING_MEIER).build());
         expectedModel = getModel();
         ModelHelper.setFilteredList(expectedModel, DANIEL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
         /* Case: mixed case command word -> rejected */
-        command = "FiNd Meier";
+        command = "FiNd" + " "
+            + getFindEntryDescriptorDetails(builder.reset().withTitle(KEYWORD_MATCHING_MEIER).build());
         assertCommandFailure(command, MESSAGE_UNKNOWN_COMMAND);
     }
 

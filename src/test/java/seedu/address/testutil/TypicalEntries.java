@@ -28,15 +28,15 @@ public class TypicalEntries {
             .withTitle("Alice Pauline")
             .withAddress("123, Jurong West Ave 6, #08-111")
             .withLink("https://alice.example.com")
-            .withDescription("Description place-holder")
+            .withDescription("Description place-holder Carl")
             .withTags("friends")
             .build();
     public static final Entry BENSON = new EntryBuilder()
             .withTitle("Benson Meier")
             .withAddress("311, Clementi Ave 2, #02-25")
             .withLink("https://johnd.example.com")
-            .withDescription("Description place-holder")
-            .withTags("owesMoney", "friends")
+            .withDescription("Description place-holder Benson")
+            .withTags("owesMoney")
             .build();
     public static final Entry CARL = new EntryBuilder()
             .withTitle("Carl Kurz")
@@ -49,12 +49,12 @@ public class TypicalEntries {
             .withDescription("Description place-holder")
             .withLink("https://cornelia.example.com")
             .withAddress("10th street")
-            .withTags("friends")
+            .withTags("friends", "Carl")
             .build();
     public static final Entry ELLE = new EntryBuilder()
             .withTitle("Elle Meyer")
             .withDescription("Description place-holder")
-            .withLink("https://werner.example.com")
+            .withLink("https://werner.Carl.example.com")
             .withAddress("michegan ave")
             .build();
     public static final Entry FIONA = new EntryBuilder()
@@ -126,6 +126,7 @@ public class TypicalEntries {
             .build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
+    public static final String KEYPHRASE_NOT_MATCHING_ANYWHERE = "THISSTRINGISNOTMATCHINGANYENTRYANYFIELD";
 
     // For AddCommandTest
     public static final String DUMMY_TITLE = "Dummy Title";
