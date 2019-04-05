@@ -33,7 +33,7 @@ public class EntryContainsSearchTermsPredicate implements Predicate<Entry> {
         }
         if (!result && findEntryDescriptor.getLink().isPresent()) {
             result = StringUtil.containsPhraseIgnoreCase(
-                entry.getLink().value,
+                entry.getLink().value.toString(),
                 findEntryDescriptor.getLink().get());
         }
         if (!result && findEntryDescriptor.getDescription().isPresent()) {
@@ -44,9 +44,12 @@ public class EntryContainsSearchTermsPredicate implements Predicate<Entry> {
         if (!result && findEntryDescriptor.getAll().isPresent()) {
             result = result
                 || entry.getTags().contains(new Tag(findEntryDescriptor.getAll().get()))
-                || StringUtil.containsPhraseIgnoreCase(entry.getTitle().fullTitle, findEntryDescriptor.getAll().get())
-                || StringUtil.containsPhraseIgnoreCase(entry.getDescription().value, findEntryDescriptor.getAll().get())
-                || StringUtil.containsPhraseIgnoreCase(entry.getLink().value, findEntryDescriptor.getAll().get());
+                || StringUtil.containsPhraseIgnoreCase(
+                        entry.getTitle().fullTitle, findEntryDescriptor.getAll().get())
+                || StringUtil.containsPhraseIgnoreCase(
+                        entry.getDescription().value, findEntryDescriptor.getAll().get())
+                || StringUtil.containsPhraseIgnoreCase(
+                        entry.getLink().value.toString(), findEntryDescriptor.getAll().get());
         }
 
         return result;

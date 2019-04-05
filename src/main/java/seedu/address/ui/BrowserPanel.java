@@ -48,21 +48,21 @@ public class BrowserPanel extends UiPart<Region> {
 
     private WebEngine webEngine = browser.getEngine();
 
-    private String currentLocation; // location of selected entry, regardless of reader view, error page etc
-    private String currentBaseUrl; // original URL, even if offline file is loaded
+    private URL currentLocationUrl; // location of selected entry, regardless of reader view, error page etc
+    private URL currentBaseUrl; // original URL, even if offline file is loaded
     private boolean isLoadingReaderView; //  flag - whether reader view is loading
     private boolean hasLoadedReaderView; // status - whether reader view has loaded
     private ViewMode viewMode; // current view mode
-    private final Function<String, Optional<String>> getOfflineLink; // asks logic what the offline link for a url is
+    private final Function<URL, Optional<URL>> getOfflineLink; // asks logic what the offline link for a url is
 
     public BrowserPanel(ObservableValue<Entry> selectedEntry,
                         ObservableValue<ViewMode> viewMode,
-                        Function<String, Optional<String>> getOfflineLink) {
+                        Function<URL, Optional<URL>> getOfflineLink) {
 
         super(FXML);
 
-        this.currentLocation = "";
-        this.currentBaseUrl = "";
+        this.currentLocationUrl = null;
+        this.currentBaseUrl = null;
         this.isLoadingReaderView = false;
         this.hasLoadedReaderView = false;
         this.viewMode = viewMode.getValue();
@@ -81,8 +81,8 @@ public class BrowserPanel extends UiPart<Region> {
             this.viewMode = newViewMode;
             if (!Strings.isNullOrEmpty(webEngine.getLocation())) {
                 loadPage(webEngine.getLocation());
-            } else if (!Strings.isNullOrEmpty(currentLocation)) {
-                loadPage(currentLocation);
+            } else if (currentLocationUrl != null) {
+                loadPage(currentLocationUrl.toString());
             }
         });
 
@@ -113,7 +113,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void handleRunning() {
         if (isLoadingReaderView) {
-            String message = String.format("Loading reader view for %s...", currentLocation);
+            String message = String.format("Loading reader view for %s...", currentLocationUrl);
             logger.info(message);
         } else {
             String message = String.format("Loading %s...", webEngine.getLocation());
@@ -129,7 +129,7 @@ public class BrowserPanel extends UiPart<Region> {
 
         // Log and display loaded message
         if (isLoadingReaderView) {
-            String message = String.format("Successfully loaded reader view for %s", currentLocation);
+            String message = String.format("Successfully loaded reader view for %s", currentLocationUrl);
             logger.info(message);
             hasLoadedReaderView = true;
         } else {
@@ -140,18 +140,18 @@ public class BrowserPanel extends UiPart<Region> {
         isLoadingReaderView = false;
 
         // Load reader view if reader view mode is selected but not loaded
-        if (viewMode.getViewType().equals(ViewType.READER)
+        try {
+            URL url = new URL(webEngine.getLocation());
+            if (viewMode.getViewType().equals(ViewType.READER)
                 && !hasLoadedReaderView
-                && currentLocation.equals(webEngine.getLocation())) {
-            try {
-                URL url = new URL(webEngine.getLocation());
+                && url.equals(currentLocationUrl)) {
                 if (url.equals(DEFAULT_PAGE) || url.equals(ERROR_PAGE) || url.equals(READER_VIEW_FAILURE_PAGE)) {
                     return;
                 }
-                loadReader(currentBaseUrl);
-            } catch (MalformedURLException mue) {
-                // do nothing
+                loadReader(currentBaseUrl.toString());
             }
+        } catch (MalformedURLException mue) {
+            // do nothing
         }
 
     }
@@ -170,11 +170,11 @@ public class BrowserPanel extends UiPart<Region> {
      * @param entry entry to load
      */
     private void loadEntryPage(Entry entry) {
-        String onlineLink = entry.getLink().value;
-        Optional<String> offlineLink = getOfflineLink.apply(onlineLink);
+        URL onlineLink = entry.getLink().value;
+        Optional<URL> offlineLink = getOfflineLink.apply(onlineLink);
         currentBaseUrl = onlineLink;
-        currentLocation = offlineLink.orElse(onlineLink);
-        loadPage(currentLocation);
+        currentLocationUrl = offlineLink.orElse(onlineLink);
+        loadPage(currentLocationUrl.toString());
     }
 
     /**
@@ -241,7 +241,7 @@ public class BrowserPanel extends UiPart<Region> {
                 webEngine.loadContent(processedHtml);
             });
         } catch (TransformerException | IllegalArgumentException e) {
-            String message = String.format("Failed to load reader view for %s", this.currentLocation);
+            String message = String.format("Failed to load reader view for %s", this.currentLocationUrl);
             logger.warning(message);
             loadReaderViewFailurePage();
         }

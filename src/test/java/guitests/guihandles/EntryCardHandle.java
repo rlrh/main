@@ -88,7 +88,7 @@ public class EntryCardHandle extends NodeHandle<Node> {
         return getTitle().equals(entry.getTitle().fullTitle)
                 && getAddress().equals(entry.getAddress().value)
                 && getDescription().equals(entry.getDescription().value)
-                && getLink().equals(entry.getLink().value)
+                && getLink().equals(entry.getLink().value.toString())
                 && ImmutableMultiset.copyOf(getTags()).equals(ImmutableMultiset.copyOf(entry.getTags().stream()
                         .map(tag -> tag.tagName)
                         .collect(Collectors.toList())));

@@ -24,6 +24,7 @@ import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_INCOMPLET
 import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRIPTION_COMPLETE;
 import static seedu.address.testutil.TypicalEntries.STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE;
 
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -198,12 +199,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public void deleteArticle(String url) {
+        public void deleteArticle(URL url) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public Optional<Path> addArticle(String url, byte[] articleContent) {
+        public Optional<Path> addArticle(URL url, byte[] articleContent) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -249,7 +250,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public Optional<String> getOfflineLink(String url) {
+        public Optional<URL> getOfflineLink(URL url) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -484,7 +485,7 @@ public class AddCommandTest {
         private final ArrayList<Entry> entriesAdded = new ArrayList<>();
 
         @Override
-        public Optional<Path> addArticle(String url, byte[] articleContent) {
+        public Optional<Path> addArticle(URL url, byte[] articleContent) {
             return Optional.empty();
         }
 

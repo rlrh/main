@@ -1,5 +1,6 @@
 package seedu.address.mocks;
 
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -79,22 +80,22 @@ public class StorageStub implements Storage {
     }
 
     @Override
-    public void deleteArticle(String url) {
+    public void deleteArticle(URL url) {
         // Do nothing
     }
 
     @Override
-    public Optional<Path> addArticle(String url, byte[] content) {
+    public Optional<Path> addArticle(URL url, byte[] content) {
         return Optional.empty();
     }
 
     @Override
-    public Path getArticlePath(String url) {
+    public Path getArticlePath(URL url) {
         return null;
     }
 
     @Override
-    public Optional<Path> getOfflineLink(String url) {
+    public Optional<Path> getOfflineLink(URL url) {
         return Optional.empty();
     }
 }

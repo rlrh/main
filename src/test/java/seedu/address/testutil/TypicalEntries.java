@@ -11,6 +11,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -132,27 +133,25 @@ public class TypicalEntries {
     public static final String DUMMY_TITLE = "Dummy Title";
     public static final String DUMMY_DESCRIPTION = "Dummy description";
 
-    public static final String STUB_LINK_URL = "http://www.description.test/title/title_test.html";
+    public static final URL STUB_LINK_URL = TestUtil.toUrl("http://www.description.test/title/title_test.html");
     public static final String STUB_LINK_TITLE = "Title Test";
     public static final String STUB_LINK_DESCRIPTION = "www.description.test";
 
-    public static final String REAL_LINK_URL = MainApp.class
-            .getResource("/ModelManagerTest/NUS_School_of_Computing.html").toExternalForm();
+    public static final URL REAL_LINK_URL = MainApp.class.getResource("/ModelManagerTest/NUS_School_of_Computing.html");
     public static final String REAL_LINK_TITLE = "NUS School of Computing - Wikipedia";
     public static final String REAL_LINK_DESCRIPTION = "COM1. The Computing Dean's Office "
             + "and Department of Computer Science are located in this building.";
 
-    public static final String READABILITY_LINK_URL = MainApp.class
-            .getResource("/ModelManagerTest/ProPublica.html").toExternalForm();
+    public static final URL READABILITY_LINK_URL = MainApp.class.getResource("/ModelManagerTest/ProPublica.html");
     public static final String READABILITY_LINK_TITLE = "A Reading Guide — ProPublica";
     public static final String READABILITY_LINK_DESCRIPTION = "This week’s testimony by President Donald Trump’s "
             + "former personal attorney and fixer held millions rapt with allegations of fraud, coded orders to lie "
             + "and hundreds of threats. Many of those assertions had…";
 
-    public static final String RELATIVE_LINK_ARTICLE_URL = MainApp.class
-            .getResource("/util/relativeLinkedArticle.html").toExternalForm();
-    public static final String ABSOLUTE_LINK_ARTICLE_URL = MainApp.class
-            .getResource("/util/absoluteLinkedArticle.html").toExternalForm();
+    public static final URL RELATIVE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/relativeLinkedArticle.html");
+    public static final URL ABSOLUTE_LINK_ARTICLE_URL = MainApp.class
+            .getResource("/util/absoluteLinkedArticle.html");
 
     public static final Entry STUB_LINK_NO_TITLE_NO_DESCRIPTION_INCOMPLETE = new EntryBuilder()
             .withTitle("")
@@ -286,8 +285,7 @@ public class TypicalEntries {
     public static final Entry VALID_FILE_LINK = new EntryBuilder()
             .withTitle("Valid File Link")
             .withDescription("Valid file link")
-            .withLink("file://" + MainApp.class.getResource(
-                    "/NetworkTest/default.html").toExternalForm().substring(5))
+            .withLink(MainApp.class.getResource("/NetworkTest/default.html"))
             .withAddress("Valid file link")
             .build();
     public static final Entry INVALID_FILE_LINK = new EntryBuilder()
@@ -299,9 +297,8 @@ public class TypicalEntries {
     public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
 
     // For BrowserPanelTest
-    public static final String BROWSER_PANEL_TEST_ENTRY_BASE_URL =
-            "file://" + MainApp.class.getResource("/view/BrowserPanelTest/test.html")
-                    .toExternalForm().substring(5);
+    public static final URL BROWSER_PANEL_TEST_ENTRY_BASE_URL =
+        MainApp.class.getResource("/view/BrowserPanelTest/test.html");
     public static final Entry BROWSER_PANEL_TEST_ENTRY = new EntryBuilder()
             .withTitle("Browser Panel Test Web Page")
             .withDescription("Browser panel test web page")
@@ -312,8 +309,7 @@ public class TypicalEntries {
     public static final Entry WIKIPEDIA_ENTRY = new EntryBuilder()
             .withTitle("Wikipedia Test Web Page")
             .withDescription("Wikipedia test web page")
-            .withLink("file://" + MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html")
-                    .toExternalForm().substring(5))
+            .withLink(MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html"))
             .withAddress("Wikipedia test web page")
             .build();
 
@@ -328,7 +324,7 @@ public class TypicalEntries {
     public static final Entry LOCAL_FEED_ENTRY = new EntryBuilder()
             .withTitle("Tsutsukakushi's anime reviews - local copy")
             .withDescription("anime reviews")
-            .withLink(MainApp.class.getResource("/RssFeedTest/rss.xml").toExternalForm())
+            .withLink(MainApp.class.getResource("/RssFeedTest/rss.xml"))
             .withAddress("somewhere in Finland")
             .build();
 

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static seedu.address.testutil.TypicalEntries.getTypicalArchivesEntryBook;
 import static seedu.address.testutil.TypicalEntries.getTypicalListEntryBook;
 
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -89,7 +90,7 @@ public class StorageManagerTest {
          * {@link DataDirectoryArticleStorage} class.
          * More extensive testing of article saving/reading is done in {@link DataDirectoryArticleStorageTest} class.
          */
-        String testUrl = "https://test.url";
+        URL testUrl = new URL("https://test.url");
         byte[] testContent = "test content".getBytes();
         storageManager.addArticle(testUrl, testContent);
         Path savedArticlePath = storageManager.getArticlePath(testUrl);

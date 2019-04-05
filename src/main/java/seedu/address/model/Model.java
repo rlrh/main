@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -73,10 +74,8 @@ public interface Model {
 
     /**
      * Returns the link to the offline copy of the url given if it exists.
-     *
-     * @see seedu.address.model.Model#getOfflineLink(String url)
      */
-    Optional<String> getOfflineLink(String url);
+    Optional<URL> getOfflineLink(URL url);
 
     /**
      * Sets the user prefs' article data directory path.
@@ -176,13 +175,13 @@ public interface Model {
     void clearFeedsEntryBook();
 
     /** Deletes article associated with {@code url}. */
-    void deleteArticle(String url) throws IOException;
+    void deleteArticle(URL url) throws IOException;
 
     /** Sets the search context entry book. */
     void setSearchEntryBook(ReadOnlyEntryBook searchEntryBook);
 
     /** Adds article with {@code articleContent} associated with {@code url}. */
-    Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
+    Optional<Path> addArticle(URL url, byte[] articleContent) throws IOException;
 
 
     /** Returns an unmodifiable view of the filtered entry list */

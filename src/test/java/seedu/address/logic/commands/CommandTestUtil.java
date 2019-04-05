@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STYLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
 import seedu.address.testutil.FindEntryDescriptorBuilder;
+import seedu.address.testutil.TestUtil;
 import seedu.address.ui.ReaderViewStyle;
 import seedu.address.ui.ViewType;
 
@@ -33,8 +35,8 @@ public class CommandTestUtil {
     public static final String VALID_TITLE_BOB = "Bob Choo's affair!";
     public static final String VALID_DESCRIPTION_AMY = "Bad investments??";
     public static final String VALID_DESCRIPTION_BOB = "The answer will shock you!";
-    public static final String VALID_LINK_AMY = "https://amy.example.com";
-    public static final String VALID_LINK_BOB = "file:///bob/example/file";
+    public static final URL VALID_LINK_AMY = TestUtil.toUrl("https://amy.example.com");
+    public static final URL VALID_LINK_BOB = TestUtil.toUrl("file:///bob/example/file");
     public static final String VALID_ADDRESS_AMY = "Block 312, Amy Street 1";
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
     public static final String VALID_TAG_SCIENCE = "science";
@@ -159,7 +161,7 @@ public class CommandTestUtil {
         Entry entry = model.getFilteredEntryList().get(targetIndex.getZeroBased());
         model.updateFilteredEntryList(new EntryContainsSearchTermsPredicate(
                                                 new FindEntryDescriptorBuilder()
-                                                    .withLink(entry.getLink().value)
+                                                    .withLink(entry.getLink().value.toString())
                                                     .build()));
 
         assertEquals(1, model.getFilteredEntryList().size());

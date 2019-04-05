@@ -1,5 +1,6 @@
 package seedu.address.storage;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -54,7 +55,7 @@ class JsonAdaptedEntry {
     public JsonAdaptedEntry(Entry source) {
         title = source.getTitle().fullTitle;
         description = source.getDescription().value;
-        link = source.getLink().value;
+        link = source.getLink().value.toString();
         address = source.getAddress().value;
         tagged.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -92,10 +93,12 @@ class JsonAdaptedEntry {
         if (link == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Link.class.getSimpleName()));
         }
-        if (!Link.isValidConstructionLink(link)) {
+        final Link modelLink;
+        try {
+            modelLink = new Link(link);
+        } catch (MalformedURLException mue) {
             throw new IllegalValueException(Link.formExceptionMessage(link));
         }
-        final Link modelLink = new Link(link);
 
         if (address == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));

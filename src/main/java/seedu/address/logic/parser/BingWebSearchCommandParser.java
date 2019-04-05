@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 
 import seedu.address.logic.commands.BingWebSearchCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -26,6 +27,8 @@ public class BingWebSearchCommandParser implements Parser<BingWebSearchCommand> 
             return new BingWebSearchCommand(userInput.trim());
         } catch (UnsupportedEncodingException uee) {
             throw new ParseException("UTF-8 encoding not supported by system!", uee);
+        } catch (MalformedURLException mue) {
+            throw new ParseException("Invalid link format! " + mue.getMessage(), mue);
         }
     }
 }

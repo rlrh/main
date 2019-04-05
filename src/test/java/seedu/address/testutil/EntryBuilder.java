@@ -1,5 +1,6 @@
 package seedu.address.testutil;
 
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class EntryBuilder {
     public EntryBuilder() {
         title = new Title(DEFAULT_TITLE);
         description = new Description(DEFAULT_DESCRIPTION);
-        link = new Link(DEFAULT_LINK);
+        link = new Link(TestUtil.toUrl(DEFAULT_LINK));
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
     }
@@ -81,8 +82,16 @@ public class EntryBuilder {
     /**
      * Sets the {@code Link} of the {@code Entry} that we are building.
      */
-    public EntryBuilder withLink(String link) {
+    public EntryBuilder withLink(URL link) {
         this.link = new Link(link);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Link} of the {@code Entry} that we are building.
+     */
+    public EntryBuilder withLink(String link) {
+        this.link = new Link(TestUtil.toUrl(link));
         return this;
     }
 

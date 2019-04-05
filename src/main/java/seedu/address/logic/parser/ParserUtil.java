@@ -8,6 +8,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -116,12 +118,29 @@ public class ParserUtil {
         requireNonNull(link);
         if (link.isPresent()) {
             String trimmedLink = link.get().trim();
-            if (!Link.isValidUserInputLink(trimmedLink)) {
+            try {
+                return new Link(trimmedLink);
+            } catch (MalformedURLException mue) {
                 throw new ParseException(Link.formExceptionMessage(trimmedLink));
             }
-            return new Link(trimmedLink);
         } else {
             throw new ParseException(Link.formExceptionMessage());
+        }
+    }
+
+    /**
+     * Parses a {@code String link} into a {@code URL}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code link} is empty or {@code link}'s value is invalid.
+     */
+    public static URL parseUrl(String link) throws ParseException {
+        requireNonNull(link);
+        String trimmedLink = link.trim();
+        try {
+            return new URL(trimmedLink);
+        } catch (MalformedURLException mue) {
+            throw new ParseException(Link.formExceptionMessage(trimmedLink));
         }
     }
 
