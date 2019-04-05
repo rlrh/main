@@ -51,8 +51,7 @@ public class BrowserPanel extends UiPart<Region> {
 
     private WebEngine webEngine = browser.getEngine();
 
-    private String currentLocation; // location of selected entry, regardless of reader view, error page etc
-    private String currentBaseUrl; // original URL, even if offline file is loaded
+    private Optional<String> onlineLink;
     private Optional<String> offlineLink;
     private boolean isLoadingReaderView; //  flag - whether reader view is loading
     private boolean hasLoadedReaderView; // status - whether reader view has loaded
@@ -65,8 +64,7 @@ public class BrowserPanel extends UiPart<Region> {
 
         super(FXML);
 
-        this.currentLocation = "";
-        this.currentBaseUrl = "";
+        this.onlineLink = Optional.empty();
         this.offlineLink = Optional.empty();
         this.isLoadingReaderView = false;
         this.hasLoadedReaderView = false;
@@ -84,11 +82,7 @@ public class BrowserPanel extends UiPart<Region> {
         // Reload when view mode changes.
         viewMode.addListener((observable, oldViewMode, newViewMode) -> {
             this.viewMode = newViewMode;
-            if (!Strings.isNullOrEmpty(currentLocation)) {
-                loadPage(currentLocation);
-            } else if (!Strings.isNullOrEmpty(webEngine.getLocation())) {
-                loadPage(webEngine.getLocation());
-            }
+            offlineLink.or(() -> onlineLink).ifPresent(this::loadPage);
         });
 
         // Respond to browser state events.
@@ -118,7 +112,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void handleRunning() {
         if (isLoadingReaderView) {
-            String message = String.format("Loading reader view for %s...", currentLocation);
+            String message = String.format("Loading reader view for %s...", onlineLink.orElse("unknown"));
             logger.info(message);
         } else {
             String message = String.format("Loading %s...", webEngine.getLocation());
@@ -134,7 +128,7 @@ public class BrowserPanel extends UiPart<Region> {
 
         // Log and display loaded message
         if (isLoadingReaderView) {
-            String message = String.format("Successfully loaded reader view for %s", currentLocation);
+            String message = String.format("Successfully loaded reader view for %s", onlineLink.orElse("unknown"));
             logger.info(message);
             hasLoadedReaderView = true;
         } else {
@@ -146,15 +140,7 @@ public class BrowserPanel extends UiPart<Region> {
 
         // Load reader view if reader view mode is selected but not loaded
         if (viewMode.getViewType().equals(ViewType.READER) && !hasLoadedReaderView) {
-            try {
-                URL url = new URL(webEngine.getLocation());
-                if (url.equals(DEFAULT_PAGE) || url.equals(ERROR_PAGE) || url.equals(READER_VIEW_FAILURE_PAGE)) {
-                    return;
-                }
-                loadReader(currentBaseUrl);
-            } catch (MalformedURLException mue) {
-                // do nothing
-            }
+            onlineLink.ifPresent(this::loadReader);
         }
 
     }
@@ -173,32 +159,40 @@ public class BrowserPanel extends UiPart<Region> {
      * @param entry entry to load
      */
     private void loadEntryPage(Entry entry) {
-        String onlineLink = entry.getLink().value;
-        offlineLink = getOfflineLink.apply(onlineLink);
-        currentBaseUrl = onlineLink;
-        currentLocation = offlineLink.orElse(onlineLink);
-        loadPage(currentLocation);
+        onlineLink = Optional.of(entry.getLink().value);
+        offlineLink = getOfflineLink.apply(onlineLink.get());
+        loadPage(offlineLink.or(() -> onlineLink).get());
     }
 
     /**
      * Loads a default HTML file with a background that matches the general theme.
      */
     private void loadDefaultPage() {
-        loadPage(DEFAULT_PAGE.toExternalForm());
+        loadInternalPage(DEFAULT_PAGE.toExternalForm());
     }
 
     /**
      * Loads an error HTML file with a background that matches the general theme.
      */
     private void loadErrorPage() {
-        loadPage(ERROR_PAGE.toExternalForm());
+        loadInternalPage(ERROR_PAGE.toExternalForm());
     }
 
     /**
      * Loads an reader view failure HTML file.
      */
     private void loadReaderViewFailurePage() {
-        loadPage(READER_VIEW_FAILURE_PAGE.toExternalForm());
+        loadInternalPage(READER_VIEW_FAILURE_PAGE.toExternalForm());
+    }
+
+    /**
+     * Loads a Web page.
+     * @param url URL of the Web page to load
+     */
+    private void loadInternalPage(String url) {
+        onlineLink = Optional.empty();
+        offlineLink = Optional.empty();
+        loadPage(url);
     }
 
     /**
@@ -244,7 +238,7 @@ public class BrowserPanel extends UiPart<Region> {
                 webEngine.loadContent(processedHtml);
             });
         } catch (TransformerException | IllegalArgumentException e) {
-            String message = String.format("Failed to load reader view for %s", this.currentLocation);
+            String message = String.format("Failed to load reader view for %s", onlineLink.orElse("unknown"));
             logger.warning(message);
             loadReaderViewFailurePage();
         }
