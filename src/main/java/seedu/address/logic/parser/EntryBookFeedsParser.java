@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.HelpCommand;
-import seedu.address.logic.commands.RefreshCommand;
+import seedu.address.logic.commands.RefreshFeedCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.SubscribeCommand;
 import seedu.address.logic.commands.UnsubscribeCommand;
@@ -30,8 +30,8 @@ public class EntryBookFeedsParser extends EntryBookParser {
         final String arguments = matcher.group("arguments");
         switch (commandWord) {
 
-        case RefreshCommand.COMMAND_WORD:
-            return new RefreshCommandParser().parse(arguments);
+        case RefreshFeedCommand.COMMAND_WORD:
+            return new RefreshFeedCommandParser().parse(arguments);
 
         case SelectCommand.COMMAND_WORD:
         case SelectCommand.COMMAND_ALIAS:
