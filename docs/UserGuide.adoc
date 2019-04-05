@@ -84,9 +84,18 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * **`select`**`1` : selects the first entry for reading
 * **`add`**`l/https://en.wikipedia.org/wiki/Special:Random` : adds a random Wikipedia page to your reading list
 * **`select`**`7` : selects the Wikipedia page for reading
-* **`feed`**`http://rss.nytimes.com/services/xml/rss/nyt/World.xml` : adds all the latest articles from the New York Times world news feed
-* **`select`**`1` : selects the first NYT article for reading
+* *`googlenews`* : displays the current top stories from Google News
+* **`add`**`1` : adds the first news article to your reading list
+* *`list`* : goes back to your reading list
+* **`select`**`8` : selects the just-added news article for reading
 * **`view`**`reader` : switches to a more comfortable reading experience
+* **`archive`**`8` : archives the news article
+* *`archives`* : shows your archived links
+* **`delete`**`1` : delete the archived news article
+* *`feeds`* : shows your subscribed feeds
+* **`subscribe`**`l/https://www.buzzfeed.com/index.xml ti/BuzzFeed` : subscribes to the BuzzFeed news feed (this can take a while)
+* *`list`* : goes back to your reading list
+* **`select`**`8` : selects one of the just-added news articles for reading
 * *`exit`* : exits the app
 
 .  Refer to <<Commands>> for details of each command.
