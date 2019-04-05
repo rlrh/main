@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_NET;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_XML;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_SUCCESS;
 
@@ -28,6 +29,8 @@ public class FeedCommandTest {
         MainApp.class.getResource("/RssFeedTest/rss.xml");
     private static final URL NOTAFEED_URL =
         TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml");
+    private static final URL NOTAWEBSITE_URL =
+        TestUtil.toUrl("https://this.website.does.not.exist.definitely/");
 
     private Model model = new ModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
@@ -87,6 +90,15 @@ public class FeedCommandTest {
     public void execute_urlIsNotAFeed_commandFails() {
         String expectedMessage = String.format(MESSAGE_FAILURE_XML, NOTAFEED_URL);
         FeedCommand command = new FeedCommand(NOTAFEED_URL);
+
+        assertCommandFailure(command, model, commandHistory, expectedMessage);
+    }
+
+    @Test
+    public void execute_urlIsNotAWebsite_commandFails() {
+        String expectedMessage = String.format(MESSAGE_FAILURE_NET,
+            "java.net.UnknownHostException: this.website.does.not.exist.definitely");
+        FeedCommand command = new FeedCommand(NOTAWEBSITE_URL);
 
         assertCommandFailure(command, model, commandHistory, expectedMessage);
     }
