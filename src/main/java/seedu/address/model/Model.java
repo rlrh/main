@@ -184,6 +184,8 @@ public interface Model {
     /** Adds article with {@code articleContent} associated with {@code url}. */
     Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
 
+    /** Gets article associated with {@code url}. */
+    Optional<String> getArticle(String url);
 
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();

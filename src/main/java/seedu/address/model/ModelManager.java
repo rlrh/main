@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.util.FileUtil;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.entry.Entry;
@@ -324,6 +325,19 @@ public class ModelManager implements Model {
     @Override
     public Optional<Path> addArticle(String url, byte[] articleContent) throws IOException {
         return storage.addArticle(url, articleContent);
+    }
+
+    @Override
+    public Optional<String> getArticle(String url) {
+        return storage
+                .getOfflineLink(url)
+                .map(path -> {
+                    try {
+                        return FileUtil.readFromFile(path);
+                    } catch (IOException ioe) {
+                        return null;
+                    }
+                });
     }
 
     //=========== Displayed Entry List ================================================================================

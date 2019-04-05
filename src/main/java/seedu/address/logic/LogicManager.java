@@ -59,6 +59,11 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public Optional<String> getArticle(String url) {
+        return model.getArticle(url);
+    }
+
+    @Override
     public ObservableList<Entry> getFilteredEntryList() {
         return model.getFilteredEntryList();
     }
