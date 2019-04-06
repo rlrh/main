@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -26,6 +27,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.exceptions.EntryNotFoundException;
 import seedu.address.storage.Storage;
 import seedu.address.ui.ViewMode;
+import seedu.address.util.Network;
 
 /**
  * Represents the in-memory model of the entry book data.
@@ -161,6 +163,10 @@ public class ModelManager implements Model {
     public void setArchivesEntryBookFilePath(Path archivesEntryBookFilePath) {
         requireNonNull(archivesEntryBookFilePath);
         userPrefs.setArchivesEntryBookFilePath(archivesEntryBookFilePath);
+    }
+
+    public boolean hasOfflineCopy(URL url) {
+        return getOfflineLink(url).isPresent();
     }
 
     @Override
@@ -374,6 +380,26 @@ public class ModelManager implements Model {
             throw new EntryNotFoundException();
         }
         selectedEntry.setValue(entry);
+        if (entry != null) {
+            ensureDownloaded(entry.getLink().value);
+        }
+    }
+
+    /**
+     * Ensures that we have a local copy of the article at the specified url.
+     */
+    private void ensureDownloaded(URL url) {
+        if (!hasOfflineCopy(url)) {
+            Network.fetchArticleAsync(url)
+                // Ensure model updates are run on JavaFX thread
+                .thenAccept(articleContent -> Platform.runLater(() -> {
+                    try {
+                        addArticle(url, articleContent);
+                    } catch (IOException ioe) {
+                        // If couldn't save article, just ignore
+                    }
+                }));
+        }
     }
 
     //=========== View mode ===========================================================================
