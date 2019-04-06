@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -28,7 +27,6 @@ class JsonAdaptedEntry {
     private final String title;
     private final String description;
     private final String link;
-    private final String address;
     private final List<JsonAdaptedTag> tagged = new ArrayList<>();
 
     /**
@@ -38,12 +36,10 @@ class JsonAdaptedEntry {
     public JsonAdaptedEntry(@JsonProperty("title") String title,
                             @JsonProperty("description") String description,
                             @JsonProperty("link") String link,
-                            @JsonProperty("address") String address,
                             @JsonProperty("tagged") List<JsonAdaptedTag> tagged) {
         this.title = title;
         this.description = description;
         this.link = link;
-        this.address = address;
         if (tagged != null) {
             this.tagged.addAll(tagged);
         }
@@ -56,7 +52,6 @@ class JsonAdaptedEntry {
         title = source.getTitle().fullTitle;
         description = source.getDescription().value;
         link = source.getLink().value.toString();
-        address = source.getAddress().value;
         tagged.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -100,16 +95,8 @@ class JsonAdaptedEntry {
             throw new IllegalValueException(Link.formExceptionMessage(link));
         }
 
-        if (address == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
-        }
-        if (!Address.isValidConstructionAddress(address)) {
-            throw new IllegalValueException(Address.formExceptionMessage(address));
-        }
-        final Address modelAddress = new Address(address);
-
         final Set<Tag> modelTags = new HashSet<>(entryTags);
-        return new Entry(modelTitle, modelDescription, modelLink, modelAddress, modelTags);
+        return new Entry(modelTitle, modelDescription, modelLink, modelTags);
     }
 
 }

@@ -18,7 +18,6 @@ import seedu.address.commons.util.CollectionUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Title;
@@ -93,10 +92,9 @@ public class EditCommand extends Command {
 
         Title updatedTitle = editEntryDescriptor.getTitle().orElse(entryToEdit.getTitle());
         Description updatedDescription = editEntryDescriptor.getDescription().orElse(entryToEdit.getDescription());
-        Address updatedAddress = editEntryDescriptor.getAddress().orElse(entryToEdit.getAddress());
         Set<Tag> updatedTags = editEntryDescriptor.getTags().orElse(entryToEdit.getTags());
 
-        return new Entry(updatedTitle, updatedDescription, entryToEdit.getLink(), updatedAddress, updatedTags);
+        return new Entry(updatedTitle, updatedDescription, entryToEdit.getLink(), updatedTags);
     }
 
     @Override
@@ -124,7 +122,6 @@ public class EditCommand extends Command {
     public static class EditEntryDescriptor {
         private Title title;
         private Description description;
-        private Address address;
         private Set<Tag> tags;
 
         public EditEntryDescriptor() {}
@@ -136,7 +133,6 @@ public class EditCommand extends Command {
         public EditEntryDescriptor(EditEntryDescriptor toCopy) {
             setTitle(toCopy.title);
             setDescription(toCopy.description);
-            setAddress(toCopy.address);
             setTags(toCopy.tags);
         }
 
@@ -144,7 +140,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(title, description, address, tags);
+            return CollectionUtil.isAnyNonNull(title, description, tags);
         }
 
         public void setTitle(Title title) {
@@ -161,14 +157,6 @@ public class EditCommand extends Command {
 
         public Optional<Description> getDescription() {
             return Optional.ofNullable(description);
-        }
-
-        public void setAddress(Address address) {
-            this.address = address;
-        }
-
-        public Optional<Address> getAddress() {
-            return Optional.ofNullable(address);
         }
 
         /**
@@ -205,7 +193,6 @@ public class EditCommand extends Command {
 
             return getTitle().equals(e.getTitle())
                     && getDescription().equals(e.getDescription())
-                    && getAddress().equals(e.getAddress())
                     && getTags().equals(e.getTags());
         }
     }

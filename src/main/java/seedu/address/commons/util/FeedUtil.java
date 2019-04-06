@@ -20,7 +20,6 @@ import com.rometools.rome.io.XmlReader;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.EntryBook;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -75,7 +74,6 @@ public class FeedUtil {
                 extractTitle(syndEntry),
                 extractDescription(syndEntry, feedUrl),
                 link,
-                new Address(DEFAULT_ADDRESS_TEXT),
                 Collections.emptySet()
         ));
     }

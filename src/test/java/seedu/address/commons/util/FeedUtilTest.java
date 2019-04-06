@@ -16,7 +16,6 @@ import com.rometools.rome.io.FeedException;
 
 import seedu.address.MainApp;
 import seedu.address.model.EntryBook;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;

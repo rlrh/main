@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
