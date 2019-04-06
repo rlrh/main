@@ -41,7 +41,7 @@ public class EntryUtil {
         StringBuilder sb = new StringBuilder();
         sb.append(PREFIX_TITLE + entry.getTitle().fullTitle + " ");
         sb.append(PREFIX_DESCRIPTION + entry.getDescription().value + " ");
-        sb.append(PREFIX_LINK + entry.getLink().value + " ");
+        sb.append(PREFIX_LINK + entry.getLink().value.toString() + " ");
         sb.append(PREFIX_ADDRESS + entry.getAddress().value + " ");
         entry.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagName + " ")

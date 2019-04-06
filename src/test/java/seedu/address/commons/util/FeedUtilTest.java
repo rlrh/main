@@ -5,7 +5,7 @@ import static seedu.address.commons.util.FeedUtil.DEFAULT_ADDRESS_TEXT;
 import static seedu.address.commons.util.FeedUtil.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.commons.util.FeedUtil.fromFeedUrl;
 
-import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 
 import org.junit.Rule;
@@ -22,15 +22,14 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.testutil.EntryBookBuilder;
+import seedu.address.testutil.TestUtil;
 
 public class FeedUtilTest {
-    private static final String TEST_URL = "https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml";
-    private static final String TEST_URL_LOCAL = MainApp.class.getResource("/RssFeedTest/rss.xml")
-            .toExternalForm();
-
-    private static final String MALFORMED_URL = "notavalidprotocol://malformed.url/invalid";
-    private static final String NOTAFEED_URL =
-            "https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml";
+    private static final URL TEST_URL =
+        TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml");
+    private static final URL TEST_URL_LOCAL = MainApp.class.getResource("/RssFeedTest/rss.xml");
+    private static final URL NOTAFEED_URL =
+        TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml");
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
@@ -38,7 +37,7 @@ public class FeedUtilTest {
     /**
      * Generates a list of entries. It has to take in the url because we need it for the default description.
      */
-    private static EntryBook getTestEntryBook(String url) {
+    private static EntryBook getTestEntryBook(URL url) {
         return new EntryBookBuilder()
                 .withEntry(makeEntryFromRssTriple("Anime: Mahoujin Guru Guru",
                         "https://blog.GNU.moe/anime/review/mahoujin-guru-guru.html",
@@ -79,7 +78,7 @@ public class FeedUtilTest {
         return new Entry(
                 new Title(title),
                 new Description(description),
-                new Link(link),
+                new Link(TestUtil.toUrl(link)),
                 new Address(DEFAULT_ADDRESS_TEXT),
                 Collections.emptySet()
         );
@@ -93,12 +92,6 @@ public class FeedUtilTest {
     @Test
     public void fromFeedUrl_validRemoteUrl_success() throws Exception {
         assertEquals(fromFeedUrl(TEST_URL), getTestEntryBook(TEST_URL));
-    }
-
-    @Test
-    public void fromFeedUrl_malformedUrl_throwsException() throws Exception {
-        thrown.expect(IOException.class);
-        fromFeedUrl(MALFORMED_URL);
     }
 
     @Test

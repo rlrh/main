@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
+import java.net.URL;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -57,12 +58,12 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
-        String urlString = toAdd.getLink().value;
+        URL url = toAdd.getLink().value;
 
         EntryAutofill autofill = new EntryAutofill(toAdd.getTitle(), toAdd.getDescription());
-        autofill.extractFromUrl(urlString);
+        autofill.extractFromUrl(url);
 
-        Optional<byte[]> articleContent = Network.fetchArticleOptional(urlString);
+        Optional<byte[]> articleContent = Network.fetchArticleOptional(url);
         if (articleContent.isPresent()) {
             String html = new String(articleContent.get());
             autofill.extractFromHtml(html);

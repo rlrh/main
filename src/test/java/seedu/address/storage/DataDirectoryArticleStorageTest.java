@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
+import seedu.address.testutil.TestUtil;
+
 public class DataDirectoryArticleStorageTest {
 
     @Rule
@@ -25,7 +27,7 @@ public class DataDirectoryArticleStorageTest {
     public void addArticle_nullDirectoryPath_throwsNullPointerException() throws IOException {
         thrown.expect(NullPointerException.class);
         DataDirectoryArticleStorage ddas = new DataDirectoryArticleStorage(null);
-        ddas.addArticle("https://test.com", "test".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.com"), "test".getBytes());
     }
 
     @Test
@@ -34,15 +36,15 @@ public class DataDirectoryArticleStorageTest {
 
         // Save a bunch of articles then fetch them. They shouldn't overwrite each other.
 
-        ddas.addArticle("https://test.com", "test1".getBytes());
-        ddas.addArticle("https://test.com/article", "test2".getBytes());
-        ddas.addArticle("https://test.com/article.html", "test3".getBytes());
-        ddas.addArticle("https://test.io", "test4".getBytes());
-        ddas.addArticle("https://test.io/article", "test5".getBytes());
-        ddas.addArticle("https://test.io/article.html", "test6".getBytes());
-        ddas.addArticle("http://test.io", "test7".getBytes());
-        ddas.addArticle("http://test.io/article", "test8".getBytes());
-        ddas.addArticle("http://test.io/article.html", "test9".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.com"), "test1".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.com/article"), "test2".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.com/article.html"), "test3".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.io"), "test4".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.io/article"), "test5".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.io/article.html"), "test6".getBytes());
+        ddas.addArticle(TestUtil.toUrl("http://test.io"), "test7".getBytes());
+        ddas.addArticle(TestUtil.toUrl("http://test.io/article"), "test8".getBytes());
+        ddas.addArticle(TestUtil.toUrl("http://test.io/article.html"), "test9".getBytes());
 
         assertFetchSuccess(ddas, "https://test.com", "test1".getBytes());
         assertFetchSuccess(ddas, "https://test.com/article", "test2".getBytes());
@@ -61,10 +63,10 @@ public class DataDirectoryArticleStorageTest {
 
         // If re-adding an article, the content should be overwritten.
 
-        ddas.addArticle("https://test.com", "test1".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.com"), "test1".getBytes());
         assertFetchSuccess(ddas, "https://test.com", "test1".getBytes());
 
-        ddas.addArticle("https://test.com", "test2".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.com"), "test2".getBytes());
         assertFetchSuccess(ddas, "https://test.com", "test2".getBytes());
     }
 
@@ -72,18 +74,18 @@ public class DataDirectoryArticleStorageTest {
     public void getOfflineLink() throws IOException {
         DataDirectoryArticleStorage ddas = new DataDirectoryArticleStorage(testFolder.getRoot().toPath());
 
-        ddas.addArticle("https://test.com", "test1".getBytes());
+        ddas.addArticle(TestUtil.toUrl("https://test.com"), "test1".getBytes());
 
         // Test that getting an offline link returns Optional.empty() if article was not added.
-        assertTrue(ddas.getOfflineLink("https://test.com").isPresent());
-        assertFalse(ddas.getOfflineLink("http://test.com").isPresent());
+        assertTrue(ddas.getOfflineLink(TestUtil.toUrl("https://test.com")).isPresent());
+        assertFalse(ddas.getOfflineLink(TestUtil.toUrl("http://test.com")).isPresent());
     }
 
     /**
      * Checks that the content saved for the URL matches.
      */
     private void assertFetchSuccess(DataDirectoryArticleStorage ddas, String url, byte[] content) throws IOException {
-        Path savedLocation = ddas.getArticlePath(url);
+        Path savedLocation = ddas.getArticlePath(TestUtil.toUrl(url));
         assertArrayEquals(Files.readAllBytes(savedLocation), content);
     }
 }

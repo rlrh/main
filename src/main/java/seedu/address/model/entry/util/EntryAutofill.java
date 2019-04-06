@@ -1,6 +1,5 @@
 package seedu.address.model.entry.util;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -60,23 +59,17 @@ public class EntryAutofill {
 
     /**
      * Extract candidates by parsing URL.
-     * @param urlString URL string to parse
+     * @param url URL to parse
      */
-    public EntryAutofill extractFromUrl(String urlString) {
+    public EntryAutofill extractFromUrl(URL url) {
         if (noTitleOrNoDescription) {
-            try {
-                URL url = new URL(urlString);
-                String baseName = Files.getNameWithoutExtension(url.getPath())
-                        .replaceAll("\n", "") // remove newline chars
-                        .replaceAll("\r", "") // remove carriage return chars
-                        .replaceAll("[^a-zA-Z0-9]+", " ") // replace special chars with spaces
-                        .trim();
-                titleCandidate.tryout(WordUtils.capitalizeFully(baseName)); // title - cleaned up base name
-                descriptionCandidate.tryout(url.getHost()); // description - host name
-            } catch (MalformedURLException mue) {
-                // Stop if URL is malformed
-                logger.warning("Malformed URL: " + urlString);
-            }
+            String baseName = Files.getNameWithoutExtension(url.getPath())
+                    .replaceAll("\n", "") // remove newline chars
+                    .replaceAll("\r", "") // remove carriage return chars
+                    .replaceAll("[^a-zA-Z0-9]+", " ") // replace special chars with spaces
+                    .trim();
+            titleCandidate.tryout(WordUtils.capitalizeFully(baseName)); // title - cleaned up base name
+            descriptionCandidate.tryout(url.getHost()); // description - host name
         }
         return this;
     }
