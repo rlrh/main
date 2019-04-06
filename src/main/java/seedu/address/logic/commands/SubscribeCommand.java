@@ -6,7 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import com.rometools.rome.io.FeedException;
 
