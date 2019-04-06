@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import com.rometools.rome.io.FeedException;
 
@@ -64,10 +63,7 @@ public class RefreshFeedCommand extends Command {
 
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
-                .forEach(entry -> {
-                    Optional<byte[]> articleContent = Network.fetchArticleOptional(entry.getLink().value);
-                    model.addListEntry(entry, articleContent);
-                });
+                .forEach(entry -> model.addListEntry(entry, Network.fetchArticleOptional(entry.getLink().value)));
 
 
         return new CommandResult(String.format(MESSAGE_REFRESH_FEED_SUCCESS, feedToRefresh));
