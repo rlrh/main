@@ -17,6 +17,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
+import seedu.address.model.entry.util.EntryAutofill;
 import seedu.address.util.Network;
 
 /** Subscribes to a feed and adds the feed to the feedEntryBook. */
@@ -65,7 +66,11 @@ public class SubscribeCommand extends Command {
             throw new CommandException(String.format(MESSAGE_FAILURE_XML, toSubscribe.getLink().value));
         }
 
-        model.addFeedsEntry(toSubscribe);
+        EntryAutofill autofill = new EntryAutofill(toSubscribe);
+        autofill.extractFromFeed(feed);
+        Entry updatedToSubscribe = autofill.getFilledEntry();
+
+        model.addFeedsEntry(updatedToSubscribe);
 
         // initial import into reading list
         EntryBook feedEntries = FeedUtil.serializeToEntryBook(feed, feedUrl.toString());
@@ -73,7 +78,7 @@ public class SubscribeCommand extends Command {
                 .filter(entry -> !model.hasEntry(entry))
                 .forEach(entry -> model.addListEntry(entry, Network.fetchArticleOptional(entry.getLink().value)));
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, toSubscribe));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, updatedToSubscribe));
     }
 
     @Override
