@@ -249,7 +249,7 @@ public class ModelManager implements Model {
         try {
             this.addArticle(entry.getLink().value, articleContent);
         } catch (IOException ioe) {
-            // Do nothing if failed to savve content to disk for now
+            // Do nothing if failed to save content to disk for now
         }
     }
 
