@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Title;
@@ -34,7 +33,6 @@ public class EditEntryDescriptorBuilder {
         descriptor = new EditCommand.EditEntryDescriptor();
         descriptor.setTitle(entry.getTitle());
         descriptor.setDescription(entry.getDescription());
-        descriptor.setAddress(entry.getAddress());
         descriptor.setTags(entry.getTags());
     }
 
@@ -51,14 +49,6 @@ public class EditEntryDescriptorBuilder {
      */
     public EditEntryDescriptorBuilder withDescription(String description) {
         descriptor.setDescription(new Description(description));
-        return this;
-    }
-
-    /**
-     * Sets the {@code Address} of the {@code EditEntryDescriptor} that we are building.
-     */
-    public EditEntryDescriptorBuilder withAddress(String address) {
-        descriptor.setAddress(new Address(address));
         return this;
     }
 

@@ -11,6 +11,7 @@ import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.SubscribeCommand;
 import seedu.address.logic.commands.UnsubscribeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 
 /**
  * Represents the parser for the feeds context.
@@ -46,7 +47,7 @@ public class EntryBookFeedsParser extends EntryBookParser {
             return new UnsubscribeCommandParser().parse(arguments);
 
         default:
-            return super.parseCommand(userInput);
+            return super.parseCommand(userInput, ModelContext.CONTEXT_FEEDS);
         }
     }
 }

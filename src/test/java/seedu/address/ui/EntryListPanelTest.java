@@ -17,7 +17,6 @@ import guitests.guihandles.EntryListPanelHandle;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -83,8 +82,7 @@ public class EntryListPanelTest extends GuiUnitTest {
             Title title = new Title(i + "a");
             Description description = new Description("000");
             Link link = new Link(TestUtil.toUrl("https://a.aa"));
-            Address address = new Address("a");
-            Entry entry = new Entry(title, description, link, address, Collections.emptySet());
+            Entry entry = new Entry(title, description, link, Collections.emptySet());
             backingList.add(entry);
         }
         return backingList;
