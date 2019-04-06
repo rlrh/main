@@ -18,12 +18,13 @@ import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 
 /**
  * Represents the base parser for any context.
  * It successfully parses a command if and only if the command is context-switching, exit, help or history.
  */
-public class EntryBookParser {
+public abstract class EntryBookParser {
 
     /**
      * Used for initial separation of command word and args.
@@ -38,7 +39,17 @@ public class EntryBookParser {
      * @return the command based on the user input
      * @throws ParseException if the user input does not conform the expected format
      */
-    public Command parseCommand(String userInput) throws ParseException {
+    public abstract Command parseCommand(String userInput) throws ParseException;
+
+    /**
+     * Parses user input into command for execution.
+     * Parses successfully if and only if the command is context-switching, exit, help or history.
+
+     * @param userInput full user input string
+     * @return the command based on the user input
+     * @throws ParseException if the user input does not conform the expected format
+     */
+    protected Command parseCommand(String userInput, ModelContext currentContext) throws ParseException {
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
@@ -85,7 +96,7 @@ public class EntryBookParser {
             return new HelpCommand();
 
         default:
-            throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
+            throw new ParseException(String.format(MESSAGE_UNKNOWN_COMMAND, currentContext));
         }
     }
 

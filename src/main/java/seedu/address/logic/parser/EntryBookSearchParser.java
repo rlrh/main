@@ -10,6 +10,7 @@ import seedu.address.logic.commands.IndexedAddCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 
 /**
  * Represents the parser for the search context.
@@ -42,7 +43,7 @@ public class EntryBookSearchParser extends EntryBookParser {
             return new ViewModeCommandParser().parse(arguments);
 
         default:
-            return super.parseCommand(userInput);
+            return super.parseCommand(userInput, ModelContext.CONTEXT_SEARCH);
         }
     }
 }
