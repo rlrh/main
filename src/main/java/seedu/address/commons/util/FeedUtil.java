@@ -32,7 +32,6 @@ import seedu.address.util.Network;
  */
 public class FeedUtil {
     public static final String DEFAULT_DESCRIPTION_TEXT = "imported from %s";
-    public static final String DEFAULT_ADDRESS_TEXT = "this field is deprecated";
 
     private static final Logger logger = LogsCenter.getLogger(FeedUtil.class);
 

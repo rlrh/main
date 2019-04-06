@@ -24,7 +24,7 @@ import seedu.address.model.entry.Title;
 import seedu.address.model.tag.Tag;
 
 /**
- * Edits the details of an existing entry in the address book.
+ * Edits the details of an existing entry in the entry book.
  */
 public class EditCommand extends Command {
 

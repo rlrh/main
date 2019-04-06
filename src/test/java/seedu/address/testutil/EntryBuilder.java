@@ -19,19 +19,16 @@ public class EntryBuilder {
     public static final String DEFAULT_TITLE = "Alice Pauline";
     public static final String DEFAULT_DESCRIPTION = "85355255";
     public static final String DEFAULT_LINK = "https://alice.gmail.com";
-    public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
 
     private Title title;
     private Description description;
     private Link link;
-    private Address address;
     private Set<Tag> tags;
 
     public EntryBuilder() {
         title = new Title(DEFAULT_TITLE);
         description = new Description(DEFAULT_DESCRIPTION);
         link = new Link(TestUtil.toUrl(DEFAULT_LINK));
-        address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
     }
 
@@ -42,7 +39,6 @@ public class EntryBuilder {
         title = entryToCopy.getTitle();
         description = entryToCopy.getDescription();
         link = entryToCopy.getLink();
-        address = entryToCopy.getAddress();
         tags = new HashSet<>(entryToCopy.getTags());
     }
 
@@ -59,14 +55,6 @@ public class EntryBuilder {
      */
     public EntryBuilder withTags(String ... tags) {
         this.tags = SampleDataUtil.getTagSet(tags);
-        return this;
-    }
-
-    /**
-     * Sets the {@code Address} of the {@code Entry} that we are building.
-     */
-    public EntryBuilder withAddress(String address) {
-        this.address = new Address(address);
         return this;
     }
 
@@ -95,7 +83,7 @@ public class EntryBuilder {
     }
 
     public Entry build() {
-        return new Entry(title, description, link, address, tags);
+        return new Entry(title, description, link, tags);
     }
 
 }

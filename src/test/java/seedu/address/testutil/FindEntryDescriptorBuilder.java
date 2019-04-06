@@ -31,7 +31,6 @@ public class FindEntryDescriptorBuilder {
         descriptor.setTitle(entry.getTitle().fullTitle);
         descriptor.setDescription(entry.getDescription().value);
         descriptor.setLink(entry.getLink().value.toString());
-        descriptor.setAddress(entry.getAddress().value);
         descriptor.setTags(entry.getTags());
     }
 
@@ -56,14 +55,6 @@ public class FindEntryDescriptorBuilder {
      */
     public FindEntryDescriptorBuilder withLink(String link) {
         descriptor.setLink(link);
-        return this;
-    }
-
-    /**
-     * Sets the {@code String} keyphrase for address of the {@code FindEntryDescriptor} that we are building.
-     */
-    public FindEntryDescriptorBuilder withAddress(String address) {
-        descriptor.setAddress(address);
         return this;
     }
 

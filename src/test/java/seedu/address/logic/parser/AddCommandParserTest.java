@@ -1,12 +1,8 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_LINK;
@@ -23,7 +19,6 @@ import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
@@ -53,28 +48,24 @@ public class AddCommandParserTest {
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
+                + TAG_DESC_TECH, new AddCommand(expectedEntry));
 
         // multiple titles - last title accepted
         assertParseSuccess(parser, TITLE_DESC_AMY + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
+                + TAG_DESC_TECH, new AddCommand(expectedEntry));
 
         // multiple descriptions - last description accepted
         assertParseSuccess(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_AMY + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
+                + TAG_DESC_TECH, new AddCommand(expectedEntry));
 
         // multiple links - last link accepted
         assertParseSuccess(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_AMY + LINK_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
-
-        // multiple addresses - last address accepted
-        assertParseSuccess(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_AMY
-                + ADDRESS_DESC_BOB + TAG_DESC_TECH, new AddCommand(expectedEntry));
+                + TAG_DESC_TECH, new AddCommand(expectedEntry));
 
         // multiple tags - all accepted
         Entry expectedEntryMultipleTags = new EntryBuilder(BOB).withTags(VALID_TAG_TECH, VALID_TAG_SCIENCE)
                 .build();
-        assertParseSuccess(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB
+        assertParseSuccess(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + TAG_DESC_SCIENCE + TAG_DESC_TECH, new AddCommand(expectedEntryMultipleTags));
     }
 
@@ -82,7 +73,7 @@ public class AddCommandParserTest {
     public void parse_optionalFieldsMissing_success() {
         // zero tags
         Entry expectedEntry = new EntryBuilder(AMY).withTags().build();
-        assertParseSuccess(parser, TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY,
+        assertParseSuccess(parser, TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY,
                 new AddCommand(expectedEntry));
     }
 
@@ -95,39 +86,35 @@ public class AddCommandParserTest {
                 expectedMessage);
 
         // all prefixes missing
-        assertParseFailure(parser, VALID_TITLE_BOB + VALID_DESCRIPTION_BOB + VALID_LINK_BOB + VALID_ADDRESS_BOB,
+        assertParseFailure(parser, VALID_TITLE_BOB + VALID_DESCRIPTION_BOB + VALID_LINK_BOB,
                 expectedMessage);
     }
 
     @Test
     public void parse_invalidValue_failure() {
         // invalid title
-        assertParseFailure(parser, INVALID_TITLE_DESC + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB
+        assertParseFailure(parser, INVALID_TITLE_DESC + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + TAG_DESC_SCIENCE + TAG_DESC_TECH, Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         // invalid description
-        assertParseFailure(parser, TITLE_DESC_BOB + INVALID_DESCRIPTION_DESC + LINK_DESC_BOB + ADDRESS_DESC_BOB
+        assertParseFailure(parser, TITLE_DESC_BOB + INVALID_DESCRIPTION_DESC + LINK_DESC_BOB
                 + TAG_DESC_SCIENCE + TAG_DESC_TECH, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         // invalid link
-        assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + INVALID_LINK_DESC + ADDRESS_DESC_BOB
+        assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + INVALID_LINK_DESC
                 + TAG_DESC_SCIENCE + TAG_DESC_TECH, Link.formExceptionMessage(INVALID_LINK.trim()));
 
-        // invalid address
-        assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + INVALID_ADDRESS_DESC
-                + TAG_DESC_SCIENCE + TAG_DESC_TECH, Address.formExceptionMessage(INVALID_ADDRESS.trim()));
-
         // invalid tag
-        assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + ADDRESS_DESC_BOB
+        assertParseFailure(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + INVALID_TAG_DESC, Tag.formExceptionMessage(INVALID_TAG.trim()));
 
         // two invalid values, only first invalid value reported
-        assertParseFailure(parser, INVALID_TITLE_DESC + DESCRIPTION_DESC_BOB + LINK_DESC_BOB + INVALID_ADDRESS_DESC,
+        assertParseFailure(parser, INVALID_TITLE_DESC + DESCRIPTION_DESC_BOB + LINK_DESC_BOB,
                 Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_SCIENCE + TAG_DESC_TECH,
+                + TAG_DESC_SCIENCE + TAG_DESC_TECH,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 }

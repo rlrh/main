@@ -82,8 +82,7 @@ public class EntryListPanelTest extends GuiUnitTest {
             Title title = new Title(i + "a");
             Description description = new Description("000");
             Link link = new Link(TestUtil.toUrl("https://a.aa"));
-            Address address = new Address("a");
-            Entry entry = new Entry(title, description, link, address, Collections.emptySet());
+            Entry entry = new Entry(title, description, link, Collections.emptySet());
             backingList.add(entry);
         }
         return backingList;
