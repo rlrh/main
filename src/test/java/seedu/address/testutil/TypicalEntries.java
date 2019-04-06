@@ -346,7 +346,7 @@ public class TypicalEntries {
     }
 
     public static List<Entry> getTypicalEntries() {
-        return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+        return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE, WIKIPEDIA_ENTRY));
     }
 
     public static List<Entry> getTypicalArchivesEntries() {
