@@ -62,12 +62,21 @@ public abstract class Network {
      * @throws IOException
      */
     public static CompletableFuture<byte[]> fetchAsBytesAsync(URL url) {
-        return asyncHttpClient
-            .prepareGet(url.toString())
-            .execute()
-            .toCompletableFuture()
-            .thenApply(Response::getResponseBody)
-            .thenApply(String::getBytes);
+        if (url.getProtocol().equals("http")
+            || url.getProtocol().equals("https")) {
+            return asyncHttpClient
+                .prepareGet(url.toString())
+                .execute()
+                .toCompletableFuture()
+                .thenApply(Response::getResponseBody)
+                .thenApply(String::getBytes);
+        } else {
+            try {
+                return CompletableFuture.completedFuture(fetchAsBytes(url));
+            } catch (IOException ioe) {
+                return CompletableFuture.failedFuture(ioe);
+            }
+        }
     }
 
     /**
