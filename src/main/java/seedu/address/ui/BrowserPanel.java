@@ -2,14 +2,11 @@ package seedu.address.ui;
 
 import static java.util.Objects.requireNonNull;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
-
-import com.google.common.base.Strings;
 
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -19,9 +16,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.events.EventListener;
-import org.w3c.dom.events.EventTarget;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.XmlUtil;
@@ -57,10 +51,12 @@ public class BrowserPanel extends UiPart<Region> {
     private boolean hasLoadedReaderView; // status - whether reader view has loaded
     private ViewMode viewMode; // current view mode
     private final Function<String, Optional<String>> getOfflineLink; // asks logic what the offline link for a url is
+    private final Function<String, Optional<String>> getArticle;
 
     public BrowserPanel(ObservableValue<Entry> selectedEntry,
                         ObservableValue<ViewMode> viewMode,
-                        Function<String, Optional<String>> getOfflineLink) {
+                        Function<String, Optional<String>> getOfflineLink,
+                        Function<String, Optional<String>> getArticle) {
 
         super(FXML);
 
@@ -70,6 +66,7 @@ public class BrowserPanel extends UiPart<Region> {
         this.hasLoadedReaderView = false;
         this.viewMode = viewMode.getValue();
         this.getOfflineLink = getOfflineLink;
+        this.getArticle = getArticle;
 
         // To prevent triggering events for typing inside the loaded Web page.
         getRoot().setOnKeyPressed(Event::consume);
@@ -161,7 +158,12 @@ public class BrowserPanel extends UiPart<Region> {
     private void loadEntryPage(Entry entry) {
         onlineLink = Optional.of(entry.getLink().value);
         offlineLink = getOfflineLink.apply(onlineLink.get());
-        loadPage(offlineLink.or(() -> onlineLink).get());
+        Optional<String> offlineContent = getArticle.apply(entry.getLink().value);
+        if (viewMode.getViewType().equals(ViewType.READER) && offlineContent.isPresent()) {
+            loadReader(offlineContent.get(), entry.getLink().value);
+        } else {
+            loadPage(offlineLink.or(() -> onlineLink).get());
+        }
     }
 
     /**
@@ -238,7 +240,44 @@ public class BrowserPanel extends UiPart<Region> {
                 webEngine.loadContent(processedHtml);
             });
         } catch (TransformerException | IllegalArgumentException e) {
-            String message = String.format("Failed to load reader view for %s", onlineLink.orElse("unknown"));
+            String message = String.format("Failed to load reader view for %s", baseUrl);
+            logger.warning(message);
+            loadReaderViewFailurePage();
+        }
+
+    }
+
+    /**
+     * Loads reader view of current content.
+     * Assumes original Web page is already loaded.
+     * @param baseUrl base URL used to resolve relative URLs to absolute URLs
+     */
+    private void loadReader(String rawHtml, String baseUrl) {
+
+        // set stylesheet for reader view
+        try {
+            Platform.runLater(() ->
+                    webEngine.setUserStyleSheetLocation(
+                            viewMode
+                                    .getReaderViewStyle()
+                                    .getStylesheetLocation()
+                                    .toExternalForm()
+                    )
+            );
+        } catch (IllegalArgumentException | NullPointerException e) {
+            String message = "Failed to set user style sheet location";
+            logger.warning(message);
+        }
+
+        // process loaded content, then load processed content
+        try {
+            String processedHtml = ReaderViewUtil.generateReaderViewStringFrom(rawHtml, baseUrl);
+            Platform.runLater(() -> {
+                isLoadingReaderView = true;
+                webEngine.loadContent(processedHtml);
+            });
+        } catch (IllegalArgumentException e) {
+            String message = String.format("Failed to load reader view for %s", baseUrl);
             logger.warning(message);
             loadReaderViewFailurePage();
         }
