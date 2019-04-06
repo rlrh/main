@@ -84,22 +84,23 @@ public class EntryAutofill {
             // Process through Jsoup
             Document document = Jsoup.parse(html);
             titleCandidate // title 2nd choice - document title element
-                    .tryout(document.title().trim());
+                    .tryout(StringUtil.utfSafeOf(document.title().trim()));
             descriptionCandidate // desc 3rd choice - first N words of raw document body text
-                    .tryout(StringUtil.getFirstNWordsWithEllipsis(document.body().text().trim(), MAX_WORDS));
+                    .tryout(StringUtil.getFirstNWordsWithEllipsis(
+                        StringUtil.utfSafeOf(document.body().text().trim()), MAX_WORDS));
 
 
             // Process through Readability4J
             Readability4J readability4J = new Readability4J("", document);
             Article article = readability4J.parse();
             titleCandidate // title 1st choice - extract title
-                    .tryout(StringUtil.nullSafeOf(article.getTitle()).trim());
+                    .tryout(StringUtil.utfSafeOf(StringUtil.nullSafeOf(article.getTitle())).trim());
             descriptionCandidate
                     .tryout(StringUtil.getFirstNWordsWithEllipsis(
-                            StringUtil.nullSafeOf(article.getTextContent()).trim(), MAX_WORDS
+                            StringUtil.utfSafeOf(StringUtil.nullSafeOf(article.getTextContent())).trim(), MAX_WORDS
                     )) // desc 2nd choice - first N words of cleaned-up document body text
                     .tryout(StringUtil.getFirstNWordsWithEllipsis(
-                            StringUtil.nullSafeOf(article.getExcerpt()).trim(), MAX_WORDS
+                            StringUtil.utfSafeOf(StringUtil.nullSafeOf(article.getExcerpt())).trim(), MAX_WORDS
                     )); // desc 1st choice - extract description
 
         }
