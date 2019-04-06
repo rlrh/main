@@ -353,10 +353,11 @@
     -fx-border-radius: 0px;
 }
 
-.toolbar-button:focused
+.toolbar-button:focused, .toolbar-button:pressed
 {
     -fx-background-color: #424d5f;
     -fx-border-color: #3e7b91;
+    -fx-text-fill: white;
 }
 
 .toolbar-button .glyph-icon
