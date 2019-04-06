@@ -46,6 +46,7 @@ import seedu.address.model.ModelContext;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.entry.Entry;
+import seedu.address.model.entry.exceptions.DuplicateEntryException;
 import seedu.address.storage.Storage;
 import seedu.address.testutil.EntryBuilder;
 import seedu.address.ui.ViewMode;
@@ -475,6 +476,13 @@ public class AddCommandTest {
         public boolean hasEntry(Entry listEntry) {
             requireNonNull(listEntry);
             return this.entry.isSameEntry(listEntry);
+        }
+
+        @Override
+        public void addListEntry(Entry listEntry, Optional<byte[]> articleContents) {
+            if (listEntry.equals(entry)) {
+                throw new DuplicateEntryException();
+            }
         }
     }
 
