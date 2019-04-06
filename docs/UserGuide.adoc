@@ -453,21 +453,25 @@ Clears all existing tags from the 2nd entry.
 
 Finds entries whose fields contain any of the given keyphrases. +
 
-Format: `edit [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
+Format: `find [a/SEARCH_PHRASE] [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
 
 ****
+* At least one of the optional fields must be provided.
 * The search is case insensitive. e.g `hans` will match `Hans`
 * The search matches anywhere for title, description and link. e.g. `ans B` will match `Hans Bo`
 * The search matches exactly for tags. e.g. 'science' will match 'science', but not 'scienceandtech'
-* Entries matching at least one keyphrase will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
+* The search phrase with prefix `a/` will try to match with every field in the entry according to the above rules.
+** i.e. `find a/keyphrase` is equivalent to `find ti/keyphrase d/keyphrase l/keyphrase t/keyphrase`
+* Entries matching at least one field will be returned (i.e. `OR` search).
+** e.g. `find ti/aaa d/bbb l/ccc t/ddd` will match an entry with title `Aaawesome` and an entry with description `abbbA`
 ****
 
 Examples:
 
-* `find Trump` +
-Returns entries with titles containing `trump` and `Donald Trump` etc.
-* `find Boeing FAA` +
-Returns any entry having titles `Boeing` or `FAA`
+* `find ti/Trump` +
+Returns entries with titles containing the phrase `trump` such as `Donald Trump` or `CS average salary trumps again`
+* `find l/cnn t/science` +
+Returns any entries having links containing the phrase `cnn` and entries with the exact tag `science`.
 
 ==== Selecting an entry: `select`
 
