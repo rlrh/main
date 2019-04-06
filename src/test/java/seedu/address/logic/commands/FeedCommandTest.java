@@ -27,6 +27,8 @@ public class FeedCommandTest {
         TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml");
     private static final URL TEST_URL_LOCAL =
         MainApp.class.getResource("/RssFeedTest/rss.xml");
+    private static final URL TEST_BAD_FEED_URL =
+        MainApp.class.getResource("/RssFeedTest/badrss.xml");
     private static final URL NOTAFEED_URL =
         TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml");
     private static final URL NOTAWEBSITE_URL =
@@ -79,6 +81,11 @@ public class FeedCommandTest {
     @Test
     public void execute_localUrl_success() throws Exception {
         assertFeedSuccessfullyLoaded(TEST_URL_LOCAL);
+    }
+
+    @Test
+    public void execute_badFeed_success() throws Exception {
+        assertFeedSuccessfullyLoaded(TEST_BAD_FEED_URL);
     }
 
     @Test
