@@ -84,7 +84,7 @@ public class EntryAutofill {
             // Process through Jsoup
             Document document = Jsoup.parse(html);
             titleCandidate // title 2nd choice - document title element
-                    .tryout(document.title().trim());
+                    .tryout(StringUtil.utfSafeOf(document.title().trim()));
             descriptionCandidate // desc 3rd choice - first N words of raw document body text
                     .tryout(StringUtil.getFirstNWordsWithEllipsis(
                         StringUtil.utfSafeOf(document.body().text().trim()), MAX_WORDS));
