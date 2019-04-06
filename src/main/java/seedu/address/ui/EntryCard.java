@@ -16,8 +16,7 @@ public class EntryCard extends UiPart<Region> {
 
     private static final String[] TAG_COLOR_STYLES = { "red", "pink", "purple", "deepPurple", "indigo", "blue",
                                                        "lightBlue", "cyan", "teal", "green", "lightGreen", "lime",
-                                                       "yellow", "amber", "orange", "deepOrange", "brown", "gray",
-                                                       "blueGray" };
+                                                       "yellow", "amber", "orange", "deepOrange" };
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
