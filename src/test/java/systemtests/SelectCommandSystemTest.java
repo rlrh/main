@@ -17,6 +17,7 @@ import java.net.URL;
 import org.junit.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.model.Model;
 import seedu.address.model.ModelContext;
@@ -97,13 +98,21 @@ public class SelectCommandSystemTest extends EntryBookSystemTest {
     public void select_downloadsUndownloaded() throws IOException {
 
         /* Case: Non-downloaded entry is downloaded after selection */
-        // The 8th entry is the wikipedia entry
+        // First add the entry, then we delete the article
         URL wikiurl = TypicalEntries.WIKIPEDIA_ENTRY.getLink().value;
-        Index validIndex = Index.fromOneBased(8);
-        String command = SelectCommand.COMMAND_WORD + " " + validIndex.getOneBased();
+        String command = AddCommand.COMMAND_WORD + " l/" + wikiurl.toString();
+        executeCommand(command);
         deleteArticle(wikiurl);
+
+        // Now we check that it's not downloaded
         assertFalse(getOfflineLink(wikiurl).isPresent());
+
+        // Select
+        Index validIndex = getLastIndex(getModel());
+        command = SelectCommand.COMMAND_WORD + " " + validIndex.getOneBased();
         assertCommandSuccess(command, validIndex);
+
+        // Check that it's downloaded
         assertTrue(getOfflineLink(wikiurl).isPresent());
 
         /* Case: Non-downloaded entry is invalid, so it's still non-downloaded after selection */
@@ -111,6 +120,8 @@ public class SelectCommandSystemTest extends EntryBookSystemTest {
         URL aliceurl = TypicalEntries.ALICE.getLink().value;
         validIndex = Index.fromOneBased(1);
         command = SelectCommand.COMMAND_WORD + " " + validIndex.getOneBased();
+
+        // Check that it's not downloaded, select, then check that it's still not downloaded
         assertFalse(getOfflineLink(aliceurl).isPresent());
         assertCommandSuccess(command, validIndex);
         assertFalse(getOfflineLink(aliceurl).isPresent());
