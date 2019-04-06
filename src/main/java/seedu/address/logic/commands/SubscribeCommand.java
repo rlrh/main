@@ -68,10 +68,7 @@ public class SubscribeCommand extends Command {
         // initial import into reading list
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
-                .forEach(entry -> {
-                    Optional<byte[]> articleContent = Network.fetchArticleOptional(entry.getLink().value);
-                    model.addListEntry(entry, articleContent);
-                });
+                .forEach(entry -> model.addListEntry(entry, Network.fetchArticleOptional(entry.getLink().value)));
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, toSubscribe));
     }

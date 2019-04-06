@@ -15,6 +15,7 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
+import seedu.address.model.entry.exceptions.DuplicateEntryException;
 import seedu.address.model.entry.util.EntryAutofill;
 import seedu.address.util.Network;
 
@@ -64,10 +65,7 @@ public class AddCommand extends Command {
         autofill.extractFromUrl(url);
 
         Optional<byte[]> articleContent = Network.fetchArticleOptional(url);
-        if (articleContent.isPresent()) {
-            String html = new String(articleContent.get());
-            autofill.extractFromHtml(html);
-        }
+        articleContent.ifPresent(bytes -> autofill.extractFromHtml(new String(bytes)));
 
         Entry updatedEntry = new Entry(
                 autofill.getTitle(),
@@ -77,11 +75,11 @@ public class AddCommand extends Command {
                 toAdd.getTags()
         );
 
-        if (model.hasEntry(updatedEntry)) {
+        try {
+            model.addListEntry(updatedEntry, articleContent);
+        } catch (DuplicateEntryException dee) {
             throw new CommandException(MESSAGE_DUPLICATE_ENTRY);
         }
-
-        model.addListEntry(updatedEntry, articleContent);
         return new CommandResult(String.format(MESSAGE_SUCCESS, updatedEntry));
     }
 
