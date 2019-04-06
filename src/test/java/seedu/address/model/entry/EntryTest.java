@@ -2,7 +2,6 @@ package seedu.address.model.entry;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
@@ -84,10 +83,6 @@ public class EntryTest {
 
         // different link -> returns false
         editedAlice = new EntryBuilder(ALICE).withLink(VALID_LINK_BOB).build();
-        assertFalse(ALICE.equals(editedAlice));
-
-        // different address -> returns false
-        editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different tags -> returns false

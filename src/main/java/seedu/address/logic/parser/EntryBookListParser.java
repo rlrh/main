@@ -15,6 +15,7 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.RefreshEntryCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 
 /**
  * Represents the parser for the list-context.
@@ -72,7 +73,7 @@ public class EntryBookListParser extends EntryBookParser {
             return new ViewModeCommandParser().parse(arguments);
 
         default:
-            return super.parseCommand(userInput);
+            return super.parseCommand(userInput, ModelContext.CONTEXT_LIST);
         }
     }
 

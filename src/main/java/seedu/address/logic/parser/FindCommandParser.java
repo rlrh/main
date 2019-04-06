@@ -1,7 +1,6 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ALL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
@@ -36,7 +35,6 @@ public class FindCommandParser implements Parser<FindCommand> {
                 PREFIX_TITLE,
                 PREFIX_DESCRIPTION,
                 PREFIX_LINK,
-                PREFIX_ADDRESS,
                 PREFIX_ALL,
                 PREFIX_TAG);
 
@@ -50,9 +48,6 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
         if (argMultimap.getValue(PREFIX_LINK).isPresent()) {
             findEntryDescriptor.setLink(ParserUtil.parseKeyphrase(argMultimap.getValue(PREFIX_LINK).get()));
-        }
-        if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
-            findEntryDescriptor.setAddress(ParserUtil.parseKeyphrase(argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
         if (argMultimap.getValue(PREFIX_ALL).isPresent()) {
             findEntryDescriptor.setAll(ParserUtil.parseKeyphrase(argMultimap.getValue(PREFIX_ALL).get()));

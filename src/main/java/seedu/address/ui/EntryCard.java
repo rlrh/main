@@ -38,8 +38,6 @@ public class EntryCard extends UiPart<Region> {
     @FXML
     private Label description;
     @FXML
-    private Label address;
-    @FXML
     private Label link;
     @FXML
     private FlowPane tags;
@@ -50,8 +48,6 @@ public class EntryCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         title.setText(entry.getTitle().fullTitle);
         description.setText(entry.getDescription().value);
-        address.setText(entry.getAddress().value);
-        address.setManaged(false); // Makes address label invisible, graphic pipeline will not manage it.
         link.setText(entry.getLink().value.toString());
         entry.getTags().forEach(tag -> {
             Label tagLabel = new Label(tag.tagName);
