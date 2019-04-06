@@ -56,10 +56,9 @@ public abstract class Network {
     }
 
     /**
-     * Fetches the resource (i.e. webpage) at url, returning it as a byte array
+     * Fetches the resource (i.e. webpage) at url asynchronously, returning it as a byte array
      * @param url
-     * @return The content fetched.
-     * @throws IOException
+     * @return The CompleteableFuture that completes with the resource content
      */
     public static CompletableFuture<byte[]> fetchAsBytesAsync(URL url) {
         if (url.getProtocol().equals("http")
@@ -105,7 +104,7 @@ public abstract class Network {
     }
 
     /**
-     * Fetches the article linked at the URL and returns it,
+     * Asynchronously fetches the article linked at the URL and returns it as a CompleteableFuture,
      * but first pre-processing it by converting all links to absolute form.
      */
     public static CompletableFuture<byte[]> fetchArticleAsync(URL url) {
