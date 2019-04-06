@@ -273,7 +273,6 @@ public class ModelManager implements Model {
     @Override
     public void addArchivesEntry(Entry entry) {
         archivesEntryBook.addEntry(entry);
-        updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
 
     @Override
