@@ -51,7 +51,6 @@ public class EditCommandSystemTest extends EntryBookSystemTest {
                 + DESCRIPTION_DESC_BOB + " " + TAG_DESC_SCIENCE + " " + TAG_DESC_TECH + " ";
         Entry editedEntry = new EntryBuilder(BOB)
             .withLink(entryToEdit.getLink().value)
-            .withAddress(entryToEdit.getAddress().value)
             .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH)
             .build();
         assertCommandSuccess(command, index, editedEntry);
@@ -66,20 +65,17 @@ public class EditCommandSystemTest extends EntryBookSystemTest {
         assertTrue(getModel().getListEntryBook().getEntryList().contains(firstEntry));
         assertEquals(firstEntry, new EntryBuilder(BOB)
                                         .withLink(entryToEdit.getLink().value)
-                                        .withAddress(entryToEdit.getAddress().value)
                                         .build());
 
         index = INDEX_SECOND_ENTRY;
         entryToEdit = getModel().getFilteredEntryList().get(index.getZeroBased());
         assertNotEquals(entryToEdit, new EntryBuilder(firstEntry)
-            .withLink(entryToEdit.getLink().value)
-            .withAddress(entryToEdit.getAddress().value));
+            .withLink(entryToEdit.getLink().value));
 
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased()
                 + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
         editedEntry = new EntryBuilder(firstEntry)
             .withLink(entryToEdit.getLink().value)
-            .withAddress(entryToEdit.getAddress().value)
             .build();
         assertCommandSuccess(command, index, editedEntry);
 
@@ -123,7 +119,6 @@ public class EditCommandSystemTest extends EntryBookSystemTest {
                 + TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + TAG_DESC_TECH + TAG_DESC_SCIENCE;
         editedEntry = new EntryBuilder(BOB)
             .withLink(entryToEdit.getLink().value)
-            .withAddress(entryToEdit.getAddress().value)
             .build();
         // this can be misleading: card selection actually remains unchanged but the
         // browser's url is updated to reflect the new entry's title

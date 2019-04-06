@@ -2,7 +2,6 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -19,7 +18,6 @@ import java.util.stream.Stream;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -84,27 +82,6 @@ public class ParserUtil {
             return new Description(trimmedDescription);
         } else {
             return new Description(Description.DEFAULT_DESCRIPTION);
-        }
-    }
-
-    /**
-     * Parses a {@code Optional<String> address} into an {@code Address}.
-     * Modified from original as address is now optional (and invisible) field.
-     * Leading and trailing whitespaces will be trimmed.
-     * If address is empty, default address used.
-     *
-     * @throws ParseException if the given {@code address} is invalid.
-     */
-    public static Address parseAddress(Optional<String> address) throws ParseException {
-        requireNonNull(address);
-        if (address.isPresent()) {
-            String trimmedAddress = address.get().trim();
-            if (!Address.isValidUserInputAddress(trimmedAddress)) {
-                throw new ParseException(Address.formExceptionMessage(trimmedAddress));
-            }
-            return new Address(trimmedAddress);
-        } else {
-            return new Address(Address.DEFAULT_ADDRESS);
         }
     }
 
@@ -190,7 +167,7 @@ public class ParserUtil {
     public static Entry parseEntryFromArgs(String args, String usageMessage) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
-                        PREFIX_TITLE, PREFIX_DESCRIPTION, PREFIX_LINK, PREFIX_ADDRESS, PREFIX_TAG);
+                        PREFIX_TITLE, PREFIX_DESCRIPTION, PREFIX_LINK, PREFIX_TAG);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_LINK)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -200,10 +177,9 @@ public class ParserUtil {
         Title title = ParserUtil.parseTitle(argMultimap.getValue(PREFIX_TITLE));
         Description description = ParserUtil.parseDescription(argMultimap.getValue(PREFIX_DESCRIPTION));
         Link link = ParserUtil.parseLink(argMultimap.getValue(PREFIX_LINK));
-        Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS));
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-        return new Entry(title, description, link, address, tagList);
+        return new Entry(title, description, link, tagList);
     }
 
     /**

@@ -3,9 +3,9 @@ package seedu.address.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.testutil.TypicalEntries.ALICE;
+import static seedu.address.testutil.TypicalEntries.BOB;
 import static seedu.address.testutil.TypicalEntries.getTypicalListEntryBook;
 
 import java.util.Arrays;
@@ -53,9 +53,9 @@ public class EntryBookTest {
     @Test
     public void resetData_withDuplicateEntries_throwsDuplicateEntryException() {
         // Two entries with the same identity fields
-        Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
+        Entry editedBob = new EntryBuilder(BOB).withLink(ALICE.getLink().value).withTags(VALID_TAG_SCIENCE)
                 .build();
-        List<Entry> newEntries = Arrays.asList(ALICE, editedAlice);
+        List<Entry> newEntries = Arrays.asList(ALICE, editedBob);
         EntryBookStub newData = new EntryBookStub(newEntries);
 
         thrown.expect(DuplicateEntryException.class);
@@ -82,9 +82,9 @@ public class EntryBookTest {
     @Test
     public void hasEntry_entryWithSameIdentityFieldsInEntryBook_returnsTrue() {
         entryBook.addEntry(ALICE);
-        Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
+        Entry editedBob = new EntryBuilder(BOB).withLink(ALICE.getLink().value).withTags(VALID_TAG_SCIENCE)
                 .build();
-        assertTrue(entryBook.hasEntry(editedAlice));
+        assertTrue(entryBook.hasEntry(editedBob));
     }
 
     @Test

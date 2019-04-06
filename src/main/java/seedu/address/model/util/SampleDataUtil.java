@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import seedu.address.model.EntryBook;
 import seedu.address.model.ReadOnlyEntryBook;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -25,37 +24,31 @@ public class SampleDataUtil {
                     new Title("CS2103 the best mod ever?"),
                     new Description("CS2101 disagrees!"),
                     new Link("https://www.comp.nus.edu.sg/programmes/ug/cs/"),
-                    new Address("Blk 30 Geylang Street 29, #06-40"),
                     getTagSet("nus", "soc")),
                 new Entry(
                     new Title("Filler - "),
                     new Description("or is it...?"),
                     new Link("file:///example/folder/file"),
-                    new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
                     getTagSet()),
                 new Entry(
                     new Title("Qiji trivalises all engineering majors!"),
                     new Description("Has he taken it too far?"),
                     new Link("https://github.com/qjqqyy"),
-                    new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
                     getTagSet("engineering")),
                 new Entry(
                     new Title("Jonathan voted best in procrastination!"),
                     new Description("The 22-time winner says \"I don't want to win anymore...\"!"),
                     new Link("https://github.com/epicfailname"),
-                    new Address("Blk 436 Serangoon Gardens Street 26, #16-43"),
                     getTagSet("award")),
                 new Entry(
                     new Title("Thomas invents time travel!"),
                     new Description("Still can't finish his work.."),
                     new Link("https://github.com/thomastanck"),
-                    new Address("Blk 47 Tampines Street 20, #17-35"),
                     getTagSet("science", "tech")),
                 new Entry(
                     new Title("Rayner - the new CEO of Amazon"),
                     new Description("Says \"I couldn't have done it without CS2103!\""),
                     new Link("https://github.com/rlrh"),
-                    new Address("Blk 45 Aljunied Street 85, #11-31"),
                     getTagSet("nus", "soc", "amazon"))
             };
         } catch (MalformedURLException mue) {

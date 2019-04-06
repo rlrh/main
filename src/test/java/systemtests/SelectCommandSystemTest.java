@@ -15,6 +15,7 @@ import org.junit.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 
 public class SelectCommandSystemTest extends EntryBookSystemTest {
     @Test
@@ -78,7 +79,7 @@ public class SelectCommandSystemTest extends EntryBookSystemTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
 
         /* Case: mixed case command word -> rejected */
-        assertCommandFailure("SeLeCt 1", MESSAGE_UNKNOWN_COMMAND);
+        assertCommandFailure("SeLeCt 1", String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
 
         /* Case: select from empty address book -> rejected */
         deleteAllEntries();

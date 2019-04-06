@@ -1,8 +1,6 @@
 package systemtests;
 
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DESCRIPTION;
@@ -39,6 +37,7 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -60,12 +59,12 @@ public class AddCommandSystemTest extends EntryBookSystemTest {
          */
         Entry toAdd = AMY;
         String command = "   " + AddCommand.COMMAND_WORD + "  " + TITLE_DESC_AMY + "  " + DESCRIPTION_DESC_AMY + " "
-                + LINK_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TAG_DESC_TECH + " ";
+                + LINK_DESC_AMY + "   " + TAG_DESC_TECH + " ";
         assertCommandSuccess(command, toAdd);
 
         /* Case: add a entry with all fields same as another entry in the entry book except link -> added */
         toAdd = new EntryBuilder(AMY).withLink(VALID_LINK_BOB).build();
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_BOB + ADDRESS_DESC_AMY
+        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_BOB
                 + TAG_DESC_TECH;
         assertCommandSuccess(command, toAdd);
 
@@ -85,7 +84,7 @@ public class AddCommandSystemTest extends EntryBookSystemTest {
 
         /* Case: add a entry with tags, command with parameters in random order -> added */
         toAdd = BOB;
-        command = AddCommand.COMMAND_WORD + TAG_DESC_TECH + DESCRIPTION_DESC_BOB + ADDRESS_DESC_BOB + TITLE_DESC_BOB
+        command = AddCommand.COMMAND_WORD + TAG_DESC_TECH + DESCRIPTION_DESC_BOB + TITLE_DESC_BOB
                 + TAG_DESC_SCIENCE + LINK_DESC_BOB;
         assertCommandSuccess(command, toAdd);
 
@@ -125,36 +124,30 @@ public class AddCommandSystemTest extends EntryBookSystemTest {
         assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_ENTRY);
 
         /* Case: missing link -> rejected */
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
+        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         /* Case: invalid keyword -> rejected */
         command = "adds " + EntryUtil.getEntryDetails(toAdd);
-        assertCommandFailure(command, Messages.MESSAGE_UNKNOWN_COMMAND);
+        assertCommandFailure(command, String.format(Messages.MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
 
         /* Case: invalid title -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_TITLE_DESC
-            + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
+            + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
         assertCommandFailure(command, Title.formExceptionMessage(INVALID_TITLE.trim()));
 
         /* Case: invalid description -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_DESCRIPTION_DESC
-            + TITLE_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY;
+            + TITLE_DESC_AMY + LINK_DESC_AMY;
         assertCommandFailure(command, Description.formExceptionMessage(INVALID_DESCRIPTION.trim()));
 
         /* Case: invalid link -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_LINK_DESC
-             + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + ADDRESS_DESC_AMY;
+             + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY;
         assertCommandFailure(command, Link.formExceptionMessage(INVALID_LINK.trim()));
 
-        /* Case: invalid address -> rejected
-        command = AddCommand.COMMAND_WORD + INVALID_ADDRESS_DESC
-             + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
-        assertCommandFailure(command, Address.MESSAGE_CONSTRAINTS);
-        */
-
         /* Case: invalid tag -> rejected */
-        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + ADDRESS_DESC_AMY
+        command = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY
                 + INVALID_TAG_DESC;
         assertCommandFailure(command, Tag.formExceptionMessage(INVALID_TAG.trim()));
 
@@ -164,12 +157,12 @@ public class AddCommandSystemTest extends EntryBookSystemTest {
 
         /* Case: using alias to add a entry without tags to a non-empty entry book -> added */
         command = "   " + AddCommand.COMMAND_ALIAS + "  " + TITLE_DESC_AMY + "  " + DESCRIPTION_DESC_AMY + " "
-            + LINK_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TAG_DESC_TECH + " ";
+            + LINK_DESC_AMY + "   " + TAG_DESC_TECH + " ";
         assertCommandSuccess(command, AMY);
 
         /* Case: command with leading spaces and trailing spaces -> added */
         command = "   " + AddCommand.COMMAND_WORD + "  " + TITLE_DESC_BOB + "  " + DESCRIPTION_DESC_BOB + " "
-            + LINK_DESC_BOB + "   " + ADDRESS_DESC_BOB + "   " + TAG_DESC_TECH + "   " + TAG_DESC_SCIENCE + " ";
+            + LINK_DESC_BOB + "   " + TAG_DESC_TECH + "   " + TAG_DESC_SCIENCE + " ";
         assertCommandSuccess(command, BOB);
     }
 
