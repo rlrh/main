@@ -8,13 +8,12 @@ import static seedu.address.testutil.TypicalEntries.FILE_TEST_CONTENTS;
 import static seedu.address.testutil.TypicalEntries.VALID_FILE_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_HTTPS_LINK;
 import static seedu.address.testutil.TypicalEntries.VALID_HTTP_LINK;
-import static seedu.address.util.Network.fetchAsStream;
-import static seedu.address.util.Network.fetchAsString;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,15 +32,15 @@ public class NetworkTest {
 
     @Test
     public void fetchAsStream_success() throws IOException {
-        InputStream httpsContent = fetchAsStream(HTTPS_TEST_URL);
+        InputStream httpsContent = Network.fetchAsStream(HTTPS_TEST_URL);
         byte[] httpsContentBytes = httpsContent.readAllBytes();
         assertTrue(httpsContentBytes.length > 0);
         assertTrue(new String(httpsContentBytes, StandardCharsets.UTF_8).contains("<p>It works!</p>"));
 
-        InputStream httpContent = fetchAsStream(HTTP_TEST_URL);
+        InputStream httpContent = Network.fetchAsStream(HTTP_TEST_URL);
         assertTrue(httpContent.readAllBytes().length > 0);
 
-        InputStream localContent = fetchAsStream(FILE_TEST_URL);
+        InputStream localContent = Network.fetchAsStream(FILE_TEST_URL);
         byte[] localContentBytes = localContent.readAllBytes();
         assertTrue(localContentBytes.length > 0);
         assertArrayEquals(localContentBytes, FILE_TEST_CONTENTS.getBytes());
@@ -50,29 +49,29 @@ public class NetworkTest {
     @Test
     public void fetchAsStream_invalidUrl_throwsIoexception() throws IOException {
         thrown.expect(IOException.class);
-        fetchAsStream(TestUtil.toUrl("https://abc.``ILLEGAL_CHARS.com"));
+        Network.fetchAsStream(TestUtil.toUrl("https://abc.``ILLEGAL_CHARS.com"));
     }
 
     @Test
     public void fetchAsStream_invalidWebsite_throwsIoexception() throws IOException {
         thrown.expect(IOException.class);
-        fetchAsStream(TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely"));
+        Network.fetchAsStream(TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely"));
     }
 
     @Test
     public void fetchAsString_success() {
         try {
-            String httpsContent = fetchAsString(
+            String httpsContent = Network.fetchAsString(
                 TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
             assertTrue(httpsContent.length() > 0);
             assertTrue(httpsContent.contains("<p>It works!</p>"));
 
-            String httpContent = fetchAsString(
+            String httpContent = Network.fetchAsString(
                 TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
             assertTrue(httpContent.length() > 0);
 
-            String localContent = fetchAsString(
-                    TestUtil.toUrl(MainApp.class.getResource("/NetworkTest/default.html").toExternalForm()));
+            String localContent = Network.fetchAsString(
+                    MainApp.class.getResource("/NetworkTest/default.html"));
             assertTrue(localContent.length() > 0);
 
             assertEquals(localContent, FILE_TEST_CONTENTS);
@@ -84,13 +83,70 @@ public class NetworkTest {
     @Test
     public void fetchAsString_invalidUrl_throwsIoexception() throws IOException {
         thrown.expect(IOException.class);
-        fetchAsString(TestUtil.toUrl("https://abc.``ILLEGAL_CHARS.com"));
+        Network.fetchAsString(TestUtil.toUrl("https://abc.``ILLEGAL_CHARS.com"));
     }
 
     @Test
     public void fetchAsString_invalidWebsite_throwsIoexception() throws IOException {
         thrown.expect(IOException.class);
-        fetchAsString(TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely"));
+        Network.fetchAsString(TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely"));
+    }
+
+    @Test
+    public void fetchArticle_success() throws IOException {
+        String httpsContent = new String(Network.fetchArticle(
+            TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/")));
+        assertTrue(httpsContent.length() > 0);
+        assertTrue(httpsContent.contains("<p>It works!</p>"));
+
+        String httpContent = new String(Network.fetchArticle(
+            TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/")));
+        assertTrue(httpContent.length() > 0);
+
+        String localContent = new String(Network.fetchArticle(
+            MainApp.class.getResource("/NetworkTest/default.html")));
+        assertTrue(localContent.length() > 0);
+    }
+
+    @Test
+    public void fetchAsBytesAsync_success() throws IOException {
+        Network.fetchAsBytesAsync(
+            TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/"))
+            .thenAccept(content -> {
+                String httpsContent = new String(content);
+                assertTrue(httpsContent.length() > 0);
+                assertTrue(httpsContent.contains("<p>It works!</p>"));
+            });
+
+        Network.fetchAsBytesAsync(
+            TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/"))
+            .thenAccept(content -> {
+                String httpContent = new String(content);
+                assertTrue(httpContent.length() > 0);
+            });
+
+        Network.fetchAsBytesAsync(
+            MainApp.class.getResource("/NetworkTest/default.html"))
+            .thenAccept(content -> {
+                String localContent = new String(content);
+                assertTrue(localContent.length() > 0);
+            });
+    }
+
+    @Test
+    public void fetchAsBytesAsync_invalidWebsite_failsFuture() throws ExecutionException, InterruptedException {
+        thrown.expect(ExecutionException.class);
+        Network.fetchAsBytesAsync(
+            TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely"))
+            .get();
+    }
+
+    @Test
+    public void fetchAsBytesAsync_invalidLocalFile_failsFuture() throws ExecutionException, InterruptedException {
+        thrown.expect(ExecutionException.class);
+        Network.fetchAsBytesAsync(
+            TestUtil.toUrl("file:/example/bob/fake/file"))
+            .get();
     }
 
 }
