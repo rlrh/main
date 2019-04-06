@@ -39,6 +39,7 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -130,7 +131,7 @@ public class AddCommandSystemTest extends EntryBookSystemTest {
 
         /* Case: invalid keyword -> rejected */
         command = "adds " + EntryUtil.getEntryDetails(toAdd);
-        assertCommandFailure(command, Messages.MESSAGE_UNKNOWN_COMMAND);
+        assertCommandFailure(command, String.format(Messages.MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
 
         /* Case: invalid title -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_TITLE_DESC
