@@ -61,18 +61,13 @@ public class AddCommand extends Command {
 
         URL url = toAdd.getLink().value;
 
-        EntryAutofill autofill = new EntryAutofill(toAdd.getTitle(), toAdd.getDescription());
+        EntryAutofill autofill = new EntryAutofill(toAdd);
         autofill.extractFromUrl(url);
 
         Optional<byte[]> articleContent = Network.fetchArticleOptional(url);
         articleContent.ifPresent(bytes -> autofill.extractFromHtml(new String(bytes)));
 
-        Entry updatedEntry = new Entry(
-                autofill.getTitle(),
-                autofill.getDescription(),
-                toAdd.getLink(),
-                toAdd.getTags()
-        );
+        Entry updatedEntry = autofill.getFilledEntry();
 
         try {
             model.addListEntry(updatedEntry, articleContent);

@@ -2,23 +2,22 @@ package seedu.address.model.entry.util;
 
 import java.net.URL;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import org.apache.commons.text.WordUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import com.google.common.io.Files;
+import com.rometools.rome.feed.synd.SyndFeed;
 
 import net.dankito.readability4j.Article;
 import net.dankito.readability4j.Readability4J;
-
-import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.Candidate;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.ParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.entry.Description;
+import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Title;
 
 /**
@@ -26,21 +25,16 @@ import seedu.address.model.entry.Title;
  */
 public class EntryAutofill {
 
-    private static final Logger logger = LogsCenter.getLogger(EntryAutofill.class);
     private static final String FALLBACK_TITLE = "Untitled";
     private static final String FALLBACK_DESCRIPTION = "No description";
     private static final int MAX_WORDS = 32;
 
-    private final Title title;
-    private final Description description;
-    private final boolean noTitleOrNoDescription;
+    private final Entry originalEntry;
     private final Candidate<String, Title> titleCandidate;
     private final Candidate<String, Description> descriptionCandidate;
 
-    public EntryAutofill(Title originalTitle, Description originalDescription) {
-        this.title = originalTitle;
-        this.description = originalDescription;
-        this.noTitleOrNoDescription = title.isEmpty() || description.isEmpty();
+    public EntryAutofill(Entry originalEntry) {
+        this.originalEntry = originalEntry;
         this.titleCandidate = new Candidate<>(new Title(FALLBACK_TITLE), string -> {
             try {
                 return Optional.of(ParserUtil.parseTitle(Optional.of(string)));
@@ -57,12 +51,16 @@ public class EntryAutofill {
         });
     }
 
+    private boolean noTitleOrNoDescription() {
+        return originalEntry.getTitle().isEmpty() || originalEntry.getDescription().isEmpty();
+    }
+
     /**
      * Extract candidates by parsing URL.
      * @param url URL to parse
      */
-    public EntryAutofill extractFromUrl(URL url) {
-        if (noTitleOrNoDescription) {
+    public void extractFromUrl(URL url) {
+        if (noTitleOrNoDescription()) {
             String baseName = Files.getNameWithoutExtension(url.getPath())
                     .replaceAll("\n", "") // remove newline chars
                     .replaceAll("\r", "") // remove carriage return chars
@@ -71,15 +69,14 @@ public class EntryAutofill {
             titleCandidate.tryout(WordUtils.capitalizeFully(baseName)); // title - cleaned up base name
             descriptionCandidate.tryout(url.getHost()); // description - host name
         }
-        return this;
     }
 
     /**
      * Extract candidates by parsing HTML.
      * @param html raw HTML to parse
      */
-    public EntryAutofill extractFromHtml(String html) {
-        if (noTitleOrNoDescription) {
+    public void extractFromHtml(String html) {
+        if (noTitleOrNoDescription()) {
 
             // Process through Jsoup
             Document document = Jsoup.parse(html);
@@ -103,23 +100,25 @@ public class EntryAutofill {
                     )); // desc 1st choice - extract description
 
         }
-        return this;
     }
 
-    /**
-     * Gets the best title.
-     * @return autofilled title if original title is empty, else original title
-     */
-    public Title getTitle() {
-        return title.isEmpty() ? titleCandidate.get() : title;
+    /** Extract candidate by parsing RSS/Atom feed metadata. */
+    public void extractFromFeed(SyndFeed feed) {
+        if (noTitleOrNoDescription()) {
+            titleCandidate.tryout(feed.getTitle());
+            descriptionCandidate.tryout(feed.getDescription());
+        }
     }
 
-    /**
-     * Gets the best description.
-     * @return autofilled description if original description is empty, else original description
-     */
-    public Description getDescription() {
-        return description.isEmpty() ? descriptionCandidate.get() : description;
+    /** get the filled up Entry. */
+    public Entry getFilledEntry() {
+        return new Entry(
+                // best title
+                originalEntry.getTitle().isEmpty() ? titleCandidate.get() : originalEntry.getTitle(),
+                // best description
+                originalEntry.getDescription().isEmpty() ? descriptionCandidate.get() : originalEntry.getDescription(),
+                originalEntry.getLink(),
+                originalEntry.getTags()
+        );
     }
-
 }
