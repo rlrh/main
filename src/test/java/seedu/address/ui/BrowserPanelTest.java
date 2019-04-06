@@ -51,7 +51,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     public void displayCorrectPage() throws Exception {
         // associated web page of a entry with valid link
         guiRobot.interact(() -> selectedEntry.set(VALID_FILE_LINK));
-        URL expectedEntryUrl = new URL(VALID_FILE_LINK.getLink().value);
+        URL expectedEntryUrl = VALID_FILE_LINK.getLink().value;
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedEntryUrl, browserPanelHandle.getLoadedUrl());
     }
@@ -66,12 +66,12 @@ public class BrowserPanelTest extends GuiUnitTest {
 
     @Test
     public void displayReaderViewOnTestPage() {
-        assertReaderViewWorksOn(BROWSER_PANEL_TEST_ENTRY, BROWSER_PANEL_TEST_ENTRY_BASE_URL);
+        assertReaderViewWorksOn(BROWSER_PANEL_TEST_ENTRY, BROWSER_PANEL_TEST_ENTRY_BASE_URL.toString());
     }
 
     @Test
     public void displayReaderViewOnWikipediaPage() {
-        assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_ENTRY.getLink().value);
+        assertReaderViewWorksOn(WIKIPEDIA_ENTRY, WIKIPEDIA_ENTRY.getLink().value.toString());
     }
 
     @Test

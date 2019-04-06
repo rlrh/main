@@ -30,7 +30,7 @@ public class FindEntryDescriptorBuilder {
         descriptor = new FindEntryDescriptor();
         descriptor.setTitle(entry.getTitle().fullTitle);
         descriptor.setDescription(entry.getDescription().value);
-        descriptor.setLink(entry.getLink().value);
+        descriptor.setLink(entry.getLink().value.toString());
         descriptor.setAddress(entry.getAddress().value);
         descriptor.setTags(entry.getTags());
     }

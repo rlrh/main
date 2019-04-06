@@ -8,6 +8,9 @@ import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_NET;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_XML;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_SUCCESS;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.junit.Test;
 
 import seedu.address.MainApp;
@@ -17,21 +20,23 @@ import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelContext;
+import seedu.address.testutil.TestUtil;
 
 public class FeedCommandTest {
-    private static final String TEST_URL = "https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml";
-    private static final String TEST_URL_LOCAL = MainApp.class.getResource("/RssFeedTest/rss.xml")
-            .toExternalForm();
-
-    private static final String MALFORMED_URL = "notavalidprotocol://malformed.url/invalid";
-    private static final String NOTAFEED_URL =
-        "https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml";
+    private static final URL TEST_URL =
+        TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml");
+    private static final URL TEST_URL_LOCAL =
+        MainApp.class.getResource("/RssFeedTest/rss.xml");
+    private static final URL NOTAFEED_URL =
+        TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml");
+    private static final URL NOTAWEBSITE_URL =
+        TestUtil.toUrl("https://this.website.does.not.exist.definitely/");
 
     private Model model = new ModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
 
     /** Asserts that executing a FeedCommand with the given url imports the Entry list. */
-    public void assertFeedSuccessfullyLoaded(String feedUrl) throws Exception {
+    public void assertFeedSuccessfullyLoaded(URL feedUrl) throws Exception {
         Model model = new ModelManagerStub();
         Model expectedModel = new ModelManagerStub();
         CommandHistory commandHistory = new CommandHistory();
@@ -47,9 +52,9 @@ public class FeedCommandTest {
     }
 
     @Test
-    public void equals() {
-        String firstUrl = "https://open.kattis.com/rss/new-problems";
-        String secondUrl = "https://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=rss";
+    public void equals() throws MalformedURLException {
+        URL firstUrl = new URL("https://open.kattis.com/rss/new-problems");
+        URL secondUrl = new URL("https://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=rss");
 
         FeedCommand feedFirstCommand = new FeedCommand(firstUrl);
         FeedCommand feedSecondCommand = new FeedCommand(secondUrl);
@@ -82,18 +87,18 @@ public class FeedCommandTest {
     }
 
     @Test
-    public void execute_malformedUrlGiven_commandFails() {
-        String expectedMessage = String.format(MESSAGE_FAILURE_NET,
-                "java.net.MalformedURLException: unknown protocol: notavalidprotocol");
-        FeedCommand command = new FeedCommand(MALFORMED_URL);
+    public void execute_urlIsNotAFeed_commandFails() {
+        String expectedMessage = String.format(MESSAGE_FAILURE_XML, NOTAFEED_URL);
+        FeedCommand command = new FeedCommand(NOTAFEED_URL);
 
         assertCommandFailure(command, model, commandHistory, expectedMessage);
     }
 
     @Test
-    public void execute_urlIsNotAFeed_commandFails() {
-        String expectedMessage = String.format(MESSAGE_FAILURE_XML, NOTAFEED_URL);
-        FeedCommand command = new FeedCommand(NOTAFEED_URL);
+    public void execute_urlIsNotAWebsite_commandFails() {
+        String expectedMessage = String.format(MESSAGE_FAILURE_NET,
+            "java.net.UnknownHostException: this.website.does.not.exist.definitely");
+        FeedCommand command = new FeedCommand(NOTAWEBSITE_URL);
 
         assertCommandFailure(command, model, commandHistory, expectedMessage);
     }

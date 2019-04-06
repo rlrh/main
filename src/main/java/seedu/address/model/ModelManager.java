@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
@@ -162,9 +164,14 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public Optional<String> getOfflineLink(String url) {
-        return storage.getOfflineLink(url)
-                .map(path -> path.toUri().toString());
+    public Optional<URL> getOfflineLink(URL url) {
+        return storage.getOfflineLink(url).flatMap(path -> {
+            try {
+                return Optional.of(path.toUri().toURL());
+            } catch (MalformedURLException e) {
+                return Optional.empty();
+            }
+        });
     }
 
     //=========== EntryBook ================================================================================
@@ -317,12 +324,12 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void deleteArticle(String url) throws IOException {
+    public void deleteArticle(URL url) throws IOException {
         storage.deleteArticle(url);
     }
 
     @Override
-    public Optional<Path> addArticle(String url, byte[] articleContent) throws IOException {
+    public Optional<Path> addArticle(URL url, byte[] articleContent) throws IOException {
         return storage.addArticle(url, articleContent);
     }
 

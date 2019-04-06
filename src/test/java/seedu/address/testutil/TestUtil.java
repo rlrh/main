@@ -1,6 +1,8 @@
 package seedu.address.testutil;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,5 +53,17 @@ public class TestUtil {
      */
     public static Entry getEntry(Model model, Index index) {
         return model.getFilteredEntryList().get(index.getZeroBased());
+    }
+
+    /**
+     * Constructs a URL object and ignores the exception. For testing purposes only!
+     */
+    public static URL toUrl(String url) {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException mue) {
+            // Should never happen!
+            throw new AssertionError("Invalid link found in test! Ensure links are valid! " + mue.getMessage());
+        }
     }
 }
