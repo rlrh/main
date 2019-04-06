@@ -20,7 +20,6 @@ import com.rometools.rome.io.XmlReader;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.EntryBook;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -33,7 +32,6 @@ import seedu.address.util.Network;
  */
 public class FeedUtil {
     public static final String DEFAULT_DESCRIPTION_TEXT = "imported from %s";
-    public static final String DEFAULT_ADDRESS_TEXT = "this field is deprecated";
 
     private static final Logger logger = LogsCenter.getLogger(FeedUtil.class);
 
@@ -75,7 +73,6 @@ public class FeedUtil {
                 extractTitle(syndEntry),
                 extractDescription(syndEntry, feedUrl),
                 link,
-                new Address(DEFAULT_ADDRESS_TEXT),
                 Collections.emptySet()
         ));
     }

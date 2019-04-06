@@ -71,7 +71,6 @@ public class FindCommand extends Command {
         private String title;
         private String description;
         private String link;
-        private String address;
         private String all;
         private Set<Tag> tags;
 
@@ -85,7 +84,6 @@ public class FindCommand extends Command {
             setTitle(toCopy.title);
             setDescription(toCopy.description);
             setLink(toCopy.link);
-            setAddress(toCopy.address);
             setAll(toCopy.all);
             setTags(toCopy.tags);
         }
@@ -94,7 +92,7 @@ public class FindCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(title, link, description, address, all, tags);
+            return CollectionUtil.isAnyNonNull(title, link, description, all, tags);
         }
 
         public void setTitle(String title) {
@@ -119,14 +117,6 @@ public class FindCommand extends Command {
 
         public Optional<String> getLink() {
             return Optional.ofNullable(link);
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
-        public Optional<String> getAddress() {
-            return Optional.ofNullable(address);
         }
 
         public void setAll(String all) {
@@ -172,7 +162,6 @@ public class FindCommand extends Command {
             return getTitle().equals(e.getTitle())
                 && getDescription().equals(e.getDescription())
                 && getLink().equals(e.getLink())
-                && getAddress().equals(e.getAddress())
                 && getAll().equals(e.getAll())
                 && getTags().equals(e.getTags());
         }

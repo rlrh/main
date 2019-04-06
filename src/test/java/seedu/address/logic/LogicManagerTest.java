@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
-import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESCRIPTION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TITLE_DESC_AMY;
@@ -108,8 +107,7 @@ public class LogicManagerTest {
         logic = new LogicManager(model);
 
         // Execute add command
-        String addCommand = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY
-                + ADDRESS_DESC_AMY;
+        String addCommand = AddCommand.COMMAND_WORD + TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY;
         Entry expectedEntry = new EntryBuilder(AMY).withTags().build();
         Model expectedModel = new ModelManagerStub();
         String expectedInitialMessage = String.format(AddCommand.MESSAGE_SUCCESS, expectedEntry);
@@ -182,7 +180,7 @@ public class LogicManagerTest {
      * Executes the command, confirms that the result message is correct and that the expected exception is thrown,
      * and also confirms that the following two parts of the LogicManager object's state are as expected:<br>
      *      - the internal model manager data are same as those in the {@code expectedModel} <br>
-     *      - {@code expectedModel}'s address book was saved to the storage file.
+     *      - {@code expectedModel}'s entry book was saved to the storage file.
      */
     private void assertCommandBehavior(Class<?> expectedException, String inputCommand,
                                            String expectedMessage, Model expectedModel) {
