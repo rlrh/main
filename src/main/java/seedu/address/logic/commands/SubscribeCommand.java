@@ -6,7 +6,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.io.IOException;
+import java.net.URL;
 
+import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 
 import seedu.address.commons.util.FeedUtil;
@@ -52,10 +54,11 @@ public class SubscribeCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_FEED);
         }
 
-        EntryBook feedEntries;
+        URL feedUrl = toSubscribe.getLink().value;
+        SyndFeed feed;
         try {
             // we ensure the link is a feed here
-            feedEntries = FeedUtil.fromFeedUrl(toSubscribe.getLink().value);
+            feed = FeedUtil.fetchAsFeed(feedUrl);
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e));
         } catch (FeedException e) {
@@ -65,6 +68,7 @@ public class SubscribeCommand extends Command {
         model.addFeedsEntry(toSubscribe);
 
         // initial import into reading list
+        EntryBook feedEntries = FeedUtil.serializeToEntryBook(feed, feedUrl.toString());
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
                 .forEach(entry -> model.addListEntry(entry, Network.fetchArticleOptional(entry.getLink().value)));
