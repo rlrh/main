@@ -31,6 +31,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
@@ -148,7 +149,7 @@ public class EntryBookListParserTest {
             parser.parseCommand("histories");
             throw new AssertionError("The expected ParseException was not thrown.");
         } catch (ParseException pe) {
-            assertEquals(MESSAGE_UNKNOWN_COMMAND, pe.getMessage());
+            assertEquals(String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST), pe.getMessage());
         }
     }
 
@@ -190,7 +191,7 @@ public class EntryBookListParserTest {
     @Test
     public void parseCommand_unknownCommand_throwsParseException() throws Exception {
         thrown.expect(ParseException.class);
-        thrown.expectMessage(MESSAGE_UNKNOWN_COMMAND);
+        thrown.expectMessage(String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
         parser.parseCommand("unknownCommand");
     }
 }
