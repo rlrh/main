@@ -16,6 +16,7 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 import seedu.address.model.entry.Entry;
 
 public class DeleteCommandSystemTest extends EntryBookSystemTest {
@@ -95,7 +96,7 @@ public class DeleteCommandSystemTest extends EntryBookSystemTest {
         assertCommandFailure(DeleteCommand.COMMAND_WORD + " 1 abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
         /* Case: mixed case command word -> rejected */
-        assertCommandFailure("DelETE 1", MESSAGE_UNKNOWN_COMMAND);
+        assertCommandFailure("DelETE 1", String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
     }
 
     /**

@@ -20,6 +20,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 import seedu.address.testutil.FindEntryDescriptorBuilder;
 
 public class FindCommandSystemTest extends EntryBookSystemTest {
@@ -253,7 +254,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         /* Case: mixed case command word -> rejected */
         command = "FiNd" + " "
             + getFindEntryDescriptorDetails(builder.reset().withTitle(KEYWORD_MATCHING_MEIER).build());
-        assertCommandFailure(command, MESSAGE_UNKNOWN_COMMAND);
+        assertCommandFailure(command, String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
     }
 
     /**

@@ -29,6 +29,7 @@ import seedu.address.mocks.ModelManagerStub;
 import seedu.address.mocks.TemporaryStorageManager;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.UserPrefs;
@@ -63,7 +64,7 @@ public class LogicManagerTest {
     @Test
     public void execute_invalidCommandFormat_throwsParseException() {
         String invalidCommand = "uicfhmowqewca";
-        assertParseException(invalidCommand, MESSAGE_UNKNOWN_COMMAND);
+        assertParseException(invalidCommand, String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
         assertHistoryCorrect(invalidCommand);
     }
 
