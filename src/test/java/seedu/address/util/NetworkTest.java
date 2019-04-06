@@ -109,28 +109,31 @@ public class NetworkTest {
     }
 
     @Test
-    public void fetchAsBytesAsync_success() throws IOException {
+    public void fetchAsBytesAsync_success() throws ExecutionException, InterruptedException {
         Network.fetchAsBytesAsync(
             TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/"))
             .thenAccept(content -> {
                 String httpsContent = new String(content);
                 assertTrue(httpsContent.length() > 0);
                 assertTrue(httpsContent.contains("<p>It works!</p>"));
-            });
+            })
+            .get();
 
         Network.fetchAsBytesAsync(
             TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/"))
             .thenAccept(content -> {
                 String httpContent = new String(content);
                 assertTrue(httpContent.length() > 0);
-            });
+            })
+            .get();
 
         Network.fetchAsBytesAsync(
             MainApp.class.getResource("/NetworkTest/default.html"))
             .thenAccept(content -> {
                 String localContent = new String(content);
                 assertTrue(localContent.length() > 0);
-            });
+            })
+            .get();
     }
 
     @Test
