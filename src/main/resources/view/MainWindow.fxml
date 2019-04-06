@@ -10,6 +10,9 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+
+<?import javafx.scene.control.Button?>
 
 <fx:root type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
          title="Readme" minWidth="450" minHeight="600" onCloseRequest="#handleExit">
@@ -47,6 +50,32 @@
         </StackPane>
 
         <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.4" VBox.vgrow="ALWAYS">
+
+          <VBox prefHeight="445.0" minWidth="120.0" maxWidth="120.0" SplitPane.resizableWithParent="false">
+            <children>
+              <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="toolbar-button" text="Discover" textAlignment="CENTER">
+                <graphic>
+                  <FontAwesomeIconView glyphName="SEARCH" size="30" />
+                </graphic>
+              </Button>
+              <Button contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="toolbar-button" text="${'Reading\nList'}" textAlignment="CENTER">
+                <graphic>
+                  <FontAwesomeIconView glyphName="LIST" size="30" />
+                </graphic>
+              </Button>
+              <Button contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="toolbar-button" text="Archives" textAlignment="CENTER">
+                <graphic>
+                  <FontAwesomeIconView glyphName="ARCHIVE" size="30" />
+                </graphic>
+              </Button>
+              <Button contentDisplay="TOP" layoutX="10.0" layoutY="81.0" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="toolbar-button" text="Feeds" textAlignment="CENTER">
+                <graphic>
+                  <FontAwesomeIconView glyphName="RSS_SQUARE" size="30" />
+                </graphic>
+              </Button>
+            </children>
+          </VBox>
+
           <VBox fx:id="entryList" minWidth="340" prefWidth="340" SplitPane.resizableWithParent="false">
             <padding>
               <Insets top="10" right="10" bottom="10" left="10" />

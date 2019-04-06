@@ -40,6 +40,7 @@ repositories {
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url "https://jitpack.io" }
+    maven { url "https://bintray.com" }
 }
 
 checkstyle {
@@ -62,6 +63,8 @@ dependencies {
     String testFxVersion = '4.0.12-alpha'
     String jUnitVersion = '5.1.0'
 
+    compile 'de.jensd:fontawesomefx-fontawesome:4.7.0-5'
+    compile 'de.jensd:fontawesomefx-commons:9.1.2'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.0'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.7.4'
     implementation group: 'com.google.guava', name: 'guava', version: '19.0'
