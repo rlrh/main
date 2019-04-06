@@ -1,7 +1,6 @@
 package seedu.address.commons.util;
 
 import static org.junit.Assert.assertEquals;
-import static seedu.address.commons.util.FeedUtil.DEFAULT_ADDRESS_TEXT;
 import static seedu.address.commons.util.FeedUtil.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.commons.util.FeedUtil.fromFeedUrl;
 
@@ -16,7 +15,6 @@ import com.rometools.rome.io.FeedException;
 
 import seedu.address.MainApp;
 import seedu.address.model.EntryBook;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -79,7 +77,6 @@ public class FeedUtilTest {
                 new Title(title),
                 new Description(description),
                 new Link(TestUtil.toUrl(link)),
-                new Address(DEFAULT_ADDRESS_TEXT),
                 Collections.emptySet()
         );
     }

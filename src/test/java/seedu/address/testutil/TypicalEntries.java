@@ -1,7 +1,5 @@
 package seedu.address.testutil;
 
-import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_AMY;
@@ -27,14 +25,12 @@ public class TypicalEntries {
 
     public static final Entry ALICE = new EntryBuilder()
             .withTitle("Alice Pauline")
-            .withAddress("123, Jurong West Ave 6, #08-111")
             .withLink("https://alice.example.com")
             .withDescription("Description place-holder Carl")
             .withTags("friends")
             .build();
     public static final Entry BENSON = new EntryBuilder()
             .withTitle("Benson Meier")
-            .withAddress("311, Clementi Ave 2, #02-25")
             .withLink("https://johnd.example.com")
             .withDescription("Description place-holder Benson")
             .withTags("owesMoney")
@@ -43,57 +39,48 @@ public class TypicalEntries {
             .withTitle("Carl Kurz")
             .withDescription("Description place-holder")
             .withLink("https://heinz.example.com")
-            .withAddress("wall street")
             .build();
     public static final Entry DANIEL = new EntryBuilder()
             .withTitle("Daniel Meier")
             .withDescription("Description place-holder")
             .withLink("https://cornelia.example.com")
-            .withAddress("10th street")
             .withTags("friends", "Carl")
             .build();
     public static final Entry ELLE = new EntryBuilder()
             .withTitle("Elle Meyer")
             .withDescription("Description place-holder")
             .withLink("https://werner.Carl.example.com")
-            .withAddress("michegan ave")
             .build();
     public static final Entry FIONA = new EntryBuilder()
             .withTitle("Fiona Kunz")
             .withDescription("Description place-holder")
             .withLink("https://lydia.example.com")
-            .withAddress("little tokyo")
             .build();
     public static final Entry GEORGE = new EntryBuilder()
             .withTitle("George Best")
             .withDescription("Description place-holder")
             .withLink("https://anna.example.com")
-            .withAddress("4th street")
             .build();
     public static final Entry HANS = new EntryBuilder()
         .withTitle("Hans Solo")
         .withDescription("Description place-holder")
         .withLink("https://bobo.example.com")
-        .withAddress("10th street")
         .withTags("friends")
         .build();
     public static final Entry ISABELLE = new EntryBuilder()
         .withTitle("Isabelle Toh")
         .withDescription("Description place-holder")
         .withLink("https://koko.example.com")
-        .withAddress("michegan ave")
         .build();
     public static final Entry JONATHAN = new EntryBuilder()
         .withTitle("Jonathan Cheng")
         .withDescription("Description place-holder")
         .withLink("https://lolo.example.com")
-        .withAddress("little tokyo")
         .build();
     public static final Entry KEVIN = new EntryBuilder()
         .withTitle("Kevin Hart")
         .withDescription("Description place-holder")
         .withLink("https://dodo.example.com")
-        .withAddress("4th street")
         .build();
 
     // Manually added
@@ -101,13 +88,11 @@ public class TypicalEntries {
             .withTitle("Hoon Meier")
             .withDescription("Description place-holder")
             .withLink("https://stefan.example.com")
-            .withAddress("little india")
             .build();
     public static final Entry IDA = new EntryBuilder()
             .withTitle("Ida Mueller")
             .withDescription("Description place-holder")
             .withLink("https://hans.example.com")
-            .withAddress("chicago ave")
             .build();
 
     // Manually added - Entry's details found in {@code CommandTestUtil}
@@ -115,14 +100,12 @@ public class TypicalEntries {
             .withTitle(VALID_TITLE_AMY)
             .withDescription(VALID_DESCRIPTION_AMY)
             .withLink(VALID_LINK_AMY)
-            .withAddress(VALID_ADDRESS_AMY)
             .withTags(VALID_TAG_TECH)
             .build();
     public static final Entry BOB = new EntryBuilder()
             .withTitle(VALID_TITLE_BOB)
             .withDescription(VALID_DESCRIPTION_BOB)
             .withLink(VALID_LINK_BOB)
-            .withAddress(VALID_ADDRESS_BOB)
             .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH)
             .build();
 
@@ -274,25 +257,21 @@ public class TypicalEntries {
             .withTitle("Valid HTTPS Link")
             .withDescription("Valid https link")
             .withLink("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/")
-            .withAddress("Valid https link")
             .build();
     public static final Entry VALID_HTTP_LINK = new EntryBuilder()
             .withTitle("Valid HTTP Link")
             .withDescription("Valid http link")
             .withLink("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/")
-            .withAddress("Valid http link")
             .build();
     public static final Entry VALID_FILE_LINK = new EntryBuilder()
             .withTitle("Valid File Link")
             .withDescription("Valid file link")
             .withLink(MainApp.class.getResource("/NetworkTest/default.html"))
-            .withAddress("Valid file link")
             .build();
     public static final Entry INVALID_FILE_LINK = new EntryBuilder()
             .withTitle("Invalid File Link")
             .withDescription("Invalid file link")
             .withLink("file:///folder/file.type")
-            .withAddress("Invalid file link")
             .build();
     public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
 
@@ -303,14 +282,12 @@ public class TypicalEntries {
             .withTitle("Browser Panel Test Web Page")
             .withDescription("Browser panel test web page")
             .withLink(BROWSER_PANEL_TEST_ENTRY_BASE_URL)
-            .withAddress("Browser panel test web page")
             .build();
     public static final String WIKIPEDIA_ENTRY_BASE_URL = "http://en.wikipedia.org/wiki/Therapsids";
     public static final Entry WIKIPEDIA_ENTRY = new EntryBuilder()
             .withTitle("Wikipedia Test Web Page")
             .withDescription("Wikipedia test web page")
             .withLink(MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html"))
-            .withAddress("Wikipedia test web page")
             .build();
 
     // bunch of RSS feeds
@@ -318,27 +295,23 @@ public class TypicalEntries {
             .withTitle("Kattis - new problems")
             .withDescription("kattis the kat")
             .withLink("https://open.kattis.com/rss/new-problems")
-            .withAddress("kattis")
             .build();
 
     public static final Entry LOCAL_FEED_ENTRY = new EntryBuilder()
             .withTitle("Tsutsukakushi's anime reviews - local copy")
             .withDescription("anime reviews")
             .withLink(MainApp.class.getResource("/RssFeedTest/rss.xml"))
-            .withAddress("somewhere in Finland")
             .build();
 
     public static final Entry ANIMEREVIEW_FEED_ENTRY = new EntryBuilder()
             .withTitle("Tsutsukakushi's anime reviews - remote mirror")
             .withDescription("anime reviews!")
             .withLink("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml")
-            .withAddress("also finland")
             .build();
 
     public static final Entry ENGADGET_FEED_ENTRY = new EntryBuilder()
             .withTitle("Engadget RSS")
             .withLink("https://live.engadget.com/rss.xml")
-            .withAddress("engadget")
             .build();
 
     private TypicalEntries() {} // prevents instantiation

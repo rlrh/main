@@ -71,7 +71,6 @@ public class AddCommand extends Command {
                 autofill.getTitle(),
                 autofill.getDescription(),
                 toAdd.getLink(),
-                toAdd.getAddress(),
                 toAdd.getTags()
         );
 

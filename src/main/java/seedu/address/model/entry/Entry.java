@@ -16,23 +16,21 @@ import seedu.address.model.tag.Tag;
 public class Entry {
 
     // Identity fields
-    private final Title title;
-    private final Description description;
     private final Link link;
 
     // Data fields
-    private final Address address;
+    private final Title title;
+    private final Description description;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Entry(Title title, Description description, Link link, Address address, Set<Tag> tags) {
-        requireAllNonNull(title, description, link, address, tags);
+    public Entry(Title title, Description description, Link link, Set<Tag> tags) {
+        requireAllNonNull(title, description, link, tags);
         this.title = title;
         this.description = description;
         this.link = link;
-        this.address = address;
         this.tags.addAll(tags);
     }
 
@@ -46,10 +44,6 @@ public class Entry {
 
     public Link getLink() {
         return link;
-    }
-
-    public Address getAddress() {
-        return address;
     }
 
     /**
@@ -91,14 +85,13 @@ public class Entry {
         return otherEntry.getTitle().equals(getTitle())
                 && otherEntry.getDescription().equals(getDescription())
                 && otherEntry.getLink().equals(getLink())
-                && otherEntry.getAddress().equals(getAddress())
                 && otherEntry.getTags().equals(getTags());
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(title, description, link, address, tags);
+        return Objects.hash(title, description, link, tags);
     }
 
     @Override
@@ -109,8 +102,6 @@ public class Entry {
                 .append(getDescription())
                 .append(" Link: ")
                 .append(getLink())
-                .append(" Address: ")
-                .append(getAddress())
                 .append(" Tags: ");
         getTags().forEach(builder::append);
         return builder.toString();

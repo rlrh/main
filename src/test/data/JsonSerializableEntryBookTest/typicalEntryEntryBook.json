@@ -5,49 +5,42 @@
     "description" : "Description place-holder Carl",
     "link" : "https://alice.example.com",
     "offlineLink" : "",
-    "address" : "123, Jurong West Ave 6, #08-111",
     "tagged" : [ "friends" ]
   }, {
     "title" : "Benson Meier",
     "description" : "Description place-holder Benson",
     "link" : "https://johnd.example.com",
     "offlineLink" : "",
-    "address" : "311, Clementi Ave 2, #02-25",
     "tagged" : [ "owesMoney" ]
   }, {
     "title" : "Carl Kurz",
     "description" : "Description place-holder",
     "link" : "https://heinz.example.com",
     "offlineLink" : "",
-    "address" : "wall street",
     "tagged" : [ ]
   }, {
     "title" : "Daniel Meier",
     "description" : "Description place-holder",
     "link" : "https://cornelia.example.com",
     "offlineLink" : "",
-    "address" : "10th street",
     "tagged" : [ "friends", "Carl" ]
   }, {
     "title" : "Elle Meyer",
     "description" : "Description place-holder",
     "link" : "https://werner.Carl.example.com",
     "offlineLink" : "",
-    "address" : "michegan ave",
     "tagged" : [ ]
   }, {
     "title" : "Fiona Kunz",
     "description" : "Description place-holder",
     "link" : "https://lydia.example.com",
     "offlineLink" : "",
-    "address" : "little tokyo",
     "tagged" : [ ]
   }, {
     "title" : "George Best",
     "description" : "Description place-holder",
     "link" : "https://anna.example.com",
     "offlineLink" : "",
-    "address" : "4th street",
     "tagged" : [ ]
   } ]
 }
