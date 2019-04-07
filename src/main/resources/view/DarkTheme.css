@@ -401,6 +401,11 @@
     -fx-background-color: #e91e63;
 }
 
+#tags .pinkPurple {
+    -fx-text-fill: white;
+    -fx-background-color: #c3238a;
+}
+
 #tags .purple {
     -fx-text-fill: white;
     -fx-background-color: #9c27b0;
@@ -468,7 +473,7 @@
 
 #tags .deepOrange {
     -fx-text-fill: white;
-    -fx-background-color: #f4511e;
+    -fx-background-color: #ff5722;
 }
 
 #tags .brown {
