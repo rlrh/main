@@ -49,6 +49,18 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public void executeCommand(Command command) {
+        logger.info("----------------[COMMAND][" + command + "]");
+
+        try {
+            CommandResult commandResult = command.execute(model, history);
+            setCommandResult(commandResult);
+        } catch (CommandException ce) {
+            setException(ce);
+        }
+    }
+
+    @Override
     public ReadOnlyEntryBook getListEntryBook() {
         return model.getListEntryBook();
     }
