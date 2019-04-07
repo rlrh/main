@@ -28,7 +28,17 @@ public interface Logic {
      */
     CommandResult execute(String commandText) throws CommandException, ParseException;
 
+    /**
+     * Executes the command.
+     * @param command the command to execute.
+     */
     void executeCommand(Command command);
+
+    /**
+     * Executes a context switch.
+     * @param context the context to switch to.
+     */
+    void executeContextSwitch(ModelContext context);
 
     /**
      * Returns the EntryBook.

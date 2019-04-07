@@ -157,6 +157,11 @@ public class MainWindow extends UiPart<Stage> {
             processContext(newContext);
         });
 
+        discoverButton.setOnAction(event -> logic.executeContextSwitch(ModelContext.CONTEXT_SEARCH));
+        listButton.setOnAction(event -> logic.executeContextSwitch(ModelContext.CONTEXT_LIST));
+        archivesButton.setOnAction(event -> logic.executeContextSwitch(ModelContext.CONTEXT_ARCHIVES));
+        feedsButton.setOnAction(event -> logic.executeContextSwitch(ModelContext.CONTEXT_FEEDS));
+
         processContext(this.logic.contextProperty().getValue());
     }
 
@@ -284,9 +289,6 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
-    /**
-     * Processes a context.
-     */
     private void setAllButtonsToDefaultStyle() {
         setButtonToDefaultStyle(discoverButton);
         setButtonToDefaultStyle(listButton);

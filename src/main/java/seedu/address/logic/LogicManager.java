@@ -8,8 +8,12 @@ import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.logic.commands.ArchivesCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.FeedsCommand;
+import seedu.address.logic.commands.GoogleNewsCommand;
+import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -57,6 +61,26 @@ public class LogicManager implements Logic {
             setCommandResult(commandResult);
         } catch (CommandException ce) {
             setException(ce);
+        }
+    }
+
+    @Override
+    public void executeContextSwitch(ModelContext context) {
+        switch (context) {
+        case CONTEXT_SEARCH:
+            executeCommand(new GoogleNewsCommand());
+            break;
+        case CONTEXT_LIST:
+            executeCommand(new ListCommand());
+            break;
+        case CONTEXT_ARCHIVES:
+            executeCommand(new ArchivesCommand());
+            break;
+        case CONTEXT_FEEDS:
+            executeCommand(new FeedsCommand());
+            break;
+        default:
+            break;
         }
     }
 
