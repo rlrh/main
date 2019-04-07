@@ -1,7 +1,9 @@
 package seedu.address;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import javafx.stage.Screen;
@@ -141,6 +143,14 @@ public class TestApp extends MainApp {
         copy.setContext(model.getContext());
         ModelHelper.setFilteredList(copy, model.getFilteredEntryList());
         return copy;
+    }
+
+    public void deleteArticle(URL url) throws IOException {
+        model.deleteArticle(url);
+    }
+
+    public Optional<URL> getOfflineLink(URL url) {
+        return model.getOfflineLink(url);
     }
 
     /**
