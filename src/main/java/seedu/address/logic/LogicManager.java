@@ -1,5 +1,6 @@
 package seedu.address.logic;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -69,7 +70,11 @@ public class LogicManager implements Logic {
     public void executeContextSwitch(ModelContext context) {
         switch (context) {
         case CONTEXT_SEARCH:
-            executeCommand(new GoogleNewsCommand());
+            try {
+                executeCommand(new GoogleNewsCommand());
+            } catch (MalformedURLException e) {
+                // bug with Google news command (malformed url)
+            }
             break;
         case CONTEXT_LIST:
             executeCommand(new ListCommand());
