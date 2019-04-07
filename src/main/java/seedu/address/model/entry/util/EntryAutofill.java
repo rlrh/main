@@ -30,11 +30,13 @@ public class EntryAutofill {
     private static final int MAX_WORDS = 32;
 
     private final Entry originalEntry;
+    private final boolean noTitleOrNoDescription;
     private final Candidate<String, Title> titleCandidate;
     private final Candidate<String, Description> descriptionCandidate;
 
     public EntryAutofill(Entry originalEntry) {
         this.originalEntry = originalEntry;
+        this.noTitleOrNoDescription = originalEntry.getTitle().isEmpty() || originalEntry.getDescription().isEmpty();
         this.titleCandidate = new Candidate<>(new Title(FALLBACK_TITLE), string -> {
             try {
                 return Optional.of(ParserUtil.parseTitle(Optional.of(string)));
@@ -51,16 +53,12 @@ public class EntryAutofill {
         });
     }
 
-    private boolean noTitleOrNoDescription() {
-        return originalEntry.getTitle().isEmpty() || originalEntry.getDescription().isEmpty();
-    }
-
     /**
      * Extract candidates by parsing URL.
      * @param url URL to parse
      */
     public void extractFromUrl(URL url) {
-        if (noTitleOrNoDescription()) {
+        if (noTitleOrNoDescription) {
             String baseName = Files.getNameWithoutExtension(url.getPath())
                     .replaceAll("\n", "") // remove newline chars
                     .replaceAll("\r", "") // remove carriage return chars
@@ -76,7 +74,7 @@ public class EntryAutofill {
      * @param html raw HTML to parse
      */
     public void extractFromHtml(String html) {
-        if (noTitleOrNoDescription()) {
+        if (noTitleOrNoDescription) {
 
             // Process through Jsoup
             Document document = Jsoup.parse(html);
@@ -105,7 +103,7 @@ public class EntryAutofill {
 
     /** Extract candidate by parsing RSS/Atom feed metadata. */
     public void extractFromFeed(SyndFeed feed) {
-        if (noTitleOrNoDescription()) {
+        if (noTitleOrNoDescription) {
             titleCandidate.tryout(feed.getTitle());
             descriptionCandidate.tryout(feed.getDescription());
         }
