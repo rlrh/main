@@ -67,6 +67,7 @@ public class SubscribeCommand extends Command {
         }
 
         EntryAutofill autofill = new EntryAutofill(toSubscribe);
+        autofill.extractFromUrl(feedUrl);
         autofill.extractFromFeed(feed);
         Entry updatedToSubscribe = autofill.getFilledEntry();
 
