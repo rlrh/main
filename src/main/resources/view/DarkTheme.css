@@ -359,22 +359,22 @@
     -fx-background-radius: 0;
 }
 
-.toolbar-button
+.navBar-button, .navBar-button:hover, .navBar-button:focused, .navBar-button:pressed
 {
-    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-radius: 0px;
     -fx-border-radius: 0px;
-}
-
-.toolbar-button:focused, .toolbar-button:pressed
-{
-    -fx-background-color: #424d5f;
-    -fx-border-color: #3e7b91;
     -fx-text-fill: white;
 }
 
-.toolbar-button .glyph-icon
+.navBar-button.selected
+{
+    -fx-background-color: #424d5f;
+    -fx-border-color: #3e7b91;
+}
+
+.navBar-button .glyph-icon
 {
     -fx-fill: white;
 }

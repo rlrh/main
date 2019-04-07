@@ -2,8 +2,10 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -16,6 +18,7 @@ import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -55,6 +58,18 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane statusbarPlaceholder;
+
+    @FXML
+    private Button discoverButton;
+
+    @FXML
+    private Button listButton;
+
+    @FXML
+    private Button archivesButton;
+
+    @FXML
+    private Button feedsButton;
 
     public MainWindow(Stage primaryStage, Logic logic) {
         super(FXML, primaryStage);
@@ -137,6 +152,12 @@ public class MainWindow extends UiPart<Stage> {
         this.logic.exceptionProperty().addListener((observable, oldException, newException) -> {
             processManualFailure(newException);
         });
+
+        this.logic.contextProperty().addListener((observable, oldContext, newContext) -> {
+            processContext(newContext);
+        });
+
+        processContext(this.logic.contextProperty().getValue());
     }
 
     /**
@@ -239,4 +260,50 @@ public class MainWindow extends UiPart<Stage> {
         resultDisplay.setFeedbackErrorToUser(e.getMessage());
         commandBox.processCommandFailure();
     }
+
+    /**
+     * Processes a context.
+     */
+    private void processContext(ModelContext context) {
+        setAllButtonsToDefaultStyle();
+        switch (context) {
+        case CONTEXT_SEARCH:
+            setButtonToSelectedStyle(discoverButton);
+            break;
+        case CONTEXT_LIST:
+            setButtonToSelectedStyle(listButton);
+            break;
+        case CONTEXT_ARCHIVES:
+            setButtonToSelectedStyle(archivesButton);
+            break;
+        case CONTEXT_FEEDS:
+            setButtonToSelectedStyle(feedsButton);
+            break;
+        default:
+
+        }
+    }
+
+    /**
+     * Processes a context.
+     */
+    private void setAllButtonsToDefaultStyle() {
+        setButtonToDefaultStyle(discoverButton);
+        setButtonToDefaultStyle(listButton);
+        setButtonToDefaultStyle(archivesButton);
+        setButtonToDefaultStyle(feedsButton);
+    }
+
+    private void setButtonToDefaultStyle(Button button) {
+        button.getStyleClass().remove("selected");
+    }
+
+    private void setButtonToSelectedStyle(Button button) {
+        ObservableList<String> styleClass = button.getStyleClass();
+        if (styleClass.contains("selected")) {
+            return;
+        }
+        styleClass.add("selected");
+    }
+
 }

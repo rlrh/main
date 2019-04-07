@@ -51,29 +51,27 @@
 
         <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.4" VBox.vgrow="ALWAYS">
 
-          <VBox prefHeight="445.0" minWidth="120.0" maxWidth="120.0" SplitPane.resizableWithParent="false">
-            <children>
-              <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="toolbar-button" text="Discover" textAlignment="CENTER">
-                <graphic>
-                  <FontAwesomeIconView glyphName="SEARCH" size="30" />
-                </graphic>
-              </Button>
-              <Button contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="toolbar-button" text="${'Reading\nList'}" textAlignment="CENTER">
-                <graphic>
-                  <FontAwesomeIconView glyphName="LIST" size="30" />
-                </graphic>
-              </Button>
-              <Button contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="toolbar-button" text="Archives" textAlignment="CENTER">
-                <graphic>
-                  <FontAwesomeIconView glyphName="ARCHIVE" size="30" />
-                </graphic>
-              </Button>
-              <Button contentDisplay="TOP" layoutX="10.0" layoutY="81.0" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="toolbar-button" text="Feeds" textAlignment="CENTER">
-                <graphic>
-                  <FontAwesomeIconView glyphName="RSS_SQUARE" size="30" />
-                </graphic>
-              </Button>
-            </children>
+          <VBox fx:id="navBar" prefHeight="400.0" minWidth="120.0" maxWidth="120.0" SplitPane.resizableWithParent="false">
+            <Button fx:id="discoverButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="navBar-button" text="Discover" textAlignment="CENTER">
+              <graphic>
+                <FontAwesomeIconView glyphName="SEARCH" size="30" />
+              </graphic>
+            </Button>
+            <Button fx:id="listButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="navBar-button" text="${'Reading\nList'}" textAlignment="CENTER">
+              <graphic>
+                <FontAwesomeIconView glyphName="LIST" size="30" />
+              </graphic>
+            </Button>
+            <Button fx:id="archivesButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="navBar-button" text="Archives" textAlignment="CENTER">
+              <graphic>
+                <FontAwesomeIconView glyphName="ARCHIVE" size="30" />
+              </graphic>
+            </Button>
+            <Button fx:id="feedsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="400.0" prefWidth="120.0" styleClass="navBar-button" text="Feeds" textAlignment="CENTER">
+              <graphic>
+                <FontAwesomeIconView glyphName="RSS_SQUARE" size="30" />
+              </graphic>
+            </Button>
           </VBox>
 
           <VBox fx:id="entryList" minWidth="340" prefWidth="340" SplitPane.resizableWithParent="false">
