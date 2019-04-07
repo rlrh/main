@@ -1,6 +1,7 @@
 package seedu.address.storage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -21,13 +22,13 @@ public interface Storage extends UserPrefsStorage, ArticleStorage {
     void saveUserPrefs(ReadOnlyUserPrefs userPrefs) throws IOException;
 
     @Override
-    void deleteArticle(String url) throws IOException;
+    void deleteArticle(URL url) throws IOException;
 
     @Override
-    Optional<Path> addArticle(String url, byte[] articleContent) throws IOException;
+    Optional<Path> addArticle(URL url, byte[] articleContent) throws IOException;
 
     @Override
-    Optional<Path> getOfflineLink(String url);
+    Optional<Path> getOfflineLink(URL url);
 
     Path getListEntryBookFilePath();
 

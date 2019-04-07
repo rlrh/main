@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ENTRIES;
 
 import java.io.IOException;
+import java.net.URL;
 
 import com.rometools.rome.io.FeedException;
 
@@ -30,8 +31,8 @@ public class FeedCommand extends Command {
             + "Parameters: LINK\n"
             + "Example: " + COMMAND_WORD + " https://open.kattis.com/rss/new-problems";
 
-    private String feedUrl;
-    public FeedCommand(String feedUrl) {
+    private URL feedUrl;
+    public FeedCommand(URL feedUrl) {
         this.feedUrl = feedUrl;
     }
 

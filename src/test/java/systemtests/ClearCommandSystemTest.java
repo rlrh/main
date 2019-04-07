@@ -7,6 +7,7 @@ import org.junit.Test;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.Model;
+import seedu.address.model.ModelContext;
 
 public class ClearCommandSystemTest extends EntryBookSystemTest {
 
@@ -25,7 +26,7 @@ public class ClearCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: mixed case command word -> rejected */
-        assertCommandFailure("ClEaR", MESSAGE_UNKNOWN_COMMAND);
+        assertCommandFailure("ClEaR", String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
     }
 
     /**

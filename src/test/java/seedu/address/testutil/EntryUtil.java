@@ -1,6 +1,5 @@
 package seedu.address.testutil;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ALL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LINK;
@@ -41,8 +40,7 @@ public class EntryUtil {
         StringBuilder sb = new StringBuilder();
         sb.append(PREFIX_TITLE + entry.getTitle().fullTitle + " ");
         sb.append(PREFIX_DESCRIPTION + entry.getDescription().value + " ");
-        sb.append(PREFIX_LINK + entry.getLink().value + " ");
-        sb.append(PREFIX_ADDRESS + entry.getAddress().value + " ");
+        sb.append(PREFIX_LINK + entry.getLink().value.toString() + " ");
         entry.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagName + " ")
         );
@@ -57,7 +55,6 @@ public class EntryUtil {
         descriptor.getTitle().ifPresent(title -> sb.append(PREFIX_TITLE).append(title.fullTitle).append(" "));
         descriptor.getDescription().ifPresent(
             description -> sb.append(PREFIX_DESCRIPTION).append(description.value).append(" "));
-        descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
             if (tags.isEmpty()) {
@@ -78,8 +75,6 @@ public class EntryUtil {
             title -> sb.append(PREFIX_TITLE).append(title).append(" "));
         descriptor.getDescription().ifPresent(
             description -> sb.append(PREFIX_DESCRIPTION).append(description).append(" "));
-        descriptor.getAddress().ifPresent(
-            address -> sb.append(PREFIX_ADDRESS).append(address).append(" "));
         descriptor.getLink().ifPresent(
             link -> sb.append(PREFIX_LINK).append(link).append(" "));
         descriptor.getAll().ifPresent(
