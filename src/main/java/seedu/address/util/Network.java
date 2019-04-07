@@ -18,12 +18,12 @@ public abstract class Network {
 
     private static final int CONNECTION_TIMEOUT_MILLIS = 1000 * 10; // 10 seconds
     private static final int READ_TIMEOUT_MILLIS = 1000 * 10; // 10 seconds
-    private static final int REQUEST_TIMEOUT_MILLIS = 1000 * 10; // 10 seconds
+    private static final int REQUEST_TIMEOUT_MILLIS = 1000 * 60; // 60 seconds
 
     private static final AsyncHttpClient asyncHttpClient = Dsl.asyncHttpClient(Dsl.config()
         .setConnectTimeout(CONNECTION_TIMEOUT_MILLIS)
         .setReadTimeout(READ_TIMEOUT_MILLIS)
-        .setRequestTimeout(REQUEST_TIMEOUT_MILLIS));;
+        .setRequestTimeout(REQUEST_TIMEOUT_MILLIS));
 
     /**
      * Fetches the resource (i.e. webpage) at url, returning it as an InputStream.
