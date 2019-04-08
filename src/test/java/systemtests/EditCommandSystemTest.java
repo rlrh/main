@@ -110,7 +110,7 @@ public class EditCommandSystemTest extends EntryBookSystemTest {
         /* Case: selects second card in the entry list, edit a entry -> edited, card selection remains unchanged but
          * browser url changes
          */
-        showAllEntries();
+        showAllListEntries();
         Index indexSelected = INDEX_SECOND_ENTRY;
         selectEntry(indexSelected);
         index = INDEX_FIRST_ENTRY;
