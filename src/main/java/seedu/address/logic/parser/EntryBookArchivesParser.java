@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteArchiveEntryCommand;
+import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.UnarchiveCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -38,6 +39,10 @@ public class EntryBookArchivesParser extends EntryBookParser {
 
         case DeleteArchiveEntryCommand.COMMAND_WORD:
             return new DeleteArchiveEntryCommandParser().parse(arguments);
+
+        case FindCommand.COMMAND_WORD:
+        case FindCommand.COMMAND_ALIAS:
+            return new FindCommandParser().parse(arguments);
 
         case UnarchiveCommand.COMMAND_WORD:
         case UnarchiveCommand.COMMAND_ALIAS:
