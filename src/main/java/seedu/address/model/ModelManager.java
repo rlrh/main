@@ -229,7 +229,6 @@ public class ModelManager implements Model {
             }
         }
         listEntryBook.addEntry(entry);
-        updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
 
     @Override
