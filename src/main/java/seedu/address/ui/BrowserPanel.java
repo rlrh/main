@@ -16,6 +16,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.events.EventTarget;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.XmlUtil;
@@ -135,6 +140,9 @@ public class BrowserPanel extends UiPart<Region> {
         }
         isLoadingReaderView = false;
 
+        // Process any hyperlinks in loaded page
+        processHyperlinks();
+
         // Load reader view if reader view mode is selected but not loaded
         if (viewMode.getViewType().equals(ViewType.READER) && !hasLoadedReaderView) {
             onlineLink.ifPresent(this::loadReader);
@@ -152,15 +160,34 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     /**
+     * Updates online link whenever a hyperlink is clicked.
+     */
+    private void processHyperlinks() {
+        Optional.ofNullable(webEngine.getDocument())
+                .map(document -> document.getElementsByTagName("a"))
+                .ifPresent(links -> {
+                    for (int i = 0; i < links.getLength(); i++) {
+                        final Node link = links.item(i);
+                        final String href = ((Element) link).getAttribute("href");
+                        ((EventTarget) link).addEventListener("click",
+                                e -> onlineLink = Optional.of(href),
+                                false);
+                    }
+                });
+    }
+
+    /**
      * Loads an entry.
      * @param entry entry to load
      */
     private void loadEntryPage(Entry entry) {
-        onlineLink = Optional.of(entry.getLink().value);
-        offlineLink = getOfflineLink.apply(onlineLink.get());
-        Optional<String> offlineContent = getArticle.apply(entry.getLink().value);
+        final String url = entry.getLink().value;
+        onlineLink = Optional.of(url);
+        offlineLink = getOfflineLink.apply(url);
+        final Optional<String> offlineContent = getArticle.apply(url);
+
         if (viewMode.getViewType().equals(ViewType.READER) && offlineContent.isPresent()) {
-            loadReader(offlineContent.get(), entry.getLink().value);
+            loadReader(offlineContent.get(), url);
         } else {
             loadPage(offlineLink.or(() -> onlineLink).get());
         }
@@ -216,30 +243,11 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void loadReader(String baseUrl) {
 
-        // set stylesheet for reader view
-        try {
-            Platform.runLater(() ->
-                webEngine.setUserStyleSheetLocation(
-                        viewMode
-                        .getReaderViewStyle()
-                        .getStylesheetLocation()
-                        .toExternalForm()
-                )
-            );
-        } catch (IllegalArgumentException | NullPointerException e) {
-            String message = "Failed to set user style sheet location";
-            logger.warning(message);
-        }
-
         // process loaded content, then load processed content
         try {
             String rawHtml = XmlUtil.convertDocumentToString(webEngine.getDocument());
-            String processedHtml = ReaderViewUtil.generateReaderViewStringFrom(rawHtml, baseUrl);
-            Platform.runLater(() -> {
-                isLoadingReaderView = true;
-                webEngine.loadContent(processedHtml);
-            });
-        } catch (TransformerException | IllegalArgumentException e) {
+            loadReader(rawHtml, baseUrl);
+        } catch (TransformerException te) {
             String message = String.format("Failed to load reader view for %s", baseUrl);
             logger.warning(message);
             loadReaderViewFailurePage();
@@ -248,8 +256,8 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     /**
-     * Loads reader view of current content.
-     * Assumes original Web page is already loaded.
+     * Loads reader view of given HTML.
+     * @param rawHtml HTML to generate reader view of
      * @param baseUrl base URL used to resolve relative URLs to absolute URLs
      */
     private void loadReader(String rawHtml, String baseUrl) {
@@ -258,11 +266,7 @@ public class BrowserPanel extends UiPart<Region> {
         try {
             Platform.runLater(() ->
                     webEngine.setUserStyleSheetLocation(
-                            viewMode
-                                    .getReaderViewStyle()
-                                    .getStylesheetLocation()
-                                    .toExternalForm()
-                    )
+                            viewMode.getReaderViewStyle().getStylesheetLocation().toExternalForm())
             );
         } catch (IllegalArgumentException | NullPointerException e) {
             String message = "Failed to set user style sheet location";
