@@ -46,7 +46,7 @@ public class EntryCard extends UiPart<Region> {
     public EntryCard(Entry entry, int displayedIndex) {
         super(FXML);
         this.entry = entry;
-        id.setText(displayedIndex + ". ");
+        id.setText(displayedIndex + ".");
         title.setText(entry.getTitle().fullTitle);
         description.setText(entry.getDescription().value);
         address.setText(entry.getAddress().value);
