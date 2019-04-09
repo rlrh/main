@@ -245,13 +245,16 @@ and a way for the application to keep track of its context.
 We require individual Parser classes for each context.
 Each Parser class should only parse commands allowed for the context it represents.
 
-The following classes were created to support this feature.
+The following classes were created to support this feature (refer to the class diagram given below).
 
 * `EntryBookParser` — the base abstract class all Parsers extend from
 * `EntryBookListParser` — Parser for the list context.
 * `EntryBookArchivesParser` —  Parser for the archives context.
 * `EntryBookFeedsParser` —  Parser for the feeds context.
 * `EntryBookSearchParser` —  Parser for the search context.
+
+.Class Diagram of the Logic Component with parser classes.
+image::LogicClassDiagram.png[width="800"]
 
 Each Parser class has a `parseCommand(String)` operation that parses the string command.
 `EntryBookParser#parseCommand(String)` is the fallback operation used when any of its children
@@ -264,22 +267,34 @@ Context is represented by the enum class `ModelContext`.
 Parser class `Logic` should use when a command is executed.
 Each `ModelContext` holds a static Parser class that parses commands for the context it represents.
 
-The following operations are implemented
+The following operations are implemented.
+
 * `Model#getContext()` — gets the context the application is in.
 * `Model#setContext(ModelContext)` — sets the context the application is in.
 
-Given below is an example usage scenario and how this mechanism behaves.
+`Model#setContext(ModelContext)` is called when a context-switching command is executed
+(refer to the <<UserGuide.adoc#context-switching-commands, User Guide>> for the list of these commands).
 
-1.  The user launches the application. The `ModelManager` will default
-to `ModelContext.CONTEXT_LIST` context.
-2.  The user executes the `archive` command to archive entries.
-3.  The user erroneously executes the `unarchive` command, and the application reports
-it as an "Unknown command".
-4.  The user executes the `archives` command to view his archives. In the execution of
-of this `ArchivesCommand`, `model.setContext(ModelContext)` is called to change the
-context to `ModelContext.CONTEXT_ARCHIVES` context.
-5.  The user executes the `unarchive` command with correct arguments, and the
-application successfully executes the command.
+Given below is the sequence diagram for the context-switching command, `archives`.
+
+.Sequence diagram for the `archives` command.
+image::ChangeContextSdForModel.png[width="800"]
+
+===== Example usage
+
+Given below is an example usage scenario of how the contexts and parsers restrict available commands.
+
+1.  The user launches the application.
+2.  The `ModelManager` will default to `ModelContext.CONTEXT_LIST` context.
+3.  The user executes the `archive` command with correct arguments.
+4.  `EntryBookListParser` parses the command successfully. Command executes
+5.  The user erroneously executes the `unarchive` command.
+6.  `EntryBookListParser` tries to parse it and fails. The application reports it as an "Unknown command".
+7.  The user executes the `archives` command to view his archives.
+8.  In the execution of this `ArchivesCommand`, `model.setContext(ModelContext)` is called to change the
+context to `ModelContext.CONTEXT_ARCHIVES`.
+9.  The user executes the `unarchive` command with correct arguments.
+10.  `EntryBookArchivesParser` parses the command successfully. Command executes
 
 ==== Design Considerations
 * *Alternative 1 (current choice):* Context information is held by `Model`
@@ -407,6 +422,7 @@ The current design makes it very simple for us to add another reader view style,
 
 // end::readerview[]
 
+[[Multiple-EntryBooks]]
 // tag::multiple-entrybooks[]
 === Multiple EntryBooks
 

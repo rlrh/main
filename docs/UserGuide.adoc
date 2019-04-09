@@ -295,6 +295,7 @@ Exits the program.
 
 Format: `exit`
 
+[[Context-switch]]
 // tag::contextcommands[]
 === Context-switching commands
 
