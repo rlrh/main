@@ -273,7 +273,7 @@ The following operations are implemented.
 * `Model#setContext(ModelContext)` — sets the context the application is in.
 
 `Model#setContext(ModelContext)` is called when a context-switching command is executed
-(refer to the <<UserGuide.adoc#context-switching-commands, User Guide>> for the list of these commands).
+(refer to the <<UserGuide.adoc#Context-switch, User Guide>> for the list of these commands).
 
 Given below is the sequence diagram for the context-switching command, `archives`.
 
