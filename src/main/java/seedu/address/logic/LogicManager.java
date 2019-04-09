@@ -1,5 +1,6 @@
 package seedu.address.logic;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -72,8 +73,9 @@ public class LogicManager implements Logic {
         case CONTEXT_SEARCH:
             try {
                 executeCommand(new GoogleNewsCommand());
-            } catch (MalformedURLException e) {
-                // bug with Google news command (malformed url)
+            } catch (MalformedURLException mue) {
+                setException(new CommandException("Sorry, Google News is unavailable."));
+                executeCommand(new ListCommand());
             }
             break;
         case CONTEXT_LIST:
