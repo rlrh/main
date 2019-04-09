@@ -2,10 +2,8 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -18,7 +16,6 @@ import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.ModelContext;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -40,6 +37,7 @@ public class MainWindow extends UiPart<Stage> {
     private HelpWindow helpWindow;
     private CommandBox commandBox;
     private StatusBarFooter statusBarFooter;
+    private NavigationBar navigationBar;
 
     @FXML
     private StackPane browserPlaceholder;
@@ -60,16 +58,7 @@ public class MainWindow extends UiPart<Stage> {
     private StackPane statusbarPlaceholder;
 
     @FXML
-    private Button discoverButton;
-
-    @FXML
-    private Button listButton;
-
-    @FXML
-    private Button archivesButton;
-
-    @FXML
-    private Button feedsButton;
+    private StackPane navigationBarPlaceholder;
 
     public MainWindow(Stage primaryStage, Logic logic) {
         super(FXML, primaryStage);
@@ -145,24 +134,17 @@ public class MainWindow extends UiPart<Stage> {
         commandBox = new CommandBox(this::executeCommand, logic.getHistory());
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
 
-        this.logic.commandResultProperty().addListener((observable, oldCommandResult, newCommandResult) -> {
+        navigationBar = new NavigationBar(logic::executeContextSwitch, logic.contextProperty());
+        navigationBarPlaceholder.getChildren().add(navigationBar.getRoot());
+
+        logic.commandResultProperty().addListener((observable, oldCommandResult, newCommandResult) -> {
             processManualSuccess(newCommandResult);
         });
 
-        this.logic.exceptionProperty().addListener((observable, oldException, newException) -> {
+        logic.exceptionProperty().addListener((observable, oldException, newException) -> {
             processManualFailure(newException);
         });
 
-        this.logic.contextProperty().addListener((observable, oldContext, newContext) -> {
-            processContext(newContext);
-        });
-
-        discoverButton.setOnAction(event -> logic.executeContextSwitch(ModelContext.CONTEXT_SEARCH));
-        listButton.setOnAction(event -> logic.executeContextSwitch(ModelContext.CONTEXT_LIST));
-        archivesButton.setOnAction(event -> logic.executeContextSwitch(ModelContext.CONTEXT_ARCHIVES));
-        feedsButton.setOnAction(event -> logic.executeContextSwitch(ModelContext.CONTEXT_FEEDS));
-
-        processContext(this.logic.contextProperty().getValue());
     }
 
     /**
@@ -264,48 +246,6 @@ public class MainWindow extends UiPart<Stage> {
         logger.info("Operation failed: " + e.getMessage());
         resultDisplay.setFeedbackErrorToUser(e.getMessage());
         commandBox.processCommandFailure();
-    }
-
-    /**
-     * Processes a context.
-     */
-    private void processContext(ModelContext context) {
-        setAllButtonsToDefaultStyle();
-        switch (context) {
-        case CONTEXT_SEARCH:
-            setButtonToSelectedStyle(discoverButton);
-            break;
-        case CONTEXT_LIST:
-            setButtonToSelectedStyle(listButton);
-            break;
-        case CONTEXT_ARCHIVES:
-            setButtonToSelectedStyle(archivesButton);
-            break;
-        case CONTEXT_FEEDS:
-            setButtonToSelectedStyle(feedsButton);
-            break;
-        default:
-
-        }
-    }
-
-    private void setAllButtonsToDefaultStyle() {
-        setButtonToDefaultStyle(discoverButton);
-        setButtonToDefaultStyle(listButton);
-        setButtonToDefaultStyle(archivesButton);
-        setButtonToDefaultStyle(feedsButton);
-    }
-
-    private void setButtonToDefaultStyle(Button button) {
-        button.getStyleClass().remove("selected");
-    }
-
-    private void setButtonToSelectedStyle(Button button) {
-        ObservableList<String> styleClass = button.getStyleClass();
-        if (styleClass.contains("selected")) {
-            return;
-        }
-        styleClass.add("selected");
     }
 
 }
