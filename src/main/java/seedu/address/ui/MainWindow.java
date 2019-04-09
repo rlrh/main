@@ -16,6 +16,7 @@ import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -145,6 +146,13 @@ public class MainWindow extends UiPart<Stage> {
             processManualFailure(newException);
         });
 
+        logic.contextProperty().addListener(((observable, oldContext, newContext) -> {
+            if (newContext.equals(ModelContext.CONTEXT_FEEDS)) {
+                browserPlaceholder.getChildren().remove(browserPanel.getRoot());
+            } else {
+                browserPlaceholder.getChildren().add(browserPanel.getRoot());
+            }
+        }));
     }
 
     /**
