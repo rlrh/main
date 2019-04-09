@@ -149,7 +149,7 @@ public class MainWindow extends UiPart<Stage> {
         logic.contextProperty().addListener(((observable, oldContext, newContext) -> {
             if (newContext.equals(ModelContext.CONTEXT_FEEDS)) {
                 browserPlaceholder.getChildren().remove(browserPanel.getRoot());
-            } else {
+            } else if (!browserPlaceholder.getChildren().contains(browserPanel.getRoot())) {
                 browserPlaceholder.getChildren().add(browserPanel.getRoot());
             }
         }));
