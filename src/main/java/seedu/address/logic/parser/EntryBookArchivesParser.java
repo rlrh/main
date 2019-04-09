@@ -9,6 +9,7 @@ import seedu.address.logic.commands.DeleteArchiveEntryCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.UnarchiveCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 
 /**
  * Represents the parser for the archive-context.
@@ -43,7 +44,7 @@ public class EntryBookArchivesParser extends EntryBookParser {
             return new UnarchiveCommandParser().parse(arguments);
 
         default:
-            return super.parseCommand(userInput);
+            return super.parseCommand(userInput, ModelContext.CONTEXT_ARCHIVES);
         }
     }
 

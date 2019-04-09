@@ -16,6 +16,7 @@ import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.UnarchiveCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.ModelContext;
 
 public class EntryBookArchivesParserTest {
     @Rule
@@ -48,7 +49,7 @@ public class EntryBookArchivesParserTest {
             parser.parseCommand("histories");
             throw new AssertionError("The expected ParseException was not thrown.");
         } catch (ParseException pe) {
-            assertEquals(MESSAGE_UNKNOWN_COMMAND, pe.getMessage());
+            assertEquals(String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_ARCHIVES), pe.getMessage());
         }
     }
 
@@ -77,7 +78,7 @@ public class EntryBookArchivesParserTest {
     @Test
     public void parseCommand_unknownCommand_throwsParseException() throws Exception {
         thrown.expect(ParseException.class);
-        thrown.expectMessage(MESSAGE_UNKNOWN_COMMAND);
+        thrown.expectMessage(String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_ARCHIVES));
         parser.parseCommand("unknownCommand");
     }
 }

@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 
 import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -17,13 +18,15 @@ public class GoogleNewsCommandParser implements Parser<GoogleNewsCommand> {
      */
     public GoogleNewsCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
-        if (trimmedArgs.isEmpty()) {
-            return new GoogleNewsCommand();
-        }
         try {
+            if (trimmedArgs.isEmpty()) {
+                return new GoogleNewsCommand();
+            }
             return new GoogleNewsCommand(trimmedArgs);
         } catch (UnsupportedEncodingException uee) {
             throw new ParseException("UTF-8 encoding not supported by system!", uee);
+        } catch (MalformedURLException mue) {
+            throw new ParseException("Invalid link format! " + mue.getMessage(), mue);
         }
     }
 

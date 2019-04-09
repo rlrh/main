@@ -1,5 +1,6 @@
 package seedu.address.logic;
 
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -53,9 +54,9 @@ public interface Logic {
     /**
      * Returns the link to the offline copy of the url given if it exists.
      *
-     * @see seedu.address.model.Model#getOfflineLink(String url)
+     * @see seedu.address.model.Model#getOfflineLink(URL url)
      */
-    Optional<String> getOfflineLink(String url);
+    Optional<URL> getOfflineLink(URL url);
 
     /**
      * Returns an unmodifiable view of the list of commands entered by the user.
