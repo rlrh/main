@@ -70,6 +70,23 @@ public class EntryAutofill {
     }
 
     /**
+     * Extract candidates by parsing URL pointing to a feed.
+     * Differs from {@code extractFromUrl} because we want to autofill the Title with hostname and description
+     * with the base name of the file.
+     * @param url URL to parse as a link to RSS/Atom feed
+     */
+    public void extractFromFeedUrl(URL url) {
+        if (noTitleOrNoDescription) {
+            String baseName = Files.getNameWithoutExtension(url.getPath())
+                    .replaceAll("\n", "") // remove newline chars
+                    .replaceAll("\r", "") // remove carriage return chars
+                    .replaceAll("[^a-zA-Z0-9]+", " ") // replace special chars with spaces
+                    .trim();
+            titleCandidate.tryout(url.getHost()); // title - host name
+            descriptionCandidate.tryout(WordUtils.capitalizeFully(baseName)); // description - cleaned up base name
+        }
+    }
+    /**
      * Extract candidates by parsing HTML.
      * @param html raw HTML to parse
      */
