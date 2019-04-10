@@ -29,11 +29,11 @@ public class Candidate<S, T> {
     }
 
     /**
-     * Tries to see if candidate maps to a suitable value, and if so, accepts it and replaces current value.
-     * @param candidate candidate to try out
+     * Tries to see if valueToMap maps to a suitable value, and if so, accepts it and replaces current value.
+     * @param valueToMap value to try out
      */
-    public Candidate<S, T> tryout(S candidate) {
-        mapper.apply(candidate).ifPresent(value -> this.value = value);
+    public Candidate<S, T> tryout(S valueToMap) {
+        mapper.apply(valueToMap).ifPresent(value -> this.value = value);
         return this;
     }
 
