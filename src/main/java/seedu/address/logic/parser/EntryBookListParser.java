@@ -4,7 +4,6 @@ import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT
 
 import java.util.regex.Matcher;
 
-import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ArchiveCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
@@ -41,10 +40,6 @@ public class EntryBookListParser extends EntryBookParser {
         final String commandWord = matcher.group("commandWord");
         final String arguments = matcher.group("arguments");
         switch (commandWord) {
-
-        case AddCommand.COMMAND_WORD:
-        case AddCommand.COMMAND_ALIAS:
-            return new AddCommandParser().parse(arguments);
 
         case ArchiveCommand.COMMAND_WORD:
         case ArchiveCommand.COMMAND_ALIAS:

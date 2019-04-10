@@ -6,6 +6,7 @@ import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ArchivesCommand;
 import seedu.address.logic.commands.BingWebSearchCommand;
 import seedu.address.logic.commands.Command;
@@ -94,6 +95,10 @@ public abstract class EntryBookParser {
         case HelpCommand.COMMAND_WORD:
         case HelpCommand.COMMAND_ALIAS:
             return new HelpCommand();
+
+        case AddCommand.COMMAND_WORD:
+        case AddCommand.COMMAND_ALIAS:
+            return new AddCommandParser().parse(arguments);
 
         default:
             throw new ParseException(String.format(MESSAGE_UNKNOWN_COMMAND, currentContext));
