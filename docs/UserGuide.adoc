@@ -675,6 +675,24 @@ Examples:
 `delete 2` +
 Deletes the 2nd entry in the archives.
 
+==== Selecting an entry: `select`
+
+Selects the entry identified by the index number used in the displayed entry list for reading.
+
+Format: `select INDEX`
+
+****
+- Selects the entry at the specified `INDEX` for reading.
+- The index refers to the index number shown in the displayed entry list.
+- The index *must be a positive integer* 1`, 2, 3, ...`
+****
+
+Examples:
+
+* `archives` +
+`select 2` +
+Selects the 2nd archived entry.
+
 ==== Clearing all entries : `clear` `[coming in v2.0]`
 Clears all archived entries from the manager.
 
