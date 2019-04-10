@@ -531,11 +531,11 @@ Switches to a clean and clutter-free reader view mode for a more comfortable rea
 * `view reader s/dark` +
 Switches to reader view mode with dark style colour scheme
 
-==== Redownloading an entry: `redownload` `[coming in v2.0]`
+==== Refreshing an entry: `refresh` `[since v1.3]`
 
-Redownload the specified entry to get the latest version of its content.
+Refreshes the specified entry to get the latest version of its content.
 
-Format: `redownload INDEX`
+Format: `refresh INDEX`
 
 ****
 * Refreshes the content of the entry at the specified `INDEX`.
@@ -546,7 +546,7 @@ Format: `redownload INDEX`
 Examples:
 
 * `list` +
-`redownload 2` +
+`refresh 2` +
 Refreshes the content of the 2nd entry in the reading list.
 
 ==== Marking an entry as read: `read` `[coming in v2.0]`
