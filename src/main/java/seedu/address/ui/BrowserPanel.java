@@ -8,6 +8,10 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.events.EventTarget;
+
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -15,10 +19,6 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.events.EventTarget;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.XmlUtil;
@@ -179,10 +179,10 @@ public class BrowserPanel extends UiPart<Region> {
                 .ifPresent(links -> {
                     for (int i = 0; i < links.getLength(); i++) {
                         final Node link = links.item(i);
-                        final String href = ((Element) link).getAttribute("href");
-                        ((EventTarget) link).addEventListener("click",
-                                e -> onlineLink = Optional.of(href),
-                                false);
+                        final Element linkElement = (Element) link;
+                        final String href = linkElement.getAttribute("href");
+                        final EventTarget linkEventTarget = (EventTarget) link;
+                        linkEventTarget.addEventListener("click", e -> onlineLink = Optional.of(href), false);
                     }
                 });
     }
