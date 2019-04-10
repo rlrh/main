@@ -657,26 +657,21 @@ Format: `clear`
 [[Results-Context]]
 === `Search Results` Context Commands
 
-==== Adding entries: `add` `[since v1.3]`
+==== Adding entries: `addindex` `[since v1.3]`
 
 Adds entries from results to the reading list. Content is automatically downloaded to disk.
 
-Format: `add INDEX`
+Format: `addindex INDEX`
 
-Format: `add INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
+Format: `addindex INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
 
-Format: `add all` `[coming in v2.0]`
+Format: `addindex all` `[coming in v2.0]`
 
-[TIP]
-====
-A entry can have any number of tags (including 0).
-Title will be automatically filled by parsing the entry if you do not provide it.
-====
 
 Examples:
 
-- `add 3` Adds the 3rd entry.
-- `add 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business” `[coming in v2.0]`
+- `addindex 3` Adds the 3rd entry.
+- `addindex 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business” `[coming in v2.0]`
 
 ==== Selecting an entry: `select` `[since v1.3]`
 

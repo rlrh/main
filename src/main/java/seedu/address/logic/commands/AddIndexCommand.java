@@ -15,10 +15,10 @@ import seedu.address.model.entry.Entry;
  * Adds an entry identified using its displayed index to the List context EntryBook.
  * This usage only makes sense in search context.
  */
-public class IndexedAddCommand extends Command {
+public class AddIndexCommand extends Command {
 
-    public static final String COMMAND_WORD = "add";
-    public static final String COMMAND_ALIAS = "a";
+    public static final String COMMAND_WORD = "addindex";
+    public static final String COMMAND_ALIAS = "addi";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds the entry identified by the index number used in the displayed entry list.\n"
@@ -27,7 +27,7 @@ public class IndexedAddCommand extends Command {
 
     private final Index targetIndex;
 
-    public IndexedAddCommand(Index targetIndex) {
+    public AddIndexCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
@@ -48,7 +48,7 @@ public class IndexedAddCommand extends Command {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof IndexedAddCommand // instanceof handles nulls
-                && targetIndex.equals(((IndexedAddCommand) other).targetIndex)); // state check
+                || (other instanceof AddIndexCommand // instanceof handles nulls
+                && targetIndex.equals(((AddIndexCommand) other).targetIndex)); // state check
     }
 }
