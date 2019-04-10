@@ -1,17 +1,17 @@
 @font-face {
-    src: url("RobotoSlab-Regular.ttf");
+    src: url("../fonts/RobotoSlab-Regular.ttf");
 }
 
 @font-face {
-    src: url("Roboto-Regular.ttf");
+    src: url("../fonts/Roboto-Regular.ttf");
 }
 
 @font-face {
-    src: url("Roboto-Light.ttf");
+    src: url("../fonts/Roboto-Light.ttf");
 }
 
 @font-face {
-    src: url("Roboto-LightItalic.ttf");
+    src: url("../fonts/Roboto-LightItalic.ttf");
 }
 
 .background {
