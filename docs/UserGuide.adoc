@@ -275,6 +275,47 @@ Examples:
 - `import /home/tt/Desktop/export.jtjr` Saves an export file to desktop
 - `import C:\Users\Name\Desktop\export.jtjr` Saves an export file to desktop
 
+[[Add-Command]]
+==== Adding a single entry: `add` `[updated v1.2]`
+
+Adds a single entry from a link URL to your reading list.
+Content is automatically downloaded onto your personal computer.
+
+Format: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+
+[TIP]
+The `Title` and `Description` fields are automatically filled if you do not provide them.
+[TIP]
+A entry can have any number of tags (including 0).
+
+Examples:
+
+- `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
+Adds a single entry with a description and tagged with “Business”
+
+[[Subscribe-command]]
+==== Subscribing to a feed: `subscribe` `[since v1.3]`
+
+Adds a feed to the manager and subscribes to updates.
+All entries in the subscribed feed will be added to the reading list.
+
+Format: `subscribe l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]..`
+
+[TIP]
+The `Title` and `Description` fields are automatically filled up if you do not provide them.
+[TIP]
+A feed can have any number of tags (including 0)
+
+Examples:
+
+- `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` Adds a feed whose name is “Engadget”.
+-  The imported entries will be tagged with “Tech” `[coming in v2.0]`
+
+[WARNING]
+====
+The application may be unresponsive for a short while when adding entries from a large feed.
+====
+
 ==== Listing entered commands : `history`
 
 Lists all the commands that you have entered in reverse chronological order. +
@@ -411,22 +452,7 @@ Format: `stats`
 [[List-Context]]
 === `Reading List` Context Commands
 
-==== Adding a single entry: `add` `[updated v1.2]`
-
-Adds a single entry from a link URL to your reading list.
-Content is automatically downloaded onto your personal computer.
-
-Format: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
-
-[TIP]
-The `Title` and `Description` fields are automatically filled if you do not provide them.
-[TIP]
-A entry can have any number of tags (including 0).
-
-Examples:
-
-- `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
-Adds a single entry with a description and tagged with “Business”
+To add entries to the reading list, please refer to <<Add-Command>>.
 
 ==== Editing an entry: `edit`
 
@@ -707,27 +733,7 @@ Switches to reader view mode with dark style colour scheme
 [[Feeds-Context]]
 === `Feeds` Context Commands
 
-==== Subscribing to a feed: `subscribe` `[since v1.3]`
-
-Adds a feed to the manager and subscribes to updates.
-All entries in the subscribed feed will be added to the reading list.
-
-Format: `subscribe l/URL [ti/TITLE] [d/COMMENT] [t/TAG]...`
-
-[TIP]
-====
-A feed can have any number of tags (including 0)
-====
-
-Examples:
-
-- `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` Adds a feed whose name is “Engadget”.
--  The imported entries will be tagged with “Tech” `[coming in v2.0]`
-
-[WARNING]
-====
-The application may be unresponsive for a short while when adding entries from a large feed.
-====
+To subscribe to a feed, please refer to [[Subscribe-Command]].
 
 ==== Updating entries from feeds: `refresh` `[since v1.3]`
 
