@@ -7,7 +7,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
 
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -75,7 +74,7 @@ public class SubscribeCommand extends Command {
         model.addFeedsEntry(updatedToSubscribe);
 
         // initial import into reading list
-        EntryBook feedEntries = FeedUtil.serializeToEntryBook(feed, feedUrl.toString(), Collections.emptySet());
+        EntryBook feedEntries = FeedUtil.serializeToEntryBook(feed, feedUrl.toString(), updatedToSubscribe.getTags());
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
                 .forEach(entry -> model.addListEntry(entry, Network.fetchArticleOptional(entry.getLink().value)));
