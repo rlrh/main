@@ -33,7 +33,7 @@ public class ContextSwitchSystemTest extends EntryBookSystemTest {
 
         /* Case: non-list-context command unarchive fails */
         command = UnarchiveCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased();
-        expectedResultMessage = String.format(MESSAGE_UNKNOWN_COMMAND);
+        expectedResultMessage = String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST);
         assertCommandFailure(command, expectedResultMessage);
 
         /* Case: view archives, model should not change */
@@ -49,7 +49,7 @@ public class ContextSwitchSystemTest extends EntryBookSystemTest {
 
         /* Case: non-archives-context command archive fails */
         command = ArchiveCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased();
-        expectedResultMessage = String.format(MESSAGE_UNKNOWN_COMMAND);
+        expectedResultMessage = String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_ARCHIVES);
         assertCommandFailure(command, expectedResultMessage);
 
         /* Case: view entry book, model should not change */

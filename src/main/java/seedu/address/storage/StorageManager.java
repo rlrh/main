@@ -1,6 +1,7 @@
 package seedu.address.storage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -135,22 +136,22 @@ public class StorageManager implements Storage {
     }
 
     @Override
-    public void deleteArticle(String url) throws IOException {
+    public void deleteArticle(URL url) throws IOException {
         articleStorage.deleteArticle(url);
     }
 
     @Override
-    public Optional<Path> addArticle(String url, byte[] content) throws IOException {
+    public Optional<Path> addArticle(URL url, byte[] content) throws IOException {
         return articleStorage.addArticle(url, content);
     }
 
     @Override
-    public Path getArticlePath(String url) {
+    public Path getArticlePath(URL url) {
         return articleStorage.getArticlePath(url);
     }
 
     @Override
-    public Optional<Path> getOfflineLink(String url) {
+    public Optional<Path> getOfflineLink(URL url) {
         return articleStorage.getOfflineLink(url);
     }
 }

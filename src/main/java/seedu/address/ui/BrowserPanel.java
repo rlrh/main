@@ -16,10 +16,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.events.EventTarget;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
@@ -55,13 +53,13 @@ public class BrowserPanel extends UiPart<Region> {
     private boolean isLoadingReaderView; //  flag - whether reader view is loading
     private boolean hasLoadedReaderView; // status - whether reader view has loaded
     private ViewMode viewMode; // current view mode
-    private final Function<String, Optional<String>> getOfflineLink; // asks logic what the offline link for a url is
-    private final Function<String, Optional<String>> getArticle;
+    private final Function<URL, Optional<URL>> getOfflineUrl; // asks logic what the offline link for a url is
+    private final Function<URL, Optional<String>> getArticle;
 
     public BrowserPanel(ObservableValue<Entry> selectedEntry,
                         ObservableValue<ViewMode> viewMode,
-                        Function<String, Optional<String>> getOfflineLink,
-                        Function<String, Optional<String>> getArticle) {
+                        Function<URL, Optional<URL>> getOfflineUrl,
+                        Function<URL, Optional<String>> getArticle) {
 
         super(FXML);
 
@@ -70,7 +68,7 @@ public class BrowserPanel extends UiPart<Region> {
         this.isLoadingReaderView = false;
         this.hasLoadedReaderView = false;
         this.viewMode = viewMode.getValue();
-        this.getOfflineLink = getOfflineLink;
+        this.getOfflineUrl = getOfflineUrl;
         this.getArticle = getArticle;
 
         // To prevent triggering events for typing inside the loaded Web page.
@@ -84,7 +82,11 @@ public class BrowserPanel extends UiPart<Region> {
         // Reload when view mode changes.
         viewMode.addListener((observable, oldViewMode, newViewMode) -> {
             this.viewMode = newViewMode;
-            offlineLink.or(() -> onlineLink).ifPresent(this::loadPage);
+            if (newViewMode.getViewType().equals(ViewType.READER) && hasLoadedReaderView) {
+                setStyleSheet();
+            } else {
+                offlineLink.or(() -> onlineLink).ifPresent(this::loadPage);
+            }
         });
 
         // Respond to browser state events.
@@ -110,7 +112,7 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     /**
-     * Displays loading message.
+     * Logs loading message.
      */
     private void handleRunning() {
         if (isLoadingReaderView) {
@@ -124,7 +126,7 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     /**
-     * Displays loaded message, and loads reader view if necessary.
+     * Logs loaded message, and loads reader view if necessary.
      */
     private void handleSucceeded() {
 
@@ -151,12 +153,21 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     /**
-     * Displays failed to load message, and loads error page.
+     * Logs failed to load message, and loads error page.
      */
     private void handleFailed() {
         String message = String.format("Failed to load %s", webEngine.getLocation());
         logger.warning(message);
         loadErrorPage();
+    }
+
+    /**
+     * Logs failed to load reader view message, and loads reader view failure page.
+     */
+    private void handleReaderViewFailure(String baseUrl) {
+        String message = String.format("Failed to load reader view for %s", baseUrl);
+        logger.warning(message);
+        loadReaderViewFailurePage();
     }
 
     /**
@@ -181,13 +192,13 @@ public class BrowserPanel extends UiPart<Region> {
      * @param entry entry to load
      */
     private void loadEntryPage(Entry entry) {
-        final String url = entry.getLink().value;
-        onlineLink = Optional.of(url);
-        offlineLink = getOfflineLink.apply(url);
-        final Optional<String> offlineContent = getArticle.apply(url);
+        final URL entryUrl = entry.getLink().value;
+        onlineLink = Optional.of(entryUrl).map(URL::toExternalForm);
+        offlineLink = getOfflineUrl.apply(entryUrl).map(URL::toExternalForm);
+        final Optional<String> offlineContent = getArticle.apply(entryUrl);
 
         if (viewMode.getViewType().equals(ViewType.READER) && offlineContent.isPresent()) {
-            loadReader(offlineContent.get(), url);
+            loadReader(offlineContent.get(), entryUrl.toExternalForm());
         } else {
             loadPage(offlineLink.or(() -> onlineLink).get());
         }
@@ -242,17 +253,15 @@ public class BrowserPanel extends UiPart<Region> {
      * @param baseUrl base URL used to resolve relative URLs to absolute URLs
      */
     private void loadReader(String baseUrl) {
-
-        // process loaded content, then load processed content
-        try {
-            String rawHtml = XmlUtil.convertDocumentToString(webEngine.getDocument());
-            loadReader(rawHtml, baseUrl);
-        } catch (TransformerException te) {
-            String message = String.format("Failed to load reader view for %s", baseUrl);
-            logger.warning(message);
-            loadReaderViewFailurePage();
-        }
-
+        Optional.ofNullable(webEngine.getDocument())
+                .ifPresentOrElse(document -> {
+                    try {
+                        String rawHtml = XmlUtil.convertDocumentToString(webEngine.getDocument());
+                        loadReader(rawHtml, baseUrl);
+                    } catch (TransformerException te) {
+                        handleReaderViewFailure(baseUrl);
+                    }
+                }, () -> handleReaderViewFailure(baseUrl));
     }
 
     /**
@@ -263,15 +272,7 @@ public class BrowserPanel extends UiPart<Region> {
     private void loadReader(String rawHtml, String baseUrl) {
 
         // set stylesheet for reader view
-        try {
-            Platform.runLater(() ->
-                    webEngine.setUserStyleSheetLocation(
-                            viewMode.getReaderViewStyle().getStylesheetLocation().toExternalForm())
-            );
-        } catch (IllegalArgumentException | NullPointerException e) {
-            String message = "Failed to set user style sheet location";
-            logger.warning(message);
-        }
+        setStyleSheet();
 
         // process loaded content, then load processed content
         try {
@@ -281,11 +282,21 @@ public class BrowserPanel extends UiPart<Region> {
                 webEngine.loadContent(processedHtml);
             });
         } catch (IllegalArgumentException e) {
-            String message = String.format("Failed to load reader view for %s", baseUrl);
-            logger.warning(message);
-            loadReaderViewFailurePage();
+            handleReaderViewFailure(baseUrl);
         }
 
+    }
+
+    private void setStyleSheet() {
+        try {
+            Platform.runLater(() ->
+                    webEngine.setUserStyleSheetLocation(
+                            viewMode.getReaderViewStyle().getStylesheetLocation().toExternalForm())
+            );
+        } catch (IllegalArgumentException | NullPointerException e) {
+            String message = "Failed to set user style sheet location";
+            logger.warning(message);
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package seedu.address.logic;
 
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -54,12 +55,12 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public Optional<String> getOfflineLink(String url) {
+    public Optional<URL> getOfflineLink(URL url) {
         return model.getOfflineLink(url);
     }
 
     @Override
-    public Optional<String> getArticle(String url) {
+    public Optional<String> getArticle(URL url) {
         return model.getArticle(url);
     }
 

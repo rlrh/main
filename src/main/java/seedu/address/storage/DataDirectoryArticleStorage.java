@@ -1,6 +1,7 @@
 package seedu.address.storage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -31,14 +32,14 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
     }
 
     @Override
-    public void deleteArticle(String url) throws IOException {
+    public void deleteArticle(URL url) throws IOException {
         Path targetPath = getArticlePath(url);
 
         FileUtil.deleteFile(targetPath);
     }
 
     @Override
-    public Optional<Path> addArticle(String url, byte[] articleContent) throws IOException {
+    public Optional<Path> addArticle(URL url, byte[] articleContent) throws IOException {
         Path targetPath = getArticlePath(url);
 
         // Ensure data directory exists
@@ -52,8 +53,8 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
     /**
      * Converts the given url to a filename that will be used to write to.
      */
-    private String urlToFilename(String url) throws NoSuchAlgorithmException {
-        String lowercaseUrl = url.toLowerCase();
+    private String urlToFilename(URL url) throws NoSuchAlgorithmException {
+        String lowercaseUrl = url.toString().toLowerCase();
 
         try {
             // We hash the URL with sha-256, truncate it to 128 bits so it's shorter, then encode it in base32
@@ -69,7 +70,7 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
         }
     }
 
-    public Path getArticlePath(String url) {
+    public Path getArticlePath(URL url) {
         try {
             return directoryPath.resolve(urlToFilename(url));
         } catch (NoSuchAlgorithmException nsae) {
@@ -77,7 +78,7 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
         }
     }
 
-    public Optional<Path> getOfflineLink(String url) {
+    public Optional<Path> getOfflineLink(URL url) {
         Path offlineLink = getArticlePath(url);
         if (FileUtil.isFileExists(offlineLink)) {
             return Optional.of(offlineLink);

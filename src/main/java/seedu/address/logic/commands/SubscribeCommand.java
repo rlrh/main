@@ -6,8 +6,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.net.URL;
 
+import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 
 import seedu.address.commons.util.FeedUtil;
@@ -16,6 +17,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
+import seedu.address.model.entry.util.EntryAutofill;
 import seedu.address.util.Network;
 
 /** Subscribes to a feed and adds the feed to the feedEntryBook. */
@@ -53,27 +55,31 @@ public class SubscribeCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_FEED);
         }
 
-        EntryBook feedEntries;
+        URL feedUrl = toSubscribe.getLink().value;
+        SyndFeed feed;
         try {
             // we ensure the link is a feed here
-            feedEntries = FeedUtil.fromFeedUrl(toSubscribe.getLink().value);
+            feed = FeedUtil.fetchAsFeed(feedUrl);
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e));
         } catch (FeedException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_XML, toSubscribe.getLink().value));
         }
 
-        model.addFeedsEntry(toSubscribe);
+        EntryAutofill autofill = new EntryAutofill(toSubscribe);
+        autofill.extractFromFeedUrl(feedUrl);
+        autofill.extractFromFeed(feed);
+        Entry updatedToSubscribe = autofill.getFilledEntry();
+
+        model.addFeedsEntry(updatedToSubscribe);
 
         // initial import into reading list
+        EntryBook feedEntries = FeedUtil.serializeToEntryBook(feed, feedUrl.toString());
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
-                .forEach(entry -> {
-                    Optional<byte[]> articleContent = Network.fetchArticleOptional(entry.getLink().value);
-                    model.addListEntry(entry, articleContent);
-                });
+                .forEach(entry -> model.addListEntry(entry, Network.fetchArticleOptional(entry.getLink().value)));
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, toSubscribe));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, updatedToSubscribe));
     }
 
     @Override

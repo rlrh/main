@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 
 /**
@@ -18,12 +20,12 @@ public class GoogleNewsCommand extends FeedCommand {
     private static final String GOOGLE_NEWS_TOP_STORIES_RSS_LINK = "https://news.google.com/rss";
     private static final String GOOGLE_NEWS_SEARCH_RSS_LINK = "https://news.google.com/rss/search?q=%s";
 
-    public GoogleNewsCommand() {
-        super(GOOGLE_NEWS_TOP_STORIES_RSS_LINK);
+    public GoogleNewsCommand() throws MalformedURLException {
+        super(new URL(GOOGLE_NEWS_TOP_STORIES_RSS_LINK));
     }
 
-    public GoogleNewsCommand(String keywords) throws UnsupportedEncodingException {
-        super(String.format(GOOGLE_NEWS_SEARCH_RSS_LINK, URLEncoder.encode(keywords, "UTF-8")));
+    public GoogleNewsCommand(String keywords) throws UnsupportedEncodingException, MalformedURLException {
+        super(new URL(String.format(GOOGLE_NEWS_SEARCH_RSS_LINK, URLEncoder.encode(keywords, "UTF-8"))));
     }
 
 }

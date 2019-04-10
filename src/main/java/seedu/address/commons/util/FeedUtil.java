@@ -2,6 +2,8 @@ package seedu.address.commons.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +20,6 @@ import com.rometools.rome.io.XmlReader;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.EntryBook;
-import seedu.address.model.entry.Address;
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
@@ -31,15 +32,23 @@ import seedu.address.util.Network;
  */
 public class FeedUtil {
     public static final String DEFAULT_DESCRIPTION_TEXT = "imported from %s";
-    public static final String DEFAULT_ADDRESS_TEXT = "this field is deprecated";
 
     private static final Logger logger = LogsCenter.getLogger(FeedUtil.class);
 
-    /** Reads in URL of a feed and serializes it into an {@code EntryBook}. */
-    public static EntryBook fromFeedUrl(String feedUrl) throws IOException, FeedException {
+    /** Fetches URL as ROME SyndFeed. */
+    public static SyndFeed fetchAsFeed(URL feedUrl) throws IOException, FeedException {
         InputStream inputStream = Network.fetchAsStream(feedUrl);
-        SyndFeed syndFeed = new SyndFeedInput().build(new XmlReader(inputStream));
+        return new SyndFeedInput().build(new XmlReader(inputStream));
+    }
 
+    /** Reads in URL of a feed and serializes it into an {@code EntryBook}. */
+    public static EntryBook fromFeedUrl(URL feedUrl) throws IOException, FeedException {
+        SyndFeed syndFeed = fetchAsFeed(feedUrl);
+        return serializeToEntryBook(syndFeed, feedUrl.toString());
+    }
+
+    /** Serializes {@code SyndFeed} to @{code EntryBook}. */
+    public static EntryBook serializeToEntryBook(SyndFeed syndFeed, String feedUrl) {
         List<Entry> importedEntries = syndFeed.getEntries().stream()
                 .flatMap(syndEntry -> syndEntryToEntryBookEntry(syndEntry, feedUrl).stream())
                 .collect(Collectors.toList());
@@ -57,16 +66,22 @@ public class FeedUtil {
 
     /** Converts a single SyndEntry into an EntryBook Entry. */
     private static Optional<Entry> syndEntryToEntryBookEntry(SyndEntry syndEntry, String feedUrl) {
-        Optional<String> link = Optional.ofNullable(syndEntry.getLink());
-        if (!link.isPresent()) {
+        Optional<String> syndEntryLink = Optional.ofNullable(syndEntry.getLink());
+        if (!syndEntryLink.isPresent()) {
             logger.warning("Entry without link found when processing " + feedUrl + ", discarding.");
+            return Optional.empty();
+        }
+        Link link;
+        try {
+            link = new Link(syndEntryLink.get());
+        } catch (MalformedURLException mue) {
+            logger.warning("Entry with invalid link found when processing " + feedUrl + ", discarding.");
             return Optional.empty();
         }
         return Optional.of(new Entry(
                 extractTitle(syndEntry),
                 extractDescription(syndEntry, feedUrl),
-                new Link(link.get()),
-                new Address(DEFAULT_ADDRESS_TEXT),
+                link,
                 Collections.emptySet()
         ));
     }

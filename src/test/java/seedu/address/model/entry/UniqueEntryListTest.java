@@ -3,7 +3,6 @@ package seedu.address.model.entry;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.testutil.TypicalEntries.ALICE;
 import static seedu.address.testutil.TypicalEntries.BOB;
@@ -46,8 +45,7 @@ public class UniqueEntryListTest {
     @Test
     public void contains_entryWithSameIdentityFieldsInList_returnsTrue() {
         uniqueEntryList.add(ALICE);
-        Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
-                .build();
+        Entry editedAlice = new EntryBuilder(BOB).withLink(ALICE.getLink().value).build();
         assertTrue(uniqueEntryList.contains(editedAlice));
     }
 
@@ -94,7 +92,7 @@ public class UniqueEntryListTest {
     @Test
     public void setEntry_editedEntryHasSameIdentity_success() {
         uniqueEntryList.add(ALICE);
-        Entry editedAlice = new EntryBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_SCIENCE)
+        Entry editedAlice = new EntryBuilder(ALICE).withTags(VALID_TAG_SCIENCE)
                 .build();
         uniqueEntryList.setEntry(ALICE, editedAlice);
         UniqueEntryList expectedUniqueEntryList = new UniqueEntryList();

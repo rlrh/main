@@ -133,4 +133,24 @@ public class StringUtil {
         return Optional.ofNullable(string).orElse("");
     }
 
+    /**
+     * Gets a UTF-8 encode-able version of a string.
+     * @param string Cannot be null.
+     * @return string if can be UTF-8 encode-able, empty otherwise.
+     */
+    public static String utfSafeOf(String string) {
+        StringBuilder sb = new StringBuilder();
+        for (int codepoint : string.codePoints().toArray()) {
+            // Workaround to try and make javafx not crash when rendering bad text.
+            // Not sure if this covers all the cases, but this handles most cases.
+            if (Character.isValidCodePoint(codepoint)
+                && Character.isDefined(codepoint)
+                && !Character.isISOControl(codepoint)
+                && !Character.isSupplementaryCodePoint(codepoint)) {
+                sb.appendCodePoint(codepoint);
+            }
+        }
+        return sb.toString();
+    }
+
 }
