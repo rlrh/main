@@ -210,7 +210,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public Optional<String> getArticle(String url) {
+        public Optional<String> getArticle(URL url) {
             throw new AssertionError("This method should not be called.");
         }
 
