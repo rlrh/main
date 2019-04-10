@@ -30,9 +30,7 @@ public class NavigationBar extends UiPart<Region> {
     public NavigationBar(ContextSwitchExecutor contextSwitchExecutor, ObservableValue<ModelContext> contextProperty) {
         super(FXML);
 
-        contextProperty.addListener((observable, oldContext, newContext) -> {
-            processContextSwitch(newContext);
-        });
+        contextProperty.addListener((observable, oldContext, newContext) -> processContextSwitch(newContext));
         processContextSwitch(contextProperty.getValue());
 
         discoverButton.setOnAction(event -> contextSwitchExecutor.executeContextSwitch(ModelContext.CONTEXT_SEARCH));

@@ -138,21 +138,22 @@ public class MainWindow extends UiPart<Stage> {
         navigationBar = new NavigationBar(logic::executeContextSwitch, logic.contextProperty());
         navigationBarPlaceholder.getChildren().add(navigationBar.getRoot());
 
-        logic.commandResultProperty().addListener((observable, oldCommandResult, newCommandResult) -> {
-            processManualSuccess(newCommandResult);
-        });
+        logic.commandResultProperty().addListener(observable ->
+            processManualSuccess(logic.commandResultProperty().getValue())
+        );
 
-        logic.exceptionProperty().addListener((observable, oldException, newException) -> {
-            processManualFailure(newException);
-        });
+        logic.exceptionProperty().addListener(observable ->
+            processManualFailure(logic.exceptionProperty().getValue())
+        );
 
-        logic.contextProperty().addListener(((observable, oldContext, newContext) -> {
+        // Hide browser panel in Feeds context
+        logic.contextProperty().addListener((observable, oldContext, newContext) -> {
             if (newContext.equals(ModelContext.CONTEXT_FEEDS)) {
                 browserPlaceholder.getChildren().remove(browserPanel.getRoot());
             } else if (!browserPlaceholder.getChildren().contains(browserPanel.getRoot())) {
                 browserPlaceholder.getChildren().add(browserPanel.getRoot());
             }
-        }));
+        });
     }
 
     /**
