@@ -35,11 +35,20 @@ public class FeedUtil {
 
     private static final Logger logger = LogsCenter.getLogger(FeedUtil.class);
 
+    /** Fetches URL as ROME SyndFeed. */
+    public static SyndFeed fetchAsFeed(URL feedUrl) throws IOException, FeedException {
+        InputStream inputStream = Network.fetchAsStream(feedUrl);
+        return new SyndFeedInput().build(new XmlReader(inputStream));
+    }
+
     /** Reads in URL of a feed and serializes it into an {@code EntryBook}. */
     public static EntryBook fromFeedUrl(URL feedUrl) throws IOException, FeedException {
-        InputStream inputStream = Network.fetchAsStream(feedUrl);
-        SyndFeed syndFeed = new SyndFeedInput().build(new XmlReader(inputStream));
+        SyndFeed syndFeed = fetchAsFeed(feedUrl);
+        return serializeToEntryBook(syndFeed, feedUrl.toString());
+    }
 
+    /** Serializes {@code SyndFeed} to @{code EntryBook}. */
+    public static EntryBook serializeToEntryBook(SyndFeed syndFeed, String feedUrl) {
         List<Entry> importedEntries = syndFeed.getEntries().stream()
                 .flatMap(syndEntry -> syndEntryToEntryBookEntry(syndEntry, feedUrl).stream())
                 .collect(Collectors.toList());
@@ -56,7 +65,7 @@ public class FeedUtil {
     }
 
     /** Converts a single SyndEntry into an EntryBook Entry. */
-    private static Optional<Entry> syndEntryToEntryBookEntry(SyndEntry syndEntry, URL feedUrl) {
+    private static Optional<Entry> syndEntryToEntryBookEntry(SyndEntry syndEntry, String feedUrl) {
         Optional<String> syndEntryLink = Optional.ofNullable(syndEntry.getLink());
         if (!syndEntryLink.isPresent()) {
             logger.warning("Entry without link found when processing " + feedUrl + ", discarding.");
@@ -86,7 +95,7 @@ public class FeedUtil {
     }
 
     /** Extracts a useful description from a SyndEntry. */
-    private static Description extractDescription(SyndEntry syndEntry, URL feedUrl) {
+    private static Description extractDescription(SyndEntry syndEntry, String feedUrl) {
         // note that both SyndEntry#getDescription and SyndContent#getValue might null
         Optional<String> description = Optional.ofNullable(syndEntry.getDescription())
                 .flatMap(syndContent -> Optional.ofNullable(syndContent.getValue()))

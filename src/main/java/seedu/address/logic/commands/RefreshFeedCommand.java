@@ -49,7 +49,7 @@ public class RefreshFeedCommand extends Command {
 
         Entry feedToRefresh = lastShownList.get(targetIndex.getZeroBased());
 
-        // todo: dedup
+        // can't dedup this
         EntryBook feedEntries;
         try {
             // we ensure the link is a feed here
