@@ -34,6 +34,7 @@ import seedu.address.storage.StorageManager;
 import seedu.address.storage.UserPrefsStorage;
 import seedu.address.ui.Ui;
 import seedu.address.ui.UiManager;
+import seedu.address.util.Network;
 
 /**
  * The main entry point to the application.
@@ -202,6 +203,11 @@ public class MainApp extends Application {
     @Override
     public void stop() {
         logger.info("============================ [ Stopping README ] =============================");
+        try {
+            Network.stop();
+        } catch (IOException e) {
+            logger.severe("Failed to terminate remaining network connections " + StringUtil.getDetails(e));
+        }
         try {
             storage.saveUserPrefs(model.getUserPrefs());
         } catch (IOException e) {
