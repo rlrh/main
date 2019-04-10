@@ -18,6 +18,7 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SelectCommand;
+import seedu.address.logic.commands.SubscribeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ModelContext;
 
@@ -96,9 +97,15 @@ public abstract class EntryBookParser {
         case HelpCommand.COMMAND_ALIAS:
             return new HelpCommand();
 
+        // the following commands are actually context specific but accessible everywhere for convenience
+
         case AddCommand.COMMAND_WORD:
         case AddCommand.COMMAND_ALIAS:
             return new AddCommandParser().parse(arguments);
+
+        case SubscribeCommand.COMMAND_WORD:
+        case SubscribeCommand.COMMAND_ALIAS:
+            return new SubscribeCommandParser().parse(arguments);
 
         default:
             throw new ParseException(String.format(MESSAGE_UNKNOWN_COMMAND, currentContext));
