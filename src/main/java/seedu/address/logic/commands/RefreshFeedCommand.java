@@ -53,7 +53,7 @@ public class RefreshFeedCommand extends Command {
         EntryBook feedEntries;
         try {
             // we ensure the link is a feed here
-            feedEntries = FeedUtil.fromFeedUrl(feedToRefresh.getLink().value);
+            feedEntries = FeedUtil.fromFeedUrl(feedToRefresh.getLink().value, feedToRefresh.getTags());
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e));
         } catch (FeedException e) {
