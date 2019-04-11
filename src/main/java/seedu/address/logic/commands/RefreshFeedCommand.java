@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import com.rometools.rome.io.FeedException;
 
@@ -50,11 +49,11 @@ public class RefreshFeedCommand extends Command {
 
         Entry feedToRefresh = lastShownList.get(targetIndex.getZeroBased());
 
-        // todo: dedup
+        // can't dedup this
         EntryBook feedEntries;
         try {
             // we ensure the link is a feed here
-            feedEntries = FeedUtil.fromFeedUrl(feedToRefresh.getLink().value);
+            feedEntries = FeedUtil.fromFeedUrl(feedToRefresh.getLink().value, feedToRefresh.getTags());
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_FAILURE_NET, e));
         } catch (FeedException e) {
@@ -64,10 +63,7 @@ public class RefreshFeedCommand extends Command {
 
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
-                .forEach(entry -> {
-                    Optional<byte[]> articleContent = Network.fetchArticleOptional(entry.getLink().value);
-                    model.addListEntry(entry, articleContent);
-                });
+                .forEach(entry -> model.addListEntry(entry, Network.fetchArticleOptional(entry.getLink().value)));
 
 
         return new CommandResult(String.format(MESSAGE_REFRESH_FEED_SUCCESS, feedToRefresh));

@@ -8,13 +8,12 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.net.URL;
 import java.util.Optional;
-import java.util.logging.Logger;
 
-import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.entry.Entry;
+import seedu.address.model.entry.exceptions.DuplicateEntryException;
 import seedu.address.model.entry.util.EntryAutofill;
 import seedu.address.util.Network;
 
@@ -42,8 +41,6 @@ public class AddCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New entry added: %1$s";
     public static final String MESSAGE_DUPLICATE_ENTRY = "This entry already exists in the entry book";
 
-    private static final Logger logger = LogsCenter.getLogger(AddCommand.class);
-
     private final Entry toAdd;
 
     /**
@@ -60,27 +57,19 @@ public class AddCommand extends Command {
 
         URL url = toAdd.getLink().value;
 
-        EntryAutofill autofill = new EntryAutofill(toAdd.getTitle(), toAdd.getDescription());
+        EntryAutofill autofill = new EntryAutofill(toAdd);
         autofill.extractFromUrl(url);
 
         Optional<byte[]> articleContent = Network.fetchArticleOptional(url);
-        if (articleContent.isPresent()) {
-            String html = new String(articleContent.get());
-            autofill.extractFromHtml(html);
-        }
+        articleContent.ifPresent(bytes -> autofill.extractFromHtml(new String(bytes)));
 
-        Entry updatedEntry = new Entry(
-                autofill.getTitle(),
-                autofill.getDescription(),
-                toAdd.getLink(),
-                toAdd.getTags()
-        );
+        Entry updatedEntry = autofill.getFilledEntry();
 
-        if (model.hasEntry(updatedEntry)) {
+        try {
+            model.addListEntry(updatedEntry, articleContent);
+        } catch (DuplicateEntryException dee) {
             throw new CommandException(MESSAGE_DUPLICATE_ENTRY);
         }
-
-        model.addListEntry(updatedEntry, articleContent);
         return new CommandResult(String.format(MESSAGE_SUCCESS, updatedEntry));
     }
 
