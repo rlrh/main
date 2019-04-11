@@ -74,7 +74,7 @@ public class SubscribeCommand extends Command {
         model.addFeedsEntry(updatedToSubscribe);
 
         // initial import into reading list
-        EntryBook feedEntries = FeedUtil.serializeToEntryBook(feed, feedUrl.toString());
+        EntryBook feedEntries = FeedUtil.serializeToEntryBook(feed, feedUrl.toString(), updatedToSubscribe.getTags());
         feedEntries.getEntryList().stream()
                 .filter(entry -> !model.hasEntry(entry))
                 .forEach(entry -> model.addListEntry(entry, Network.fetchArticleOptional(entry.getLink().value)));

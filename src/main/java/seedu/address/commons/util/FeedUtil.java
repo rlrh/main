@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.entry.exceptions.DuplicateEntryException;
+import seedu.address.model.tag.Tag;
 import seedu.address.util.Network;
 
 /**
@@ -41,16 +43,21 @@ public class FeedUtil {
         return new SyndFeedInput().build(new XmlReader(inputStream));
     }
 
-    /** Reads in URL of a feed and serializes it into an {@code EntryBook}. */
+    /** Takes in URL of a feed and returns an {@code EntryBook}. */
     public static EntryBook fromFeedUrl(URL feedUrl) throws IOException, FeedException {
-        SyndFeed syndFeed = fetchAsFeed(feedUrl);
-        return serializeToEntryBook(syndFeed, feedUrl.toString());
+        return fromFeedUrl(feedUrl, Collections.emptySet());
     }
 
-    /** Serializes {@code SyndFeed} to @{code EntryBook}. */
-    public static EntryBook serializeToEntryBook(SyndFeed syndFeed, String feedUrl) {
+    /** Takes in URL of a feed and returns an {@code EntryBook} with the given tags. */
+    public static EntryBook fromFeedUrl(URL feedUrl, Set<Tag> tags) throws IOException, FeedException {
+        SyndFeed syndFeed = fetchAsFeed(feedUrl);
+        return serializeToEntryBook(syndFeed, feedUrl.toString(), tags);
+    }
+
+    /** Serializes {@code SyndFeed} to {@code EntryBook} where all the entries are tagged. */
+    public static EntryBook serializeToEntryBook(SyndFeed syndFeed, String feedUrl, Set<Tag> tags) {
         List<Entry> importedEntries = syndFeed.getEntries().stream()
-                .flatMap(syndEntry -> syndEntryToEntryBookEntry(syndEntry, feedUrl).stream())
+                .flatMap(syndEntry -> syndEntryToEntryBookEntry(syndEntry, feedUrl, tags).stream())
                 .collect(Collectors.toList());
         EntryBook entryBook = new EntryBook();
         for (Entry entry : importedEntries) {
@@ -65,7 +72,7 @@ public class FeedUtil {
     }
 
     /** Converts a single SyndEntry into an EntryBook Entry. */
-    private static Optional<Entry> syndEntryToEntryBookEntry(SyndEntry syndEntry, String feedUrl) {
+    private static Optional<Entry> syndEntryToEntryBookEntry(SyndEntry syndEntry, String feedUrl, Set<Tag> tags) {
         Optional<String> syndEntryLink = Optional.ofNullable(syndEntry.getLink());
         if (!syndEntryLink.isPresent()) {
             logger.warning("Entry without link found when processing " + feedUrl + ", discarding.");
@@ -82,7 +89,7 @@ public class FeedUtil {
                 extractTitle(syndEntry),
                 extractDescription(syndEntry, feedUrl),
                 link,
-                Collections.emptySet()
+                tags
         ));
     }
 
