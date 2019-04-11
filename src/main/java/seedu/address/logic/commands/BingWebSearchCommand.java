@@ -13,14 +13,14 @@ public class BingWebSearchCommand extends FeedCommand {
 
     public static final String COMMAND_WORD = "bing";
 
-    public BingWebSearchCommand(String keywords) throws UnsupportedEncodingException, MalformedURLException {
-        super(getBingWebSearchRssLink(keywords));
-    }
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Searches the web using Bing. "
+            + "Parameters: [KEYWORDS]\n"
+            + "Example: bing trump";
 
-    private static URL getBingWebSearchRssLink(String keywords)
-            throws UnsupportedEncodingException, MalformedURLException {
-        return new URL(String.format(
-            "https://www.bing.com/search?q=%s&format=rss",
-            URLEncoder.encode(keywords, "UTF-8")));
+    private static final String BING_WEB_SEARCH_RSS_LINK = "https://www.bing.com/search?q=%s&format=rss";
+
+    public BingWebSearchCommand(String keywords) throws UnsupportedEncodingException, MalformedURLException {
+        super(new URL(String.format(BING_WEB_SEARCH_RSS_LINK, URLEncoder.encode(keywords, "UTF-8"))));
     }
 }

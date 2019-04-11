@@ -6,6 +6,7 @@ import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ArchivesCommand;
 import seedu.address.logic.commands.BingWebSearchCommand;
 import seedu.address.logic.commands.Command;
@@ -16,7 +17,7 @@ import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
-import seedu.address.logic.commands.SelectCommand;
+import seedu.address.logic.commands.SubscribeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ModelContext;
 
@@ -74,10 +75,6 @@ public abstract class EntryBookParser {
         case ListCommand.COMMAND_ALIAS:
             return new ListCommand();
 
-        case SelectCommand.COMMAND_WORD:
-        case SelectCommand.COMMAND_ALIAS:
-            return new SelectCommandParser().parse(arguments);
-
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
 
@@ -94,6 +91,16 @@ public abstract class EntryBookParser {
         case HelpCommand.COMMAND_WORD:
         case HelpCommand.COMMAND_ALIAS:
             return new HelpCommand();
+
+        // the following commands are actually context specific but accessible everywhere for convenience
+
+        case AddCommand.COMMAND_WORD:
+        case AddCommand.COMMAND_ALIAS:
+            return new AddCommandParser().parse(arguments);
+
+        case SubscribeCommand.COMMAND_WORD:
+        case SubscribeCommand.COMMAND_ALIAS:
+            return new SubscribeCommandParser().parse(arguments);
 
         default:
             throw new ParseException(String.format(MESSAGE_UNKNOWN_COMMAND, currentContext));
