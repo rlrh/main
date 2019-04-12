@@ -3,17 +3,11 @@ package seedu.address.ui;
 import static java.util.Objects.requireNonNull;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Logger;
-import javax.swing.text.html.Option;
-import javax.xml.transform.TransformerException;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.events.EventTarget;
+import javax.xml.transform.TransformerException;
 
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -28,7 +22,6 @@ import seedu.address.commons.util.UrlUtil;
 import seedu.address.commons.util.XmlUtil;
 import seedu.address.model.entry.Entry;
 import seedu.address.ui.util.ReaderViewUtil;
-import seedu.address.ui.util.UrlType;
 
 /**
  * The Browser Panel of the App.
@@ -48,17 +41,23 @@ public class BrowserPanel extends UiPart<Region> {
 
     private static final String FXML = "BrowserPanel.fxml";
 
-    private final Logger logger = LogsCenter.getLogger(getClass());
+    private final Logger logger = LogsCenter.getLogger(BrowserPanel.class);
 
     @FXML
     private WebView browser;
 
     private WebEngine webEngine = browser.getEngine();
 
-    private final List<URL> internalPages;
+    //private final List<URL> internalPages;
 
-    private URL lastUrl;
-    private ViewMode viewMode; // current view mode
+    /** aaa */
+    //enum LoadingState { LOADING, LOADED }
+    enum LoadingSource { INTERNAL, LOCAL, REMOTE, READER }
+
+    //private LoadingState loadState;
+    private LoadingSource loadSrc;
+
+    private ObservableValue<ViewMode> viewMode; // current view mode
     private final Function<URL, Optional<URL>> getOfflineUrl; // asks logic what the offline link for a url is
     private final Function<URL, Optional<String>> getArticle;
 
@@ -69,13 +68,7 @@ public class BrowserPanel extends UiPart<Region> {
 
         super(FXML);
 
-        internalPages = new ArrayList<>();
-        internalPages.add(DEFAULT_PAGE);
-        internalPages.add(ERROR_PAGE);
-        internalPages.add(READER_VIEW_FAILURE_PAGE);
-
-        this.lastUrl = null;
-        this.viewMode = viewMode.getValue();
+        this.viewMode = viewMode;
         this.getOfflineUrl = getOfflineUrl;
         this.getArticle = getArticle;
 
@@ -106,11 +99,20 @@ public class BrowserPanel extends UiPart<Region> {
             Optional.ofNullable(newValue).ifPresentOrElse(this::loadEntryPage, this::loadDefaultPage);
         });
 
-        viewMode.addListener((observable) -> {
+        viewMode.addListener((obs, oldv, newv) -> {
+            if (oldv.getViewType().equals(ViewType.READER) && newv.getViewType().equals(ViewType.READER)) {
+                logger.fine("Changing reader view style from " + oldv.getReaderViewStyle() + " to "
+                        + newv.getReaderViewStyle());
+                updateReaderViewStyleSheet(newv.getReaderViewStyle());
+            }
+            // todo: handle page already open or something (or maybe just reload page???)
+
+        });
+
+        /* viewMode.addListener((observable) -> {
             ViewMode newViewMode = viewMode.getValue();
-            this.viewMode = newViewMode;
             if (newViewMode.getViewType().equals(ViewType.READER) && getCurrentUrlType().equals(UrlType.READER_VIEW)) {
-                setStyleSheet(newViewMode.getReaderViewStyle().getStylesheetLocation());
+                //setStyleSheet(newViewMode.getReaderViewStyle().getStylesheetLocation());
             } else if (newViewMode.getViewType().equals(ViewType.READER) && getCurrentUrlType().equals(UrlType.ONLINE)) {
                 loadReader(lastUrl.toExternalForm());
             } else if (newViewMode.getViewType().equals(ViewType.READER) && getCurrentUrlType().equals(UrlType.OFFLINE)) {
@@ -122,60 +124,66 @@ public class BrowserPanel extends UiPart<Region> {
                     !(getCurrentUrlType().equals(UrlType.ONLINE) && getCurrentUrlType().equals(UrlType.OFFLINE))) {
                 loadPage(lastUrl.toExternalForm());
             }
-        });
+        }); */
 
         // Load default page on startup.
         loadDefaultPage();
 
     }
 
+
     /**
      * Logs loading message.
      */
     private void handleRunning() {
-        Optional<URL> currentUrl = UrlUtil.fromString(webEngine.getLocation());
-        currentUrl.ifPresent(url -> {
-            if (!internalPages.contains(url)) lastUrl = url;
-        });
-        UrlType currentState = calculateState(UrlUtil.fromString(webEngine.getLocation()), internalPages);
-        String message = String.format("Loading %s: %s", currentState, currentUrl.orElse(lastUrl));
-        logger.info(message);
+        logger.info("Loading " + webEngine.getLocation());
     }
 
     /**
      * Logs loaded message, and loads reader view if necessary.
      */
     private void handleSucceeded() {
+        if (isReaderView() && loadSrc == LoadingSource.REMOTE) {
+            logger.info("Refreshing just loaded page " + webEngine.getLocation() + " with reader view.");
+            loadReader(webEngine.getLocation()); // todo: maybe refer to something?
+            return;
+        }
         // current state
-        Optional<URL> currentUrl = UrlUtil.fromString(webEngine.getLocation());
+        //loadState = LoadingState.LOADED;
+        /*Optional<URL> currentUrl = UrlUtil.fromString(webEngine.getLocation());
         currentUrl.ifPresent(url -> {
-            if (!internalPages.contains(url)) lastUrl = url;
+            if (!internalPages.contains(url)) {
+                lastUrl = url;
+            }
         });
         UrlType currentState = calculateState(UrlUtil.fromString(webEngine.getLocation()), internalPages);
-        String message = String.format("Successfully loaded %s: %s", currentState, currentUrl.orElse(lastUrl));
-        logger.info(message);
+        String message = String.format("Successfully loaded %s -- state: %s", webEngine.getLocation(), loadState);*/
+        logger.info("Successfully loaded " + webEngine.getLocation());
 
         // actions
-        if (viewMode.getViewType().equals(ViewType.READER) &&
+        /*if (viewMode.getViewType().equals(ViewType.READER) &&
                 (getCurrentUrlType().equals(UrlType.ONLINE) || getCurrentUrlType().equals(UrlType.OFFLINE))) {
             loadReader(lastUrl.toExternalForm());
-        }
+        }*/
 
         // next state
     }
 
+    private boolean isReaderView() {
+        return viewMode.getValue().getViewType().equals(ViewType.READER);
+    }
     /**
      * Logs failed to load message, and loads error page.
      */
     private void handleFailed() {
         // current state
         Optional<URL> currentUrl = UrlUtil.fromString(webEngine.getLocation());
-        currentUrl.ifPresent(url -> {
+        /* currentUrl.ifPresent(url -> {
             if (!internalPages.contains(url)) lastUrl = url;
         });
         UrlType currentState = calculateState(UrlUtil.fromString(webEngine.getLocation()), internalPages);
-        String message = String.format("Failed to load %s: %s", currentState, currentUrl.orElse(lastUrl));
-        logger.info(message);
+        String message = String.format("Failed to load %s: %s", "BB", currentUrl.orElse(lastUrl));*/
+        logger.info("Failed to load " + webEngine.getLocation());
 
         // next state
 
@@ -216,15 +224,28 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     private void loadInternalPage(URL url) {
-        // next state
-
-        // actions
+        loadSrc = LoadingSource.INTERNAL;
         loadPage(url.toExternalForm());
     }
 
     private void loadEntryPage(Entry entry) {
         URL entryUrl = entry.getLink().value;
-        if (viewMode.getViewType().equals(ViewType.READER)) {
+        Optional<String> offlineUrl = getOfflineUrl.apply(entryUrl).map(URL::toExternalForm);
+        if (offlineUrl.isPresent()) {
+            Optional<String> html = getArticle.apply(entryUrl);
+            if (isReaderView() && html.isPresent()) {
+                loadSrc = LoadingSource.READER;
+                loadReader(html.get(), entryUrl.toExternalForm());
+                // when html is not present we let handleSuccess take care of things
+            } else {
+                loadSrc = LoadingSource.LOCAL;
+                loadPage(offlineUrl.get());
+            }
+        } else {
+            loadSrc = LoadingSource.REMOTE;
+            loadPage(entryUrl.toExternalForm());
+        }
+        /*if (viewMode.getValue().getViewType().equals(ViewType.READER)) {
             System.out.println("Reader entry page");
             getOfflineUrl.apply(entryUrl).ifPresent(url -> {
                 System.out.println(url);
@@ -242,7 +263,7 @@ public class BrowserPanel extends UiPart<Region> {
             getOfflineUrl.apply(entryUrl)
                     .map(URL::toExternalForm)
                     .ifPresentOrElse(this::loadPage, () -> loadPage(entryUrl.toExternalForm()));
-        }
+        }*/
 
     }
 
@@ -269,9 +290,9 @@ public class BrowserPanel extends UiPart<Region> {
      * @param baseUrl base URL used to resolve relative URLs to absolute URLs
      */
     private void loadReader(String rawHtml, String baseUrl) {
-
+        loadSrc = LoadingSource.READER;
         // set stylesheet for reader view
-        setStyleSheet(viewMode.getReaderViewStyle().getStylesheetLocation());
+        setStyleSheet(viewMode.getValue().getReaderViewStyle().getStylesheetLocation());
 
         // process loaded content, then load processed content
         try {
@@ -303,6 +324,11 @@ public class BrowserPanel extends UiPart<Region> {
      * @param url URL of the Web page to load
      */
     private void loadPage(String url) {
+        System.out.println("loadPage: Trying to load " + url);
+        /*if (loadState == LoadingState.LOADING) {
+            System.out.println("Changing page, try (?) cancel current load");
+            webEngine.getLoadWorker().cancel();
+        }*/
         Platform.runLater(() -> {
             webEngine.setUserStyleSheetLocation(null);
             webEngine.load(url);
@@ -317,6 +343,7 @@ public class BrowserPanel extends UiPart<Region> {
         Platform.runLater(() -> webEngine.loadContent(html));
     }
 
+    /*
     private UrlType calculateState(Optional<URL> currentUrl, List<URL> internalPages) {
 
         if (!currentUrl.isPresent()) {
@@ -349,12 +376,25 @@ public class BrowserPanel extends UiPart<Region> {
             loadingEntryPage = currentUrl.get().equals(lastEntryOfflineUrl.get());
         }
         System.out.println(String.format("Loading entry page: %s", loadingEntryPage));
-        */
+
 
     }
 
     private UrlType getCurrentUrlType() {
         return calculateState(UrlUtil.fromString(webEngine.getLocation()), internalPages);
+    }*/
+
+
+    /** aaa. */
+    private void updateReaderViewStyleSheet(ReaderViewStyle readerViewStyle) {
+        try {
+            Platform.runLater(() ->
+                    webEngine.setUserStyleSheetLocation(readerViewStyle.getStylesheetLocation().toExternalForm())
+            );
+        } catch (IllegalArgumentException | NullPointerException e) {
+            String message = "Failed to set user style sheet location";
+            logger.warning(message);
+        }
     }
 
 }
