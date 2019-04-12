@@ -1,47 +1,71 @@
-= Jonathan Cheng - Project Portfolio for README
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
+
+= Jonathan Cheng - Project Portfolio
+
+Hello there! I am Computer Science undergraduate student studying at National University of Singapore (NUS).
+This document highlights all the projects I have contributed to over the course of the studies, and I hope it gives you a better idea of what I can do!
 
 == PROJECT: README
 
 == Overview
 
-README is a desktop bookmark manager/rss feed reader application.
+README is a desktop bookmark manager/RSS feed reader application.
+README lets users store webpages for offline reading and subscribe to feeds so that their favourite content is delivered to them.
+
+The application is the product of a brownfield project for the NUS module CS2103T.
+We built our application from an existing https://github.com/nus-cs2103-AY1819S2/addressbook-level4/[addressbook application].
+
+We envision users to use our application to store a large number of entries (which refers to links in the application), so it is vital that they have a way to navigate these many entries.
+As such, my responsibility in this project is to develop a powerful system to organise and manage entries in README.
 
 == Summary of contributions
 
+|===
+|Given below are contributions that I made to this application.
+|===
+
 === *Major enhancement*: Entry management system
-I implemented a collection of several commands that allow users to manage a large number of entries in the entrybook.
-** Justification: Essential for heavy users so that they can navigate large numbers of entries efficiently, and allows
-them to partition their entries into groups using tags and the archive.
-** Highlights: Updated commands from addressbook application and added new ones.
-*** Archives command: Users can archive links they have read.
-*** Find command: Updated so users can search for links in the list of currently displayed entries using any of the fields and/or tags.
-*** Context switching: Users can make the application display different entries (archive entries, search result entries etc.)
+
+I implemented a collection of several commands that allow users to navigate their large number of entries in the application.
+
+** Justification: Essential for heavy users so that they can search for and navigate their large numbers of entries efficiently, and allows them to partition their entries into groups using tags and the archive.
+** Highlights:
+*** Archives command: Users can archive (instead of delete) entries they have read for future reference.
+*** Find command: Enhanced so users can search for entries in the list of currently displayed entries using any of the fields and/or tags.
+*** Context switching: Users can make the application display different entries (saved entries, archived entries etc.)
 via context-switching commands.
 
 === *Minor enhancement*: Morphing addressbook to entrybook
 ** I contributed significantly to refactors and renames of codebase to fit the context of our application.
 
 === *Code contributed*:
+For an overview of all of the code contributed by me, refer to the CS2103T https://nus-cs2103-ay1819s2.github.io/cs2103-dashboard/#=undefined&search=epicfailname[module dashboard]!
+
+Otherwise, refer to the links below to relevant pull requests for each enhancement!
+
 ** https://github.com/CS2103-AY1819S2-W10-1/main/pull/106[Archives]
+** https://github.com/CS2103-AY1819S2-W10-1/main/pull/126[Find Command Enhancement]
 ** https://github.com/CS2103-AY1819S2-W10-1/main/pull/77[Context switching]
 ** https://github.com/CS2103-AY1819S2-W10-1/main/pull/21[Morphing addressbook to entrybook]
 
 === *Other contributions*:
 
 * Project management:
-** .
+** I managed the release of https://github.com/CS2103-AY1819S2-W10-1/main/releases/tag/v1.3.1[version 1.3.1] of our application.
 * Community:
-** PRs reviewed (with non-trivial review comments):
-*** https://github.com/CS2103-AY1819S2-W10-1/main/pull/107[#107]
+** Regularly review pull requests (PR) (see https://github.com/CS2103-AY1819S2-W10-1/main/pulls?utf8=%E2%9C%93&q=is%3Apr+reviewed-by%3Aepicfailname[here] for the complete list). PRs with non-trivial comments:
 *** https://github.com/CS2103-AY1819S2-W10-1/main/pull/76[#76]
+*** https://github.com/CS2103-AY1819S2-W10-1/main/pull/107[#107]
+** Reported bugs and gave suggestions for another group's https://github.com/CS2103-AY1819S2-W11-3/main[project]:
+*** https://github.com/CS2103-AY1819S2-W11-3/main/issues/156[#156]
+*** https://github.com/CS2103-AY1819S2-W11-3/main/issues/158[#158]
 
 == Contributions to the User Guide
 
 |===
-|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
 include::../UserGuide.adoc[tag=contextcommands]
@@ -49,7 +73,7 @@ include::../UserGuide.adoc[tag=contextcommands]
 == Contributions to the Developer Guide
 
 |===
-|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
 include::../DeveloperGuide.adoc[tag=contextswitching]
