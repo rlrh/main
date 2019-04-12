@@ -275,6 +275,47 @@ Examples:
 - `import /home/tt/Desktop/export.jtjr` Saves an export file to desktop
 - `import C:\Users\Name\Desktop\export.jtjr` Saves an export file to desktop
 
+[[Add-Command]]
+==== Adding a single entry: `add` `[updated v1.2]`
+
+Adds a single entry from a link URL to your reading list.
+Content is automatically downloaded onto your personal computer.
+
+Format: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+
+[TIP]
+The `Title` and `Description` fields are automatically filled if you do not provide them.
+[TIP]
+A entry can have any number of tags (including 0).
+
+Examples:
+
+- `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
+Adds a single entry with a description and tagged with “Business”
+
+[[Subscribe-command]]
+==== Subscribing to a feed: `subscribe` `[since v1.3]`
+
+Adds a feed to the manager and subscribes to updates.
+All entries in the subscribed feed will be added to the reading list.
+
+Format: `subscribe l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]..`
+
+[TIP]
+The `Title` and `Description` fields are automatically filled up if you do not provide them.
+[TIP]
+A feed can have any number of tags (including 0)
+
+Examples:
+
+- `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` Adds a feed whose name is “Engadget”.
+-  The imported entries will be tagged with “Tech” `[coming in v2.0]`
+
+[WARNING]
+====
+The application may be unresponsive for a short while when adding entries from a large feed.
+====
+
 ==== Listing entered commands : `history`
 
 Lists all the commands that you have entered in reverse chronological order. +
@@ -412,22 +453,7 @@ Format: `stats`
 [[List-Context]]
 === `Reading List` Context Commands
 
-==== Adding a single entry: `add` `[updated v1.2]`
-
-Adds a single entry from a link URL to your reading list.
-Content is automatically downloaded onto your personal computer.
-
-Format: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
-
-[TIP]
-The `Title` and `Description` fields are automatically filled if you do not provide them.
-[TIP]
-A entry can have any number of tags (including 0).
-
-Examples:
-
-- `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
-Adds a single entry with a description and tagged with “Business”
+To add entries to the reading list, please refer to <<Add-Command>>.
 
 ==== Editing an entry: `edit`
 
@@ -454,21 +480,25 @@ Clears all existing tags from the 2nd entry.
 
 Finds entries whose fields contain any of the given keyphrases. +
 
-Format: `edit [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
+Format: `find [a/SEARCH_PHRASE] [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
 
 ****
+* At least one of the optional fields must be provided.
 * The search is case insensitive. e.g `hans` will match `Hans`
 * The search matches anywhere for title, description and link. e.g. `ans B` will match `Hans Bo`
 * The search matches exactly for tags. e.g. 'science' will match 'science', but not 'scienceandtech'
-* Entries matching at least one keyphrase will be returned (i.e. `OR` search). e.g. `Hans, Bo` will return `Hans Gruber`, `Bo Yang`
+* The search phrase with prefix `a/` will try to match with every field in the entry according to the above rules.
+** i.e. `find a/keyphrase` is equivalent to `find ti/keyphrase d/keyphrase l/keyphrase t/keyphrase`
+* Entries matching at least one field will be returned (i.e. `OR` search).
+** e.g. `find ti/aaa d/bbb l/ccc t/ddd` will match an entry with title `Aaawesome` and an entry with description `abbbA`
 ****
 
 Examples:
 
-* `find Trump` +
-Returns entries with titles containing `trump` and `Donald Trump` etc.
-* `find Boeing FAA` +
-Returns any entry having titles `Boeing` or `FAA`
+* `find ti/Trump` +
+Returns entries with titles containing the phrase `trump` such as `Donald Trump` or `CS average salary trumps again`
+* `find l/cnn t/science` +
+Returns any entries having links containing the phrase `cnn` and entries with the exact tag `science`.
 
 ==== Selecting an entry: `select`
 
@@ -506,11 +536,11 @@ Switches to a clean and clutter-free reader view mode for a more comfortable rea
 * `view reader s/dark` +
 Switches to reader view mode with dark style colour scheme
 
-==== Redownloading an entry: `redownload` `[coming in v2.0]`
+==== Refreshing an entry: `refresh` `[since v1.3]`
 
-Redownload the specified entry to get the latest version of its content.
+Refreshes the specified entry to get the latest version of its content.
 
-Format: `redownload INDEX`
+Format: `refresh INDEX`
 
 ****
 * Refreshes the content of the entry at the specified `INDEX`.
@@ -521,7 +551,7 @@ Format: `redownload INDEX`
 Examples:
 
 * `list` +
-`redownload 2` +
+`refresh 2` +
 Refreshes the content of the 2nd entry in the reading list.
 
 ==== Marking an entry as read: `read` `[coming in v2.0]`
@@ -650,6 +680,24 @@ Examples:
 `delete 2` +
 Deletes the 2nd entry in the archives.
 
+==== Selecting an entry: `select`
+
+Selects the entry identified by the index number used in the displayed entry list for reading.
+
+Format: `select INDEX`
+
+****
+- Selects the entry at the specified `INDEX` for reading.
+- The index refers to the index number shown in the displayed entry list.
+- The index *must be a positive integer* 1`, 2, 3, ...`
+****
+
+Examples:
+
+* `archives` +
+`select 2` +
+Selects the 2nd archived entry.
+
 ==== Clearing all entries : `clear` `[coming in v2.0]`
 Clears all archived entries from the manager.
 
@@ -658,26 +706,21 @@ Format: `clear`
 [[Results-Context]]
 === `Search Results` Context Commands
 
-==== Adding entries: `add` `[since v1.3]`
+==== Adding entries: `addindex` `[since v1.3]`
 
 Adds entries from results to the reading list. Content is automatically downloaded to disk.
 
-Format: `add INDEX`
+Format: `addindex INDEX`
 
-Format: `add INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
+Format: `addindex INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
 
-Format: `add all` `[coming in v2.0]`
+Format: `addindex all` `[coming in v2.0]`
 
-[TIP]
-====
-A entry can have any number of tags (including 0).
-Title will be automatically filled by parsing the entry if you do not provide it.
-====
 
 Examples:
 
-- `add 3` Adds the 3rd entry.
-- `add 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business” `[coming in v2.0]`
+- `addindex 3` Adds the 3rd entry.
+- `addindex 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business” `[coming in v2.0]`
 
 ==== Selecting an entry: `select` `[since v1.3]`
 
@@ -713,27 +756,7 @@ Switches to reader view mode with dark style colour scheme
 [[Feeds-Context]]
 === `Feeds` Context Commands
 
-==== Subscribing to a feed: `subscribe` `[since v1.3]`
-
-Adds a feed to the manager and subscribes to updates.
-All entries in the subscribed feed will be added to the reading list.
-
-Format: `subscribe l/URL [ti/TITLE] [d/COMMENT] [t/TAG]...`
-
-[TIP]
-====
-A feed can have any number of tags (including 0)
-====
-
-Examples:
-
-- `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` Adds a feed whose name is “Engadget”.
--  The imported entries will be tagged with “Tech” `[coming in v2.0]`
-
-[WARNING]
-====
-The application may be unresponsive for a short while when adding entries from a large feed.
-====
+To subscribe to a feed, please refer to [[Subscribe-Command]].
 
 ==== Updating entries from feeds: `refresh` `[since v1.3]`
 
