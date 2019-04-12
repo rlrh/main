@@ -4,7 +4,7 @@ public enum UrlType {
     INTERNAL("internal page"),
     ONLINE("online page"),
     OFFLINE("offline page"),
-    READER_VIEW("reader view page");
+    CONTENT("content");
 
     private String friendlyName;
 
