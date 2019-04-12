@@ -113,4 +113,8 @@ public abstract class Network {
             .thenApply(articleContent -> AbsoluteUrlDocumentConverter.convert(url, articleContent));
     }
 
+    /** Cleans up by closing the AsyncHttpClient. */
+    public static void stop() throws IOException {
+        asyncHttpClient.close();
+    }
 }

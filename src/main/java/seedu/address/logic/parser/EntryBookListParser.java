@@ -4,7 +4,6 @@ import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT
 
 import java.util.regex.Matcher;
 
-import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ArchiveCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
@@ -13,6 +12,7 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.RefreshEntryCommand;
+import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ModelContext;
@@ -42,10 +42,6 @@ public class EntryBookListParser extends EntryBookParser {
         final String arguments = matcher.group("arguments");
         switch (commandWord) {
 
-        case AddCommand.COMMAND_WORD:
-        case AddCommand.COMMAND_ALIAS:
-            return new AddCommandParser().parse(arguments);
-
         case ArchiveCommand.COMMAND_WORD:
         case ArchiveCommand.COMMAND_ALIAS:
             return new ArchiveCommandParser().parse(arguments);
@@ -67,6 +63,11 @@ public class EntryBookListParser extends EntryBookParser {
         case RefreshEntryCommand.COMMAND_WORD:
         case RefreshEntryCommand.COMMAND_ALIAS:
             return new RefreshEntryCommandParser().parse(arguments);
+
+
+        case SelectCommand.COMMAND_WORD:
+        case SelectCommand.COMMAND_ALIAS:
+            return new SelectCommandParser().parse(arguments);
 
         case ViewModeCommand.COMMAND_WORD:
         case ViewModeCommand.COMMAND_ALIAS:
