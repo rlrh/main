@@ -16,6 +16,7 @@ import org.junit.rules.ExpectedException;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ArchiveCommand;
 import seedu.address.logic.commands.ArchivesCommand;
+import seedu.address.logic.commands.BingWebSearchCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -25,6 +26,7 @@ import seedu.address.logic.commands.FeedCommand;
 import seedu.address.logic.commands.FeedsCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.FindCommand.FindEntryDescriptor;
+import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -106,6 +108,20 @@ public class EntryBookListParserTest {
     @Test
     public void parseCommand_feed() throws Exception {
         assertTrue(parser.parseCommand(FeedCommand.COMMAND_WORD + " https://url.com/a.xml") instanceof FeedCommand);
+    }
+
+    @Test
+    public void parseCommand_bing() throws Exception {
+        assertTrue(parser.parseCommand(BingWebSearchCommand.COMMAND_WORD + " somekeyword")
+                instanceof BingWebSearchCommand);
+    }
+
+    @Test
+    public void parseCommand_googlenews() throws Exception {
+        assertTrue(parser.parseCommand(GoogleNewsCommand.COMMAND_WORD) instanceof GoogleNewsCommand);
+        assertTrue(parser.parseCommand(GoogleNewsCommand.COMMAND_ALIAS) instanceof GoogleNewsCommand);
+        assertTrue(parser.parseCommand(GoogleNewsCommand.COMMAND_WORD + " kw") instanceof GoogleNewsCommand);
+        assertTrue(parser.parseCommand(GoogleNewsCommand.COMMAND_ALIAS + " kw") instanceof GoogleNewsCommand);
     }
 
     @Test
@@ -193,5 +209,19 @@ public class EntryBookListParserTest {
         thrown.expect(ParseException.class);
         thrown.expectMessage(String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
         parser.parseCommand("unknownCommand");
+    }
+
+    @Test
+    public void parseCommand_unsubscribeCommand_throwsParseException() throws Exception {
+        thrown.expect(ParseException.class);
+        thrown.expectMessage(String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
+        parser.parseCommand("unsubscribe 9");
+    }
+
+    @Test
+    public void parseCommand_unarchiveCommand_throwsParseException() throws Exception {
+        thrown.expect(ParseException.class);
+        thrown.expectMessage(String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
+        parser.parseCommand("unarchive 9");
     }
 }
