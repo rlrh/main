@@ -3,7 +3,6 @@ package seedu.address.ui;
 import static java.util.Objects.requireNonNull;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -37,8 +36,7 @@ public class BrowserPanel extends UiPart<Region> {
             requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "error.html"));
     public static final URL READER_VIEW_FAILURE_PAGE =
             requireNonNull(MainApp.class.getResource(BROWSER_FILE_FOLDER + "reader_view_failure.html"));
-
-
+    private static final List<URL> INTERNAL_URLS = List.of(DEFAULT_PAGE, ERROR_PAGE, READER_VIEW_FAILURE_PAGE);
 
     private static final String FXML = "BrowserPanel.fxml";
 
@@ -48,8 +46,6 @@ public class BrowserPanel extends UiPart<Region> {
     private WebView browser;
 
     private WebEngine webEngine = browser.getEngine();
-
-    private final List<URL> internalPages;
 
     private boolean isRequestInFlight;
     private URL lastUrl;
@@ -63,11 +59,6 @@ public class BrowserPanel extends UiPart<Region> {
                         Function<URL, Optional<String>> getArticle) {
 
         super(FXML);
-
-        internalPages = new ArrayList<>();
-        internalPages.add(DEFAULT_PAGE);
-        internalPages.add(ERROR_PAGE);
-        internalPages.add(READER_VIEW_FAILURE_PAGE);
 
         this.viewMode = viewMode.getValue();
         this.getOfflineUrl = getOfflineUrl;
@@ -96,7 +87,7 @@ public class BrowserPanel extends UiPart<Region> {
         // Update last external url when current location changes
         webEngine.locationProperty().addListener((observable, oldLocation, newLocation) -> {
             Optional<URL> newUrl = UrlUtil.fromString(newLocation);
-            if (newUrl.isPresent() && !internalPages.contains(newUrl.get())) {
+            if (newUrl.isPresent() && !INTERNAL_URLS.contains(newUrl.get())) {
                 lastUrl = newUrl.get();
             }
         });
@@ -175,13 +166,12 @@ public class BrowserPanel extends UiPart<Region> {
     /**
      * Finds out the type of the given URL
      * @param currentUrl URL to find type of
-     * @param internalUrls URLs considered internal
      * @return type of the currentUrl
      */
-    private UrlType getUrlType(Optional<URL> currentUrl, List<URL> internalUrls) {
+    private UrlType getUrlType(Optional<URL> currentUrl) {
         if (!currentUrl.isPresent()) {
             return UrlType.CONTENT;
-        } else if (internalUrls.contains(currentUrl.get())) {
+        } else if (INTERNAL_URLS.contains(currentUrl.get())) {
             return UrlType.INTERNAL;
         } else if (currentUrl.get().getProtocol().contains("file")) {
             return UrlType.OFFLINE;
@@ -191,7 +181,7 @@ public class BrowserPanel extends UiPart<Region> {
     }
 
     private UrlType getCurrentUrlType() {
-        return getUrlType(UrlUtil.fromString(webEngine.getLocation()), internalPages);
+        return getUrlType(UrlUtil.fromString(webEngine.getLocation()));
     }
 
     private boolean currentlyInExternalPage() {
@@ -212,7 +202,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void log(String status) {
         Optional<URL> currentUrl = UrlUtil.fromString(webEngine.getLocation());
-        UrlType currentUrlType = getUrlType(currentUrl, internalPages);
+        UrlType currentUrlType = getUrlType(currentUrl);
 
         String message = String.format("%s %s: %s", status, currentUrlType, currentUrl.orElse(lastUrl));
         logger.info(message);
@@ -330,9 +320,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void setStyleSheet(URL styleSheetUrl) {
         try {
-            Platform.runLater(() ->
-                    webEngine.setUserStyleSheetLocation(styleSheetUrl.toExternalForm())
-            );
+            Platform.runLater(() -> webEngine.setUserStyleSheetLocation(styleSheetUrl.toExternalForm()));
         } catch (IllegalArgumentException | NullPointerException e) {
             String message = "Failed to set user style sheet location";
             logger.warning(message);
