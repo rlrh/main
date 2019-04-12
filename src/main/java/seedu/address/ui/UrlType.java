@@ -1,5 +1,8 @@
-package seedu.address.ui.util;
+package seedu.address.ui;
 
+/**
+ * Represents internal interpretation of URLs into URL types.
+ */
 public enum UrlType {
     INTERNAL("internal page"),
     ONLINE("online page"),
