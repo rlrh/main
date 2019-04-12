@@ -100,7 +100,9 @@ public class BrowserPanel extends UiPart<Region> {
         });
 
         // Load entry page when selected entry changes.
-        selectedEntry.addListener((observable, oldValue, newValue) -> {
+        selectedEntry.addListener((observable) -> {
+            System.out.println("Loading new entry");
+            Entry newValue = selectedEntry.getValue();
             Optional.ofNullable(newValue).ifPresentOrElse(this::loadEntryPage, this::loadDefaultPage);
         });
 
@@ -223,9 +225,19 @@ public class BrowserPanel extends UiPart<Region> {
     private void loadEntryPage(Entry entry) {
         URL entryUrl = entry.getLink().value;
         if (viewMode.getViewType().equals(ViewType.READER)) {
-            getOfflineUrl.apply(entryUrl).ifPresent(url -> lastUrl = url);
+            System.out.println("Reader entry page");
+            getOfflineUrl.apply(entryUrl).ifPresent(url -> {
+                System.out.println(url);
+                lastUrl = url;
+            });
             getArticle.apply(entryUrl)
-                    .ifPresentOrElse(html -> loadReader(html, entryUrl.toExternalForm()), () -> loadPage(entryUrl.toExternalForm()));
+                    .ifPresentOrElse(html -> {
+                        System.out.println("Offline reader entry page");
+                        loadReader(html, entryUrl.toExternalForm());
+                    }, () -> {
+                        System.out.println("Online reader entry page");
+                        loadPage(entryUrl.toExternalForm());
+                    });
         } else {
             getOfflineUrl.apply(entryUrl)
                     .map(URL::toExternalForm)
