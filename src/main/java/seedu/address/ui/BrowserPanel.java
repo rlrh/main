@@ -105,8 +105,7 @@ public class BrowserPanel extends UiPart<Region> {
             } else if (newViewMode.hasReaderViewType() && currentlyInExternalPage()) {
                 getArticle
                         .apply(lastUrl)
-                        .ifPresentOrElse(html -> loadReader(html, lastUrl.toExternalForm()), () ->
-                                loadReader(lastUrl.toExternalForm()));
+                        .ifPresentOrElse(this::loadReader, this::loadReader);
             } else if (newViewMode.hasBrowserViewType() && !currentlyInExternalPage()) {
                 loadPage(lastUrl.toExternalForm());
             }
@@ -243,8 +242,7 @@ public class BrowserPanel extends UiPart<Region> {
                     .ifPresent(url -> lastUrl = url);
             getArticle
                     .apply(entryUrl)
-                    .ifPresentOrElse(html -> loadReader(html, entryUrl.toExternalForm()), () ->
-                            loadPage(entryUrl.toExternalForm()));
+                    .ifPresentOrElse(this::loadReader, () -> loadPage(entryUrl.toExternalForm()));
         } else {
             getOfflineUrl
                     .apply(entryUrl)
@@ -257,9 +255,8 @@ public class BrowserPanel extends UiPart<Region> {
     /**
      * Loads reader view of current content.
      * Assumes original web page is already loaded.
-     * @param baseUrl base URL used to resolve relative URLs to absolute URLs
      */
-    private void loadReader(String baseUrl) {
+    private void loadReader() {
         Optional.ofNullable(webEngine.getDocument())
                 .map(document -> {
                     try {
@@ -268,22 +265,21 @@ public class BrowserPanel extends UiPart<Region> {
                         return null;
                     }
                 })
-                .ifPresentOrElse(html -> loadReader(html, baseUrl), this::handleReaderViewFailure);
+                .ifPresentOrElse(this::loadReader, this::handleReaderViewFailure);
     }
 
     /**
      * Loads reader view of given HTML.
      * @param rawHtml HTML to generate reader view of
-     * @param baseUrl base URL used to resolve relative URLs to absolute URLs
      */
-    private void loadReader(String rawHtml, String baseUrl) {
+    private void loadReader(String rawHtml) {
 
         // set stylesheet for reader view
         setStyleSheet(viewMode.getReaderViewStyle().getStylesheetLocation());
 
         // process loaded content, then load processed content
         try {
-            String processedHtml = ReaderViewUtil.generateReaderViewStringFrom(rawHtml, baseUrl);
+            String processedHtml = ReaderViewUtil.generateReaderViewStringFrom(rawHtml, "");
             loadContent(processedHtml);
         } catch (IllegalArgumentException e) {
             handleReaderViewFailure();
