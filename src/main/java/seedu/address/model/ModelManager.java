@@ -341,15 +341,7 @@ public class ModelManager implements Model {
 
     @Override
     public Optional<String> getArticle(URL url) {
-        return storage
-                .getOfflineLink(url)
-                .map(path -> {
-                    try {
-                        return FileUtil.readFromFile(path);
-                    } catch (IOException ioe) {
-                        return null;
-                    }
-                });
+        return storage.getArticle(url);
     }
 
     //=========== Displayed Entry List ================================================================================
