@@ -32,28 +32,29 @@ public abstract class AbsoluteUrlDocumentConverter {
 
             if (e.hasAttr("href")) {
                 String link = e.attr("href");
-                try {
-                    String absLink = new URL(baseUrl, link).toExternalForm();
-                    e.attr("href", absLink);
-                } catch (MalformedURLException mue) {
-                    // do nothing because if the URL is malformed,
-                    // we simply need not convert the URL.
-                }
+                e.attr("href", convertUrl(baseUrl, link));
+            }
 
-            } else if (e.hasAttr("src")) {
+            if (e.hasAttr("src")) {
                 String link = e.attr("src");
-                try {
-                    String absLink = new URL(baseUrl, link).toExternalForm();
-                    e.attr("src", absLink);
-                } catch (MalformedURLException mue) {
-                    // do nothing because if the URL is malformed,
-                    // we simply need not convert the URL.
-                }
+                e.attr("src", convertUrl(baseUrl, link));
             }
 
         }
 
         return document;
+    }
+
+    /**
+     * Converts a URL to absolute form.
+     */
+    private static String convertUrl(URL baseUrl, String url) {
+        try {
+            return new URL(baseUrl, url).toExternalForm();
+        } catch (MalformedURLException mue) {
+            // Do nothing if URL is malformed, basically don't convert
+            return url;
+        }
     }
 
 }
