@@ -255,6 +255,7 @@ public abstract class EntryBookSystemTest {
      * @see EntryListPanelHandle#isSelectedEntryCardChanged()
      */
     protected void assertSelectedCardChanged(Index expectedSelectedCardIndex) {
+        int index = getEntryListPanel().getSelectedCardIndex();
         getEntryListPanel().navigateToCard(getEntryListPanel().getSelectedCardIndex());
         String selectedCardLink = getEntryListPanel().getHandleToSelectedCard().getLink();
         URL expectedUrl;

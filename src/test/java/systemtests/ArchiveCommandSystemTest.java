@@ -8,7 +8,7 @@ import static seedu.address.logic.commands.UnarchiveCommand.MESSAGE_UNARCHIVE_EN
 import static seedu.address.testutil.TestUtil.getEntry;
 import static seedu.address.testutil.TestUtil.getLastIndex;
 import static seedu.address.testutil.TestUtil.getMidIndex;
-import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_MEIER;
+import static seedu.address.testutil.TypicalEntries.KEYWORD_MATCHING_TOKI;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
 import java.util.Optional;
@@ -49,8 +49,7 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
 
         /* Case: archive the last entry in the list -> archived */
-        Model modelBeforeArchivingLast = getModel();
-        Index lastEntryIndex = getLastIndex(modelBeforeArchivingLast);
+        Index lastEntryIndex = getLastIndex(getModel());
         assertArchiveCommandSuccess(lastEntryIndex);
 
         /* Case: archive the middle entry in the list -> archived */
@@ -60,26 +59,61 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
         /* ------------------ Performing archive operation while a filtered list is being shown -------------------- */
 
         /* Case: filtered entry list, archive index within bounds of entry book and entry list -> archived */
-        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
+        showEntriesWithTitle(KEYWORD_MATCHING_TOKI);
         Index index = INDEX_FIRST_ENTRY;
         assertTrue(index.getZeroBased() < getModel().getFilteredEntryList().size());
         assertArchiveCommandSuccess(index);
 
+        /* Case: archive the last entry in the filtered list -> archived */
+        lastEntryIndex = getLastIndex(getModel());
+        assertArchiveCommandSuccess(lastEntryIndex);
+
+        /* Case: archive the middle entry in the filtered list -> archived */
+        middleEntryIndex = getMidIndex(getModel());
+        assertArchiveCommandSuccess(middleEntryIndex);
+
         /* Case: filtered entry list, archive index within bounds of entry book but out of bounds of entry list
          * -> rejected
          */
-        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
+        showEntriesWithTitle(KEYWORD_MATCHING_TOKI);
         int invalidIndex = getModel().getListEntryBook().getEntryList().size();
         command = ArchiveCommand.COMMAND_WORD + " " + invalidIndex;
         assertCommandFailure(command, MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
 
+        /* Archive the rest of the "Toki" entries for future tests */
+        index = INDEX_FIRST_ENTRY;
+        assertArchiveCommandSuccess(index);
+        assertArchiveCommandSuccess(index);
+
         /* --------------------- Performing archive operation while a entry card is selected ------------------------ */
 
-        /* Case: archive the selected entry -> entry list panel selects the entry before the archived entry */
+        /* Case: archive the first selected entry -> nothing selected */
         showAllListEntries();
         expectedModel = getModel();
-        Index selectedIndex = getLastIndex(expectedModel);
-        Index expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);
+        Index selectedIndex = INDEX_FIRST_ENTRY;
+        Index expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased());
+        selectEntry(selectedIndex);
+        command = ArchiveCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
+        archivedEntry = archiveEntry(expectedModel, selectedIndex);
+        expectedResultMessage = String.format(MESSAGE_ARCHIVE_ENTRY_SUCCESS, archivedEntry);
+        assertCommandSuccessDeselected(command, expectedModel, expectedResultMessage);
+
+        /* Case: archive the last selected entry -> entry list panel selects the entry before the archived entry */
+        showAllListEntries();
+        expectedModel = getModel();
+        selectedIndex = getMidIndex(expectedModel);
+        expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);
+        selectEntry(selectedIndex);
+        command = ArchiveCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
+        archivedEntry = archiveEntry(expectedModel, selectedIndex);
+        expectedResultMessage = String.format(MESSAGE_ARCHIVE_ENTRY_SUCCESS, archivedEntry);
+        assertCommandSuccess(command, expectedModel, expectedResultMessage, expectedIndex);
+
+        /* Case: archive the last selected entry -> entry list panel selects the entry before the archived entry */
+        showAllListEntries();
+        expectedModel = getModel();
+        selectedIndex = getLastIndex(expectedModel);
+        expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);
         selectEntry(selectedIndex);
         command = ArchiveCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
         archivedEntry = archiveEntry(expectedModel, selectedIndex);
@@ -111,32 +145,9 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
         /* Case: mixed case command word -> rejected */
         assertCommandFailure("ArChivE 1", String.format(MESSAGE_UNKNOWN_COMMAND, ModelContext.CONTEXT_LIST));
 
-        /* ----------------- Archive the remaining "MEIER" entry currently shown for future tests ------------------ */
-        expectedModel = getModel();
-        command = ArchiveCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased();
-        archivedEntry = archiveEntry(expectedModel, INDEX_FIRST_ENTRY);
-        expectedResultMessage = String.format(MESSAGE_ARCHIVE_ENTRY_SUCCESS, archivedEntry);
-        assertCommandSuccess(command, expectedModel, expectedResultMessage);
-
         /* ----------------- Show archives, and change the context of the model ------------------------------------- */
         executeCommand(ArchivesCommand.COMMAND_WORD);
         assertTrue(getModel().getContext().equals(ModelContext.CONTEXT_ARCHIVES));
-
-        /* ------------------ Performing archive operation while a filtered list is being shown -------------------- */
-
-        /* Case: filtered entry list, archive index within bounds of entry book and entry list -> archived */
-        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
-        index = INDEX_FIRST_ENTRY;
-        assertTrue(index.getZeroBased() < getModel().getFilteredEntryList().size());
-        assertUnarchiveCommandSuccess(index);
-
-        /* Case: filtered entry list, archive index within bounds of entry book but out of bounds of entry list
-         * -> rejected
-         */
-        showEntriesWithTitle(KEYWORD_MATCHING_MEIER);
-        invalidIndex = getModel().getArchivesEntryBook().getEntryList().size();
-        command = UnarchiveCommand.COMMAND_WORD + " " + invalidIndex;
-        assertCommandFailure(command, MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
 
         /* ----------------- Performing unarchive operation while an unfiltered list is being shown ---------------- */
         showAllArchivesEntries();
@@ -148,18 +159,62 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
         expectedResultMessage = String.format(MESSAGE_UNARCHIVE_ENTRY_SUCCESS, unarchivedEntry);
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
 
-        /* Case: archive the last entry in the list -> archived */
-        Model modelBeforeUnarchivingLast = getModel();
-        lastEntryIndex = getLastIndex(modelBeforeUnarchivingLast);
+        /* Case: unarchive the last entry in the list -> unarchived */
+        lastEntryIndex = getLastIndex(getModel());
         assertUnarchiveCommandSuccess(lastEntryIndex);
 
-        /* Case: archive the middle entry in the list -> archived */
+        /* Case: unarchive the middle entry in the list -> unarchived */
         middleEntryIndex = getMidIndex(getModel());
         assertUnarchiveCommandSuccess(middleEntryIndex);
 
-        /* --------------------- Performing archive operation while a entry card is selected ------------------------ */
+        /* ------------------ Performing unarchive operation while a filtered list is being shown ------------------ */
 
-        /* Case: archive the selected entry -> entry list panel selects the entry before the archived entry */
+        /* Case: filtered entry list, unarchive index within bounds of entry book and entry list -> unarchived */
+        showEntriesWithTitle(KEYWORD_MATCHING_TOKI);
+        index = INDEX_FIRST_ENTRY;
+        assertTrue(index.getZeroBased() < getModel().getFilteredEntryList().size());
+        assertUnarchiveCommandSuccess(index);
+
+        /* Case: unarchive the last entry in the filtered list -> unarchived */
+        lastEntryIndex = getLastIndex(getModel());
+        assertUnarchiveCommandSuccess(lastEntryIndex);
+
+        /* Case: unarchive the middle entry in the filtered list -> unarchived */
+        middleEntryIndex = getMidIndex(getModel());
+        assertUnarchiveCommandSuccess(middleEntryIndex);
+
+        /* Case: filtered entry list, unarchive index within bounds of entry book but out of bounds of entry list
+         * -> rejected
+         */
+        showEntriesWithTitle(KEYWORD_MATCHING_TOKI);
+        invalidIndex = getModel().getArchivesEntryBook().getEntryList().size();
+        command = UnarchiveCommand.COMMAND_WORD + " " + invalidIndex;
+        assertCommandFailure(command, MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
+
+        /* --------------------- Performing unarchive operation while a entry card is selected ---------------------- */
+
+        /* Case: unarchive the first selected entry -> nothing selected */
+        showAllArchivesEntries();
+        expectedModel = getModel();
+        selectedIndex = INDEX_FIRST_ENTRY;
+        selectEntry(selectedIndex);
+        command = UnarchiveCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
+        unarchivedEntry = unarchiveEntry(expectedModel, selectedIndex);
+        expectedResultMessage = String.format(MESSAGE_UNARCHIVE_ENTRY_SUCCESS, unarchivedEntry);
+        assertCommandSuccessDeselected(command, expectedModel, expectedResultMessage);
+
+        /* Case: unarchive the middle selected entry -> entry list panel selects the entry before this entry */
+        showAllArchivesEntries();
+        expectedModel = getModel();
+        selectedIndex = getMidIndex(expectedModel);
+        expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);
+        selectEntry(selectedIndex);
+        command = UnarchiveCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
+        unarchivedEntry = unarchiveEntry(expectedModel, selectedIndex);
+        expectedResultMessage = String.format(MESSAGE_UNARCHIVE_ENTRY_SUCCESS, unarchivedEntry);
+        assertCommandSuccess(command, expectedModel, expectedResultMessage, expectedIndex);
+
+        /* Case: unarchive the last selected entry -> entry list panel selects the entry before the unarchived entry */
         showAllArchivesEntries();
         expectedModel = getModel();
         selectedIndex = getLastIndex(expectedModel);
@@ -182,7 +237,7 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
 
         /* Case: invalid index (size + 1) -> rejected */
         outOfBoundsIndex = Index.fromOneBased(
-            getModel().getListEntryBook().getEntryList().size() + 1);
+            getModel().getArchivesEntryBook().getEntryList().size() + 1);
         command = UnarchiveCommand.COMMAND_WORD + " " + outOfBoundsIndex.getOneBased();
         assertCommandFailure(command, MESSAGE_INVALID_ENTRY_DISPLAYED_INDEX);
 
@@ -190,7 +245,8 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
         assertCommandFailure(UnarchiveCommand.COMMAND_WORD + " abc", MESSAGE_INVALID_UNARCHIVE_COMMAND_FORMAT);
 
         /* Case: invalid arguments (extra argument) -> rejected */
-        assertCommandFailure(UnarchiveCommand.COMMAND_WORD + " 1 abc", MESSAGE_INVALID_UNARCHIVE_COMMAND_FORMAT);
+        assertCommandFailure(UnarchiveCommand.COMMAND_WORD
+            + " 1 abc", MESSAGE_INVALID_UNARCHIVE_COMMAND_FORMAT);
 
         /* Case: mixed case command word -> rejected */
         assertCommandFailure("uNArChivE 1", String.format(MESSAGE_UNKNOWN_COMMAND,
@@ -279,6 +335,22 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
         } else {
             assertSelectedCardUnchanged();
         }
+
+        assertCommandBoxShowsDefaultStyle();
+        assertResultDisplayShowsDefaultStyle();
+        assertStatusBarUnchangedExceptSyncStatusExcludingCount();
+    }
+
+    /**
+     * Performs the same verification as {@code assertCommandSuccess(String, Model, String)} except that browser url
+     * should be set to the default page and no entries are selected.
+     * @see ArchiveCommandSystemTest#assertCommandSuccess(String, Model, String)
+     * @see EntryBookSystemTest#assertSelectedCardChanged(Index)
+     */
+    private void assertCommandSuccessDeselected(String command, Model expectedModel, String expectedResultMessage) {
+        executeCommand(command);
+        assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
+        assertSelectedCardDeselected();
 
         assertCommandBoxShowsDefaultStyle();
         assertResultDisplayShowsDefaultStyle();
