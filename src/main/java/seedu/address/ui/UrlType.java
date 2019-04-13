@@ -7,7 +7,7 @@ public enum UrlType {
     INTERNAL("internal page"),
     ONLINE("online page"),
     OFFLINE("offline page"),
-    CONTENT("content");
+    CONTENT("HTML content");
 
     private String friendlyName;
 
