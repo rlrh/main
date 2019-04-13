@@ -91,7 +91,6 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
         showAllListEntries();
         expectedModel = getModel();
         Index selectedIndex = INDEX_FIRST_ENTRY;
-        Index expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased());
         selectEntry(selectedIndex);
         command = ArchiveCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
         archivedEntry = archiveEntry(expectedModel, selectedIndex);
@@ -102,7 +101,7 @@ public class ArchiveCommandSystemTest extends EntryBookSystemTest {
         showAllListEntries();
         expectedModel = getModel();
         selectedIndex = getMidIndex(expectedModel);
-        expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);
+        Index expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);
         selectEntry(selectedIndex);
         command = ArchiveCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
         archivedEntry = archiveEntry(expectedModel, selectedIndex);
