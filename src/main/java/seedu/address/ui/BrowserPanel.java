@@ -47,7 +47,6 @@ public class BrowserPanel extends UiPart<Region> {
 
     private WebEngine webEngine = browser.getEngine();
 
-    private boolean isRequestInFlight; // used to prevent a load reader view request after an ongoing load request
     private URL lastExternalUrl; // URL of the last external page - should be offline or online type
     private URL lastEntryUrl; // URL of the last selected entry - should be online type
     private ViewMode viewMode; // current view mode
@@ -61,7 +60,6 @@ public class BrowserPanel extends UiPart<Region> {
         super(FXML);
 
         // Initialization
-        this.isRequestInFlight = false;
         this.lastExternalUrl = null;
         this.lastEntryUrl = null;
         this.viewMode = viewMode.getValue();
@@ -147,18 +145,14 @@ public class BrowserPanel extends UiPart<Region> {
     private void handleSucceeded() {
         logCurrentUrlAndTypeWithStatus("Successfully loaded");
 
-        // Update state
-        boolean wasRequestInFlight = isRequestInFlight;
-        isRequestInFlight = false;
-
         // Next actions
         /* STRATEGY:
          * If using reader view mode, and if currently in online page, load reader view of current loaded document,
          * but if currently in offline page, load reader view of current loaded document with last entry as base URL.
          */
-        if (viewMode.hasReaderViewType() && currentlyInOnlinePage() && !wasRequestInFlight) {
+        if (viewMode.hasReaderViewType() && currentlyInOnlinePage()) {
             loadReaderOfLastUrl();
-        } else if (viewMode.hasReaderViewType() && currentlyInOfflinePage() && !wasRequestInFlight) {
+        } else if (viewMode.hasReaderViewType() && currentlyInOfflinePage()) {
             loadReaderOfLastEntry();
         }
     }
@@ -168,9 +162,6 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void handleFailed() {
         logCurrentUrlAndTypeWithStatus("Failed to load");
-
-        // Update state
-        isRequestInFlight = false;
 
         // Next actions
         loadErrorPage();
@@ -303,7 +294,6 @@ public class BrowserPanel extends UiPart<Region> {
                     .map(URL::toExternalForm)
                     .ifPresentOrElse(this::loadPage, this::loadPageOfLastEntry);
         }
-
     }
 
     /**
@@ -344,14 +334,8 @@ public class BrowserPanel extends UiPart<Region> {
      * @param url URL of the Web page to load
      */
     private void loadPage(String url) {
-        // Update state
-        this.isRequestInFlight = true;
-
-        // Next actions
-        Platform.runLater(() -> {
-            webEngine.setUserStyleSheetLocation(null); // reset stylesheet
-            webEngine.load(url);
-        });
+        webEngine.setUserStyleSheetLocation(null); // reset stylesheet
+        webEngine.load(url);
     }
 
     /**
@@ -359,11 +343,7 @@ public class BrowserPanel extends UiPart<Region> {
      * @param html HTML content to load
      */
     private void loadContent(String html) {
-        // Update state
-        this.isRequestInFlight = true;
-
-        // Next actions
-        Platform.runLater(() -> webEngine.loadContent(html));
+        webEngine.loadContent(html);
     }
 
     /**
@@ -371,7 +351,6 @@ public class BrowserPanel extends UiPart<Region> {
      * @param styleSheetUrl URL of the stylesheet to set
      */
     private void setStyleSheet(URL styleSheetUrl) {
-        // Next actions
         try {
             Platform.runLater(() -> webEngine.setUserStyleSheetLocation(styleSheetUrl.toExternalForm()));
         } catch (IllegalArgumentException | NullPointerException e) {
