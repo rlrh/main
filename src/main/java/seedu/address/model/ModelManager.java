@@ -378,7 +378,7 @@ public class ModelManager implements Model {
             throw new EntryNotFoundException();
         }
         selectedEntry.setValue(entry);
-        if (entry != null) {
+        if (getContext() == ModelContext.CONTEXT_LIST && entry != null) {
             ensureDownloaded(entry.getLink().value);
         }
     }
