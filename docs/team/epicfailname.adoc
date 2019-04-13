@@ -70,8 +70,11 @@ Otherwise, refer to the links below to relevant pull requests for each enhanceme
 |===
 
 ---
+
 include::../UserGuide.adoc[tag=contextcommands]
+
 ---
+
 include::../UserGuide.adoc[tag=findcommand]
 
 == Contributions to the Developer Guide
@@ -81,6 +84,9 @@ include::../UserGuide.adoc[tag=findcommand]
 |===
 
 ---
+
 include::../DeveloperGuide.adoc[tag=designlogic]
+
 ---
+
 include::../DeveloperGuide.adoc[tag=contextswitching]
