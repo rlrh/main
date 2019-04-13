@@ -130,11 +130,6 @@ public class BrowserPanel extends UiPart<Region> {
 
         // Load default page on startup.
         loadDefaultPage();
-
-        // Assert post-conditions after startup.
-        assert(!isRequestInFlight);
-        assert(lastExternalUrl != null);
-        assert(lastEntryUrl == null);
     }
 
     //=========== Loading state handlers ===============================================================================
