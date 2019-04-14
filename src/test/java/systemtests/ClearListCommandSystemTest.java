@@ -15,7 +15,7 @@ public class ClearListCommandSystemTest extends EntryBookSystemTest {
     public void clear() {
         final Model defaultModel = getModel();
 
-        /* Case: clear non-empty address book, command with leading spaces and trailing alphanumeric characters and
+        /* Case: clear non-empty list entry book, command with leading spaces and trailing alphanumeric characters and
          * spaces -> cleared
          */
         assertCommandSuccess("   " + ClearListCommand.COMMAND_WORD + " ab12   ");
@@ -40,6 +40,7 @@ public class ClearListCommandSystemTest extends EntryBookSystemTest {
     private void assertCommandSuccess(String command) {
         Model expectedModel = new ModelManagerStub();
         expectedModel.setArchivesEntryBook(getModel().getArchivesEntryBook());
+        expectedModel.setFeedsEntryBook(getModel().getFeedsEntryBook());
         assertCommandSuccess(command, ClearListCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
