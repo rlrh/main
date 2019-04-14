@@ -239,7 +239,8 @@ Format: `macro MACRO_NAME NUM_ARGS command1; command2; ... commandN`
 
 Examples:
 
-- `macro archive-tags-which-are-old 1 find t/$1 h/3 days ago; archive all`
+* Adding a macro to quickly archive all entries with given tags.
+. `macro archive-tags-which-are-old 1 find t/$1; archiveall`
 
 ==== Export settings and data to an export file : `export` `[coming in v2.0]`
 
@@ -255,8 +256,10 @@ Format: `export FILE_PATH`
 
 Examples:
 
-- `export /home/tt/Desktop` Saves an export file to desktop
-- `export C:\Users\Name\Desktop` Saves an export file to desktop
+* Saves an export file to desktop
+. `export /home/tt/Desktop` +
+* Saves an export file to desktop
+. `export C:\Users\Name\Desktop` +
 
 ==== Import settings and data from an export file : `import` `[coming in v2.0]`
 
@@ -272,8 +275,10 @@ Format: `import FILE_PATH`
 
 Examples:
 
-- `import /home/tt/Desktop/export.jtjr` Saves an export file to desktop
-- `import C:\Users\Name\Desktop\export.jtjr` Saves an export file to desktop
+* Saves an export file to desktop
+. `import /home/tt/Desktop/export.jtjr` +
+* Saves an export file to desktop
+. `import C:\Users\Name\Desktop\export.jtjr` +
 
 [[Add-Command]]
 ==== Adding a single entry: `add` `[updated v1.2]`
@@ -290,26 +295,27 @@ A entry can have any number of tags (including 0).
 
 Examples:
 
-- `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
-Adds a single entry with a description and tagged with “Business”
+* Adds a single entry with a description and tagged with “Business”
+. `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
 
 [[Subscribe-command]]
 ==== Subscribing to a feed: `subscribe` `[since v1.3]`
 
-Adds a feed to the manager and subscribes to updates.
-All entries in the subscribed feed will be added to the reading list.
+Adds a feed to the manager and subscribes to updates. +
+All entries in the subscribed feed will be added to the reading list. +
 
 Format: `subscribe l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]..`
 
 [TIP]
 The `Title` and `Description` fields are automatically filled up if you do not provide them.
 [TIP]
-A feed can have any number of tags (including 0)
+A feed can have any number of tags (including 0). +
+Imported entries from the feed will also be tagged with the same tags as the feed `[since v1.4]`
 
 Examples:
 
-- `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` Adds a feed whose name is “Engadget”.
--  The imported entries will be tagged with “Tech” `[coming in v2.0]`
+* Adds a feed whose name is “Engadget”. +
+. `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` +
 
 [WARNING]
 ====
@@ -373,7 +379,8 @@ Format: `bing [KEYWORD]...`
 
 Examples:
 
-- `bing Trump` Returns entries containing the `Trump` keyword
+* Bing search the web for entries containing the `Trump` keyword
+. `bing Trump` +
 
 ==== Searching for news: `googlenews` `[since v1.3]`
 
@@ -386,8 +393,10 @@ Format: `googlenews [KEYWORD]...`
 
 Examples:
 
-- `googlenews` Returns top stories
-- `googlenews Trump` Returns news articles containing the `Trump` keyword
+* View the current top stories on Google News.
+. `googlenews` +
+* Search for news articles containing the `Trump` keyword
+. `googlenews Trump` +
 
 ==== Searching a web feed: `feed` `[since v1.2]`
 
@@ -400,7 +409,8 @@ Format: `feed [FEED URL]`
 
 Examples:
 
-- `feed https://live.engadget.com/rss.xml` Shows entries from this feed
+* Display entries from this feed +
+. `feed https://live.engadget.com/rss.xml` +
 
 ==== Searching a web page for links: `links` `[coming in v2.0]`
 
@@ -426,8 +436,10 @@ Format: `feeds`
 
 Examples:
 
-- `feeds` Lists all feeds
-- `feeds t/Business` Lists all feeds tagged with “Business” `[coming in v2.0]`
+* List all feeds
+. `feeds` +
+* List all feeds tagged with “Business” `[coming in v2.0]`
+. `feeds t/Business` +
 
 ==== Searching online for feeds: `searchfeeds` `[coming in v2.0]`
 
@@ -440,8 +452,10 @@ Format: `searchfeeds [KEYWORD]...`
 
 Examples:
 
-- `searchfeeds` Shows some starter feeds you can add
-- `searchfeeds Tech Business` Searches for `Tech` or `Business` feeds
+* Shows some starter feeds you can add
+. `searchfeeds` +
+* Searches for `Tech` or `Business` feeds
+. `searchfeeds Tech Business` +
 
 ==== Showing reading statistics: `stats` `[coming in v2.0]`
 
@@ -471,10 +485,10 @@ Format: `edit INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [r/READ_STATUS]
 
 Examples:
 
-* `edit 1 ti/Software Design Patterns d/Useful for software engineering project.` +
-Edits the title and description of the 1st entry to be `Software Design Patterns` and `Useful for software engineering project.` respectively.
-* `edit 2 t/` +
-Clears all existing tags from the 2nd entry.
+* Edit the title and description of the 1st entry to be `Software Design Patterns` and `Useful for software engineering project.` respectively.
+. `edit 1 ti/Software Design Patterns d/Useful for software engineering project.` +
+* Clear all existing tags from the 2nd entry.
+. `edit 2 t/` +
 
 ==== Finding entries by title: `find`
 
@@ -495,8 +509,8 @@ Format: `find [a/SEARCH_PHRASE] [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_P
 
 Examples:
 
-* `find ti/lambda l/github` +
-Returns entries with title containing the phrase `lambda`, or link containing the phrase `github`
+* Find entries with title containing the phrase `lambda`, or link containing the phrase `github`.
+. `find ti/lambda l/github` +
 
 .Before: Entering the find command with search terms
 image::ug-find/ug-fieldx-1.png[width="800"]
@@ -504,10 +518,8 @@ image::ug-find/ug-fieldx-1.png[width="800"]
 .After: Only entries with title containing `lambda` (red) or link containing `github` (orange) shown
 image::ug-find/ug-fieldx-2.png[width="800"]
 
-{nbsp} +
-
-* `find t/infoTheory` +
-Returns any entries with the tag `infoTheory`
+* Find entries with the tag `infoTheory`.
+. `find t/infoTheory` +
 
 .Before: Entering the find command for specific tags
 image::ug-find/ug-tagx-1.png[width="800"]
@@ -529,12 +541,12 @@ Format: `select INDEX`
 
 Examples:
 
-* `list` +
-`select 2` +
-Selects the 2nd entry in the reading list for reading.
-* `find Trump` +
-`select 1` +
-Selects the 1st entry in the results of the `find` command for reading.
+* Select the 2nd entry in the reading list for reading.
+. `list` +
+. `select 2` +
+* Select the 1st entry in the find results for the phrase `Trump` in the title.
+. `find ti/Trump` +
+. `select 1` +
 
 ==== Changing the view mode: `view` `[since v1.2, updated v1.3]`
 
@@ -544,12 +556,12 @@ Format: `view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]`
 
 Examples:
 
-* `view browser` +
-Switches to browser view mode
-* `view reader` +
-Switches to a clean and clutter-free reader view mode for a more comfortable reading experience
-* `view reader s/dark` +
-Switches to reader view mode with dark style colour scheme
+* Switch to browser view mode. +
+. `view browser` +
+* Switch to a clean and clutter-free reader view mode for a more comfortable reading experience.
+. `view reader` +
+* Switch to reader view mode with dark style colour scheme
+. `view reader s/dark` +
 
 ==== Refreshing an entry: `refresh` `[since v1.3]`
 
@@ -565,9 +577,9 @@ Format: `refresh INDEX`
 
 Examples:
 
-* `list` +
-`refresh 2` +
-Refreshes the content of the 2nd entry in the reading list.
+* Refresh the content of the 2nd entry in the reading list. +
+. `list` +
+. `refresh 2` +
 
 ==== Marking an entry as read: `read` `[coming in v2.0]`
 
@@ -583,9 +595,9 @@ Format: `read INDEX`
 
 Examples:
 
-* `list` +
-`read 2` +
-Marks as read the 2nd entry in the reading list.
+* Mark the 2nd entry in the reading list as read.
+. `list` +
+. `read 2` +
 
 ==== Marking an entry as unread: `unread` `[coming in v2.0]`
 
@@ -601,9 +613,9 @@ Format: `unread INDEX`
 
 Examples:
 
-* `list` +
-`unread 2` +
-Marks as unread the 2nd entry in the reading list.
+* Mark the 2nd entry in the reading list as unread.
+. `list` +
+. `unread 2` +
 
 ==== Sharing an entry: `share` `[coming in v2.0]`
 
@@ -625,16 +637,13 @@ Format: `archive INDEX`
 
 Examples:
 
-* `archive 2` +
-Moves the 2nd entry in the reading list to the archive and removes its downloaded content. +
+* Move the 2nd entry in the reading list to the archives and remove its downloaded content. +
+. `list` +
+. `archive 2` +
+. `archives` +
 
 .Archiving the second entry +
 image::ug-archive/ug-archivex-1.png[width="800"]
-
-{nbsp} +
-
-* `archives` +
-Change to the archives context to view the archived entry +
 
 .Entry is saved in the archives
 image::ug-archive/ug-archivex-2.png[width="250"]
@@ -653,12 +662,13 @@ Format: `delete INDEX`
 
 Examples:
 
-* `list` +
-`delete 2` +
-Deletes the 2nd entry in the reading list.
-* `find Trump` +
-`delete 1` +
-Deletes the 1st entry in the results of the `find` command.
+* Delete the 2nd entry in the reading list.
+. `list` +
+. `delete 2` +
+
+* Delete the 1st entry in the results of the `find` command.
+. `find Trump` +
+. `delete 1` +
 
 ==== Clearing all entries : `clear`
 
@@ -683,9 +693,10 @@ Format: `unarchive INDEX`
 
 Examples:
 
-* `archives` +
-`unarchive 2` +
-Moves the 2nd entry in the archives to the reading list.
+* Move the 2nd entry in the archives to the reading list and download its webpage content.
+. `archives` +
+. `unarchive 2` +
+. `list`
 
 ==== Deleting an entry: `delete` `[since v1.3]`
 
@@ -701,9 +712,9 @@ Format: `delete INDEX`
 
 Examples:
 
-* `archives` +
-`delete 2` +
-Deletes the 2nd entry in the archives.
+* Delete the 2nd entry in the archives.
+. `archives` +
+. `delete 2` +
 
 ==== Selecting an entry: `select`
 
@@ -719,9 +730,9 @@ Format: `select INDEX`
 
 Examples:
 
-* `archives` +
-`select 2` +
-Selects the 2nd archived entry.
+Select the 2nd archived entry.
+. `archives` +
+. `select 2` +
 
 ==== Clearing all entries : `clear` `[coming in v2.0]`
 Clears all archived entries from the manager.
@@ -744,8 +755,10 @@ Format: `addindex all` `[coming in v2.0]`
 
 Examples:
 
-- `addindex 3` Adds the 3rd entry.
-- `addindex 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business” `[coming in v2.0]`
+* Add the 3rd entry
+. `addindex 3`
+* Add the 1st entry with a description and tagged with “Business” `[coming in v2.0]` +
+. `addindex 1 d/explains why UX is important t/Business`
 
 ==== Selecting an entry: `select` `[since v1.3]`
 
@@ -761,7 +774,8 @@ Format: `select INDEX`
 
 Examples:
 
-- `select 2` Selects the 2nd entry in the manager
+* Selects the 2nd entry from the search results.
+. `select 2`
 
 ==== Changing the view mode: `view` `[since v1.2, updated v1.3]`
 
@@ -771,12 +785,12 @@ Format: `view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]`
 
 Examples:
 
-* `view browser` +
-Switches to browser view mode
-* `view reader` +
-Switches to a clean and clutter-free reader view mode for a more comfortable reading experience
-* `view reader s/dark` +
-Switches to reader view mode with dark style colour scheme
+* Switch to browser view mode.
+. `view browser` +
+* Switch to a clean and clutter-free reader view mode for a more comfortable reading experience.
+. `view reader` +
+* Switch to reader view mode with dark style colour scheme.
+. `view reader s/dark` +
 
 [[Feeds-Context]]
 === `Feeds` Context Commands
@@ -793,8 +807,10 @@ Format: `refesh all` `[coming in v2.0]`
 
 Examples:
 
-- `refresh all` Updates entries from all feeds `[coming in v2.0]`
-- `refresh 2` Updates entries from the 2nd feed
+* Update entries from all feeds. `[coming in v2.0]`
+. `refresh all`
+* Update entries from the 2nd feed.
+. `refresh 2`
 
 [WARNING]
 ====
@@ -816,7 +832,8 @@ Format: `select INDEX`
 
 Examples:
 
-- `select 2` Selects the 2nd feed in the manager and displays its entries
+* Select the 2nd feed in the manager and displays its entries.
+. `select 2`
 
 ==== Editing a feed: `edit` `[coming in v2.0]`
 
@@ -834,8 +851,10 @@ Format: `edit INDEX [u/URL] [n/NAME] [t/TAG]...`
 
 Examples:
 
-- `edit 1 n/HackerNews` Edits the name of the 1st feed
-- `edit 2 t/` Clears all existing tags from the 2nd feed
+* Edit the name of the 1st feed.
+. `edit 1 n/HackerNews`
+* Clear all existing tags from the 2nd feed.
+. `edit 2 t/`
 
 ==== Unsubscribing from a feed: `unsubscribe` `[since v1.3]`
 
@@ -851,8 +870,10 @@ Format: `unsubscribe INDEX`
 
 Examples:
 
-- `unsubscribe all` Deletes all shown feeds `[coming in v2.0]`
-- `unsubscribe 2` Deletes the 2nd shown feed
+* Delete all feeds. `[coming in v2.0]`
+. `unsubscribeall`
+* Delete the 2nd shown feed.
+. `unsubscribe 2`
 
 ==== Clearing all feeds : `clear` `[coming in v2.0]`
 
@@ -880,9 +901,12 @@ A feed can have any number of tags (including 0)
 
 Examples:
 
-- `subscribe all` Adds all shown feeds
-- `subscribe 1 n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with `Tech`
-- `subscribe 5-9 t/Work` Adds the 5th to 9th feeds whose entries will be tagged with `Work`
+* Add all shown feeds.
+. `subscribeall`
+* Add a feed whose name is “Engadget” and whose entries will be tagged with `Tech`.
+. `subscribe 1 n/Engadget t/Tech`
+* Add the 5th to 9th feeds whose entries will be tagged with `Work`.
+. `subscribe 5-9 t/Work`
 
 ==== Selecting a feed: `select`
 
@@ -900,7 +924,8 @@ Format: `select INDEX`
 
 Examples:
 
-- `select 2` Selects the 2nd feed in the manager.
+* Selects the 2nd feed from the feeds list.
+. `select 2`
 // and displays its entries
 
 == FAQ
