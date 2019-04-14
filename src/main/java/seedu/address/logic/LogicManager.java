@@ -102,11 +102,6 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public Optional<String> getArticle(URL url) {
-        return model.getArticle(url);
-    }
-
-    @Override
     public ObservableList<Entry> getFilteredEntryList() {
         return model.getFilteredEntryList();
     }

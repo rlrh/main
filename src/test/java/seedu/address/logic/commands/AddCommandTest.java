@@ -210,11 +210,6 @@ public class AddCommandTest {
         }
 
         @Override
-        public Optional<String> getArticle(URL url) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
         public GuiSettings getGuiSettings() {
             throw new AssertionError("This method should not be called.");
         }

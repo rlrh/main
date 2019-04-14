@@ -89,15 +89,4 @@ public class DataDirectoryArticleStorage implements ArticleStorage {
         }
     }
 
-    public Optional<String> getArticle(URL url) {
-        return getOfflineLink(url)
-                .map(path -> {
-                    try {
-                        return FileUtil.readFromFile(path);
-                    } catch (IOException ioe) {
-                        return null;
-                    }
-                });
-    }
-
 }

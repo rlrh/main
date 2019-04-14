@@ -79,6 +79,18 @@ public abstract class Network {
     }
 
     /**
+     * Fetches the article linked at the URL and returns it as a String
+     */
+    public static Optional<String> fetchArticleAsOptionalString(URL url) {
+        try {
+            byte[] articleContent = Network.fetchAsBytes(url);
+            return Optional.of(new String(articleContent));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
      * Fetches the article linked at the URL and returns it,
      * but first pre-processing it by converting all links to absolute form.
      */

@@ -51,12 +51,12 @@ public class BrowserPanel extends UiPart<Region> {
     private URL lastEntryUrl; // URL of the last selected entry - should be online type
     private ViewMode viewMode; // current view mode
     private final Function<URL, Optional<URL>> getOfflineUrl; // gets the offline URL for the given URL
-    private final Function<URL, Optional<String>> getArticle; // gets the stored offline article for the given URL
+    private final Function<URL, Optional<String>> getHtmlFromUrl; // gets the HTML content for a given URL
 
     public BrowserPanel(ObservableValue<Entry> selectedEntry,
                         ObservableValue<ViewMode> viewMode,
                         Function<URL, Optional<URL>> getOfflineUrl,
-                        Function<URL, Optional<String>> getArticle) {
+                        Function<URL, Optional<String>> getHtmlFromUrl) {
         super(FXML);
 
         // Initialization
@@ -64,7 +64,7 @@ public class BrowserPanel extends UiPart<Region> {
         this.lastEntryUrl = null;
         this.viewMode = viewMode.getValue();
         this.getOfflineUrl = getOfflineUrl;
-        this.getArticle = getArticle;
+        this.getHtmlFromUrl = getHtmlFromUrl;
 
         // To prevent triggering events for typing inside the loaded Web page.
         getRoot().setOnKeyPressed(Event::consume);
@@ -116,8 +116,8 @@ public class BrowserPanel extends UiPart<Region> {
             if (newViewMode.hasReaderViewType() && currentlyInContent()) {
                 setStyleSheet(newViewMode.getReaderViewStyle().getStylesheetLocation());
             } else if (newViewMode.hasReaderViewType() && currentlyInOfflinePage()) {
-                getArticle
-                        .apply(lastEntryUrl)
+                getHtmlFromUrl
+                        .apply(lastExternalUrl)
                         .ifPresentOrElse(this::loadReaderOfLastEntry, this::loadReaderOfLastEntry);
             } else if (newViewMode.hasReaderViewType() && currentlyInOnlinePage()) {
                 loadReaderOfLastUrl();
@@ -286,7 +286,7 @@ public class BrowserPanel extends UiPart<Region> {
             getOfflineUrl
                     .apply(lastEntryUrl) // get entry's offline URL if available
                     .map(url -> lastExternalUrl = url) // update last URL manually as HTML content is directly loaded
-                    .flatMap(unused -> getArticle.apply(lastEntryUrl)) // get HTML content
+                    .flatMap(getHtmlFromUrl) // get HTML content
                     .ifPresentOrElse(this::loadReaderOfLastEntry, this::loadPageOfLastEntry);
         } else {
             getOfflineUrl

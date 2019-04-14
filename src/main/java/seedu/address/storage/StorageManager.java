@@ -159,9 +159,4 @@ public class StorageManager implements Storage {
         return articleStorage.getOfflineLink(url);
     }
 
-    @Override
-    public Optional<String> getArticle(URL url) {
-        return articleStorage.getArticle(url);
-    }
-
 }

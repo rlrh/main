@@ -17,6 +17,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ModelContext;
+import seedu.address.util.Network;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -119,7 +120,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     void fillInnerParts() {
         browserPanel = new BrowserPanel(logic.selectedEntryProperty(), logic.viewModeProperty(),
-                logic::getOfflineLink, logic::getArticle);
+                logic::getOfflineLink, Network::fetchArticleAsOptionalString);
         browserPlaceholder.getChildren().add(browserPanel.getRoot());
 
         entryListPanel = new EntryListPanel(logic.getFilteredEntryList(), logic.selectedEntryProperty(),

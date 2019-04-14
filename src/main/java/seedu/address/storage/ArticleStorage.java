@@ -40,8 +40,4 @@ public interface ArticleStorage {
      */
     Optional<Path> getOfflineLink(URL url);
 
-    /**
-     * Gets the stored article associated with the given url if it exists.
-     */
-    Optional<String> getArticle(URL url);
 }
