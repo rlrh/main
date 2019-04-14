@@ -114,24 +114,81 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void setArchivesEntryBookFilePath_nullPath_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        modelManager.setArchivesEntryBookFilePath(null);
+    }
+
+    @Test
+    public void setArchivesEntryBookFilePath_validPath_setsEntryBookFilePath() {
+        Path path = Paths.get("archive/book/file/path");
+        modelManager.setArchivesEntryBookFilePath(path);
+        assertEquals(path, modelManager.getArchivesEntryBookFilePath());
+    }
+
+    @Test
     public void hasEntry_nullEntry_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
         modelManager.hasEntry(null);
     }
 
     @Test
+    public void hasListEntry_nullEntry_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        modelManager.hasListEntry(null);
+    }
+
+    @Test
+    public void hasArchivesEntry_nullEntry_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        modelManager.hasArchivesEntry(null);
+    }
+
+    @Test
+    public void hasFeedsEntry_nullEntry_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        modelManager.hasFeedsEntry(null);
+    }
+
+    @Test
     public void hasEntry_entryNotInEntryBook_returnsFalse() {
         assertFalse(modelManager.hasEntry(ALICE));
+        assertFalse(modelManager.hasListEntry(ALICE));
+        assertFalse(modelManager.hasArchivesEntry(ALICE));
+        assertFalse(modelManager.hasFeedsEntry(ALICE));
     }
 
     @Test
-    public void hasEntry_entryInEntryBook_returnsTrue() {
+    public void hasListEntry_entryInEntryBook_returnsTrue() {
         modelManager.addListEntry(ALICE, Optional.empty());
         assertTrue(modelManager.hasEntry(ALICE));
+        assertTrue(modelManager.hasListEntry(ALICE));
+        assertFalse(modelManager.hasArchivesEntry(ALICE));
+        assertFalse(modelManager.hasFeedsEntry(ALICE));
     }
 
     @Test
-    public void deleteEntry_entryIsSelectedAndFirstEntryInFilteredEntryList_selectionCleared() {
+    public void hasArchivesEntry_entryInEntryBook_returnsTrue() {
+        modelManager.setContext(ModelContext.CONTEXT_ARCHIVES);
+        modelManager.addArchivesEntry(ALICE);
+        assertTrue(modelManager.hasEntry(ALICE));
+        assertFalse(modelManager.hasListEntry(ALICE));
+        assertTrue(modelManager.hasArchivesEntry(ALICE));
+        assertFalse(modelManager.hasFeedsEntry(ALICE));
+    }
+
+    @Test
+    public void hasFeedsEntry_entryInEntryBook_returnsTrue() {
+        modelManager.setContext(ModelContext.CONTEXT_FEEDS);
+        modelManager.addFeedsEntry(ALICE);
+        assertFalse(modelManager.hasEntry(ALICE));
+        assertFalse(modelManager.hasListEntry(ALICE));
+        assertFalse(modelManager.hasArchivesEntry(ALICE));
+        assertTrue(modelManager.hasFeedsEntry(ALICE));
+    }
+
+    @Test
+    public void deleteListEntry_entryIsSelectedAndFirstEntryInFilteredEntryList_selectionCleared() {
         modelManager.addListEntry(ALICE, Optional.empty());
         modelManager.setSelectedEntry(ALICE);
         modelManager.deleteListEntry(ALICE);
@@ -139,12 +196,52 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void deleteEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
+    public void deleteArchivesEntry_entryIsSelectedAndFirstEntryInFilteredEntryList_selectionCleared() {
+        modelManager.setContext(ModelContext.CONTEXT_ARCHIVES);
+        modelManager.addArchivesEntry(ALICE);
+        modelManager.setSelectedEntry(ALICE);
+        modelManager.deleteArchivesEntry(ALICE);
+        assertEquals(null, modelManager.getSelectedEntry());
+    }
+
+    @Test
+    public void deleteFeedsEntry_entryIsSelectedAndFirstEntryInFilteredEntryList_selectionCleared() {
+        modelManager.setContext(ModelContext.CONTEXT_FEEDS);
+        modelManager.addFeedsEntry(ALICE);
+        modelManager.setSelectedEntry(ALICE);
+        modelManager.deleteFeedsEntry(ALICE);
+        assertEquals(null, modelManager.getSelectedEntry());
+    }
+
+    @Test
+    public void deleteListEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
         modelManager.addListEntry(ALICE, Optional.empty());
         modelManager.addListEntry(BOB, Optional.empty());
         assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(BOB);
         modelManager.deleteListEntry(BOB);
+        assertEquals(ALICE, modelManager.getSelectedEntry());
+    }
+
+    @Test
+    public void deleteArchivesEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
+        modelManager.setContext(ModelContext.CONTEXT_ARCHIVES);
+        modelManager.addArchivesEntry(ALICE);
+        modelManager.addArchivesEntry(BOB);
+        assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
+        modelManager.setSelectedEntry(BOB);
+        modelManager.deleteArchivesEntry(BOB);
+        assertEquals(ALICE, modelManager.getSelectedEntry());
+    }
+
+    @Test
+    public void deleteFeedsEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
+        modelManager.setContext(ModelContext.CONTEXT_FEEDS);
+        modelManager.addFeedsEntry(ALICE);
+        modelManager.addFeedsEntry(BOB);
+        assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
+        modelManager.setSelectedEntry(BOB);
+        modelManager.deleteFeedsEntry(BOB);
         assertEquals(ALICE, modelManager.getSelectedEntry());
     }
 
@@ -170,8 +267,26 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setSelectedEntry_entryInFilteredEntryList_setsSelectedEntry() {
+    public void setSelectedEntryListContext_entryInFilteredEntryList_setsSelectedEntry() {
         modelManager.addListEntry(ALICE, Optional.empty());
+        assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
+        modelManager.setSelectedEntry(ALICE);
+        assertEquals(ALICE, modelManager.getSelectedEntry());
+    }
+
+    @Test
+    public void setSelectedEntryArchivesContext_entryInFilteredEntryList_setsSelectedEntry() {
+        modelManager.setContext(ModelContext.CONTEXT_ARCHIVES);
+        modelManager.addArchivesEntry(ALICE);
+        assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
+        modelManager.setSelectedEntry(ALICE);
+        assertEquals(ALICE, modelManager.getSelectedEntry());
+    }
+
+    @Test
+    public void setSelectedEntryFeedsContext_entryInFilteredEntryList_setsSelectedEntry() {
+        modelManager.setContext(ModelContext.CONTEXT_FEEDS);
+        modelManager.addFeedsEntry(ALICE);
         assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(ALICE);
         assertEquals(ALICE, modelManager.getSelectedEntry());

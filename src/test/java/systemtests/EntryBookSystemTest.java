@@ -3,7 +3,6 @@ package systemtests;
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 import static seedu.address.ui.StatusBarFooter.SYNC_STATUS_INITIAL;
 import static seedu.address.ui.StatusBarFooter.SYNC_STATUS_UPDATED;
@@ -33,7 +32,8 @@ import guitests.guihandles.ResultDisplayHandle;
 import guitests.guihandles.StatusBarFooterHandle;
 import seedu.address.TestApp;
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.ArchivesCommand;
+import seedu.address.logic.commands.ClearListCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -78,8 +78,10 @@ public abstract class EntryBookSystemTest {
         testApp = setupHelper.setupApplication(
                                 this::getInitialDataListEntryBook,
                                 this::getInitialDataArchivesEntryBook,
+                                this::getInitialDataFeedsEntryBook,
                                 getDataFileLocationListEntryBook(),
-                                getDataFileLocationArchivesEntryBook());
+                                getDataFileLocationArchivesEntryBook(),
+                                getDataFileLocationFeedsEntryBook());
         mainWindowHandle = setupHelper.setupMainWindowHandle();
 
         waitUntilBrowserLoaded(getBrowserPanel());
@@ -101,10 +103,18 @@ public abstract class EntryBookSystemTest {
 
     /**
      * Returns the data for the archives entry book to be loaded into the file in
-     * {@link #getDataFileLocationListEntryBook()}.
+     * {@link #getDataFileLocationArchivesEntryBook()}.
      */
     protected EntryBook getInitialDataArchivesEntryBook() {
         return TypicalEntries.getTypicalArchivesEntryBook();
+    }
+
+    /**
+     * Returns the data for the feeds entry book to be loaded into the file in
+     * {@link #getDataFileLocationFeedsEntryBook()}.
+     */
+    protected EntryBook getInitialDataFeedsEntryBook() {
+        return TypicalEntries.getTypicalFeedsEntryBook();
     }
 
     /**
@@ -119,6 +129,13 @@ public abstract class EntryBookSystemTest {
      */
     protected Path getDataFileLocationArchivesEntryBook() {
         return TestApp.SAVE_LOCATION_ARCHIVES_ENTRYBOOK_FOR_TESTING;
+    }
+
+    /**
+     * Returns the directory of the data file for the feeds entry book.
+     */
+    protected Path getDataFileLocationFeedsEntryBook() {
+        return TestApp.SAVE_LOCATION_FEEDS_ENTRYBOOK_FOR_TESTING;
     }
 
     public MainWindowHandle getMainWindowHandle() {
@@ -173,11 +190,19 @@ public abstract class EntryBookSystemTest {
     }
 
     /**
-     * Displays all entries in the address book.
+     * Displays all entries in the list entry book.
      */
-    protected void showAllEntries() {
+    protected void showAllListEntries() {
         executeCommand(ListCommand.COMMAND_WORD);
         assertEquals(getModel().getListEntryBook().getEntryList().size(), getModel().getFilteredEntryList().size());
+    }
+
+    /**
+     * Displays all entries in the archives entry book.
+     */
+    protected void showAllArchivesEntries() {
+        executeCommand(ArchivesCommand.COMMAND_WORD);
+        assertEquals(getModel().getArchivesEntryBook().getEntryList().size(), getModel().getFilteredEntryList().size());
     }
 
     /**
@@ -185,7 +210,6 @@ public abstract class EntryBookSystemTest {
      */
     protected void showEntriesWithTitle(String keyword) {
         executeCommand(FindCommand.COMMAND_WORD + " " + PREFIX_TITLE + keyword);
-        assertTrue(getModel().getFilteredEntryList().size() < getModel().getListEntryBook().getEntryList().size());
     }
 
     /**
@@ -200,7 +224,7 @@ public abstract class EntryBookSystemTest {
      * Deletes all entries in the address book.
      */
     protected void deleteAllEntries() {
-        executeCommand(ClearCommand.COMMAND_WORD);
+        executeCommand(ClearListCommand.COMMAND_WORD);
         assertEquals(0, getModel().getListEntryBook().getEntryList().size());
     }
 
@@ -215,6 +239,7 @@ public abstract class EntryBookSystemTest {
         assertEquals(expectedResultMessage, getResultDisplay().getText());
         assertEquals(new EntryBook(expectedModel.getListEntryBook()), testApp.readStorageListEntryBook());
         assertEquals(new EntryBook(expectedModel.getArchivesEntryBook()), testApp.readStorageArchivesEntryBook());
+        assertEquals(new EntryBook(expectedModel.getFeedsEntryBook()), testApp.readStorageFeedsEntryBook());
         assertEquals(expectedModel.getContext(), testApp.getModel().getContext());
         assertListMatching(getEntryListPanel(), expectedModel.getFilteredEntryList());
     }
