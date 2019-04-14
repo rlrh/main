@@ -101,7 +101,18 @@ public class RefreshAllFeedsCommandTest {
     }
 
     @Test
-    public void execute_noEntriesRefreshedSuccessfully() throws Exception {
+    public void execute_noEntriesRefreshed_success() throws Exception {
+        Model model = new ModelManagerStub();
+
+        CommandResult commandResult = new RefreshAllFeedsCommand().execute(model, commandHistory);
+
+        assertEquals(
+            RefreshAllFeedsCommand.MESSAGE_TRIVIAL_SUCCESS,
+            commandResult.getFeedbackToUser());
+    }
+
+    @Test
+    public void execute_firstEntryCannotBeRefreshed_throwsCommandException() throws Exception {
         thrown.expect(CommandException.class);
         thrown.expectMessage(RefreshAllFeedsCommand.MESSAGE_FAILURE);
 
