@@ -22,6 +22,7 @@ public abstract class Network {
 
     private static final Logger logger = LogsCenter.getLogger(Network.class);
 
+    private static final int DEFAULT_NUM_REDIRECTS = 15;
     private static final int CONNECTION_TIMEOUT_MILLIS = 1000 * 10; // 10 seconds
     private static final int READ_TIMEOUT_MILLIS = 1000 * 10; // 10 seconds
     private static final int REQUEST_TIMEOUT_MILLIS = 1000 * 60; // 60 seconds
@@ -72,7 +73,7 @@ public abstract class Network {
      * returning it as a Response
      */
     private static CompletableFuture<Response> fetchAsResponseAsync(URL url) {
-        return fetchAsResponseAsync(url, 15);
+        return fetchAsResponseAsync(url, DEFAULT_NUM_REDIRECTS);
     }
 
     /**
@@ -95,16 +96,7 @@ public abstract class Network {
      * Fetches the resource (i.e. webpage) at url asynchronously, returning it as an InputStream.
      */
     public static CompletableFuture<InputStream> fetchAsStreamAsync(URL url) {
-        if (!url.getProtocol().equals("http")
-            && !url.getProtocol().equals("https")) {
-            // Fallback to direct java API
-            try {
-                return CompletableFuture.completedFuture(url.openStream());
-            } catch (IOException ioe) {
-                return CompletableFuture.failedFuture(ioe);
-            }
-        }
-        return fetchAsResponseAsync(url).thenApply(Response::getResponseBodyAsStream);
+        return fetchAsStreamAsync(url, DEFAULT_NUM_REDIRECTS);
     }
 
     /**
