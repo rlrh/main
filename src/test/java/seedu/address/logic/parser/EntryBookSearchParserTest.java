@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import seedu.address.logic.commands.AddAllCommand;
 import seedu.address.logic.commands.AddIndexCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.SelectCommand;
@@ -47,6 +48,13 @@ public class EntryBookSearchParserTest {
         AddIndexCommand command = (AddIndexCommand) parser.parseCommand(
                 AddIndexCommand.COMMAND_ALIAS + " " + INDEX_FIRST_ENTRY.getOneBased());
         assertEquals(new AddIndexCommand(INDEX_FIRST_ENTRY), command);
+    }
+
+    @Test
+    public void parseCommand_addall() throws Exception {
+        AddAllCommand command = (AddAllCommand) parser.parseCommand(
+            AddAllCommand.COMMAND_WORD);
+        assertEquals(new AddAllCommand(), command);
     }
 
     @Test
