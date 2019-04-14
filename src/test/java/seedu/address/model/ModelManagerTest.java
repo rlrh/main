@@ -151,7 +151,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void hasListEntry_entryNotInEntryBook_returnsFalse() {
+    public void hasEntry_entryNotInEntryBook_returnsFalse() {
         assertFalse(modelManager.hasEntry(ALICE));
         assertFalse(modelManager.hasListEntry(ALICE));
         assertFalse(modelManager.hasArchivesEntry(ALICE));
