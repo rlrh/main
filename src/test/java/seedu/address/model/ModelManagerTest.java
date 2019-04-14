@@ -208,14 +208,17 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void deleteEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
+    public void deleteListEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
         modelManager.addListEntry(ALICE, Optional.empty());
         modelManager.addListEntry(BOB, Optional.empty());
         assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(BOB);
         modelManager.deleteListEntry(BOB);
         assertEquals(ALICE, modelManager.getSelectedEntry());
+    }
 
+    @Test
+    public void deleteArchivesEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
         modelManager.setContext(ModelContext.CONTEXT_ARCHIVES);
         modelManager.addArchivesEntry(ALICE);
         modelManager.addArchivesEntry(BOB);
@@ -223,7 +226,10 @@ public class ModelManagerTest {
         modelManager.setSelectedEntry(BOB);
         modelManager.deleteArchivesEntry(BOB);
         assertEquals(ALICE, modelManager.getSelectedEntry());
+    }
 
+    @Test
+    public void deleteFeedsEntry_entryIsSelectedAndSecondEntryInFilteredEntryList_firstEntrySelected() {
         modelManager.setContext(ModelContext.CONTEXT_FEEDS);
         modelManager.addFeedsEntry(ALICE);
         modelManager.addFeedsEntry(BOB);
