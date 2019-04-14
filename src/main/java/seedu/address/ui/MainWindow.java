@@ -120,7 +120,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     void fillInnerParts() {
         browserPanel = new BrowserPanel(logic.selectedEntryProperty(), logic.viewModeProperty(),
-                logic::getOfflineLink, Network::fetchArticleAsOptionalString);
+                logic::getOfflineLink, Network::fetchAsOptionalString);
         browserPlaceholder.getChildren().add(browserPanel.getRoot());
 
         entryListPanel = new EntryListPanel(logic.getFilteredEntryList(), logic.selectedEntryProperty(),
