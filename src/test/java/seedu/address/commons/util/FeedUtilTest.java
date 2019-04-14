@@ -1,11 +1,13 @@
 package seedu.address.commons.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static seedu.address.commons.util.FeedUtil.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.commons.util.FeedUtil.fromFeedUrl;
 
 import java.net.URL;
 import java.util.Collections;
+import java.util.Set;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EntryBookBuilder;
 import seedu.address.testutil.TestUtil;
 
@@ -28,6 +31,8 @@ public class FeedUtilTest {
     private static final URL TEST_URL_LOCAL = MainApp.class.getResource("/RssFeedTest/rss.xml");
     private static final URL NOTAFEED_URL =
         TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml");
+
+    private static final Tag TAG_TECH = new Tag("Tech");
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
@@ -89,6 +94,12 @@ public class FeedUtilTest {
     @Test
     public void fromFeedUrl_validRemoteUrl_success() throws Exception {
         assertEquals(fromFeedUrl(TEST_URL), getTestEntryBook(TEST_URL));
+    }
+
+    @Test
+    public void fromFeedUrl_validLocalUrl_allHasTags() throws Exception {
+        assertTrue(fromFeedUrl(TEST_URL_LOCAL, Set.of(TAG_TECH)).getEntryList().stream()
+                .allMatch(entry -> entry.getTags().contains(TAG_TECH)));
     }
 
     @Test
