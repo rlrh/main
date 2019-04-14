@@ -11,6 +11,7 @@ import javax.xml.transform.TransformerException;
 
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -73,71 +74,50 @@ public class BrowserPanel extends UiPart<Region> {
         // To prevent triggering events for typing inside the loaded Web page.
         getRoot().setOnKeyPressed(Event::consume);
 
-        // Display browser loading progress
+        // Display browser loading progress.
         progressBar.progressProperty().bind(webEngine.getLoadWorker().progressProperty());
 
         // React to browser loading state changes.
-        webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
-            switch (newState) {
-            case RUNNING:
-                handleRunning();
-                break;
-            case SUCCEEDED:
-                handleSucceeded();
-                break;
-            case FAILED:
-                handleFailed();
-                break;
-            default:
-                break;
-            }
-        });
+        webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) ->
+                handleBrowserLoadingStateChange(newState)
+        );
 
         // React to current location changes.
-        webEngine.locationProperty().addListener((observable, oldLocation, newLocation) -> {
-            // Update state - update last URL if new URL is external (offline or online, not internal or content)
-            UrlUtil.fromString(newLocation)
-                    .filter(newUrl -> !INTERNAL_URLS.contains(newUrl))
-                    .ifPresent(newUrl -> lastExternalUrl = newUrl);
-        });
+        webEngine.locationProperty().addListener((observable, oldLocation, newLocation) ->
+                handleBrowserLocationChange(newLocation)
+        );
 
         // React to selected entry changes.
-        selectedEntry.addListener((observable, oldEntry, newEntry) -> {
-            // Next actions - load new selected entry page if possible
-            Optional.ofNullable(newEntry).ifPresentOrElse(this::loadEntryPage, this::loadDefaultPage);
-        });
+        selectedEntry.addListener((observable, oldEntry, newEntry) -> handleSelectedEntryChange(newEntry));
 
         // React to view mode changes.
-        viewMode.addListener((observable, oldViewMode, newViewMode) -> {
-            // Update state
-            this.viewMode = newViewMode;
-
-            // Next actions
-            /* STRATEGY:
-             * If changing to reader view and currently in content, only change stylesheet.
-             * If changing to reader view and currently in offline page,
-             * directly load reader view content if possible or else load reader view of current document.
-             * If changing to reader view and currently in online page, load reader view of current document.
-             * If changing to browser view and currently in internal page or content, reload last URL.
-             */
-            if (newViewMode.hasReaderViewType() && currentlyInContent()) {
-                setStyleSheet(newViewMode.getReaderViewStyle().getStylesheetLocation());
-            } else if (newViewMode.hasReaderViewType() && currentlyInOfflinePage()) {
-                getHtmlFromUrl
-                        .apply(lastExternalUrl)
-                        .ifPresentOrElse(this::loadReaderOfLastEntry, this::loadReaderOfLastEntry);
-            } else if (newViewMode.hasReaderViewType() && currentlyInOnlinePage()) {
-                loadReaderOfLastUrl();
-            } else if (newViewMode.hasBrowserViewType() && !currentlyInExternalPage()) {
-                loadPageOfLastUrl();
-            }
-        });
+        viewMode.addListener((observable, oldViewMode, newViewMode) -> handleViewModeChange(newViewMode));
 
         // Load default page on startup.
         loadDefaultPage();
     }
 
-    //=========== Loading state handlers ===============================================================================
+    //=========== Event handlers =======================================================================================
+
+    /**
+     * Handler for browser loading state change.
+     * @param newState new browser loading state
+     */
+    private void handleBrowserLoadingStateChange(Worker.State newState) {
+        switch (newState) {
+        case RUNNING:
+            handleRunning();
+            break;
+        case SUCCEEDED:
+            handleSucceeded();
+            break;
+        case FAILED:
+            handleFailed();
+            break;
+        default:
+            break;
+        }
+    }
 
     /**
      * Handler for running state.
@@ -160,9 +140,9 @@ public class BrowserPanel extends UiPart<Region> {
          * but if currently in offline page, load reader view of current loaded document with last entry as base URL.
          */
         if (viewMode.hasReaderViewType() && currentlyInOnlinePage()) {
-            loadReaderOfLastUrl();
+            loadReaderOfPageForLastUrl();
         } else if (viewMode.hasReaderViewType() && currentlyInOfflinePage()) {
-            loadReaderOfLastEntry();
+            loadReaderOfPageForLastEntry();
         }
     }
 
@@ -187,59 +167,54 @@ public class BrowserPanel extends UiPart<Region> {
         loadReaderViewFailurePage();
     }
 
-    //=========== State methods ========================================================================================
+    /**
+     * Handler for browser location change.
+     * @param newLocation new browser location
+     */
+    private void handleBrowserLocationChange(String newLocation) {
+        // Update state - update last URL if new URL is external (offline or online, not internal or content)
+        UrlUtil.fromString(newLocation)
+                .filter(newUrl -> !INTERNAL_URLS.contains(newUrl))
+                .ifPresent(newUrl -> lastExternalUrl = newUrl);
+    }
 
     /**
-     * Finds out the type of the given URL.
-     * @param currentUrl URL to find type of
-     * @return type of the currentUrl
+     * Handler for selected entry change.
+     * @param newEntry new entry
      */
-    private UrlType getUrlType(Optional<URL> currentUrl) {
-        if (!currentUrl.isPresent()) {
-            return UrlType.CONTENT;
-        } else if (INTERNAL_URLS.contains(currentUrl.get())) {
-            return UrlType.INTERNAL;
-        } else if (currentUrl.get().getProtocol().contains("file")) {
-            return UrlType.OFFLINE;
-        } else {
-            return UrlType.ONLINE;
+    private void handleSelectedEntryChange(Entry newEntry) {
+        // Next actions - load new selected entry page if possible
+        Optional.ofNullable(newEntry).ifPresentOrElse(this::loadEntryPage, this::loadDefaultPage);
+    }
+
+    /**
+     * Handler for view mode change.
+     * @param newViewMode new view mode
+     */
+    private void handleViewModeChange(ViewMode newViewMode) {
+        // Update state
+        this.viewMode = newViewMode;
+
+        // Next actions
+        /* STRATEGY:
+         * If changing to reader view and currently in content, only change stylesheet.
+         * If changing to reader view and currently in offline page,
+         * directly load reader view content if possible or else load reader view of current document.
+         * If changing to reader view and currently in online page, load reader view of current document.
+         * If changing to browser view and currently in internal page or content, reload last URL.
+         * Otherwise no action needs to be taken.
+         */
+        if (newViewMode.hasReaderViewType() && currentlyInContent()) {
+            setStyleSheet(newViewMode.getReaderViewStyle().getStylesheetLocation());
+        } else if (newViewMode.hasReaderViewType() && currentlyInOfflinePage()) {
+            getHtmlFromUrl
+                    .apply(lastExternalUrl)
+                    .ifPresentOrElse(this::loadReaderOfHtmlForLastEntry, this::loadReaderOfPageForLastEntry);
+        } else if (newViewMode.hasReaderViewType() && currentlyInOnlinePage()) {
+            loadReaderOfPageForLastUrl();
+        } else if (newViewMode.hasBrowserViewType() && !currentlyInExternalPage()) {
+            loadPageOfLastUrl();
         }
-    }
-
-    private UrlType getCurrentUrlType() {
-        return getUrlType(UrlUtil.fromString(webEngine.getLocation()));
-    }
-
-    private boolean currentlyInInternalPage() {
-        return getCurrentUrlType().equals(UrlType.INTERNAL);
-    }
-
-    private boolean currentlyInOnlinePage() {
-        return getCurrentUrlType().equals(UrlType.ONLINE);
-    }
-
-    private boolean currentlyInOfflinePage() {
-        return getCurrentUrlType().equals(UrlType.OFFLINE);
-    }
-
-    private boolean currentlyInContent() {
-        return getCurrentUrlType().equals(UrlType.CONTENT);
-    }
-
-    private boolean currentlyInExternalPage() {
-        return currentlyInOnlinePage() || currentlyInOfflinePage();
-    }
-
-    /**
-     * Logs current URL with its type and loading status.
-     * @param status loading status
-     */
-    private void logCurrentUrlAndTypeWithStatus(String status) {
-        Optional<URL> currentUrl = UrlUtil.fromString(webEngine.getLocation());
-        UrlType currentUrlType = getUrlType(currentUrl);
-
-        String message = String.format("%s %s: %s", status, currentUrlType, currentUrl.orElse(lastExternalUrl));
-        logger.info(message);
     }
 
     //=========== Convenience methods ==================================================================================
@@ -264,15 +239,15 @@ public class BrowserPanel extends UiPart<Region> {
         loadPage(lastEntryUrl.toExternalForm());
     }
 
-    private void loadReaderOfLastUrl() {
+    private void loadReaderOfPageForLastUrl() {
         loadReader(lastExternalUrl.toExternalForm());
     }
 
-    private void loadReaderOfLastEntry() {
+    private void loadReaderOfPageForLastEntry() {
         loadReader(lastEntryUrl.toExternalForm());
     }
 
-    private void loadReaderOfLastEntry(String rawHtml) {
+    private void loadReaderOfHtmlForLastEntry(String rawHtml) {
         loadReader(rawHtml, lastEntryUrl.toExternalForm());
     }
 
@@ -297,7 +272,7 @@ public class BrowserPanel extends UiPart<Region> {
                     .apply(lastEntryUrl) // get entry's offline URL if available
                     .map(url -> lastExternalUrl = url) // update last URL manually as HTML content is directly loaded
                     .flatMap(getHtmlFromUrl) // get HTML content
-                    .ifPresentOrElse(this::loadReaderOfLastEntry, this::loadPageOfLastEntry);
+                    .ifPresentOrElse(this::loadReaderOfHtmlForLastEntry, this::loadPageOfLastEntry);
         } else {
             getOfflineUrl
                     .apply(lastEntryUrl) // get entry's offline URL if available
@@ -367,6 +342,57 @@ public class BrowserPanel extends UiPart<Region> {
             String message = "Failed to set user style sheet location";
             logger.warning(message);
         }
+    }
+
+    //=========== State methods ========================================================================================
+
+    /**
+     * Finds out the type of the given URL.
+     * @param currentUrl URL to find type of
+     * @return type of the currentUrl
+     */
+    private UrlType getUrlType(Optional<URL> currentUrl) {
+        if (!currentUrl.isPresent()) {
+            return UrlType.CONTENT;
+        } else if (INTERNAL_URLS.contains(currentUrl.get())) {
+            return UrlType.INTERNAL;
+        } else if (currentUrl.get().getProtocol().contains("file")) {
+            return UrlType.OFFLINE;
+        } else {
+            return UrlType.ONLINE;
+        }
+    }
+
+    private UrlType getCurrentUrlType() {
+        return getUrlType(UrlUtil.fromString(webEngine.getLocation()));
+    }
+
+    private boolean currentlyInOnlinePage() {
+        return getCurrentUrlType().equals(UrlType.ONLINE);
+    }
+
+    private boolean currentlyInOfflinePage() {
+        return getCurrentUrlType().equals(UrlType.OFFLINE);
+    }
+
+    private boolean currentlyInContent() {
+        return getCurrentUrlType().equals(UrlType.CONTENT);
+    }
+
+    private boolean currentlyInExternalPage() {
+        return currentlyInOnlinePage() || currentlyInOfflinePage();
+    }
+
+    /**
+     * Logs current URL with its type and loading status.
+     * @param status loading status
+     */
+    private void logCurrentUrlAndTypeWithStatus(String status) {
+        Optional<URL> currentUrl = UrlUtil.fromString(webEngine.getLocation());
+        UrlType currentUrlType = getUrlType(currentUrl);
+
+        String message = String.format("%s %s: %s", status, currentUrlType, currentUrl.orElse(lastExternalUrl));
+        logger.info(message);
     }
 
 }
