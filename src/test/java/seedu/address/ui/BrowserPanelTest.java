@@ -48,8 +48,8 @@ public class BrowserPanelTest extends GuiUnitTest {
     }
 
     @Test
-    public void displayCorrectPage() throws Exception {
-        // associated web page of a entry with valid link
+    public void displayCorrectPage() {
+        // select entry with valid link
         guiRobot.interact(() -> selectedEntry.set(VALID_FILE_LINK));
         URL expectedEntryUrl = VALID_FILE_LINK.getLink().value;
         waitUntilBrowserLoaded(browserPanelHandle);
@@ -58,7 +58,7 @@ public class BrowserPanelTest extends GuiUnitTest {
 
     @Test
     public void displayErrorPage() {
-        // associated web page of a entry with invalid link
+        // select entry with invalid link
         guiRobot.interact(() -> selectedEntry.set(INVALID_FILE_LINK));
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(BrowserPanel.ERROR_PAGE, browserPanelHandle.getLoadedUrl());
@@ -75,7 +75,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     }
 
     @Test
-    public void displayReaderViewStyle() {
+    public void setReaderViewStyle() {
 
         // load associated web page of a Wikipedia entry
         guiRobot.interact(() -> selectedEntry.set(WIKIPEDIA_ENTRY));
@@ -91,6 +91,25 @@ public class BrowserPanelTest extends GuiUnitTest {
                 browserPanelHandle.getUserStyleSheetLocation()
         );
 
+    }
+
+    @Test
+    public void displayPreviousPageAfterSwitchingViewModes() {
+        // select entry with valid URL
+        guiRobot.interact(() -> selectedEntry.set(VALID_FILE_LINK));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // set reader view mode
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.READER)));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // switch back to browser view mode
+        guiRobot.interact(() -> viewMode.set(new ViewMode(ViewType.BROWSER)));
+        waitUntilBrowserLoaded(browserPanelHandle);
+
+        // assert loaded URL is entry URL
+        URL expectedEntryUrl = VALID_FILE_LINK.getLink().value;
+        assertEquals(expectedEntryUrl, browserPanelHandle.getLoadedUrl());
     }
 
     /**
