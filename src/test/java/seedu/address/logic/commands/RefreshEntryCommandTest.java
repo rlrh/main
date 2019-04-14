@@ -52,7 +52,9 @@ public class RefreshEntryCommandTest {
         Entry entryToRefresh = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
         URL urlToRefresh = entryToRefresh.getLink().value;
 
-        String expectedMessage = String.format(RefreshEntryCommand.MESSAGE_REFRESH_ENTRY_SUCCESS, INDEX_FIRST_ENTRY.getOneBased());
+        String expectedMessage = String.format(
+            RefreshEntryCommand.MESSAGE_REFRESH_ENTRY_SUCCESS,
+            INDEX_FIRST_ENTRY.getOneBased());
 
         assertFalse(model.hasOfflineCopy(urlToRefresh));
         assertCommandSuccess(refreshCommand, model, commandHistory, expectedMessage);
@@ -75,7 +77,9 @@ public class RefreshEntryCommandTest {
         Entry entryToRefresh = model.getFilteredEntryList().get(INDEX_FIRST_ENTRY.getZeroBased());
         URL urlToRefresh = entryToRefresh.getLink().value;
 
-        String expectedMessage = String.format(RefreshEntryCommand.MESSAGE_REFRESH_ENTRY_SUCCESS, INDEX_FIRST_ENTRY.getOneBased());
+        String expectedMessage = String.format(
+            RefreshEntryCommand.MESSAGE_REFRESH_ENTRY_SUCCESS,
+            INDEX_FIRST_ENTRY.getOneBased());
 
         assertFalse(model.hasOfflineCopy(urlToRefresh));
         assertCommandSuccess(refreshCommand, model, commandHistory, expectedMessage);

@@ -17,7 +17,6 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.EntryContainsSearchTermsPredicate;
 import seedu.address.testutil.EditEntryDescriptorBuilder;
@@ -121,7 +120,8 @@ public class CommandTestUtil {
      * Convenience wrapper to {@link #assertCommandSuccess(Command, Model, CommandHistory, String, Model)}
      * that ignores checking model equality.
      */
-    public static void assertCommandSuccess(Command command, Model actualModel, CommandHistory actualCommandHistory, String expectedMessage) {
+    public static void assertCommandSuccess(Command command, Model actualModel, CommandHistory actualCommandHistory,
+                                            String expectedMessage) {
         assertCommandSuccess(command, actualModel, actualCommandHistory, expectedMessage, actualModel);
     }
 
@@ -133,7 +133,7 @@ public class CommandTestUtil {
      * - {@code actualCommandHistory} remains unchanged.
      */
     public static void assertCommandFailure(Command command, Model actualModel, CommandHistory actualCommandHistory,
-            String expectedMessage) {
+                                            String expectedMessage) {
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
         EntryBook expectedEntryBook = new EntryBook(actualModel.getListEntryBook());
