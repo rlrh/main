@@ -449,7 +449,7 @@ public class ModelManager implements Model {
 
     @Override
     public void setCommandResult(CommandResult result) {
-        commandResult.setValue(result);
+        this.commandResult.setValue(result);
     }
 
     //=========== Context ===========================================================================
