@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.RefreshAllFeedsCommand;
 import seedu.address.logic.commands.RefreshFeedCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.UnsubscribeCommand;
@@ -32,6 +33,9 @@ public class EntryBookFeedsParser extends EntryBookParser {
 
         case RefreshFeedCommand.COMMAND_WORD:
             return new RefreshFeedCommandParser().parse(arguments);
+
+        case RefreshAllFeedsCommand.COMMAND_WORD:
+            return new RefreshAllFeedsCommand();
 
         case SelectCommand.COMMAND_WORD:
         case SelectCommand.COMMAND_ALIAS:
