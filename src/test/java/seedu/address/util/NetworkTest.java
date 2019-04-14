@@ -2,6 +2,7 @@ package seedu.address.util;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static seedu.address.testutil.TypicalEntries.FILE_TEST_CONTENTS;
@@ -26,9 +27,25 @@ public class NetworkTest {
     private static final URL HTTPS_TEST_URL = VALID_HTTPS_LINK.getLink().value;
     private static final URL HTTP_TEST_URL = VALID_HTTP_LINK.getLink().value;
     private static final URL FILE_TEST_URL = VALID_FILE_LINK.getLink().value;
+    private static final URL REDIRECTING_URL = TestUtil.toUrl("http://arxiv.org/abs/1904.02379");
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void fetchAsStream_followsRedirects() throws IOException, ExecutionException, InterruptedException {
+        // Ensure that the REDIRECTING_URL actually is a redirect
+        InputStream redirectingContent = Network.fetchAsStreamAsync(REDIRECTING_URL, 0).get();
+        byte[] redirectingContentBytes = redirectingContent.readAllBytes();
+        assertTrue(redirectingContentBytes.length > 0);
+        assertTrue(new String(redirectingContentBytes, StandardCharsets.UTF_8).contains("301 Moved Permanently"));
+
+        // Ensure that if we follow redirects, then we no longer see a redirect error in the content
+        InputStream redirectedContent = Network.fetchAsStreamAsync(REDIRECTING_URL).get();
+        byte[] redirectedContentBytes = redirectedContent.readAllBytes();
+        assertTrue(redirectedContentBytes.length > 0);
+        assertFalse(new String(redirectedContentBytes, StandardCharsets.UTF_8).contains("301 Moved Permanently"));
+    }
 
     @Test
     public void fetchAsStream_success() throws IOException {

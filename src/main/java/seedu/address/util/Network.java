@@ -78,6 +78,22 @@ public abstract class Network {
     /**
      * Fetches the resource (i.e. webpage) at url asynchronously, returning it as an InputStream.
      */
+    public static CompletableFuture<InputStream> fetchAsStreamAsync(URL url, int maxRedirects) {
+        if (!url.getProtocol().equals("http")
+            && !url.getProtocol().equals("https")) {
+            // Fallback to direct java API
+            try {
+                return CompletableFuture.completedFuture(url.openStream());
+            } catch (IOException ioe) {
+                return CompletableFuture.failedFuture(ioe);
+            }
+        }
+        return fetchAsResponseAsync(url, maxRedirects).thenApply(Response::getResponseBodyAsStream);
+    }
+
+    /**
+     * Fetches the resource (i.e. webpage) at url asynchronously, returning it as an InputStream.
+     */
     public static CompletableFuture<InputStream> fetchAsStreamAsync(URL url) {
         if (!url.getProtocol().equals("http")
             && !url.getProtocol().equals("https")) {
