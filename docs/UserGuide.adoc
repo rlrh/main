@@ -588,20 +588,43 @@ Selects the entry identified by the index number used in the displayed entry lis
 . `find ti/Trump` +
 . `select 1` +
 
-==== Changing the view mode: `view` `[since v1.2, updated v1.3]`
+==== Changing the view mode: `view`
 
-Changes the view mode between the original browser or a more comfortable reading experience.
+Changes the view mode between the original browser view or the reader view for a more comfortable reading experience.
 
 [underline]#Format#: `view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]`
 
 [underline]#Examples#:
 
-* Switch to browser view mode. +
+* Switch to the browser view mode, which displays web pages as they would appear in a web browser. +
 . `view browser` +
-* Switch to a clean and clutter-free reader view mode for a more comfortable reading experience.
+
+.A web page with many distracting elements like advertisements in browser view
+image::ug-view/BrowserView.png[width="720"]
+
+* Switch to the reader view mode, which strips away clutter and presents content in a clean layout.
 . `view reader` +
-* Switch to reader view mode with dark style colour scheme
+
+.The same web page in reader view - with clutter stripped away more actual content is visible
+image::ug-view/ReaderView.png[width="720"]
+
+* Switch to the reader view mode with sepia colour scheme
+. `view reader s/sepia` +
+
+.A web page in reader view with sepia colour scheme
+image::ug-view/ReaderViewSepia.png[width="720"]
+
+* Switch to the reader view mode with dark colour scheme
 . `view reader s/dark` +
+
+.A web page in reader view with dark colour scheme
+image::ug-view/ReaderViewDark.png[width="720"]
+
+* Switch to the reader view mode with black colour scheme
+. `view reader s/black` +
+
+.A web page in reader view with black colour scheme
+image::ug-view/ReaderViewBlack.png[width="720"]
 
 ==== Refreshing an entry: `refresh` `[since v1.3]`
 
