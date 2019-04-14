@@ -42,7 +42,7 @@ public class RefreshEntryCommandTest {
     private Model model;
 
     @Before
-    public void setup() throws IOException {
+    public void setUp() throws IOException {
         model = makeTestModelWithLocallyLinkedEntries();
     }
 
