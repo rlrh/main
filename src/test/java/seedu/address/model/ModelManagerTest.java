@@ -261,18 +261,24 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void setSelectedEntry_entryInFilteredEntryList_setsSelectedEntry() {
+    public void setSelectedEntryListContext_entryInFilteredEntryList_setsSelectedEntry() {
         modelManager.addListEntry(ALICE, Optional.empty());
         assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(ALICE);
         assertEquals(ALICE, modelManager.getSelectedEntry());
+    }
 
+    @Test
+    public void setSelectedEntryArchivesContext_entryInFilteredEntryList_setsSelectedEntry() {
         modelManager.setContext(ModelContext.CONTEXT_ARCHIVES);
         modelManager.addArchivesEntry(ALICE);
         assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
         modelManager.setSelectedEntry(ALICE);
         assertEquals(ALICE, modelManager.getSelectedEntry());
+    }
 
+    @Test
+    public void setSelectedEntryFeedsContext_entryInFilteredEntryList_setsSelectedEntry() {
         modelManager.setContext(ModelContext.CONTEXT_FEEDS);
         modelManager.addFeedsEntry(ALICE);
         assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredEntryList());
