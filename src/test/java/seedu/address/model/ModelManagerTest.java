@@ -133,21 +133,57 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void hasEntry_entryNotInEntryBook_returnsFalse() {
-        assertFalse(modelManager.hasEntry(ALICE));
+    public void hasListEntry_nullEntry_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        modelManager.hasListEntry(null);
     }
 
     @Test
-    public void hasEntry_entryInEntryBook_returnsTrue() {
+    public void hasArchivesEntry_nullEntry_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        modelManager.hasArchivesEntry(null);
+    }
+
+    @Test
+    public void hasFeedsEntry_nullEntry_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        modelManager.hasFeedsEntry(null);
+    }
+
+    @Test
+    public void hasListEntry_entryNotInEntryBook_returnsFalse() {
+        assertFalse(modelManager.hasEntry(ALICE));
+        assertFalse(modelManager.hasListEntry(ALICE));
+        assertFalse(modelManager.hasArchivesEntry(ALICE));
+        assertFalse(modelManager.hasFeedsEntry(ALICE));
+    }
+
+    @Test
+    public void hasListEntry_entryInEntryBook_returnsTrue() {
         modelManager.addListEntry(ALICE, Optional.empty());
         assertTrue(modelManager.hasEntry(ALICE));
+        assertTrue(modelManager.hasListEntry(ALICE));
+        assertFalse(modelManager.hasArchivesEntry(ALICE));
+        assertFalse(modelManager.hasFeedsEntry(ALICE));
+    }
 
+    @Test
+    public void hasArchivesEntry_entryInEntryBook_returnsTrue() {
         modelManager.setContext(ModelContext.CONTEXT_ARCHIVES);
         modelManager.addArchivesEntry(ALICE);
+        assertTrue(modelManager.hasEntry(ALICE));
+        assertFalse(modelManager.hasListEntry(ALICE));
         assertTrue(modelManager.hasArchivesEntry(ALICE));
+        assertFalse(modelManager.hasFeedsEntry(ALICE));
+    }
 
+    @Test
+    public void hasFeedsEntry_entryInEntryBook_returnsTrue() {
         modelManager.setContext(ModelContext.CONTEXT_FEEDS);
         modelManager.addFeedsEntry(ALICE);
+        assertFalse(modelManager.hasEntry(ALICE));
+        assertFalse(modelManager.hasListEntry(ALICE));
+        assertFalse(modelManager.hasArchivesEntry(ALICE));
         assertTrue(modelManager.hasFeedsEntry(ALICE));
     }
 
