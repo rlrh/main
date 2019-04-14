@@ -63,7 +63,7 @@ public class DeleteCommandSystemTest extends EntryBookSystemTest {
         /* --------------------- Performing delete operation while a entry card is selected ------------------------ */
 
         /* Case: delete the selected entry -> entry list panel selects the entry before the deleted entry */
-        showAllEntries();
+        showAllListEntries();
         expectedModel = getModel();
         Index selectedIndex = getLastIndex(expectedModel);
         Index expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);

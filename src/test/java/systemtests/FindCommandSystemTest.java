@@ -31,7 +31,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         Model expectedModel = getModel();
 
         /* Case: find title of entry in entry book -> 1 entry found */
-        showAllEntries();
+        showAllListEntries();
         String command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder.reset().withTitle(BENSON.getTitle().fullTitle).build());
         ModelHelper.setFilteredList(expectedModel, BENSON);
@@ -39,7 +39,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find title (substring) of entry in entry book -> 1 entry found */
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder.reset().withTitle("enson Me").build());
         ModelHelper.setFilteredList(expectedModel, BENSON);
@@ -47,7 +47,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find description of entry in entry book -> 1 entry found */
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder.reset().withDescription(BENSON.getDescription().value).build());
         ModelHelper.setFilteredList(expectedModel, BENSON);
@@ -55,7 +55,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find description (substring) of entry in entry book -> 1 entry found */
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder.reset().withDescription("older Bens").build());
         ModelHelper.setFilteredList(expectedModel, BENSON);
@@ -63,7 +63,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find link of entry in entry book -> 1 entry found */
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder.reset().withLink(BENSON.getLink().value.toString()).build());
         ModelHelper.setFilteredList(expectedModel, BENSON);
@@ -71,7 +71,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find tags of entry in entry book -> 1 entry found */
-        showAllEntries();
+        showAllListEntries();
         String[] bensonTags = new ArrayList<>(BENSON.getTags())
             .stream()
             .map(t -> t.tagName)
@@ -83,7 +83,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find tags (substring) of entry in entry book -> 0 entries found */
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder.reset().withTags("wesMon").build());
         ModelHelper.setFilteredList(expectedModel);
@@ -92,7 +92,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
 
         /* Case: only one field matching for one entry in entry book -> 1 entry found */
         // Only matching tag
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder
                 .withTitle(KEYPHRASE_NOT_MATCHING_ANYWHERE)
@@ -105,7 +105,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find all of entry in entry book -> 4 entries found, one for each field */
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder.reset().withAll("Carl").build());
         ModelHelper.setFilteredList(expectedModel, ALICE, CARL, DANIEL, ELLE);
@@ -113,7 +113,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: same as above, but non-exact matching tag -> 3 entries found */
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder.reset().withAll("Car").build());
         ModelHelper.setFilteredList(expectedModel, ALICE, CARL, ELLE);
@@ -121,7 +121,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         // Only matching title
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder
                 .withTitle(BENSON.getTitle().fullTitle)
@@ -134,7 +134,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         // Only matching description
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder
             .withTitle(KEYPHRASE_NOT_MATCHING_ANYWHERE)
@@ -147,7 +147,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         // Only matching link
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder
             .withTitle(KEYPHRASE_NOT_MATCHING_ANYWHERE)
@@ -160,7 +160,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: no fields matching any entries -> 0 entries found */
-        showAllEntries();
+        showAllListEntries();
         command = FindCommand.COMMAND_WORD + " "
             + getFindEntryDescriptorDetails(builder
             .withTitle(KEYPHRASE_NOT_MATCHING_ANYWHERE)
@@ -233,7 +233,7 @@ public class FindCommandSystemTest extends EntryBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: find while a entry is selected -> selected card deselected */
-        showAllEntries();
+        showAllListEntries();
         selectEntry(Index.fromOneBased(1));
         assertFalse(getEntryListPanel().getHandleToSelectedCard().getLink().equals(DANIEL.getLink().value));
         command = FindCommand.COMMAND_WORD + " "

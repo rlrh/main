@@ -3,7 +3,6 @@ package systemtests;
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 import static seedu.address.ui.StatusBarFooter.SYNC_STATUS_INITIAL;
 import static seedu.address.ui.StatusBarFooter.SYNC_STATUS_UPDATED;
@@ -33,6 +32,7 @@ import guitests.guihandles.ResultDisplayHandle;
 import guitests.guihandles.StatusBarFooterHandle;
 import seedu.address.TestApp;
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.ArchivesCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.FindCommand;
@@ -173,11 +173,19 @@ public abstract class EntryBookSystemTest {
     }
 
     /**
-     * Displays all entries in the address book.
+     * Displays all entries in the list entry book.
      */
-    protected void showAllEntries() {
+    protected void showAllListEntries() {
         executeCommand(ListCommand.COMMAND_WORD);
         assertEquals(getModel().getListEntryBook().getEntryList().size(), getModel().getFilteredEntryList().size());
+    }
+
+    /**
+     * Displays all entries in the archives entry book.
+     */
+    protected void showAllArchivesEntries() {
+        executeCommand(ArchivesCommand.COMMAND_WORD);
+        assertEquals(getModel().getArchivesEntryBook().getEntryList().size(), getModel().getFilteredEntryList().size());
     }
 
     /**
@@ -185,7 +193,6 @@ public abstract class EntryBookSystemTest {
      */
     protected void showEntriesWithTitle(String keyword) {
         executeCommand(FindCommand.COMMAND_WORD + " " + PREFIX_TITLE + keyword);
-        assertTrue(getModel().getFilteredEntryList().size() < getModel().getListEntryBook().getEntryList().size());
     }
 
     /**
