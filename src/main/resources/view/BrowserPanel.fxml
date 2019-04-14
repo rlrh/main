@@ -3,6 +3,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.ProgressBar?>
+<StackPane alignment="BOTTOM_RIGHT" xmlns:fx="http://javafx.com/fxml/1">
   <WebView fx:id="browser"/>
+  <ProgressBar fx:id="progressBar" translateX="-32" translateY="-16"/>
 </StackPane>
