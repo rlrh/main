@@ -37,12 +37,26 @@ public abstract class Network {
 
     /**
      * Fetches the resource (i.e. webpage) at url, returning it as a String.
-     * @param url
+     * @param url URL
      * @return The content fetched.
      * @throws IOException
      */
     public static String fetchAsString(URL url) throws IOException {
         return new String(url.openStream().readAllBytes(), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Fetches the resource (i.e. webpage) at url, returning it as a String optional.
+     * @param url URL of resource to fetch
+     * @return Optional of HTML content if no exception, else empty Optional
+     */
+    public static Optional<String> fetchAsOptionalString(URL url) {
+        try {
+            byte[] html = Network.fetchAsBytes(url);
+            return Optional.of(new String(html, StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     /**
