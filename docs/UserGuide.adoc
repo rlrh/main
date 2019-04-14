@@ -530,6 +530,7 @@ Edits an existing entry in the reading list.
 * Clear all existing tags from the 2nd entry.
 . `edit 2 t/` +
 
+// tag::findcommand[]
 ==== Finding entries by title: `find`
 
 Finds entries whose fields contain any of the given keyphrases. +
@@ -566,6 +567,7 @@ image::ug-find/ug-tagx-1.png[width="800"]
 
 .After: Only entries with tag `infoTheory` shown
 image::ug-find/ug-tagx-2.png[width="800"]
+// end::findcommand[]
 
 ==== Selecting an entry: `select`
 
