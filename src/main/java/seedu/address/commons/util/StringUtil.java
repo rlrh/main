@@ -6,6 +6,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -98,16 +99,21 @@ public class StringUtil {
      * @return first given number of words of the given string, possibly with ellipsis at the end
      */
     public static String getFirstNWordsWithEllipsis(String string, int numOfWords) {
-        if (string == null || string.isEmpty()) {
+        if (string == null || string.isEmpty() || numOfWords <= 0) {
             return "";
         }
-        String [] stringArray = string.split("\\s+");
+        String[] stringArray = string.trim().split("\\s+");
+        List<String> words = Arrays.asList(stringArray);
+        System.out.println(words);
+        for (int i = 0; i < stringArray.length; i++) {
+            stringArray[i] = stringArray[i].trim();
+        }
         if (numOfWords >= stringArray.length) {
             return string.trim();
         }
         StringBuilder firstNWords = new StringBuilder();
         for (int i = 0; i < numOfWords; i++) {
-            firstNWords.append(stringArray[i]);
+            firstNWords.append(stringArray[i].trim());
             firstNWords.append(" ");
         }
         return firstNWords.toString().trim().concat("…");
