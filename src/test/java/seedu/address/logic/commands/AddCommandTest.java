@@ -251,6 +251,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasOfflineCopy(URL url) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public Optional<URL> getOfflineLink(URL url) {
             throw new AssertionError("This method should not be called.");
         }
