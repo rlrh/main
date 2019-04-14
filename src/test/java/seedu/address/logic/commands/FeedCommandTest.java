@@ -104,7 +104,7 @@ public class FeedCommandTest {
     @Test
     public void execute_urlIsNotAWebsite_commandFails() {
         String expectedMessage = String.format(MESSAGE_FAILURE_NET,
-            "java.net.UnknownHostException: this.website.does.not.exist.definitely");
+            "java.net.UnknownHostException: this.website.does.not.exist.definitely: Name or service not known");
         FeedCommand command = new FeedCommand(NOTAWEBSITE_URL);
 
         assertCommandFailure(command, model, commandHistory, expectedMessage);

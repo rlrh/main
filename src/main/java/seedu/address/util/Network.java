@@ -117,7 +117,11 @@ public abstract class Network {
         try {
             return fetchAsStreamAsync(url).get();
         } catch (ExecutionException | InterruptedException e) {
-            throw new IOException(e);
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            } else {
+                throw new IOException(e.getCause());
+            }
         }
     }
 
