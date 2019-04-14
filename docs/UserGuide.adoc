@@ -381,6 +381,9 @@ Refer to <<List-Context>> for available commands in this context.
 
 [underline]#Format#: `list`
 
+.Switch to the list context to see all your saved entries
+image::ug-context/ug-contextx-list.png[width="790"]
+
 ==== Showing your Archives: `archives` `[since v1.3]`
 
 Shows your Archives of all archived entries.
@@ -389,6 +392,9 @@ This command also enters the Archives context.
 Refer to <<Archives-Context>> for available commands in this context.
 
 [underline]#Format#: `archives`
+
+.Switch to the archives context to see all your archived entries
+image::ug-context/ug-contextx-archives.png[width="790"]
 
 ==== Searching the web: `bing` `[since v1.3]`
 
@@ -403,6 +409,9 @@ Refer to <<Results-Context>> for available commands in this context.
 
 * Bing search the web for entries containing the `Trump` keyword
 . `bing Trump` +
+
+.Bing search for the phrase `Trump`
+image::ug-context/ug-contextx-bing.png[width="790"]
 
 ==== Searching for news: `googlenews` `[since v1.3]`
 
@@ -420,6 +429,9 @@ Refer to <<Results-Context>> for available commands in this context.
 * Search for news articles containing the `Trump` keyword
 . `googlenews Trump` +
 
+.View the latest top news on google news using the `googlenews` command
+image::ug-context/ug-contextx-gnews.png[width="790"]
+
 ==== Searching a web feed: `feed` `[since v1.2]`
 
 Opens a web feed at the URL for previewing.
@@ -433,6 +445,9 @@ Refer to <<Results-Context>> for available commands in this context.
 
 * Display entries from this feed +
 . `feed https://live.engadget.com/rss.xml` +
+
+.Open any feed and view its contents as a list of entries
+image::ug-context/ug-contextx-feed.png[width="790"]
 
 ==== Searching a web page for links: `links` `[coming in v2.0]`
 
@@ -462,6 +477,9 @@ Refer to <<Feeds-Context>> for available commands in this context.
 . `feeds` +
 * List all feeds tagged with “Business” `[coming in v2.0]`
 . `feeds t/Business` +
+
+.Switch to the feeds context to view your subscribed feeds
+image::ug-context/ug-contextx-feeds.png[width="790"]
 
 ==== Searching online for feeds: `searchfeeds` `[coming in v2.0]`
 
