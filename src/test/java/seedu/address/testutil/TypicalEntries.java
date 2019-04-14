@@ -82,6 +82,36 @@ public class TypicalEntries {
         .withDescription("Description place-holder")
         .withLink("https://dodo.example.com")
         .build();
+    public static final Entry UKI = new EntryBuilder()
+        .withTitle("Uki Toki")
+        .withDescription("Description place-holder")
+        .withLink("https://uki.example.com")
+        .build();
+    public static final Entry VOO = new EntryBuilder()
+        .withTitle("Voo Toki")
+        .withDescription("Description place-holder")
+        .withLink("https://voodoo.example.com")
+        .build();
+    public static final Entry WAX = new EntryBuilder()
+        .withTitle("Wax Toki")
+        .withDescription("Description place-holder")
+        .withLink("https://wax.example.com")
+        .build();
+    public static final Entry XERNEX = new EntryBuilder()
+        .withTitle("Xernex Toki")
+        .withDescription("Description place-holder")
+        .withLink("https://xernex.example.com")
+        .build();
+    public static final Entry YOYO = new EntryBuilder()
+        .withTitle("Yo Toki")
+        .withDescription("Description place-holder")
+        .withLink("https://yoyo.example.com")
+        .build();
+    public static final Entry ZACK = new EntryBuilder()
+        .withTitle("Zack Toki")
+        .withDescription("Description place-holder")
+        .withLink("https://zack.example.com")
+        .build();
 
     // Manually added
     public static final Entry HOON = new EntryBuilder()
@@ -109,7 +139,8 @@ public class TypicalEntries {
             .withTags(VALID_TAG_SCIENCE, VALID_TAG_TECH)
             .build();
 
-    public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
+    public static final String KEYWORD_MATCHING_MEIER = "Meier";
+    public static final String KEYWORD_MATCHING_TOKI = "Toki";
     public static final String KEYPHRASE_NOT_MATCHING_ANYWHERE = "THISSTRINGISNOTMATCHINGANYENTRYANYFIELD";
 
     // For AddCommandTest
@@ -289,6 +320,11 @@ public class TypicalEntries {
             .withDescription("Wikipedia test web page")
             .withLink(MainApp.class.getResource("/view/BrowserPanelTest/wikipedia.html"))
             .build();
+    public static final Entry REMOTE_WIKIPEDIA_ENTRY = new EntryBuilder()
+        .withTitle("Wikipedia Test Web Page")
+        .withDescription("Wikipedia test web page")
+        .withLink(WIKIPEDIA_ENTRY_BASE_URL)
+        .build();
 
     // bunch of RSS feeds
     public static final Entry KATTIS_FEED_ENTRY = new EntryBuilder()
@@ -297,11 +333,29 @@ public class TypicalEntries {
             .withLink("https://open.kattis.com/rss/new-problems")
             .build();
 
+    public static final Entry EMPTY_FEED_ENTRY = new EntryBuilder()
+        .withTitle("An empty feed")
+        .withDescription("Very empty feed")
+        .withLink(MainApp.class.getResource("/RssFeedTest/emptyrss.xml"))
+        .build();
+
+    public static final Entry ONE_ITEM_FEED_ENTRY = new EntryBuilder()
+        .withTitle("One item feed")
+        .withDescription("Almost empty feed")
+        .withLink(MainApp.class.getResource("/RssFeedTest/oneitemrss.xml"))
+        .build();
+
     public static final Entry LOCAL_FEED_ENTRY = new EntryBuilder()
             .withTitle("Tsutsukakushi's anime reviews - local copy")
             .withDescription("anime reviews")
             .withLink(MainApp.class.getResource("/RssFeedTest/rss.xml"))
             .build();
+
+    public static final Entry NOT_A_FEED_ENTRY = new EntryBuilder()
+        .withTitle("Not a feed")
+        .withDescription("Not a feed")
+        .withLink(MainApp.class.getResource("/RssFeedTest/notafeed.notxml"))
+        .build();
 
     public static final Entry ANIMEREVIEW_FEED_ENTRY = new EntryBuilder()
             .withTitle("Tsutsukakushi's anime reviews - remote mirror")
@@ -346,7 +400,9 @@ public class TypicalEntries {
     }
 
     public static List<Entry> getTypicalEntries() {
-        return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+        return new ArrayList<>(Arrays.asList(
+            ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE,
+            UKI, VOO, WAX, XERNEX, YOYO, ZACK));
     }
 
     public static List<Entry> getTypicalArchivesEntries() {

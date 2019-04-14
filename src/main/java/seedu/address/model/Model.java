@@ -73,6 +73,11 @@ public interface Model {
     Path getArticleDataDirectoryPath();
 
     /**
+     * Returns true if the model has an offline copy of the given link.
+     */
+    boolean hasOfflineCopy(URL url);
+
+    /**
      * Returns the link to the offline copy of the url given if it exists.
      */
     Optional<URL> getOfflineLink(URL url);
@@ -155,6 +160,11 @@ public interface Model {
      * Clears the entire archives entry book.
      */
     void clearArchivesEntryBook();
+
+    /**
+     * Replaces feeds entry book data with the data in {@code feedsEntryBook}.
+     */
+    void setFeedsEntryBook(ReadOnlyEntryBook feedsEntryBook);
 
     /** Returns the feeds entry book. */
     ReadOnlyEntryBook getFeedsEntryBook();

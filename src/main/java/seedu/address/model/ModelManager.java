@@ -165,6 +165,7 @@ public class ModelManager implements Model {
         userPrefs.setArchivesEntryBookFilePath(archivesEntryBookFilePath);
     }
 
+    @Override
     public boolean hasOfflineCopy(URL url) {
         return getOfflineLink(url).isPresent();
     }
@@ -229,7 +230,6 @@ public class ModelManager implements Model {
             }
         }
         listEntryBook.addEntry(entry);
-        updateFilteredEntryList(PREDICATE_SHOW_ALL_ENTRIES);
     }
 
     @Override
@@ -287,6 +287,11 @@ public class ModelManager implements Model {
     }
 
     //=========== Feeds EntryBook ============================================================================
+
+    @Override
+    public void setFeedsEntryBook(ReadOnlyEntryBook feedsEntryBook) {
+        this.feedsEntryBook.resetData(feedsEntryBook);
+    }
 
     @Override
     public ReadOnlyEntryBook getFeedsEntryBook() {
@@ -384,7 +389,8 @@ public class ModelManager implements Model {
             throw new EntryNotFoundException();
         }
         selectedEntry.setValue(entry);
-        if (entry != null) {
+        if (getContext() == ModelContext.CONTEXT_LIST && entry != null) {
+            logger.info("Ensuring selected entry is downloaded: " + entry.getLink().value);
             ensureDownloaded(entry.getLink().value);
         }
     }
@@ -398,6 +404,7 @@ public class ModelManager implements Model {
                 // Ensure model updates are run on JavaFX thread
                 .thenAccept(articleContent -> Platform.runLater(() -> {
                     try {
+                        logger.info("Auto-downloaded article successfully: " + url);
                         addArticle(url, articleContent);
                     } catch (IOException ioe) {
                         // If couldn't save article, just ignore
@@ -454,7 +461,7 @@ public class ModelManager implements Model {
 
     @Override
     public void setCommandResult(CommandResult result) {
-        commandResult.setValue(result);
+        this.commandResult.setValue(result);
     }
 
     //=========== Context ===========================================================================
