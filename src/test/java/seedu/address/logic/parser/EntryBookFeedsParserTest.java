@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import seedu.address.logic.commands.RefreshAllFeedsCommand;
 import seedu.address.logic.commands.RefreshFeedCommand;
 import seedu.address.logic.commands.UnsubscribeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -24,6 +25,13 @@ public class EntryBookFeedsParserTest {
         RefreshFeedCommand command = (RefreshFeedCommand) parser.parseCommand(
                 RefreshFeedCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
         assertEquals(new RefreshFeedCommand(INDEX_FIRST_ENTRY), command);
+    }
+
+    @Test
+    public void parseCommand_refreshall() throws Exception {
+        RefreshAllFeedsCommand command = (RefreshAllFeedsCommand) parser.parseCommand(
+            RefreshAllFeedsCommand.COMMAND_WORD);
+        assertEquals(new RefreshAllFeedsCommand(), command);
     }
 
     @Test
