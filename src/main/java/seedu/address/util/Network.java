@@ -69,14 +69,6 @@ public abstract class Network {
     }
 
     /**
-     * Fetches the resource (i.e. webpage) at url asynchronously,
-     * returning it as a Response
-     */
-    private static CompletableFuture<Response> fetchAsResponseAsync(URL url) {
-        return fetchAsResponseAsync(url, DEFAULT_NUM_REDIRECTS);
-    }
-
-    /**
      * Fetches the resource (i.e. webpage) at url asynchronously, returning it as an InputStream.
      */
     public static CompletableFuture<InputStream> fetchAsStreamAsync(URL url, int maxRedirects) {
