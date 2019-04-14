@@ -13,6 +13,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -45,6 +46,9 @@ public class BrowserPanel extends UiPart<Region> {
     @FXML
     private WebView browser;
 
+    @FXML
+    private ProgressBar progressBar;
+
     private WebEngine webEngine = browser.getEngine();
 
     private URL lastExternalUrl; // URL of the last external page - should be offline or online type
@@ -68,6 +72,9 @@ public class BrowserPanel extends UiPart<Region> {
 
         // To prevent triggering events for typing inside the loaded Web page.
         getRoot().setOnKeyPressed(Event::consume);
+
+        // Display browser loading progress
+        progressBar.progressProperty().bind(webEngine.getLoadWorker().progressProperty());
 
         // React to browser loading state changes.
         webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
@@ -137,6 +144,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void handleRunning() {
         logCurrentUrlAndTypeWithStatus("Loading");
+        progressBar.setVisible(true);
     }
 
     /**
@@ -144,6 +152,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void handleSucceeded() {
         logCurrentUrlAndTypeWithStatus("Successfully loaded");
+        progressBar.setVisible(false);
 
         // Next actions
         /* STRATEGY:
@@ -162,6 +171,7 @@ public class BrowserPanel extends UiPart<Region> {
      */
     private void handleFailed() {
         logCurrentUrlAndTypeWithStatus("Failed to load");
+        progressBar.setVisible(false);
 
         // Next actions
         loadErrorPage();
