@@ -32,7 +32,7 @@ public class AddAllCommandTest {
             commandResult.getFeedbackToUser());
         assertTrue(
             model.getFilteredEntryList().stream()
-                .allMatch(model::hasEntry)
+                .allMatch(model::hasListEntry)
         );
 
         // Executing the command again results in no entries added because they are all duplicates
@@ -43,7 +43,7 @@ public class AddAllCommandTest {
             commandResult.getFeedbackToUser());
         assertTrue(
             model.getFilteredEntryList().stream()
-                .allMatch(model::hasEntry)
+                .allMatch(model::hasListEntry)
         );
     }
 
