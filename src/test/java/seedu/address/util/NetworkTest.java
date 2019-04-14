@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Rule;
@@ -86,11 +87,11 @@ public class NetworkTest {
             String httpContent = Network.fetchAsString(
                 TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
             assertTrue(httpContent.length() > 0);
+            assertTrue(httpsContent.contains("<p>It works!</p>"));
 
             String localContent = Network.fetchAsString(
                     MainApp.class.getResource("/NetworkTest/default.html"));
             assertTrue(localContent.length() > 0);
-
             assertEquals(localContent, FILE_TEST_CONTENTS);
         } catch (IOException e) {
             fail("Fetching valid URL failed.");
@@ -107,6 +108,35 @@ public class NetworkTest {
     public void fetchAsString_invalidWebsite_throwsIoexception() throws IOException {
         thrown.expect(IOException.class);
         Network.fetchAsString(TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely"));
+    }
+
+    @Test
+    public void fetchAsOptionalString_returnsStringOptional() {
+        Optional<String> httpsContent = Network.fetchAsOptionalString(
+                TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
+        assertTrue(httpsContent.isPresent());
+        assertTrue(httpsContent.get().contains("<p>It works!</p>"));
+
+        Optional<String> httpContent = Network.fetchAsOptionalString(
+                TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
+        assertTrue(httpContent.isPresent());
+        assertTrue(httpsContent.get().contains("<p>It works!</p>"));
+
+        Optional<String> localContent = Network.fetchAsOptionalString(
+                MainApp.class.getResource("/NetworkTest/default.html"));
+        assertTrue(localContent.isPresent());
+        assertEquals(localContent.get(), FILE_TEST_CONTENTS);
+    }
+
+    @Test
+    public void fetchAsOptionalString_invalidUrl_returnsEmptyOptional() {
+        assertFalse(Network.fetchAsOptionalString(TestUtil.toUrl("https://abc.``ILLEGAL_CHARS.com")).isPresent());
+    }
+
+    @Test
+    public void fetchAsOptionalString_invalidWebsite_returnsEmptyOptional() {
+        assertFalse(Network.fetchAsOptionalString(
+                TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely")).isPresent());
     }
 
     @Test
