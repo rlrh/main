@@ -14,17 +14,21 @@ ifndef::env-github[]
 image::images/Ui.png[width="600"]
 endif::[]
 
-* README helps you read more content you care about anywhere you go.
+* README helps you discover, organize and read more content you care about anywhere you go.
 * *All-in-one*: Follow web feeds and bookmark web pages - save interesting articles, cooking recipes, song lyrics, or anything else you come across while browsing.
 * *Read Anywhere*: Read offline, anywhere and anytime you want - all the links you save are downloaded onto your personal computer so you'll never lose them.
 * *Stay Focused*: Consume more content more comfortably - reading view strips away visual clutter to create a distraction-free reading experience so you can focus on content.
 * *Keep Organized*: Curate your content - organize and categorize your feeds and links and find them quickly with powerful search, sort and filter functionality.
 * *Fast*: Never leave your keyboard - single-shot commands and keyboard shortcuts let you do more in less time.
-* You'll love README if you consume a lot of web content and want to keep up to date with your favourite websites
-  but you're a road warrior who doesn't have regular Internet access.
-  Whether you're heading off on a flight or working in a cafe,
-  README has you covered with all the content you care about in one place.
-* This is an integrated bookmark manager and feed reader desktop application for subscribing to web feeds and saving web pages to read later on your personal computer. It has a GUI but most of the user interactions happen using a CLI (Command Line Interface).
+* You'll love README if you're a heavy consumer of web content.
+  If you find it hard to organise the things you want to read on the Web,
+  or find keeping up to date with your favourite websites inefficient,
+  README is for you - it helps you to read more productively and comfortably.
+  If you're a road warrior who doesn't have regular Internet access,
+  README has you covered whether you're heading off on a flight or working in a cafe,
+  with all the content you need stored on your personal computer.
+* This is an integrated bookmark manager and feed aggregator desktop application for subscribing to web feeds and saving web pages to read later on your personal computer.
+  It has a GUI but most of the user interactions happen using a CLI (Command Line Interface).
 
 == Site Map
 
@@ -39,9 +43,12 @@ endif::[]
 * Some parts of this application were inspired by the excellent http://code.makery.ch/library/javafx-8-tutorial/[Java FX tutorial] by
 _Marco Jakob_.
 * Libraries used:
-  https://github.com/chimbori/crux[Crux],
-  https://jsoup.org/[jsoup],
+  https://github.com/dankito/Readability4J[Readability4J],
   https://rometools.github.io/rome/[ROME],
+  https://jsoup.org/[jsoup],
+  http://cssparser.sourceforge.net/[CSS Parser],
+  https://bitbucket.org/Jerady/fontawesomefx[FontAwesomeFX],
+  https://bootswatch.com/[Bootswatch],
   https://github.com/FasterXML/jackson[Jackson],
   https://github.com/google/guava[Guava],
   https://commons.apache.org/[Apache Commons],
