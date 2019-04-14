@@ -14,10 +14,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.ArchiveAllCommand;
 import seedu.address.logic.commands.ArchiveCommand;
 import seedu.address.logic.commands.ArchivesCommand;
 import seedu.address.logic.commands.BingWebSearchCommand;
-import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.ClearListCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
@@ -30,7 +31,9 @@ import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RefreshEntryCommand;
 import seedu.address.logic.commands.SelectCommand;
+import seedu.address.logic.commands.SubscribeCommand;
 import seedu.address.logic.commands.ViewModeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ModelContext;
@@ -64,6 +67,19 @@ public class EntryBookListParserTest {
         ArchiveCommand command = (ArchiveCommand) parser.parseCommand(
             ArchiveCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
         assertEquals(new ArchiveCommand(INDEX_FIRST_ENTRY), command);
+        command = (ArchiveCommand) parser.parseCommand(
+            ArchiveCommand.COMMAND_ALIAS + " " + INDEX_FIRST_ENTRY.getOneBased());
+        assertEquals(new ArchiveCommand(INDEX_FIRST_ENTRY), command);
+    }
+
+    @Test
+    public void parseCommand_archiveall() throws Exception {
+        ArchiveAllCommand command = (ArchiveAllCommand) parser.parseCommand(
+            ArchiveAllCommand.COMMAND_WORD);
+        assertEquals(new ArchiveAllCommand(), command);
+        command = (ArchiveAllCommand) parser.parseCommand(
+            ArchiveAllCommand.COMMAND_ALIAS);
+        assertEquals(new ArchiveAllCommand(), command);
     }
 
     @Test
@@ -76,8 +92,8 @@ public class EntryBookListParserTest {
 
     @Test
     public void parseCommand_clear() throws Exception {
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
+        assertTrue(parser.parseCommand(ClearListCommand.COMMAND_WORD) instanceof ClearListCommand);
+        assertTrue(parser.parseCommand(ClearListCommand.COMMAND_WORD + " 3") instanceof ClearListCommand);
     }
 
     @Test
@@ -178,6 +194,13 @@ public class EntryBookListParserTest {
     }
 
     @Test
+    public void parseCommand_refresh() throws Exception {
+        RefreshEntryCommand command = (RefreshEntryCommand) parser.parseCommand(
+            RefreshEntryCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
+        assertEquals(new RefreshEntryCommand(INDEX_FIRST_ENTRY), command);
+    }
+
+    @Test
     public void parseCommand_select() throws Exception {
         SelectCommand command = (SelectCommand) parser.parseCommand(
                 SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
@@ -195,6 +218,17 @@ public class EntryBookListParserTest {
         ViewModeCommand aliasCommand = (ViewModeCommand) parser.parseCommand(
                 ViewModeCommand.COMMAND_ALIAS + " " + VALID_VIEWTYPE_READER + STYLE_DESC_DARK);
         assertEquals(new ViewModeCommand(new ViewMode(ViewType.READER, ReaderViewStyle.DARK)), aliasCommand);
+    }
+
+    @Test
+    public void parseCommand_subscribe() throws Exception {
+        Entry entry = new EntryBuilder().build();
+        SubscribeCommand command = (SubscribeCommand) parser.parseCommand(
+            SubscribeCommand.COMMAND_WORD + " " + EntryUtil.getEntryDetails(entry));
+        assertEquals(new SubscribeCommand(entry), command);
+        SubscribeCommand commandAlias = (SubscribeCommand) parser.parseCommand(
+            SubscribeCommand.COMMAND_ALIAS + " " + EntryUtil.getEntryDetails(entry));
+        assertEquals(new SubscribeCommand(entry), commandAlias);
     }
 
     @Test

@@ -4,11 +4,13 @@ import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT
 
 import java.util.regex.Matcher;
 
+import seedu.address.logic.commands.ClearArchivesCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteArchiveEntryCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.SelectCommand;
+import seedu.address.logic.commands.UnarchiveAllCommand;
 import seedu.address.logic.commands.UnarchiveCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ModelContext;
@@ -49,9 +51,16 @@ public class EntryBookArchivesParser extends EntryBookParser {
         case SelectCommand.COMMAND_ALIAS:
             return new SelectCommandParser().parse(arguments);
 
+        case ClearArchivesCommand.COMMAND_WORD:
+            return new ClearArchivesCommand();
+
         case UnarchiveCommand.COMMAND_WORD:
         case UnarchiveCommand.COMMAND_ALIAS:
             return new UnarchiveCommandParser().parse(arguments);
+
+        case UnarchiveAllCommand.COMMAND_WORD:
+        case UnarchiveAllCommand.COMMAND_ALIAS:
+            return new UnarchiveAllCommand();
 
         default:
             return super.parseCommand(userInput, ModelContext.CONTEXT_ARCHIVES);
