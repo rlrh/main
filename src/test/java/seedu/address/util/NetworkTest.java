@@ -112,17 +112,17 @@ public class NetworkTest {
 
     @Test
     public void fetchAsOptionalString_returnsStringOptional() {
-        Optional<String> httpsContent = Network.fetchAsOptionalString(
+        Optional<String> httpsContent = Network.fetchAsStringOptional(
                 TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
         assertTrue(httpsContent.isPresent());
         assertTrue(httpsContent.get().contains("<p>It works!</p>"));
 
-        Optional<String> httpContent = Network.fetchAsOptionalString(
+        Optional<String> httpContent = Network.fetchAsStringOptional(
                 TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
         assertTrue(httpContent.isPresent());
         assertTrue(httpsContent.get().contains("<p>It works!</p>"));
 
-        Optional<String> localContent = Network.fetchAsOptionalString(
+        Optional<String> localContent = Network.fetchAsStringOptional(
                 MainApp.class.getResource("/NetworkTest/default.html"));
         assertTrue(localContent.isPresent());
         assertEquals(localContent.get(), FILE_TEST_CONTENTS);
@@ -130,12 +130,12 @@ public class NetworkTest {
 
     @Test
     public void fetchAsOptionalString_invalidUrl_returnsEmptyOptional() {
-        assertFalse(Network.fetchAsOptionalString(TestUtil.toUrl("https://abc.``ILLEGAL_CHARS.com")).isPresent());
+        assertFalse(Network.fetchAsStringOptional(TestUtil.toUrl("https://abc.``ILLEGAL_CHARS.com")).isPresent());
     }
 
     @Test
     public void fetchAsOptionalString_invalidWebsite_returnsEmptyOptional() {
-        assertFalse(Network.fetchAsOptionalString(
+        assertFalse(Network.fetchAsStringOptional(
                 TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely")).isPresent());
     }
 

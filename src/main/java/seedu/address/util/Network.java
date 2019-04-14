@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -133,10 +132,9 @@ public abstract class Network {
      * @param url URL of resource to fetch
      * @return Optional of HTML content if no exception, else empty Optional
      */
-    public static Optional<String> fetchAsOptionalString(URL url) {
+    public static Optional<String> fetchAsStringOptional(URL url) {
         try {
-            byte[] html = Network.fetchAsBytes(url);
-            return Optional.of(new String(html, StandardCharsets.UTF_8));
+            return Optional.of(fetchAsString(url));
         } catch (Exception e) {
             return Optional.empty();
         }
