@@ -10,14 +10,4 @@ public class DuplicateEntryCommandException extends CommandException {
         super(MESSAGE_DUPLICATE_ENTRY);
     }
 
-    public DuplicateEntryCommandException(String message) {
-        super(message);
-    }
-
-    /**
-     * Constructs a new {@code CommandException} with the specified detail {@code message} and {@code cause}.
-     */
-    public DuplicateEntryCommandException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
