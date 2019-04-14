@@ -4,12 +4,12 @@ import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 
 import org.junit.Test;
 
-import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.ClearListCommand;
 import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.Model;
 import seedu.address.model.ModelContext;
 
-public class ClearCommandSystemTest extends EntryBookSystemTest {
+public class ClearListCommandSystemTest extends EntryBookSystemTest {
 
     @Test
     public void clear() {
@@ -18,11 +18,11 @@ public class ClearCommandSystemTest extends EntryBookSystemTest {
         /* Case: clear non-empty address book, command with leading spaces and trailing alphanumeric characters and
          * spaces -> cleared
          */
-        assertCommandSuccess("   " + ClearCommand.COMMAND_WORD + " ab12   ");
+        assertCommandSuccess("   " + ClearListCommand.COMMAND_WORD + " ab12   ");
         assertSelectedCardUnchanged();
 
         /* Case: clear empty address book -> cleared */
-        assertCommandSuccess(ClearCommand.COMMAND_WORD);
+        assertCommandSuccess(ClearListCommand.COMMAND_WORD);
         assertSelectedCardUnchanged();
 
         /* Case: mixed case command word -> rejected */
@@ -31,7 +31,7 @@ public class ClearCommandSystemTest extends EntryBookSystemTest {
 
     /**
      * Executes {@code command} and verifies that the command box displays an empty string, the result display
-     * box displays {@code ClearCommand#MESSAGE_SUCCESS} and the model related components equal to an empty model.
+     * box displays {@code ClearListCommand#MESSAGE_SUCCESS} and the model related components equal to an empty model.
      * These verifications are done by
      * {@code EntryBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
      * Also verifies that the command box has the default style class and the status bar's sync status changes.
@@ -40,13 +40,13 @@ public class ClearCommandSystemTest extends EntryBookSystemTest {
     private void assertCommandSuccess(String command) {
         Model expectedModel = new ModelManagerStub();
         expectedModel.setArchivesEntryBook(getModel().getArchivesEntryBook());
-        assertCommandSuccess(command, ClearCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(command, ClearListCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
     /**
      * Performs the same verification as {@code assertCommandSuccess(String)} except that the result box displays
      * {@code expectedResultMessage} and the model related components equal to {@code expectedModel}.
-     * @see ClearCommandSystemTest#assertCommandSuccess(String)
+     * @see ClearListCommandSystemTest#assertCommandSuccess(String)
      */
     private void assertCommandSuccess(String command, String expectedResultMessage, Model expectedModel) {
         executeCommand(command);

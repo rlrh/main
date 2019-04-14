@@ -33,7 +33,7 @@ import guitests.guihandles.StatusBarFooterHandle;
 import seedu.address.TestApp;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.ArchivesCommand;
-import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.ClearListCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -207,7 +207,7 @@ public abstract class EntryBookSystemTest {
      * Deletes all entries in the address book.
      */
     protected void deleteAllEntries() {
-        executeCommand(ClearCommand.COMMAND_WORD);
+        executeCommand(ClearListCommand.COMMAND_WORD);
         assertEquals(0, getModel().getListEntryBook().getEntryList().size());
     }
 
