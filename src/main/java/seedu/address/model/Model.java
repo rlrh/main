@@ -193,7 +193,6 @@ public interface Model {
     /** Adds article with {@code articleContent} associated with {@code url}. */
     Optional<Path> addArticle(URL url, byte[] articleContent) throws IOException;
 
-
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();
 
