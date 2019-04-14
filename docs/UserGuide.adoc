@@ -646,7 +646,7 @@ Examples:
 image::ug-archive/ug-archivex-1.png[width="800"]
 
 .Entry is saved in the archives
-image::ug-archive/ug-archivex-2.png[width="250"]
+image::ug-archive/ug-archivex-2.png[width="350"]
 
 ==== Deleting an entry: `delete` `[updated v1.3]`
 
