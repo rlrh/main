@@ -102,21 +102,23 @@ public class StringUtil {
         if (string == null || string.isEmpty() || numOfWords <= 0) {
             return "";
         }
+
         String[] stringArray = string.trim().split("\\s+");
-        List<String> words = Arrays.asList(stringArray);
-        System.out.println(words);
         for (int i = 0; i < stringArray.length; i++) {
             stringArray[i] = stringArray[i].trim();
         }
-        if (numOfWords >= stringArray.length) {
-            return string.trim();
-        }
+
         StringBuilder firstNWords = new StringBuilder();
-        for (int i = 0; i < numOfWords; i++) {
+        for (int i = 0; i < (stringArray.length <= numOfWords ? stringArray.length : numOfWords); i++) {
             firstNWords.append(stringArray[i].trim());
             firstNWords.append(" ");
         }
-        return firstNWords.toString().trim().concat("…");
+
+        if (stringArray.length <= numOfWords) {
+            return firstNWords.toString().trim();
+        } else {
+            return firstNWords.toString().trim().concat("…");
+        }
     }
 
     /**
@@ -126,7 +128,9 @@ public class StringUtil {
      */
     public static long getNumberOfWords(String string) {
         return Stream.ofNullable(string)
-                .flatMap(text -> Arrays.stream(text.split("\\s+")))
+                .map(text -> text.split("\\s+"))
+                .flatMap(Arrays::stream)
+                .filter(word -> word.length() > 0)
                 .count();
     }
 
