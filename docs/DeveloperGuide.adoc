@@ -610,6 +610,28 @@ which has effectively the same benefits as singleton
 after ruling out dependency inversion,
 and the static class pattern is easier to write than the singleton pattern.
 
+==== Asynchronous network calls
+
+As the entirety of addressbook-level4 (AB4) is written synchronously,
+it is a major undertaking to convert AB4 to use asynchronous (async) network calls.
+We did a small scale experiment to see how async might be done by making
+the `select` command download un-downloaded articles in the background.
+
+Here is a sequence diagram showing how the interaction works:
+
+image::SelectRefreshSdForStorage.png[width="800"]
+
+Notice that when returning from the async network call,
+we wrap our code in `Platform.runLater(...)` to ensure that the rest of the
+execution is done on the JavaFX Application Thread.
+This helps to prevent certain race conditions from potentially ruining the model.
+
+However, in the process of implementing this,
+we found that it made testing this unreliable
+as we could no longer be sure when the command has "truly" finished executing.
+Thus, we decided to defer the conversion of the rest of the AB4 to async
+to the v2.0 milestone.
+
 // end::network-design[]
 
 === Offline mode
@@ -860,7 +882,7 @@ See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build auto
 
 === Continuous Integration
 
-We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyor] to perform _Continuous Integration_ on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
+We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyo] to perform _Continuous Integration_ on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
 
 === Coverage Reporting
 
