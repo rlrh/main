@@ -688,6 +688,7 @@ Shares the specified entry through connected social media.
 
 [underline]#Format#: `share INDEX`
 
+// tag::archivecommand[]
 ==== Archiving an entry: `archive` `[since v1.3]`
 
 Moves the specified entry to the archive and removes its downloaded content.
@@ -712,6 +713,7 @@ image::ug-archive/ug-archivex-1.png[width="800"]
 
 .Entry is saved in the archives
 image::ug-archive/ug-archivex-2.png[width="350"]
+// end::archivecommand[]
 
 ==== Deleting an entry: `delete` `[updated v1.3]`
 

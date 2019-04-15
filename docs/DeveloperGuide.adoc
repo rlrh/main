@@ -232,10 +232,18 @@ This section describes some noteworthy details on how certain features are imple
 ==== Current implementation
 
 In order to implement the multiple commands for the application, we require
-a way to disallow certain commands in certain contexts. For example, when the
-user is viewing the archives, he should not be allowed to use the `archive`
-command since every entry listed is already archive. Vice-versa, when a user is
-uses the `list` command, `unarchive` should be registered as an unknown command.
+a way to disallow certain commands in certain contexts.
+
+.Activity diagram for command execution
+image::ContextSpecificCommandActivityDiagram.png[width="800"]
+
+For example, when the user is viewing the archives, commands he enter are parsed in the "Archive context" as shown above.
+If he enters the `archive` command, it will not be recognised as a valid command since every entry shown is already archived.
+
+When a user is uses the `list` command, he switches to the "List context".
+Now, when he enters the `archive` command with valid arguments, it is successfully executed.
+However, the `unarchive` command will now not be recognised.
+
 
 This presents two main problems; the need for separate command parsers for each context,
 and a way for the application to keep track of its context.
@@ -249,7 +257,7 @@ Each Parser class should only parse commands allowed for the context it represen
 
 The following classes were created to support this feature (refer to the class diagram given below).
 
-* `EntryBookParser` — the base abstract class all Parsers extend from
+* `EntryBookParser` — the base abstract class all Parsers extend from.
 * `EntryBookListParser` — Parser for the list context.
 * `EntryBookArchivesParser` —  Parser for the archives context.
 * `EntryBookFeedsParser` —  Parser for the feeds context.
@@ -260,7 +268,7 @@ image::LogicClassDiagram.png[width="800"]
 
 Each Parser class has a `parseCommand(String)` operation that parses the string command.
 `EntryBookParser#parseCommand(String)` is the fallback operation used when any of its children
-fail to parse the command. It parses commands that is common in any context.
+fail to parse the command. It successfully parses commands that is common in any context (e.g. `exit`, `help`).
 
 ===== Context state for Model
 
@@ -282,21 +290,14 @@ Given below is the sequence diagram for the context-switching command, `archives
 .Sequence diagram for the `archives` command.
 image::ChangeContextSdForModel.png[width="800"]
 
-===== Example usage
-
-Given below is an example usage scenario of how the contexts and parsers restrict available commands.
-
 1.  The user launches the application.
 2.  The `ModelManager` will default to `ModelContext.CONTEXT_LIST` context.
-3.  The user executes the `archive` command with correct arguments.
-4.  `EntryBookListParser` parses the command successfully. Command executes
-5.  The user erroneously executes the `unarchive` command.
-6.  `EntryBookListParser` tries to parse it and fails. The application reports it as an "Unknown command".
-7.  The user executes the `archives` command to view his archives.
-8.  In the execution of this `ArchivesCommand`, `model.setContext(ModelContext)` is called to change the
-context to `ModelContext.CONTEXT_ARCHIVES`.
-9.  The user executes the `unarchive` command with correct arguments.
-10.  `EntryBookArchivesParser` parses the command successfully. Command executes
+3.  The user enters the `archives` command.
+4.  The current context, `ModelContext.CONTEXT_LIST`, is retrieved from the `ModelManager`.
+5.  Static parser class `EntryBookListParser` in the `ModelContext.CONTEXT_LIST` is used to parse the command.
+6.  Command is parsed successfully, and `ArchivesCommand` created.
+7.  When the command is executed, context in `ModelManager` is set to `ModelContext.CONTEXT_ARCHIVES`.
+8.  This triggers the `ModelManager` to display the `EntryBook` for the archives, via listeners.
 
 ==== Design Considerations
 * *Alternative 1 (current choice):* Context information is held by `Model`
