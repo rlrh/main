@@ -15,7 +15,6 @@ import static seedu.address.testutil.TypicalEntries.LOCAL_FEED_BASE_URL;
 import static seedu.address.testutil.TypicalEntries.NONEXISTENT_DOMAIN;
 import static seedu.address.testutil.TypicalEntries.NOT_A_FEED_BASE_URL;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class FeedCommandTest {
     }
 
     @Test
-    public void equals() throws MalformedURLException {
+    public void equals() {
         URL firstUrl = KATTIS_FEED_BASE_URL;
         URL secondUrl = ANIMEREVIEW_FEED_BASE_URL;
 
