@@ -158,9 +158,9 @@ An instruction you type in that makes README perform a function.
 . *Entry* +
 The name we use for a single web page that has been added to README.
 Similar to a bookmark, comprising URL, Title, and Description fields among others.
-. *Mode* +
-The Mode determines which Entries are displayed and what Commands are available.
-The four modes are Reading List, Archives, Search Results and Feeds.
+. *Context* +
+The Context determines which Entries are displayed and what Commands are available.
+The four contexts are Reading List, Archives, Search Results and Feeds. Refer to <<Context>> for more information.
 . *Reading List* +
 When you or a web feed that you Subscribe to Adds a new Entry, it is saved to your Reading List.
 Entries in your Reading List have their web pages automatically downloaded onto your personal computer for offline viewing.
@@ -211,6 +211,28 @@ Keep up to date with a website by having any new Entries added to your Reading L
 . *Unsubscribe (from a website's Feed)* +
 Stop adding any new Entries from the website to your Reading List.
 
+[[Context]]
+== Contexts
+
+README supports many features, from bookmarking and archiving to subscribing to feeds and searching for new content. +
+
+To help you navigate these features, we divided these functions into four major partitions, or contexts: +
+
+. Reading List
+. Archives
+. Search Result
+. Feeds
+
+Navigate the contexts via our context-switching commands (see <<Context-switch>>), or by clicking the buttons on the sidebar!
+
+.Use the sidebar buttons to switch contexts
+image::ug-context/ug-contextx.png[width="790"]
+
+[TIP]
+The `Discover` button brings you to the Search Result context!
+
+For more information on what commands and functions are available in each context, refer to the section below!
+
 == Commands
 
 === Command Format
@@ -235,17 +257,18 @@ These commands can be used from any context.
 ==== Custom user command macro: `macro` `[coming in v2.0]`
 Creates macros that compose commands together.
 
-Format: `macro MACRO_NAME NUM_ARGS command1; command2; ... commandN`
+[underline]#Format#: `macro MACRO_NAME NUM_ARGS command1; command2; ... commandN`
 
-Examples:
+[underline]#Examples#:
 
-- `macro archive-tags-which-are-old 1 find t/$1 h/3 days ago; archive all`
+* Adding a macro to quickly archive all entries with given tags.
+. `macro archive-tags-which-are-old 1 find t/$1; archiveall`
 
 ==== Export settings and data to an export file : `export` `[coming in v2.0]`
 
 Exports the feeds, saved data, history, and other preferences to an export file.
 
-Format: `export FILE_PATH`
+[underline]#Format#: `export FILE_PATH`
 
 ****
 - Serializes all the feeds and other preferences to a file.
@@ -253,16 +276,18 @@ Format: `export FILE_PATH`
 - Compresses export folder to a export file.
 ****
 
-Examples:
+[underline]#Examples#:
 
-- `export /home/tt/Desktop` Saves an export file to desktop
-- `export C:\Users\Name\Desktop` Saves an export file to desktop
+* Saves an export file to desktop
+. `export /home/tt/Desktop` +
+* Saves an export file to desktop
+. `export C:\Users\Name\Desktop` +
 
 ==== Import settings and data from an export file : `import` `[coming in v2.0]`
 
 Imports the feeds, saved data, history, and other preferences from an export file.
 
-Format: `import FILE_PATH`
+[underline]#Format#: `import FILE_PATH`
 
 ****
 - Decompresses export file
@@ -270,10 +295,12 @@ Format: `import FILE_PATH`
 - Copies all saved data from the export folder to application database
 ****
 
-Examples:
+[underline]#Examples#:
 
-- `import /home/tt/Desktop/export.jtjr` Saves an export file to desktop
-- `import C:\Users\Name\Desktop\export.jtjr` Saves an export file to desktop
+* Saves an export file to desktop
+. `import /home/tt/Desktop/export.jtjr` +
+* Saves an export file to desktop
+. `import C:\Users\Name\Desktop\export.jtjr` +
 
 [[Add-Command]]
 ==== Adding a single entry: `add` `[updated v1.2]`
@@ -281,35 +308,36 @@ Examples:
 Adds a single entry from a link URL to your reading list.
 Content is automatically downloaded onto your personal computer.
 
-Format: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
+[underline]#Format#: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
 
 [TIP]
 The `Title` and `Description` fields are automatically filled if you do not provide them.
 [TIP]
 A entry can have any number of tags (including 0).
 
-Examples:
+[underline]#Examples#:
 
-- `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
-Adds a single entry with a description and tagged with “Business”
+* Adds a single entry with a description and tagged with “Business”
+. `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
 
 [[Subscribe-command]]
 ==== Subscribing to a feed: `subscribe` `[since v1.3]`
 
-Adds a feed to the manager and subscribes to updates.
-All entries in the subscribed feed will be added to the reading list.
+Adds a feed to the manager and subscribes to updates. +
+All entries in the subscribed feed will be added to the reading list. +
 
-Format: `subscribe l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]..`
+[underline]#Format#: `subscribe l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]..`
 
 [TIP]
 The `Title` and `Description` fields are automatically filled up if you do not provide them.
 [TIP]
-A feed can have any number of tags (including 0)
+A feed can have any number of tags (including 0). +
+Imported entries from the feed will also be tagged with the same tags as the feed `[since v1.4]`
 
-Examples:
+[underline]#Examples#:
 
-- `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` Adds a feed whose name is “Engadget”.
--  The imported entries will be tagged with “Tech” `[coming in v2.0]`
+* Adds a feed whose name is “Engadget”. +
+. `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` +
 
 [WARNING]
 ====
@@ -319,7 +347,7 @@ The application may be unresponsive for a short while when adding entries from a
 ==== Listing entered commands : `history`
 
 Lists all the commands that you have entered in reverse chronological order. +
-Format: `history`
+[underline]#Format#: `history`
 
 [TIP]
 ====
@@ -328,13 +356,13 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 
 ==== Viewing help : `help`
 
-Format: `help`
+[underline]#Format#: `help`
 
 ==== Exiting the program : `exit`
 
 Exits the program.
 
-Format: `exit`
+[underline]#Format#: `exit`
 
 [[Context-switch]]
 // tag::contextcommands[]
@@ -351,7 +379,10 @@ Shows your Reading List of all saved entries.
 This command also enters the Reading List context.
 Refer to <<List-Context>> for available commands in this context.
 
-Format: `list`
+[underline]#Format#: `list`
+
+.Switch to the list context to see all your saved entries
+image::ug-context/ug-contextx-list.png[width="790"]
 
 ==== Showing your Archives: `archives` `[since v1.3]`
 
@@ -360,7 +391,10 @@ Shows your Archives of all archived entries.
 This command also enters the Archives context.
 Refer to <<Archives-Context>> for available commands in this context.
 
-Format: `archives`
+[underline]#Format#: `archives`
+
+.Switch to the archives context to see all your archived entries
+image::ug-context/ug-contextx-archives.png[width="790"]
 
 ==== Searching the web: `bing` `[since v1.3]`
 
@@ -369,11 +403,15 @@ Searches https://www.bing.com[Bing] for entries that you can subsequently add.
 This command also enters the Search Results context.
 Refer to <<Results-Context>> for available commands in this context.
 
-Format: `bing [KEYWORD]...`
+[underline]#Format#: `bing [KEYWORD]...`
 
-Examples:
+[underline]#Examples#:
 
-- `bing Trump` Returns entries containing the `Trump` keyword
+* Bing search the web for entries containing the `Trump` keyword
+. `bing Trump` +
+
+.Bing search for the phrase `Trump`
+image::ug-context/ug-contextx-bing.png[width="790"]
 
 ==== Searching for news: `googlenews` `[since v1.3]`
 
@@ -382,12 +420,17 @@ Searches https://news.google.com/[Google News] for entries that you can subseque
 This command also enters the Search Results context.
 Refer to <<Results-Context>> for available commands in this context.
 
-Format: `googlenews [KEYWORD]...`
+[underline]#Format#: `googlenews [KEYWORD]...`
 
-Examples:
+[underline]#Examples#:
 
-- `googlenews` Returns top stories
-- `googlenews Trump` Returns news articles containing the `Trump` keyword
+* View the current top stories on Google News.
+. `googlenews` +
+* Search for news articles containing the `Trump` keyword
+. `googlenews Trump` +
+
+.View the latest top news on google news using the `googlenews` command
+image::ug-context/ug-contextx-gnews.png[width="790"]
 
 ==== Searching a web feed: `feed` `[since v1.2]`
 
@@ -396,11 +439,15 @@ Opens a web feed at the URL for previewing.
 This command also enters the Search Results context.
 Refer to <<Results-Context>> for available commands in this context.
 
-Format: `feed [FEED URL]`
+[underline]#Format#: `feed [FEED URL]`
 
-Examples:
+[underline]#Examples#:
 
-- `feed https://live.engadget.com/rss.xml` Shows entries from this feed
+* Display entries from this feed +
+. `feed https://live.engadget.com/rss.xml` +
+
+.Open any feed and view its contents as a list of entries
+image::ug-context/ug-contextx-feed.png[width="790"]
 
 ==== Searching a web page for links: `links` `[coming in v2.0]`
 
@@ -409,8 +456,8 @@ Lists all the links in a URL, or the currently displayed web page.
 This command also enters the Search Results context.
 Refer to <<Results-Context>> for available commands in this context.
 
-Format: `links`
-Format: `links [URL]`
+[underline]#Format#: `links`
+[underline]#Format#: `links [URL]`
 
 - `links`
 - `links https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Shows all entries from this article
@@ -422,12 +469,17 @@ Shows a list of feeds being followed.
 This command also enters the Feeds context.
 Refer to <<Feeds-Context>> for available commands in this context.
 
-Format: `feeds`
+[underline]#Format#: `feeds`
 
-Examples:
+[underline]#Examples#:
 
-- `feeds` Lists all feeds
-- `feeds t/Business` Lists all feeds tagged with “Business” `[coming in v2.0]`
+* List all feeds
+. `feeds` +
+* List all feeds tagged with “Business” `[coming in v2.0]`
+. `feeds t/Business` +
+
+.Switch to the feeds context to view your subscribed feeds
+image::ug-context/ug-contextx-feeds.png[width="790"]
 
 ==== Searching online for feeds: `searchfeeds` `[coming in v2.0]`
 
@@ -436,18 +488,20 @@ Searches online for feeds that you can subsequently follow.
 This command also enters the Feed Search context.
 Refer to <<Searchfeeds-Context>> for available commands in this context.
 
-Format: `searchfeeds [KEYWORD]...`
+[underline]#Format#: `searchfeeds [KEYWORD]...`
 
-Examples:
+[underline]#Examples#:
 
-- `searchfeeds` Shows some starter feeds you can add
-- `searchfeeds Tech Business` Searches for `Tech` or `Business` feeds
+* Shows some starter feeds you can add
+. `searchfeeds` +
+* Searches for `Tech` or `Business` feeds
+. `searchfeeds Tech Business` +
 
 ==== Showing reading statistics: `stats` `[coming in v2.0]`
 
 Shows helpful and fun statistics about your reading progress and habits.
 
-Format: `stats`
+[underline]#Format#: `stats`
 
 // end::contextcommands[]
 [[List-Context]]
@@ -459,7 +513,7 @@ To add entries to the reading list, please refer to <<Add-Command>>.
 
 Edits an existing entry in the reading list.
 
-Format: `edit INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [r/READ_STATUS]  [t/TAG]...`
+[underline]#Format#: `edit INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [r/READ_STATUS]  [t/TAG]...`
 
 ****
 - Edits the entry at the specified `INDEX`. The index refers to the index number shown in the displayed entry list. The index *must be a positive integer* 1, 2, 3, ...
@@ -469,19 +523,19 @@ Format: `edit INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [r/READ_STATUS]
 - You can remove all the entry's tags by typing `t/` without specifying any tags after it.
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `edit 1 ti/Software Design Patterns d/Useful for software engineering project.` +
-Edits the title and description of the 1st entry to be `Software Design Patterns` and `Useful for software engineering project.` respectively.
-* `edit 2 t/` +
-Clears all existing tags from the 2nd entry.
+* Edit the title and description of the 1st entry to be `Software Design Patterns` and `Useful for software engineering project.` respectively.
+. `edit 1 ti/Software Design Patterns d/Useful for software engineering project.` +
+* Clear all existing tags from the 2nd entry.
+. `edit 2 t/` +
 
 // tag::findcommand[]
 ==== Finding entries by title: `find`
 
 Finds entries whose fields contain any of the given keyphrases. +
 
-Format: `find [a/SEARCH_PHRASE] [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
+[underline]#Format#: `find [a/SEARCH_PHRASE] [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
 
 ****
 * At least one of the optional fields must be provided.
@@ -494,19 +548,32 @@ Format: `find [a/SEARCH_PHRASE] [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_P
 ** e.g. `find ti/aaa d/bbb l/ccc t/ddd` will match an entry with title `Aaawesome` and an entry with description `abbbA`
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `find ti/Trump` +
-Returns entries with titles containing the phrase `trump` such as `Donald Trump` or `CS average salary trumps again`
-* `find l/cnn t/science` +
-Returns any entries having links containing the phrase `cnn` and entries with the exact tag `science`.
+* Find entries with title containing the phrase `lambda`, or link containing the phrase `github`.
+. `find ti/lambda l/github` +
+
+.Before: Entering the find command with search terms
+image::ug-find/ug-fieldx-1.png[width="800"]
+
+.After: Only entries with title containing `lambda` (red) or link containing `github` (orange) shown
+image::ug-find/ug-fieldx-2.png[width="800"]
+
+* Find entries with the tag `infoTheory`.
+. `find t/infoTheory` +
+
+.Before: Entering the find command for specific tags
+image::ug-find/ug-tagx-1.png[width="800"]
+
+.After: Only entries with tag `infoTheory` shown
+image::ug-find/ug-tagx-2.png[width="800"]
 // end::findcommand[]
 
 ==== Selecting an entry: `select`
 
 Selects the entry identified by the index number used in the displayed entry list for reading.
 
-Format: `select INDEX`
+[underline]#Format#: `select INDEX`
 
 ****
 - Selects the entry at the specified `INDEX` for reading.
@@ -514,35 +581,58 @@ Format: `select INDEX`
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `list` +
-`select 2` +
-Selects the 2nd entry in the reading list for reading.
-* `find Trump` +
-`select 1` +
-Selects the 1st entry in the results of the `find` command for reading.
+* Select the 2nd entry in the reading list for reading.
+. `list` +
+. `select 2` +
+* Select the 1st entry in the find results for the phrase `Trump` in the title.
+. `find ti/Trump` +
+. `select 1` +
 
-==== Changing the view mode: `view` `[since v1.2, updated v1.3]`
+==== Changing the view mode: `view`
 
-Changes the view mode between the original browser or a more comfortable reading experience.
+Changes the view mode between the original browser view or the reader view for a more comfortable reading experience.
 
-Format: `view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]`
+[underline]#Format#: `view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]`
 
-Examples:
+[underline]#Examples#:
 
-* `view browser` +
-Switches to browser view mode
-* `view reader` +
-Switches to a clean and clutter-free reader view mode for a more comfortable reading experience
-* `view reader s/dark` +
-Switches to reader view mode with dark style colour scheme
+* Switch to the browser view mode, which displays web pages as they would appear in a web browser. +
+. `view browser` +
+
+.A web page with many distracting elements like advertisements in browser view
+image::ug-view/BrowserView.png[width="720"]
+
+* Switch to the reader view mode, which strips away clutter and presents content in a clean layout.
+. `view reader` +
+
+.The same web page in reader view - with clutter stripped away more actual content is visible
+image::ug-view/ReaderView.png[width="720"]
+
+* Switch to the reader view mode with sepia colour scheme
+. `view reader s/sepia` +
+
+.A web page in reader view with sepia colour scheme
+image::ug-view/ReaderViewSepia.png[width="720"]
+
+* Switch to the reader view mode with dark colour scheme
+. `view reader s/dark` +
+
+.A web page in reader view with dark colour scheme
+image::ug-view/ReaderViewDark.png[width="720"]
+
+* Switch to the reader view mode with black colour scheme
+. `view reader s/black` +
+
+.A web page in reader view with black colour scheme
+image::ug-view/ReaderViewBlack.png[width="720"]
 
 ==== Refreshing an entry: `refresh` `[since v1.3]`
 
 Refreshes the specified entry to get the latest version of its content.
 
-Format: `refresh INDEX`
+[underline]#Format#: `refresh INDEX`
 
 ****
 * Refreshes the content of the entry at the specified `INDEX`.
@@ -550,17 +640,17 @@ Format: `refresh INDEX`
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `list` +
-`refresh 2` +
-Refreshes the content of the 2nd entry in the reading list.
+* Refresh the content of the 2nd entry in the reading list. +
+. `list` +
+. `refresh 2` +
 
 ==== Marking an entry as read: `read` `[coming in v2.0]`
 
 Marks the specified entry as read.
 
-Format: `read INDEX`
+[underline]#Format#: `read INDEX`
 
 ****
 * Marks as read the entry at the specified `INDEX`.
@@ -568,17 +658,17 @@ Format: `read INDEX`
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `list` +
-`read 2` +
-Marks as read the 2nd entry in the reading list.
+* Mark the 2nd entry in the reading list as read.
+. `list` +
+. `read 2` +
 
 ==== Marking an entry as unread: `unread` `[coming in v2.0]`
 
 Marks the specified entry as unread.
 
-Format: `unread INDEX`
+[underline]#Format#: `unread INDEX`
 
 ****
 * Marks as unread the entry at the specified `INDEX`.
@@ -586,23 +676,23 @@ Format: `unread INDEX`
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `list` +
-`unread 2` +
-Marks as unread the 2nd entry in the reading list.
+* Mark the 2nd entry in the reading list as unread.
+. `list` +
+. `unread 2` +
 
 ==== Sharing an entry: `share` `[coming in v2.0]`
 
 Shares the specified entry through connected social media.
 
-Format: `share INDEX`
+[underline]#Format#: `share INDEX`
 
 ==== Archiving an entry: `archive` `[since v1.3]`
 
 Moves the specified entry to the archive and removes its downloaded content.
 
-Format: `archive INDEX`
+[underline]#Format#: `archive INDEX`
 
 ****
 * Archives the entry at the specified `INDEX`.
@@ -610,17 +700,24 @@ Format: `archive INDEX`
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `list` +
-`archive 2` +
-Moves the 2nd entry in the reading list to the archive and removes its downloaded content.
+* Move the 2nd entry in the reading list to the archives and remove its downloaded content. +
+. `list` +
+. `archive 2` +
+. `archives` +
+
+.Archiving the second entry +
+image::ug-archive/ug-archivex-1.png[width="800"]
+
+.Entry is saved in the archives
+image::ug-archive/ug-archivex-2.png[width="350"]
 
 ==== Deleting an entry: `delete` `[updated v1.3]`
 
 Deletes the specified entry from the reading list and removes its downloaded content.
 
-Format: `delete INDEX`
+[underline]#Format#: `delete INDEX`
 
 ****
 * Deletes the entry at the specified `INDEX`.
@@ -628,20 +725,21 @@ Format: `delete INDEX`
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `list` +
-`delete 2` +
-Deletes the 2nd entry in the reading list.
-* `find Trump` +
-`delete 1` +
-Deletes the 1st entry in the results of the `find` command.
+* Delete the 2nd entry in the reading list.
+. `list` +
+. `delete 2` +
+
+* Delete the 1st entry in the results of the `find` command.
+. `find Trump` +
+. `delete 1` +
 
 ==== Clearing all entries : `clear`
 
 Clears all saved entries from the manager.
 
-Format: `clear`
+[underline]#Format#: `clear`
 
 [[Archives-Context]]
 === `Archives` Context Commands
@@ -650,7 +748,7 @@ Format: `clear`
 
 Moves the specified entry from the archives to the reading list.
 
-Format: `unarchive INDEX`
+[underline]#Format#: `unarchive INDEX`
 
 ****
 * Unarchives the entry at the specified `INDEX`.
@@ -658,17 +756,18 @@ Format: `unarchive INDEX`
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `archives` +
-`unarchive 2` +
-Moves the 2nd entry in the archives to the reading list.
+* Move the 2nd entry in the archives to the reading list and download its webpage content.
+. `archives` +
+. `unarchive 2` +
+. `list`
 
 ==== Deleting an entry: `delete` `[since v1.3]`
 
 Deletes the specified entry from the archives.
 
-Format: `delete INDEX`
+[underline]#Format#: `delete INDEX`
 
 ****
 * Deletes the entry at the specified `INDEX`.
@@ -676,17 +775,17 @@ Format: `delete INDEX`
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `archives` +
-`delete 2` +
-Deletes the 2nd entry in the archives.
+* Delete the 2nd entry in the archives.
+. `archives` +
+. `delete 2` +
 
 ==== Selecting an entry: `select`
 
 Selects the entry identified by the index number used in the displayed entry list for reading.
 
-Format: `select INDEX`
+[underline]#Format#: `select INDEX`
 
 ****
 - Selects the entry at the specified `INDEX` for reading.
@@ -694,16 +793,16 @@ Format: `select INDEX`
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
 
-Examples:
+[underline]#Examples#:
 
-* `archives` +
-`select 2` +
-Selects the 2nd archived entry.
+Select the 2nd archived entry.
+. `archives` +
+. `select 2` +
 
 ==== Clearing all entries : `clear` `[coming in v2.0]`
 Clears all archived entries from the manager.
 
-Format: `clear`
+[underline]#Format#: `clear`
 
 [[Results-Context]]
 === `Search Results` Context Commands
@@ -712,23 +811,25 @@ Format: `clear`
 
 Adds entries from results to the reading list. Content is automatically downloaded to disk.
 
-Format: `addindex INDEX`
+[underline]#Format#: `addindex INDEX`
 
-Format: `addindex INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
+[underline]#Format#: `addindex INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
 
-Format: `addindex all` `[coming in v2.0]`
+[underline]#Format#: `addindex all` `[coming in v2.0]`
 
 
-Examples:
+[underline]#Examples#:
 
-- `addindex 3` Adds the 3rd entry.
-- `addindex 1 d/explains why UX is important t/Business` Adds the 1st entry with a description and tagged with “Business” `[coming in v2.0]`
+* Add the 3rd entry
+. `addindex 3`
+* Add the 1st entry with a description and tagged with “Business” `[coming in v2.0]` +
+. `addindex 1 d/explains why UX is important t/Business`
 
 ==== Selecting an entry: `select` `[since v1.3]`
 
 Selects the entry identified by the index number used in the displayed entry list for viewing.
 
-Format: `select INDEX`
+[underline]#Format#: `select INDEX`
 
 ****
 - Selects the entry and loads the content of the entry at the specified `INDEX`.
@@ -736,24 +837,25 @@ Format: `select INDEX`
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
 
-Examples:
+[underline]#Examples#:
 
-- `select 2` Selects the 2nd entry in the manager
+* Selects the 2nd entry from the search results.
+. `select 2`
 
 ==== Changing the view mode: `view` `[since v1.2, updated v1.3]`
 
 Changes the view mode between the original browser or a more comfortable reading experience.
 
-Format: `view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]`
+[underline]#Format#: `view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]`
 
-Examples:
+[underline]#Examples#:
 
-* `view browser` +
-Switches to browser view mode
-* `view reader` +
-Switches to a clean and clutter-free reader view mode for a more comfortable reading experience
-* `view reader s/dark` +
-Switches to reader view mode with dark style colour scheme
+* Switch to browser view mode.
+. `view browser` +
+* Switch to a clean and clutter-free reader view mode for a more comfortable reading experience.
+. `view reader` +
+* Switch to reader view mode with dark style colour scheme.
+. `view reader s/dark` +
 
 [[Feeds-Context]]
 === `Feeds` Context Commands
@@ -764,14 +866,16 @@ To subscribe to a feed, please refer to [[Subscribe-Command]].
 
 Refreshes a feed.
 
-Format: `refresh INDEX`
+[underline]#Format#: `refresh INDEX`
 
-Format: `refesh all` `[coming in v2.0]`
+[underline]#Format#: `refesh all` `[coming in v2.0]`
 
-Examples:
+[underline]#Examples#:
 
-- `refresh all` Updates entries from all feeds `[coming in v2.0]`
-- `refresh 2` Updates entries from the 2nd feed
+* Update entries from all feeds. `[coming in v2.0]`
+. `refresh all`
+* Update entries from the 2nd feed.
+. `refresh 2`
 
 [WARNING]
 ====
@@ -782,7 +886,7 @@ The application may be unresponsive for a short while when adding entries from a
 
 Selects the feed identified by the index number used in the displayed feed list and displays its entries.
 
-Format: `select INDEX`
+[underline]#Format#: `select INDEX`
 
 ****
 - Selects the feed and displays its entries.
@@ -791,15 +895,16 @@ Format: `select INDEX`
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
 
-Examples:
+[underline]#Examples#:
 
-- `select 2` Selects the 2nd feed in the manager and displays its entries
+* Select the 2nd feed in the manager and displays its entries.
+. `select 2`
 
 ==== Editing a feed: `edit` `[coming in v2.0]`
 
 Edits an existing feed in the manager.
 
-Format: `edit INDEX [u/URL] [n/NAME] [t/TAG]...`
+[underline]#Format#: `edit INDEX [u/URL] [n/NAME] [t/TAG]...`
 
 ****
 - Edits the feed at the specified `INDEX`. The index refers to the index number shown in the displayed feed list. The index *must be a positive integer* 1, 2, 3, ...
@@ -809,16 +914,18 @@ Format: `edit INDEX [u/URL] [n/NAME] [t/TAG]...`
 - You can remove all the feed’s tags by typing `t/` without specifying any tags after it.
 ****
 
-Examples:
+[underline]#Examples#:
 
-- `edit 1 n/HackerNews` Edits the name of the 1st feed
-- `edit 2 t/` Clears all existing tags from the 2nd feed
+* Edit the name of the 1st feed.
+. `edit 1 n/HackerNews`
+* Clear all existing tags from the 2nd feed.
+. `edit 2 t/`
 
 ==== Unsubscribing from a feed: `unsubscribe` `[since v1.3]`
 
 Deletes the specified feeds from the manager and unsubscribes from them, but existing entries obtained from that feed will not be deleted.
 
-Format: `unsubscribe INDEX`
+[underline]#Format#: `unsubscribe INDEX`
 
 ****
 - Deletes the feeds at the specified indices.
@@ -826,16 +933,18 @@ Format: `unsubscribe INDEX`
 - The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+[underline]#Examples#:
 
-- `unsubscribe all` Deletes all shown feeds `[coming in v2.0]`
-- `unsubscribe 2` Deletes the 2nd shown feed
+* Delete all feeds. `[coming in v2.0]`
+. `unsubscribeall`
+* Delete the 2nd shown feed.
+. `unsubscribe 2`
 
 ==== Clearing all feeds : `clear` `[coming in v2.0]`
 
 Clears all followed feeds from the manager.
 
-Format: `clear`
+[underline]#Format#: `clear`
 
 [[Searchfeeds-Context]]
 === `Feeds Search` Context Commands `[coming in v2.0]`
@@ -844,29 +953,32 @@ Format: `clear`
 
 Adds a feed from the search results to the manager and subscribes to updates.
 
-Format: `subscribe INDEX [n/NAME] [t/TAG]...`
+[underline]#Format#: `subscribe INDEX [n/NAME] [t/TAG]...`
 
-Format: `subscribe INDICES [t/TAG]...`
+[underline]#Format#: `subscribe INDICES [t/TAG]...`
 
-Format: `subscribe all`
+[underline]#Format#: `subscribe all`
 
 [TIP]
 ====
 A feed can have any number of tags (including 0)
 ====
 
-Examples:
+[underline]#Examples#:
 
-- `subscribe all` Adds all shown feeds
-- `subscribe 1 n/Engadget t/Tech` Adds a feed whose name is “Engadget” and whose entries will be tagged with `Tech`
-- `subscribe 5-9 t/Work` Adds the 5th to 9th feeds whose entries will be tagged with `Work`
+* Add all shown feeds.
+. `subscribeall`
+* Add a feed whose name is “Engadget” and whose entries will be tagged with `Tech`.
+. `subscribe 1 n/Engadget t/Tech`
+* Add the 5th to 9th feeds whose entries will be tagged with `Work`.
+. `subscribe 5-9 t/Work`
 
 ==== Selecting a feed: `select`
 
 Selects the feed identified by the index number used in the displayed feed list.
 // and displays its entries.
 
-Format: `select INDEX`
+[underline]#Format#: `select INDEX`
 
 ****
 - Selects the feed.
@@ -875,9 +987,10 @@ Format: `select INDEX`
 - The index *must be a positive integer* 1`, 2, 3, ...`
 ****
 
-Examples:
+[underline]#Examples#:
 
-- `select 2` Selects the 2nd feed in the manager.
+* Selects the 2nd feed from the feeds list.
+. `select 2`
 // and displays its entries
 
 == FAQ
