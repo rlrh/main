@@ -70,16 +70,20 @@ Get started quickly by installing README, getting to know its user interface, an
 
 === User Interface
 
-image::Ui.png[width="790"]
+image::UiOverview.png[width="790"]
 
-// TODO: Describe UI sections
+This is how the application should look like!
+
+Enter your commands in the Command Box (B), and the execution result message will appear in the Result Display \(C). +
+
+Browse your saved entries from the List Panel (F), and select any one of them to view it in the Browser Panel (G). +
 
 === Quick Tour of Basic Features
 
-.  Type the command in the command box and press kbd:[Enter] to execute it. +
+.  Type the command in the Command Box and press kbd:[Enter] to execute it. +
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
-.  Try these commands in order!
 
+.  Try these commands in order!
 * *`list`* : shows your reading list of saved links
 * **`select`**`1` : selects the first entry for reading
 * **`add`**`l/https://en.wikipedia.org/wiki/Special:Random` : adds a random Wikipedia page to your reading list
