@@ -56,7 +56,9 @@ public class EntryListPanel extends UiPart<Region> {
         entryList.addListener((ListChangeListener<? super Entry>) change -> {
             while (change.next()) {
                 entryListView.scrollTo(change.getTo());
-                logger.info(String.format("%d %d", change.getFrom(), change.getTo()));
+                logger.info(String.format("List panel contents changed between %d and %d, scrolling to %d",
+                    change.getFrom(), change.getTo(),
+                    change.getTo()));
             }
         });
 
