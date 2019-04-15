@@ -500,6 +500,7 @@ We chose to keep `displayEntryBook` private and only invoke it on model context 
 // end::multiple-entrybooks[]
 
 // tag::network-design[]
+[[network-design]]
 === `Network` design
 
 As many components have to make network calls
@@ -700,13 +701,17 @@ This is described in section xref:network-design[]
 
 ===== Interfacing with BrowserPanel
 
-We need to design this component so that `BrowserPanel` can use it.
-
-TODO: Elaborate
+Currently, `Storage` provides a method that returns an Optional<Path>,
+which will contain the path to the offline copy if it exists.
+This is because `BrowserPanel` works by displaying URLs in a `WebView`.
+Thus, by directly supplying the path,
+it's better than reading the content into a String,
+in case there are any encoding issues.
 
 ===== Storage model
 
-TODO: Talk about storing things to disk, and why this method
+When saving articles to disk, we need to do so in a way that performs well.
+This is described in section xref:Design-Storage[]
 
 === Logging
 
