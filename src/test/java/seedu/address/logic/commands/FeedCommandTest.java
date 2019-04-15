@@ -12,6 +12,7 @@ import static seedu.address.testutil.TypicalEntries.ANIMEREVIEW_FEED_BASE_URL;
 import static seedu.address.testutil.TypicalEntries.BING_33_FEED_BASE_URL;
 import static seedu.address.testutil.TypicalEntries.KATTIS_FEED_BASE_URL;
 import static seedu.address.testutil.TypicalEntries.LOCAL_FEED_BASE_URL;
+import static seedu.address.testutil.TypicalEntries.NONEXISTENT_DOMAIN;
 import static seedu.address.testutil.TypicalEntries.NOT_A_FEED_BASE_URL;
 
 import java.net.MalformedURLException;
@@ -32,8 +33,7 @@ import seedu.address.model.entry.Entry;
 import seedu.address.testutil.TestUtil;
 
 public class FeedCommandTest {
-    private static final URL NOTAWEBSITE_URL =
-        TestUtil.toUrl("https://this.website.does.not.exist.definitely/");
+    private static final URL NOTAWEBSITE_URL = TestUtil.toUrl("https://" + NONEXISTENT_DOMAIN + "/");
 
     private Model model = new ModelManagerStub();
     private CommandHistory commandHistory = new CommandHistory();
@@ -122,7 +122,7 @@ public class FeedCommandTest {
         } catch (CommandException e) {
             assertTrue(e.getMessage().startsWith(MESSAGE_FAILURE_NET_BASE_STRING));
             assertTrue(e.getMessage().contains("UnknownHostException"));
-            assertTrue(e.getMessage().contains("this.website.does.not.exist.definitely"));
+            assertTrue(e.getMessage().contains(NONEXISTENT_DOMAIN));
 
             // Check that the model remains unchanged
             assertEquals(expectedEntryBook, model.getListEntryBook());
