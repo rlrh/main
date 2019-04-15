@@ -429,55 +429,65 @@ The current design makes it very simple for us to add another reader view style,
 // tag::multiple-entrybooks[]
 === Multiple EntryBooks
 
-==== Current implementation
 
-ModelManager used to have only a single `EntryBook`. However, managing feeds and archives subscription system means that we need to deal with multiple `EntryBook`s.
-Since we should only show a single `EntryBook` at a time, our first task is to decouple the `EntryBook` that is displayed from the ones that we will be adding to `ModelManager`.
+ModelManager used to have only a single `EntryBook`. However, managing feeds and archives subscription system means that we need to deal with more than a single `EntryBook`.
+Since we should only show a single `EntryBook` at a time, we have to make model contain multiple entrybooks.
 
-===== Decoupling displayed `EntryBook`
+==== Multiple EntryBooks
 
-Decoupling the displayed `EntryBook` means that the following additional methods are implemented
-
-* `ModelManager#displayEntryBook(EntryBook)` — shows the `EntryBook` provided in the user interface
-
-Given below is an example usage scenario and how this mechanism behaves.
-
-1.  The user launches the application. The `ModelManager` will default to displaying the `EntryBook` which corresponds to the default (list) context.
-2.  The user executes the `feed [valid_feed_url]` command to view a web feed. The `feed` command fetches and parses the web feed into an `EntryBook` which is used for `ModelManager#setSearchEntryBook` to replace the search context `EntryBook`.
-3. It then sets the `ModelContext` to `search`. In the `search` context the `EntryBook` is read-only, and you can import links from the currently displayed `EntryBook` into the `list` context `EntryBook`.
-
-
-==== Design Considerations
-
-===== Decoupling displayed `EntryBook`
-
-We decided to have a `SimpleListProperty<Entry>` called `displayedEntryList` which is used to provide the base list for `filteredEntries`.
-The implementation of `ModelManager#displayEntryBook` will then just be a `displayedEntryList.setValue`. However we decided to keep `displayEntryBook` private and not expose it via the `Model` interface.
-
-* *Alternative 1 (current choice):* Keep `displayEntryBook` private,
-it only gets called when `ModelContext` changes.
-** Pros: more defensive -- a rogue command cannot easily display junk.
-** Cons: In the context of the `feed` command, where the `EntryBook` used is in fact ephemeral. When the `ModelContext` switches away from `search`, the ephemeral `EntryBook` still lives in `ModelManager`, using extra memory.
-* *Alternative 2:* Add `displayEntryBook` under the `Model` interface so that other classes (such as various commands) could use it.
-** Pros: easier implementation for some commands, slightly reduced memory usage.
-** Cons: decoupling displayed `EntryBook` from `ModelContext` could allow buggy commands to place `ModelManager` in an inconsistent state.
-
-We chose alternative 1 since it is more robust and only entails a slight additional cognitive load.
-
-===== Multiple EntryBooks
+[[Current-ModelManager-Diagram]]
+.Class diagram illustrating a model supporting multiple EntryBooks.
+image::MultipleEntryBooksChosenApproach.png[width=293]
 
 To support multiple EntryBooks, we decided to have multiple differently named EntryBooks each with their own accessors.
 
-* *Alternative 1 (current choice):* multiple differently named `EntryBook`’s with differently-named accessors each
+===== Design considerations
+
+* *Current choice:* multiple differently named `EntryBook`’s with differently-named accessors each
 ** Pros: easy to implement
 ** Cons: accessors are basically duplicated code
-* *Alternative 2:* Each `EntryBook` belongs to a `ModelContext`,
+
+.Class diagram of alternative approach for supporting multiple EntryBooks.
+image::MultipleEntryBooksAlternativeApproach.png[width=399]
+
+* *Alternative:* Each `EntryBook` belongs to a `ModelContext`,
 modifiers overloaded to be context-sensitive
 ** Pros: less code duplication due to polymorphism
-** Cons: writing to an `EntryBook` that does not belong the current
-state change will either involve an extra accessor (basically
-Alternative 1), or changing state (specifically `Model#setContext`),
-which is not robust.
+** Cons: writing to an `EntryBook` that does not belong the current state will either involve an extra accessor (basically Alternative 1), or changing state (specifically `Model#setContext`), which is not robust.
+
+We chose to implement multiple EntryBooks in parallel as it turned out that the different EntryBooks demanded slightly different behaviour, and a more polymorphic approach like that given in the alternative might overcomplicate the implementation.
+
+==== Decoupling displayed `EntryBook`
+
+Another task is to decouple the `EntryBook` that is displayed from the ones that we added  to `ModelManager`.
+Decoupling the displayed `EntryBook` means that the following additional methods are implemented
+
+* `ModelManager#displayEntryBook(EntryBook)` — shows the `EntryBook` provided in the user interface.
+
+Given below is an example usage scenario and how this mechanism behaves.
+
+.Sequence diagram illustrating how `displayEntryBook` is used.
+image::DisplayEntryBookSequenceDiagram.png[width="800"]
+
+1.  The user launches the application. The `ModelManager` will default to displaying the `EntryBook` which corresponds to the default (list) context.
+2.  The user executes the `feed [valid_feed_url]` command to view a web feed. The `feed` command fetches and parses the web feed into an `EntryBook` which is used for `ModelManager#setSearchEntryBook` to replace the search context `EntryBook`.
+3. It then sets the `ModelContext` to `CONTEXT_SEARCH`. In the search context the `EntryBook` is read-only, and you can import links from the currently displayed `EntryBook` into the `list` context `EntryBook`.
+
+
+===== Design Considerations
+
+With reference to <<Current-ModelManager-Diagram>>, we decided to have a `SimpleListProperty<Entry>` called `displayedEntryList` which is used to provide the base list for `filteredEntries`.
+The implementation of `ModelManager#displayEntryBook` will then just be a `displayedEntryList.setValue`. However we decided to keep `displayEntryBook` a private method  and not expose it via the `Model` interface.
+
+* *Current choice:* Keep `displayEntryBook` private,
+it only gets called when `ModelContext` changes.
+** Pros: more defensive -- a rogue command cannot easily display junk.
+** Cons: In the context of the `feed` command, where the `EntryBook` used is in fact ephemeral. When the `ModelContext` switches away from `search`, the ephemeral `EntryBook` still lives in `ModelManager`, using extra memory.
+* *Alternative:* Promote `displayEntryBook` to `Model` interface so that other classes (such as various commands) could use it.
+** Pros: easier implementation for some commands, slightly reduced memory usage.
+** Cons: decoupling displayed `EntryBook` from `ModelContext` could allow buggy commands to place `ModelManager` in an inconsistent state.
+
+We chose to keep `displayEntryBook` private and only invoke it on model context change since doing so is more robust and only entails a slight additional cognitive load.
 // end::multiple-entrybooks[]
 
 // tag::network-design[]

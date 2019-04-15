@@ -9,23 +9,32 @@
 
 README is an integrated link manager and web feed aggregator application.
 
+RSS and Atom are common ways of allowing an user to access updates to online content.
+When supported by websites, subscribing to the feed removes the need for users to manually check the website in question, offering greater convenience to the user.
+
 == Summary of contributions
 
-=== *Major enhancement*: I added web syndication(RSS/Atom) support in README.
-** Background: RSS and Atom achieve the purpose of web syndication. They are well-established Web syndication formats which lets users to subscribe to content sources.
+=== *Primary enhancement*: I added web syndication(RSS/Atom) support in README.
 ** Justification: With support for web syndication the user can subscribe to sources of content that they care about, and have the content delivered to them.
 ** Highlights: This enhancement requires significant architectural changes in the base link management application. It required an in-depth analysis of design considerations.
 ** Credits: The https://rometools.github.io/rome/[ROME] library is used to the heavy lifting in parsing web feeds.
 
-=== *Minor enhancement*: added a counter in status bar showing how many entries are listed
-** Quality-of-life improvement.
+=== *Minor enhancements*
+* I added a counter in status bar showing how many entries are listed, which
+is a quality-of-life improvement.
 
 === *Code contributed*
-** https://github.com/CS2103-AY1819S2-W10-1/main/pull/33[Initial RSS support]
+** https://nus-cs2103-ay1819s2.github.io/cs2103-dashboard/#=undefined&search=qjqqyy[RepoSense]
+** Initial RSS support https://github.com/CS2103-AY1819S2-W10-1/main/pull/33[#33]
 ** Architectural changes
 https://github.com/CS2103-AY1819S2-W10-1/main/pull/80[#80]
 https://github.com/CS2103-AY1819S2-W10-1/main/pull/107[#107]
-** https://github.com/CS2103-AY1819S2-W10-1/main/pull/114[Feeds management]
+** Feeds subscription https://github.com/CS2103-AY1819S2-W10-1/main/pull/114[#114]
+https://github.com/CS2103-AY1819S2-W10-1/main/pull/173[#173]
+https://github.com/CS2103-AY1819S2-W10-1/main/pull/183[#183]
+** Add counter to status bar
+https://github.com/CS2103-AY1819S2-W10-1/main/pull/15[#15]
+** Staging usage of GitHub pages for network tests https://github.com/CS2103-AY1819S2-W10-1/main/pull/64[#64]
 
 === *Other contributions*:
 
@@ -36,11 +45,12 @@ https://github.com/CS2103-AY1819S2-W10-1/main/pull/107[#107]
 https://github.com/CS2103-AY1819S2-W10-1/main/pull/37[#37]
 https://github.com/CS2103-AY1819S2-W10-1/main/pull/77[#77]
 https://github.com/CS2103-AY1819S2-W10-1/main/pull/106[#106]
-** Non-trivial contributions to forum discussions:
-https://github.com/nus-cs2103-AY1819S2/forum/issues/5[#5]
-https://github.com/nus-cs2103-AY1819S2/forum/issues/47[#47]
-https://github.com/nus-cs2103-AY1819S2/forum/issues/51[#51]
-https://github.com/nus-cs2103-AY1819S2/forum/issues/72[#72]
+** Contributions to forum discussions:
+https://github.com/nus-cs2103-AY1819S2/forum/issues/5[#5] #47 #51 #72.
+Highlights include
+*** Linking to exact line of relevant code in https://github.com/nus-cs2103-AY1819S2/forum/issues/47#issuecomment-471155263[#47]
+*** Linking to exact section of relevant docs in https://github.com/nus-cs2103-AY1819S2/forum/issues/51#issuecomment-471178524[#51]
+*** Bisecting the exact commit which broke my peer's code in https://github.com/nus-cs2103-AY1819S2/forum/issues/72#issuecomment-478489389[#72]
 ** Tools:
 *** Integrated third party library (ROME) to the project.
 https://github.com/CS2103-AY1819S2-W10-1/main/pull/33[#33]
