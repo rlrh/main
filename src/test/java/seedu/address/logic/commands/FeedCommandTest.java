@@ -1,25 +1,30 @@
 package seedu.address.logic.commands;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_NET;
+import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_NET_BASE_STRING;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_XML;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_SUCCESS;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
 import seedu.address.MainApp;
 import seedu.address.commons.util.FeedUtil;
 import seedu.address.logic.CommandHistory;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.mocks.ModelManagerStub;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelContext;
+import seedu.address.model.entry.Entry;
 import seedu.address.testutil.TestUtil;
 
 public class FeedCommandTest {
@@ -103,10 +108,34 @@ public class FeedCommandTest {
 
     @Test
     public void execute_urlIsNotAWebsite_commandFails() {
-        String expectedMessage = String.format(MESSAGE_FAILURE_NET,
-            "java.net.UnknownHostException: this.website.does.not.exist.definitely: Name or service not known");
         FeedCommand command = new FeedCommand(NOTAWEBSITE_URL);
 
-        assertCommandFailure(command, model, commandHistory, expectedMessage);
+        // we are unable to defensively copy the model for comparison later, so we can
+        // only do so by copying its components.
+        EntryBook expectedEntryBook = new EntryBook(model.getListEntryBook());
+        EntryBook expectedArchives = new EntryBook(model.getArchivesEntryBook());
+        EntryBook expectedFeeds = new EntryBook(model.getFeedsEntryBook());
+        List<Entry> expectedFilteredList = new ArrayList<>(model.getFilteredEntryList());
+        Entry expectedSelectedEntry = model.getSelectedEntry();
+
+        CommandHistory expectedCommandHistory = new CommandHistory(commandHistory);
+
+        try {
+            command.execute(model, commandHistory);
+            throw new AssertionError("The expected CommandException was not thrown.");
+        } catch (CommandException e) {
+            assertTrue(e.getMessage().startsWith(MESSAGE_FAILURE_NET_BASE_STRING));
+            assertTrue(e.getMessage().contains("UnknownHostException"));
+            assertTrue(e.getMessage().contains("this.website.does.not.exist.definitely"));
+
+            // Check that the model remains unchanged
+            assertEquals(expectedEntryBook, model.getListEntryBook());
+            assertEquals(expectedArchives, model.getArchivesEntryBook());
+            assertEquals(expectedFeeds, model.getFeedsEntryBook());
+            assertEquals(expectedFilteredList, model.getFilteredEntryList());
+            assertEquals(expectedSelectedEntry, model.getSelectedEntry());
+
+            assertEquals(expectedCommandHistory, commandHistory);
+        }
     }
 }
