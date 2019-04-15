@@ -73,6 +73,11 @@ public interface Model {
     Path getArticleDataDirectoryPath();
 
     /**
+     * Returns true if the model has an offline copy of the given link.
+     */
+    boolean hasOfflineCopy(URL url);
+
+    /**
      * Returns the link to the offline copy of the url given if it exists.
      */
     Optional<URL> getOfflineLink(URL url);
@@ -156,6 +161,11 @@ public interface Model {
      */
     void clearArchivesEntryBook();
 
+    /**
+     * Replaces feeds entry book data with the data in {@code feedsEntryBook}.
+     */
+    void setFeedsEntryBook(ReadOnlyEntryBook feedsEntryBook);
+
     /** Returns the feeds entry book. */
     ReadOnlyEntryBook getFeedsEntryBook();
 
@@ -182,7 +192,6 @@ public interface Model {
 
     /** Adds article with {@code articleContent} associated with {@code url}. */
     Optional<Path> addArticle(URL url, byte[] articleContent) throws IOException;
-
 
     /** Returns an unmodifiable view of the filtered entry list */
     ObservableList<Entry> getFilteredEntryList();
