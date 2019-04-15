@@ -43,6 +43,7 @@ import seedu.address.logic.commands.exceptions.DuplicateEntryCommandException;
 import seedu.address.model.EntryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelContext;
+import seedu.address.model.OfflineMode;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.entry.Entry;
@@ -302,6 +303,11 @@ public class AddCommandTest {
 
         @Override
         public void refreshEntry(Entry entry, byte[] articleContent) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setOfflineMode(OfflineMode isEnabled) {
             throw new AssertionError("This method should not be called.");
         }
 

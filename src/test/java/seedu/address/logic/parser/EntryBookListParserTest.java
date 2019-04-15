@@ -31,6 +31,7 @@ import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.OfflineModeCommand;
 import seedu.address.logic.commands.RefreshAllEntriesCommand;
 import seedu.address.logic.commands.RefreshEntryCommand;
 import seedu.address.logic.commands.SelectCommand;
@@ -120,6 +121,12 @@ public class EntryBookListParserTest {
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
+    }
+
+    @Test
+    public void parseCommand_offline() throws Exception {
+        assertTrue(parser.parseCommand(OfflineModeCommand.COMMAND_WORD + " enable") instanceof OfflineModeCommand);
+        assertTrue(parser.parseCommand(OfflineModeCommand.COMMAND_WORD + " disable") instanceof OfflineModeCommand);
     }
 
     @Test
