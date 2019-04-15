@@ -1270,12 +1270,12 @@ Selects the feed identified by the index number used in the displayed feed list.
 |`exit` | Exits the application.
 |=======================================================================
 
-=== List Context
+=== Reading List Context
 [width="100%",cols="20%,<30%",options="header",]
 |=======================================================================
 |Command | Summary
 |`list` | Switches to list context.
-|`edit i/INDEX [ti/TITLE] [d/DESCRIPTION] [t/TAG]... | Edits the entry specified by the index.
+|`edit i/INDEX [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Edits the entry specified by the index.
 |`find [l/URL] [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Finds entries matching the given arguments.
 |`select INDEX` | Selects the entry specified by the index for viewing.
 |`refresh INDEX` | Re-downloads the webpage content of the entry specified by the index.
@@ -1293,14 +1293,13 @@ Selects the feed identified by the index number used in the displayed feed list.
 |=======================================================================
 |Command | Summary
 |`archives` | Switches to archives context.
+|`find [l/URL] [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Finds entries matching the given arguments.
 |`select INDEX` | Selects the entry specified by the index for viewing.
 |`unarchive INDEX` | Unarchives the entry specified by the index, adding it back to the reading list.
 |`unarchiveall` | Unarchives all displayed entries, adding them back to the reading list.
 |`delete INDEX` | Deletes the entry specified by the index.
 |`deleteall` | Deletes all displayed entries.
 |`clear` | Deletes all entries.
-|`find [l/URL] [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Finds entries matching the given arguments.
-[width="100%",cols="20%,<30%",options="header",]
 |=======================================================================
 
 === Search Result Context
