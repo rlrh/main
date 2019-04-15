@@ -667,9 +667,39 @@ Refreshes the specified entry to get the latest version of its content.
 // end::refreshcommand[]
 
 // tag::refreshallcommand[]
-==== Refreshing all entries: `refreshall`
+==== Refreshing all displayed entries: `refreshall`
 
-Dummy content
+Refreshes all currently displayed entries.
+
+[underline]#Format#: `refreshall`
+
+****
+* Refreshes only entries that are currently displayed.
+****
+
+[WARNING]
+====
+The application may be unresponsive for a short while when refreshing a large number of entries.
+====
+
+[TIP]
+====
+You may refer to the xref:archiveallcommand[`archiveall` command]
+for an example on how this command may be combined
+with other commands such as xref:findcommand[`find`] to be more useful.
+====
+
+[underline]#Examples#:
+
+* Refresh *all* entries in the reading list. (Will take a long time if you have a large reading list!)
+. `list` +
+. `refreshall`
+
+* Refresh all entries tagged “infoTheory”
+. `list` +
+. `find t/infoTheory` +
+. `refreshall` +
+. `list`
 
 // end::refreshallcommand[]
 
@@ -742,6 +772,40 @@ image::ug-archive/ug-archivex-1.png[width="800"]
 image::ug-archive/ug-archivex-2.png[width="350"]
 // end::archivecommand[]
 
+// tag::archiveallcommand[]
+==== Archiving all displayed entries: `archiveall`
+
+If you want to archive many entries at the same time,
+you can make use of this command to move all the currently displayed entries to the archive,
+removing all entries' downloaded content at the same time.
+By using a xref:findcommand[`find` command] first before executing `archiveall`,
+you can archive parts of your reading list by a search criteria.
+
+[underline]#Format#: `archiveall`
+
+****
+* Archives only entries that are currently displayed.
+****
+
+[underline]#Examples#:
+
+* Archive *all* entries in the reading list
+. `list` +
+. `archiveall`
+
+* Archive all entries tagged “infoTheory”
+. `list` +
+. `find t/infoTheory` +
+. `archiveall` +
+. `list`
+
+.Filtering then archiving all infoTheory entries +
+image::find_archiveall.png[width="1200"]
+
+.Reading list now no longer has any infoTheory entries
+image::find_archiveall_list.png[width="290"]
+// end::archiveallcommand[]
+
 ==== Deleting an entry: `delete`
 
 Deletes the specified entry from the reading list and removes its downloaded content.
@@ -763,6 +827,44 @@ Deletes the specified entry from the reading list and removes its downloaded con
 * Delete the 1st entry in the results of the `find` command.
 . `find Trump` +
 . `delete 1` +
+
+// tag::deleteallcommand[]
+==== Deleting all displayed entries: `deleteall`
+
+Deletes all currently displayed entries from the reading list, and removes the entries' downloaded content.
+
+// tag::deleteallcommandcontents[]
+[underline]#Format#: `deleteall`
+
+****
+* Deletes only the entries that are currently displayed
+****
+
+[WARNING]
+====
+This operation is IRREVERSIBLE! Please take care not to accidentally delete entries you may wish to keep.
+====
+
+[TIP]
+====
+You may refer to the xref:archiveallcommand[`archiveall` command]
+for an example on how this command may be combined
+with other commands such as xref:findcommand[`find`] to be more useful.
+====
+
+[underline]#Examples#:
+
+* Delete all entries in the reading list.
+. `list` +
+. `deleteall`
+
+* Delete all entries whose titles contain “Trump”.
+. `list` +
+. `find ti/Trump` +
+. `deleteall`
+
+// end::deleteallcommandcontents[]
+// end::deleteallcommand[]
 
 ==== Clearing all entries : `clear`
 
@@ -810,6 +912,15 @@ Deletes the specified entry from the archives.
 . `archives` +
 . `delete 2` +
 
+// tag::archivesdeleteallcommand[]
+==== Deleting all displayed entries: `deleteall`
+
+Deletes all currently displayed entries from the archives.
+
+include::./UserGuide.adoc[tag=deleteallcommandcontents]
+
+// end::archivesdeleteallcommand[]
+
 ==== Selecting an entry: `select`
 
 Selects the entry identified by the index number used in the displayed entry list for reading.
@@ -828,7 +939,7 @@ Select the 2nd archived entry.
 . `archives` +
 . `select 2` +
 
-==== Clearing all entries : `clear` `[coming in v2.0]`
+==== Clearing all entries : `clear`
 Clears all archived entries from the manager.
 
 [underline]#Format#: `clear`
@@ -844,15 +955,48 @@ Adds entries from results to the reading list. Content is automatically download
 
 [underline]#Format#: `addindex INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
 
-[underline]#Format#: `addindex all` `[coming in v2.0]`
-
-
 [underline]#Examples#:
 
 * Add the 3rd entry
 . `addindex 3`
 * Add the 1st entry with a description and tagged with “Business” `[coming in v2.0]` +
 . `addindex 1 d/explains why UX is important t/Business`
+
+// tag::addallcommand[]
+==== Adding all displayed entries: `addall`
+
+Adds all currently displayed entries from results to the reading list. Content is automatically downloaded to disk.
+
+[underline]#Format#: `addall`
+
+****
+* Adds only the entries that are currently displayed
+****
+
+[WARNING]
+====
+The application may be unresponsive for a short while when adding entries from a large search result.
+====
+
+[TIP]
+====
+You may refer to the xref:archiveallcommand[`archiveall` command]
+for an example on how this command may be combined
+with other commands such as xref:findcommand[`find`] to be more useful.
+====
+
+[underline]#Examples#:
+
+* Add all entries that result from searching "Lambda Calculus" on bing.
+. `bing Lambda Calculus` +
+. `addall`
+
+* Add all entries that result from searching "Lambda Calculus" on bing, but only those with a .org domain.
+. `bing Lambda Calculus` +
+. `find l/.org` +
+. `addall`
+
+// end::addallcommand[]
 
 ==== Selecting an entry: `select`
 
@@ -911,6 +1055,42 @@ Refreshes a feed.
 The application may be unresponsive for a short while when adding entries from a large feed.
 ====
 
+// tag::refreshallfeedscommand[]
+==== Updating entries from all currently displayed feeds: `addall`
+
+Refreshes all currently displayed feeds.
+
+[underline]#Format#: `refreshall`
+
+****
+* Refreshes only the feeds that are currently displayed
+****
+
+[WARNING]
+====
+The application may be unresponsive for a short while when adding entries from a large feed, or when refreshing many feeds.
+====
+
+[TIP]
+====
+You may refer to the xref:archiveallcommand[`archiveall` command]
+for an example on how this command may be combined
+with other commands such as xref:findcommand[`find`] to be more useful.
+====
+
+[underline]#Examples#:
+
+* Refresh all subscribed feeds
+. `feeds` +
+. `refreshall`
+
+* Refresh all news feeds
+. `feeds` +
+. `find ti/News` +
+. `refreshall`
+
+// end::refreshallfeedscommand[]
+
 ==== Selecting a feed: `select`
 
 Selects the feed identified by the index number used in the displayed feed list and displays its entries.
@@ -964,8 +1144,6 @@ Deletes the specified feeds from the manager and unsubscribes from them, but exi
 
 [underline]#Examples#:
 
-* Delete all feeds. `[coming in v2.0]`
-. `unsubscribeall`
 * Delete the 2nd shown feed.
 . `unsubscribe 2`
 
