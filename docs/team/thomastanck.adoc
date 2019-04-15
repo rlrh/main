@@ -1,61 +1,148 @@
-= Thomas Tan - Project Portfolio
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: README
+= Thomas Tan - Project Portfolio
 
----
+Good day!
+I am a Computer Science undergraduate
+at the National University of Singapore (NUS).
+This document showcases the contributions I made for a group term project.
+I hope this shows you my abilities engineering software!
+
+== PROJECT: README
 
 == Overview
 
-README is a desktop bookmark manager/rss feed reader application.
+README is a desktop bookmark manager/RSS feed reader application.
+README lets users store webpages for offline reading,
+in addition to subscribing to feeds
+so that their favourite content is automatically downloaded and delivered to them.
+
+When looking at many other applications on the market for inspiration,
+we found a big hole.
+Most other applications do not support reading your saved links while offline,
+and as such we decided it was a critical feature,
+and I was placed in charge of this feature.
+However, this requires integrating `Storage` and `Network` together,
+which lie on opposite ends of the design.
+This makes it a technically challenging feature,
+interacting with most other components such as the `Model`.
+
+Thus, the bulk of my contributions lie in figuring out
+a good way to architect the overall design
+so that it is easy to support this feature.
 
 == Summary of contributions
 
-* *Major enhancement*: added *support for offline mode*
-** What it does: allows the user to continue using the application even while offline.
-** Justification: This feature improves the product significantly because being able to read articles offline allows users to read more seamlessly while also being a selling point that other competing products do not support.
-** Highlights: This enhancement needed to support saving many possibly large articles on the disk without keeping them in memory. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands as well as a large scale refactor of the architecture itself.
-** Credits: .
+|===
+|_Given below are contributions that I made to this application._
+|===
 
-* *Minor enhancement*:
+=== *Major enhancement*: Offline mode
 
-* *Code contributed*:
+I implemented a local data store that stores articles so that they can be retrieved later even while offline.
 
-* *Other contributions*:
+** Justification: Dramatically makes the application more useful
+                  for users who are often on the go,
+                  without an internet connection.
+** Highlights:
+*** Automatic download: A copy of every article saved to the reading list
+                        is saved so it can be viewed offline.
+*** Refresh command: When pages get out of date,
+                     the user can execute a command
+                     to download an updated copy.
+*** Absolute link conversion: Ensures most pages will continue to work properly
+                              even while offline by converting relative links
+                              that stop working when viewing pages offline,
+                              to absolute links that work everywhere.
 
-** Project management:
-*** Set up issue tracker
-*** Set up Travis, AppVeyor, Codacy, and Coveralls status checks.
-*** Set up Branch Protection on `master`
-** Enhancements to existing features:
-*** .
-** Documentation:
-*** .
-** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com/CS2103-AY1819S2-W10-1/main/pull/9[#9]
-*** Contributed to forum discussions (examples: )
-*** Reported bugs and suggestions for other teams in the class (examples: https://github.com/nus-cs2103-AY1819S2/forum/issues/49#issuecomment-471154226[1])
-** Tools:
-*** Integrated a third party tool (PlantUML) to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/18[#18])
+==== *Minor enhancement*: Adding `all` variants of commands
+
+Many commands like `refresh` and `archive` (by Jonathan)
+only operate on single entries.
+I added new commands such as `refreshall` and `archiveall`
+that operate on all currently displayed entries for ease of use.
+
+=== *Code contributed*:
+
+For an overview of all of code contributed by me, refer to the https://nus-cs2103-ay1819s2.github.io/cs2103-dashboard/#=undefined&search=thomastanck[CS2103T module dashboard]!
+
+Otherwise, refer to the links below to relevant pull requests for each enhancement.
+Some enhancements are done over several pull requests, so all relevant ones are linked.
+
+* Offline mode
+** Network:
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/35[PR #35],
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/36[PR #36],
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/81[PR #81],
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/203[PR #203]
+** Absolute link conversion:
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/102[PR #102],
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/186[PR #186]
+** Automatic download:
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/39[PR #39],
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/113[PR #113]
+** Refresh:
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/133[PR #133],
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/170[PR #170]
+* `all` commands:
+     https://github.com/CS2103-AY1819S2-W10-1/main/pull/190[PR #190]
+
+==== *Other contributions*:
+
+* Project management:
+** Set up issue tracker
+** Set up Travis, AppVeyor, Codacy, and Coveralls status checks.
+** Set up Branch Protection on `master`
+* Enhancements to existing features:
+** Automatically scroll the list panel to the location of the added entry when adding links.
+** Automatically fill in a default tag when subscribing to a feed.
+* Community:
+** Regularly review pull requests (PR).
+   While we mainly review through our private chat,
+   some are done directly on Github.
+   See https://github.com/CS2103-AY1819S2-W10-1/main/pulls?utf8=%E2%9C%93&q=is%3Apr+reviewed-by%3Athomastanck[here] for the complete list.
+** Otherwise, look below for PRs with non-trivial comments!
+*** https://github.com/CS2103-AY1819S2-W10-1/main/pull/44[#44]
+    https://github.com/CS2103-AY1819S2-W10-1/main/pull/184[#184]
+** Reported bugs and gave suggestions for another group's project, https://github.com/CS2103-AY1819S2-W13-3/main[The Infinity Machine]:
+*** https://github.com/CS2103-AY1819S2-W13-3/main/issues/161[#161]
+    https://github.com/CS2103-AY1819S2-W13-3/main/issues/163[#163]
+    https://github.com/CS2103-AY1819S2-W13-3/main/issues/166[#166]
+    https://github.com/CS2103-AY1819S2-W13-3/main/issues/168[#168]
+    https://github.com/CS2103-AY1819S2-W13-3/main/issues/171[#171]
+    https://github.com/CS2103-AY1819S2-W13-3/main/issues/172[#172]
+    https://github.com/CS2103-AY1819S2-W13-3/main/issues/177[#177]
+* Tools:
+** Integrated a third party tool (PlantUML) to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/18[#18])
 
 == Contributions to the User Guide
 
 |===
-|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|_Given below are sections I contributed to the User Guide.
+  They showcase my ability to write documentation targeting end-users._
 |===
 
-// include::../UserGuide.adoc[tag=undoredo]
+---
 
-// include::../UserGuide.adoc[tag=dataencryption]
+include::../UserGuide.adoc[tag=archiveallcommand]
+
+include::../UserGuide.adoc[tag=refreshcommand]
+
+---
+
+// include::../UserGuide.adoc[tag=offlinecommand]
 
 == Contributions to the Developer Guide
 
 |===
-|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|_Given below are sections I contributed to the Developer Guide.
+  They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-// include::../DeveloperGuide.adoc[tag=undoredo]
+---
 
-// include::../DeveloperGuide.adoc[tag=dataencryption]
+include::../DeveloperGuide.adoc[tag=storagecomponent]
+
+include::../DeveloperGuide.adoc[tag=network-design]

@@ -205,6 +205,7 @@ As a more OOP model, we can store a `Tag` list in `Address Book`, which `Entry` 
 image:ModelClassBetterOopDiagram.png[width="800"]
 
 [[Design-Storage]]
+// tag::storagecomponent[]
 === Storage component
 
 .Structure of the Storage Component
@@ -214,8 +215,16 @@ image::StorageClassDiagram.png[width="800"]
 
 The `Storage` component,
 
-* can save `UserPref` objects in json format and read it back.
-* can save the Address Book data in json format and read it back.
+* can save `UserPref` objects, and `EntryBook` data (for Reading List, Archives, and Feeds) in json format and read it back.
+* can save .html articles in a data directory as individual files. The article contents are only read when required by the user.
+
+Unlike the `UserPref` and `EntryBook` data, we don't store the articles in a flat file.
+This is because the file size of the article store is much larger than the file sizes of all the prefs and reading list/archives/etc. combined,
+so having it in a flat file would drastically slow down the application.
+
+Instead, the files are saved to disk and are not read until the user clicks on an entry and wants to view it offline.
+
+// end::storagecomponent[]
 
 [[Design-Commons]]
 === Common classes
@@ -232,10 +241,18 @@ This section describes some noteworthy details on how certain features are imple
 ==== Current implementation
 
 In order to implement the multiple commands for the application, we require
-a way to disallow certain commands in certain contexts. For example, when the
-user is viewing the archives, he should not be allowed to use the `archive`
-command since every entry listed is already archive. Vice-versa, when a user is
-uses the `list` command, `unarchive` should be registered as an unknown command.
+a way to disallow certain commands in certain contexts.
+
+.Activity diagram for command execution
+image::ContextSpecificCommandActivityDiagram.png[width="800"]
+
+For example, when the user is viewing the archives, commands he enter are parsed in the "Archive context" as shown above.
+If he enters the `archive` command, it will not be recognised as a valid command since every entry shown is already archived.
+
+When a user is uses the `list` command, he switches to the "List context".
+Now, when he enters the `archive` command with valid arguments, it is successfully executed.
+However, the `unarchive` command will now not be recognised.
+
 
 This presents two main problems; the need for separate command parsers for each context,
 and a way for the application to keep track of its context.
@@ -249,7 +266,7 @@ Each Parser class should only parse commands allowed for the context it represen
 
 The following classes were created to support this feature (refer to the class diagram given below).
 
-* `EntryBookParser` — the base abstract class all Parsers extend from
+* `EntryBookParser` — the base abstract class all Parsers extend from.
 * `EntryBookListParser` — Parser for the list context.
 * `EntryBookArchivesParser` —  Parser for the archives context.
 * `EntryBookFeedsParser` —  Parser for the feeds context.
@@ -260,7 +277,7 @@ image::LogicClassDiagram.png[width="800"]
 
 Each Parser class has a `parseCommand(String)` operation that parses the string command.
 `EntryBookParser#parseCommand(String)` is the fallback operation used when any of its children
-fail to parse the command. It parses commands that is common in any context.
+fail to parse the command. It successfully parses commands that is common in any context (e.g. `exit`, `help`).
 
 ===== Context state for Model
 
@@ -282,21 +299,14 @@ Given below is the sequence diagram for the context-switching command, `archives
 .Sequence diagram for the `archives` command.
 image::ChangeContextSdForModel.png[width="800"]
 
-===== Example usage
-
-Given below is an example usage scenario of how the contexts and parsers restrict available commands.
-
 1.  The user launches the application.
 2.  The `ModelManager` will default to `ModelContext.CONTEXT_LIST` context.
-3.  The user executes the `archive` command with correct arguments.
-4.  `EntryBookListParser` parses the command successfully. Command executes
-5.  The user erroneously executes the `unarchive` command.
-6.  `EntryBookListParser` tries to parse it and fails. The application reports it as an "Unknown command".
-7.  The user executes the `archives` command to view his archives.
-8.  In the execution of this `ArchivesCommand`, `model.setContext(ModelContext)` is called to change the
-context to `ModelContext.CONTEXT_ARCHIVES`.
-9.  The user executes the `unarchive` command with correct arguments.
-10.  `EntryBookArchivesParser` parses the command successfully. Command executes
+3.  The user enters the `archives` command.
+4.  The current context, `ModelContext.CONTEXT_LIST`, is retrieved from the `ModelManager`.
+5.  Static parser class `EntryBookListParser` in the `ModelContext.CONTEXT_LIST` is used to parse the command.
+6.  Command is parsed successfully, and `ArchivesCommand` created.
+7.  When the command is executed, context in `ModelManager` is set to `ModelContext.CONTEXT_ARCHIVES`.
+8.  This triggers the `ModelManager` to display the `EntryBook` for the archives, via listeners.
 
 ==== Design Considerations
 * *Alternative 1 (current choice):* Context information is held by `Model`
@@ -384,14 +394,45 @@ Available view types are specified in the `ViewType` enum, and available reader 
 The `ViewMode` object encapsulates a `ViewType` and `ReaderViewStyle` and represents a user setting.
 The `Model` exposes an observable `viewModeProperty`, which is set by `ViewModeCommand` and observed by `BrowserPanel`.
 
-The `BrowserPanel` keeps track of whether an original web page or a reader view version is loaded.
-If an original web page is loaded but the `reader` view mode is selected,
-the CSS stylesheet is changed accordingly and the reader view is generated and loaded,
-except when the currently loaded web page is the default blank page or error page.
+The `BrowserPanel` is a wrapper around the JavaFX `WebView` component, and is responsible for displaying web pages.
+It keeps track of whether an internal page, offline page, online page or HTML content is loaded,
+and reacts to events like changes in loading status, view mode and selected entry.
+
+.General state diagram for BrowserPanel.
+image::dg-readerview/BrowserStateDiagram.png[width="800"]
+
+There are two conditions which cause reader view to be generated and loaded:
+
+1. If an original web page has successfully loaded but the `reader` view mode is selected,
+the reader view is generated from the currently displayed page and loaded, then the CSS stylesheet is changed.
+This mechanism is used for online URLs, and was chosen because using the other mechanism below would cause a performance
+bottleneck due to having to download online web pages.
+
+.Sequence diagram for loading reader view from current page.
+image::dg-readerview/ReaderViewOfPageDiagram.png[width="800"]
+
+2. Alternatively, if the `reader` view mode is already selected and an offline URL is selected (most probably an entry),
+the reader view is generated from directly reading the file pointed to by the offline URL and loaded, then the CSS stylesheet is changed.
+This mechanism is used for offline URLs,
+and is a performance enhancement as it bypasses waiting for the original web page to load before reader view is loaded.
+
+.Sequence diagram for loading reader view from offline URL.
+image::dg-readerview/ReaderViewOfHtmlDiagram.png[width="800"]
 
 The Jsoup and Readability4J external libraries do the heavy lifting of parsing the raw HTML currently loaded in the `WebView` to extract useful metadata and content.
 Jsoup was chosen as it is a mature HTML parser library while Readability4J was chosen as it is a port of port of Mozilla's excellent Readability.js.
 These are combined into a new HTML document, which is styled using Bootstrap and then loaded in the `WebView`.
+
+.Activity diagram for generation of reader view.
+image::dg-readerview/ReaderViewGenerationActivityDiagram.png[width="400"]
+
+As Readability4J does not extract all available and useful metadata information, Jsoup is used to manually extract author information,
+as well as http://ogp.me[Open Graph metadata] like published datetime and section information if available.
+As Readability4J also does not provide the estimated reading time, Jsoup is used to extract text content from the HTML DOM
+Document Object, and reading time is estimated from the number of words present and the average human reading speed.
+
+.Activity diagram for insertion of metadata element.
+image::dg-readerview/InsertMetadataElementActivityDiagram.png[width="400"]
 
 ==== Design Considerations
 
@@ -418,9 +459,10 @@ Therefore, generating reader view on-the-fly will open up reader view to our app
 ** Cons: Difficult to implement, stylesheets still need to be based on Bootstrap.
 * **Why current choice:**
 * It is a case of diminishing returns.
-It is not difficult for us to add a few reader view styles for users to choose from, which gives them a lot more flexibility compared to not having any styles to choose from.
-but making the design support custom user stylesheets would require much more effort while not giving users a lot more benefit.
+It is not difficult to implement a design that allows us to add a few reader view styles for users to choose from, which gives them a lot more flexibility compared to not having any styles to choose from.
+However, making the design support custom user stylesheets would require much more effort while not giving users a lot more benefit.
 The current design makes it very simple for us to add another reader view style, in case many users demand a particular style.
+Nevertheless, this is a feature we can consider developing if there is demand for it.
 
 // end::readerview[]
 
@@ -428,58 +470,69 @@ The current design makes it very simple for us to add another reader view style,
 // tag::multiple-entrybooks[]
 === Multiple EntryBooks
 
-==== Current implementation
 
-ModelManager used to have only a single `EntryBook`. However, managing feeds and archives subscription system means that we need to deal with multiple `EntryBook`s.
-Since we should only show a single `EntryBook` at a time, our first task is to decouple the `EntryBook` that is displayed from the ones that we will be adding to `ModelManager`.
+ModelManager used to have only a single `EntryBook`. However, managing feeds and archives subscription system means that we need to deal with more than a single `EntryBook`.
+Since we should only show a single `EntryBook` at a time, we have to make model contain multiple entrybooks.
 
-===== Decoupling displayed `EntryBook`
+==== Multiple EntryBooks
 
-Decoupling the displayed `EntryBook` means that the following additional methods are implemented
-
-* `ModelManager#displayEntryBook(EntryBook)` — shows the `EntryBook` provided in the user interface
-
-Given below is an example usage scenario and how this mechanism behaves.
-
-1.  The user launches the application. The `ModelManager` will default to displaying the `EntryBook` which corresponds to the default (list) context.
-2.  The user executes the `feed [valid_feed_url]` command to view a web feed. The `feed` command fetches and parses the web feed into an `EntryBook` which is used for `ModelManager#setSearchEntryBook` to replace the search context `EntryBook`.
-3. It then sets the `ModelContext` to `search`. In the `search` context the `EntryBook` is read-only, and you can import links from the currently displayed `EntryBook` into the `list` context `EntryBook`.
-
-
-==== Design Considerations
-
-===== Decoupling displayed `EntryBook`
-
-We decided to have a `SimpleListProperty<Entry>` called `displayedEntryList` which is used to provide the base list for `filteredEntries`.
-The implementation of `ModelManager#displayEntryBook` will then just be a `displayedEntryList.setValue`. However we decided to keep `displayEntryBook` private and not expose it via the `Model` interface.
-
-* *Alternative 1 (current choice):* Keep `displayEntryBook` private,
-it only gets called when `ModelContext` changes.
-** Pros: more defensive -- a rogue command cannot easily display junk.
-** Cons: In the context of the `feed` command, where the `EntryBook` used is in fact ephemeral. When the `ModelContext` switches away from `search`, the ephemeral `EntryBook` still lives in `ModelManager`, using extra memory.
-* *Alternative 2:* Add `displayEntryBook` under the `Model` interface so that other classes (such as various commands) could use it.
-** Pros: easier implementation for some commands, slightly reduced memory usage.
-** Cons: decoupling displayed `EntryBook` from `ModelContext` could allow buggy commands to place `ModelManager` in an inconsistent state.
-
-We chose alternative 1 since it is more robust and only entails a slight additional cognitive load.
-
-===== Multiple EntryBooks
+[[Current-ModelManager-Diagram]]
+.Class diagram illustrating a model supporting multiple EntryBooks.
+image::MultipleEntryBooksChosenApproach.png[width=293]
 
 To support multiple EntryBooks, we decided to have multiple differently named EntryBooks each with their own accessors.
 
-* *Alternative 1 (current choice):* multiple differently named `EntryBook`’s with differently-named accessors each
+===== Design considerations
+
+* *Current choice:* multiple differently named `EntryBook`’s with differently-named accessors each
 ** Pros: easy to implement
 ** Cons: accessors are basically duplicated code
-* *Alternative 2:* Each `EntryBook` belongs to a `ModelContext`,
+
+.Class diagram of alternative approach for supporting multiple EntryBooks.
+image::MultipleEntryBooksAlternativeApproach.png[width=399]
+
+* *Alternative:* Each `EntryBook` belongs to a `ModelContext`,
 modifiers overloaded to be context-sensitive
 ** Pros: less code duplication due to polymorphism
-** Cons: writing to an `EntryBook` that does not belong the current
-state change will either involve an extra accessor (basically
-Alternative 1), or changing state (specifically `Model#setContext`),
-which is not robust.
+** Cons: writing to an `EntryBook` that does not belong the current state will either involve an extra accessor (basically Alternative 1), or changing state (specifically `Model#setContext`), which is not robust.
+
+We chose to implement multiple EntryBooks in parallel as it turned out that the different EntryBooks demanded slightly different behaviour, and a more polymorphic approach like that given in the alternative might overcomplicate the implementation.
+
+==== Decoupling displayed `EntryBook`
+
+Another task is to decouple the `EntryBook` that is displayed from the ones that we added  to `ModelManager`.
+Decoupling the displayed `EntryBook` means that the following additional methods are implemented
+
+* `ModelManager#displayEntryBook(EntryBook)` — shows the `EntryBook` provided in the user interface.
+
+Given below is an example usage scenario and how this mechanism behaves.
+
+.Sequence diagram illustrating how `displayEntryBook` is used.
+image::DisplayEntryBookSequenceDiagram.png[width="800"]
+
+1.  The user launches the application. The `ModelManager` will default to displaying the `EntryBook` which corresponds to the default (list) context.
+2.  The user executes the `feed [valid_feed_url]` command to view a web feed. The `feed` command fetches and parses the web feed into an `EntryBook` which is used for `ModelManager#setSearchEntryBook` to replace the search context `EntryBook`.
+3. It then sets the `ModelContext` to `CONTEXT_SEARCH`. In the search context the `EntryBook` is read-only, and you can import links from the currently displayed `EntryBook` into the `list` context `EntryBook`.
+
+
+===== Design Considerations
+
+With reference to <<Current-ModelManager-Diagram>>, we decided to have a `SimpleListProperty<Entry>` called `displayedEntryList` which is used to provide the base list for `filteredEntries`.
+The implementation of `ModelManager#displayEntryBook` will then just be a `displayedEntryList.setValue`. However we decided to keep `displayEntryBook` a private method  and not expose it via the `Model` interface.
+
+* *Current choice:* Keep `displayEntryBook` private,
+it only gets called when `ModelContext` changes.
+** Pros: more defensive -- a rogue command cannot easily display junk.
+** Cons: In the context of the `feed` command, where the `EntryBook` used is in fact ephemeral. When the `ModelContext` switches away from `search`, the ephemeral `EntryBook` still lives in `ModelManager`, using extra memory.
+* *Alternative:* Promote `displayEntryBook` to `Model` interface so that other classes (such as various commands) could use it.
+** Pros: easier implementation for some commands, slightly reduced memory usage.
+** Cons: decoupling displayed `EntryBook` from `ModelContext` could allow buggy commands to place `ModelManager` in an inconsistent state.
+
+We chose to keep `displayEntryBook` private and only invoke it on model context change since doing so is more robust and only entails a slight additional cognitive load.
 // end::multiple-entrybooks[]
 
 // tag::network-design[]
+[[network-design]]
 === `Network` design
 
 As many components have to make network calls
@@ -609,6 +662,28 @@ which has effectively the same benefits as singleton
 after ruling out dependency inversion,
 and the static class pattern is easier to write than the singleton pattern.
 
+==== Asynchronous network calls
+
+As the entirety of addressbook-level4 (AB4) is written synchronously,
+it is a major undertaking to convert AB4 to use asynchronous (async) network calls.
+We did a small scale experiment to see how async might be done by making
+the `select` command download un-downloaded articles in the background.
+
+Here is a sequence diagram showing how the interaction works:
+
+image::SelectRefreshSdForStorage.png[width="800"]
+
+Notice that when returning from the async network call,
+we wrap our code in `Platform.runLater(...)` to ensure that the rest of the
+execution is done on the JavaFX Application Thread.
+This helps to prevent certain race conditions from potentially ruining the model.
+
+However, in the process of implementing this,
+we found that it made testing this unreliable
+as we could no longer be sure when the command has "truly" finished executing.
+Thus, we decided to defer the conversion of the rest of the AB4 to async
+to the v2.0 milestone.
+
 // end::network-design[]
 
 === Offline mode
@@ -658,13 +733,17 @@ This is described in section xref:network-design[]
 
 ===== Interfacing with BrowserPanel
 
-We need to design this component so that `BrowserPanel` can use it.
-
-TODO: Elaborate
+Currently, `Storage` provides a method that returns an Optional<Path>,
+which will contain the path to the offline copy if it exists.
+This is because `BrowserPanel` works by displaying URLs in a `WebView`.
+Thus, by directly supplying the path,
+it's better than reading the content into a String,
+in case there are any encoding issues.
 
 ===== Storage model
 
-TODO: Talk about storing things to disk, and why this method
+When saving articles to disk, we need to do so in a way that performs well.
+This is described in section xref:Design-Storage[]
 
 === Logging
 
@@ -859,7 +938,7 @@ See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build auto
 
 === Continuous Integration
 
-We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyor] to perform _Continuous Integration_ on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
+We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyo] to perform _Continuous Integration_ on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
 
 === Coverage Reporting
 

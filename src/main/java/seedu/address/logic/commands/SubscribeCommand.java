@@ -40,6 +40,7 @@ public class SubscribeCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "New feed added: %1$s";
     public static final String MESSAGE_DUPLICATE_FEED = "This feed already exists in the feed list";
+    public static final String MESSAGE_FAILURE_NET_BASE_STRING = "Feed not subscribed! Fetching resource failed:";
     public static final String MESSAGE_FAILURE_NET = "Feed not subscribed! Fetching resource failed:\n%s";
     public static final String MESSAGE_FAILURE_XML = "Feed not subscribed! %s is not a valid RSS/Atom feed!";
 

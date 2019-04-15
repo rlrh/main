@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -50,6 +51,19 @@ public class EntryListPanel extends UiPart<Region> {
                 entryListView.getSelectionModel().clearAndSelect(index);
             }
         });
+
+        // Scroll to any changes made to the list
+        entryList.addListener((ListChangeListener<? super Entry>) change -> {
+            while (change.next()) {
+                entryListView.scrollTo(change.getTo());
+                logger.info(String.format("List panel contents changed between %d and %d, scrolling to %d",
+                    change.getFrom(), change.getTo(),
+                    change.getTo()));
+            }
+        });
+
+        // On startup, scroll to the end of the list
+        entryListView.scrollTo(entryList.size() - 1);
     }
 
     /**

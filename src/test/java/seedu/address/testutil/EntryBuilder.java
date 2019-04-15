@@ -1,15 +1,16 @@
 package seedu.address.testutil;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.model.entry.Description;
 import seedu.address.model.entry.Entry;
 import seedu.address.model.entry.Link;
 import seedu.address.model.entry.Title;
 import seedu.address.model.tag.Tag;
-import seedu.address.model.util.SampleDataUtil;
 
 /**
  * A utility class to help with building Entry objects.
@@ -54,8 +55,17 @@ public class EntryBuilder {
      * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code Entry} that we are building.
      */
     public EntryBuilder withTags(String ... tags) {
-        this.tags = SampleDataUtil.getTagSet(tags);
+        this.tags = getTagSet(tags);
         return this;
+    }
+
+    /**
+     * Returns a tag set containing the list of strings given.
+     */
+    public static Set<Tag> getTagSet(String... strings) {
+        return Arrays.stream(strings)
+            .map(Tag::new)
+            .collect(Collectors.toSet());
     }
 
     /**

@@ -70,32 +70,37 @@ Get started quickly by installing README, getting to know its user interface, an
 
 === User Interface
 
-image::Ui.png[width="790"]
+image::UiOverview.png[width="790"]
 
-// TODO: Describe UI sections
+This is how the application should look like!
+
+Enter your commands in the Command Box (B), and the execution result message will appear in the Result Display \(C). +
+
+Browse your saved entries from the List Panel (F), and select any one of them to view it in the Browser Panel (G). +
 
 === Quick Tour of Basic Features
 
-.  Type the command in the command box and press kbd:[Enter] to execute it. +
+.  Type the command in the Command Box and press kbd:[Enter] to execute it. +
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
-.  Try these commands in order!
 
+.  Try these commands in order!
 * *`list`* : shows your reading list of saved links
-* **`select`**`1` : selects the first entry for reading
 * **`add`**`l/https://en.wikipedia.org/wiki/Special:Random` : adds a random Wikipedia page to your reading list
-* **`select`**`7` : selects the Wikipedia page for reading
+* **`select`**`1` : selects the Wikipedia page for reading
+* **`add`**`l/https://en.wikipedia.org/wiki/Main_Page` : adds the Wikipedia main page to your reading list
 * *`googlenews`* : displays the current top stories from Google News
 * **`add`**`1` : adds the first news article to your reading list
 * *`list`* : goes back to your reading list
-* **`select`**`8` : selects the just-added news article for reading
+* **`select`**`3` : selects the just-added news article for reading
 * **`view`**`reader` : switches to a more comfortable reading experience
-* **`archive`**`8` : archives the news article
+* **`archive`**`3` : archives the news article
 * *`archives`* : shows your archived links
 * **`delete`**`1` : delete the archived news article
 * *`feeds`* : shows your subscribed feeds
 * **`subscribe`**`l/https://www.buzzfeed.com/index.xml ti/BuzzFeed` : subscribes to the BuzzFeed news feed (this can take a while)
 * *`list`* : goes back to your reading list
-* **`select`**`8` : selects one of the just-added news articles for reading
+* **`refresh`**`1` : refreshes the first entry to get most recent version from internet
+* **`select`**`1` : views the updated entry
 * *`exit`* : exits the app
 
 .  Refer to <<Commands>> for details of each command.
@@ -305,13 +310,15 @@ Imports the feeds, saved data, history, and other preferences from an export fil
 . `import C:\Users\Name\Desktop\export.jtjr` +
 
 [[Add-Command]]
-==== Adding a single entry: `add` `[updated v1.2]`
+==== Adding a single entry: `add`
 
 Adds a single entry from a link URL to your reading list.
 Content is automatically downloaded onto your personal computer.
 
 [underline]#Format#: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
 
+[TIP]
+The entry's URL must be unique. Duplicate entries with the same URL will not be added!
 [TIP]
 The `Title` and `Description` fields are automatically filled if you do not provide them.
 [TIP]
@@ -322,29 +329,43 @@ A entry can have any number of tags (including 0).
 * Adds a single entry with a description and tagged with “Business”
 . `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
 
+// tag::subscribe-command[]
 [[Subscribe-command]]
-==== Subscribing to a feed: `subscribe` `[since v1.3]`
+==== Subscribing to a feed: `subscribe`
 
-Adds a feed to the manager and subscribes to updates. +
+Adds a feed and subscribes to its updates. +
 All entries in the subscribed feed will be added to the reading list. +
 
 [underline]#Format#: `subscribe l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]..`
 
 [TIP]
+====
 The `Title` and `Description` fields are automatically filled up if you do not provide them.
+If no tags were specified, the feed entry will automatically be tagged with the URL's (stripped) hostname, if possible.
+====
+
 [TIP]
+====
 A feed can have any number of tags (including 0). +
-Imported entries from the feed will also be tagged with the same tags as the feed `[since v1.4]`
+Imported entries from the feed will also be tagged with the same tags as the feed.
+====
 
 [underline]#Examples#:
 
-* Adds a feed whose name is “Engadget”. +
-. `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` +
+* Adds a feed whose name is “Kattis”. +
+`subscribe l/https://open.kattis.com/rss/new-problems t/programming` +
+
+.Subscribing to a feed will add it to the feeds list.
+image::ug-sub/ug-subx-1.png[width="906"]
+
+.The links present in the feed are automatically imported to the reading list.
+image::ug-sub/ug-subx-2.png[width="400"]
 
 [WARNING]
 ====
 The application may be unresponsive for a short while when adding entries from a large feed.
 ====
+// end::subscribe-command[]
 
 ==== Listing entered commands : `history`
 
@@ -355,6 +376,31 @@ Lists all the commands that you have entered in reverse chronological order. +
 ====
 Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
 ====
+
+// tag::offlinemodecommand[]
+==== Enabling or disabling offline mode : `offline`
+
+Some web pages may not work with offline mode.
+In order to browse these web pages,
+you may temporarily disable offline mode with this command,
+or enable it after you wish to re-enter offline mode. +
+
+[underline]#Format#: `offline MODE(enable, disable)`
+
+[underline]#Examples#:
+
+* Disable offline mode
+. `offline disable`
+* Enable offline mode
+. `offline enable`
+
+[TIP]
+====
+Offline mode is enabled by default at the start of every session
+so you don't have to worry about forgetting to re-enable offline mode
+====
+
+// end::offlinemodecommand[]
 
 ==== Viewing help : `help`
 
@@ -386,7 +432,7 @@ Refer to <<List-Context>> for available commands in this context.
 .Switch to the list context to see all your saved entries
 image::ug-context/ug-contextx-list.png[width="790"]
 
-==== Showing your Archives: `archives` `[since v1.3]`
+==== Showing your Archives: `archives`
 
 Shows your Archives of all archived entries.
 
@@ -398,7 +444,7 @@ Refer to <<Archives-Context>> for available commands in this context.
 .Switch to the archives context to see all your archived entries
 image::ug-context/ug-contextx-archives.png[width="790"]
 
-==== Searching the web: `bing` `[since v1.3]`
+==== Searching the web: `bing`
 
 Searches https://www.bing.com[Bing] for entries that you can subsequently add.
 
@@ -415,7 +461,7 @@ Refer to <<Results-Context>> for available commands in this context.
 .Bing search for the phrase `Trump`
 image::ug-context/ug-contextx-bing.png[width="790"]
 
-==== Searching for news: `googlenews` `[since v1.3]`
+==== Searching for news: `googlenews`
 
 Searches https://news.google.com/[Google News] for entries that you can subsequently add.
 
@@ -434,7 +480,7 @@ Refer to <<Results-Context>> for available commands in this context.
 .View the latest top news on google news using the `googlenews` command
 image::ug-context/ug-contextx-gnews.png[width="790"]
 
-==== Searching a web feed: `feed` `[since v1.2]`
+==== Previewing a web feed: `feed`
 
 Opens a web feed at the URL for previewing.
 
@@ -464,7 +510,7 @@ Refer to <<Results-Context>> for available commands in this context.
 - `links`
 - `links https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Shows all entries from this article
 
-==== Showing feeds: `feeds` `[since v1.3]`
+==== Showing feeds: `feeds`
 
 Shows a list of feeds being followed.
 
@@ -533,7 +579,8 @@ Edits an existing entry in the reading list.
 . `edit 2 t/` +
 
 // tag::findcommand[]
-==== Finding entries by title: `find`
+[[findcommand]]
+==== Finding entries (by title, description, etc.): `find`
 
 Finds entries whose fields contain any of the given keyphrases. +
 
@@ -555,20 +602,14 @@ Finds entries whose fields contain any of the given keyphrases. +
 * Find entries with title containing the phrase `lambda`, or link containing the phrase `github`.
 . `find ti/lambda l/github` +
 
-.Before: Entering the find command with search terms
-image::ug-find/ug-fieldx-1.png[width="800"]
-
-.After: Only entries with title containing `lambda` (red) or link containing `github` (orange) shown
-image::ug-find/ug-fieldx-2.png[width="800"]
+.Only entries with title containing `lambda` (red) or link containing `github` (orange) shown after find command
+image::ug-find/ug-findfieldx.png[width="800"]
 
 * Find entries with the tag `infoTheory`.
 . `find t/infoTheory` +
 
-.Before: Entering the find command for specific tags
-image::ug-find/ug-tagx-1.png[width="800"]
-
-.After: Only entries with tag `infoTheory` shown
-image::ug-find/ug-tagx-2.png[width="800"]
+.Only entries with tag `infoTheory` shown after find command
+image::ug-find/ug-findtagx.png[width="800"]
 // end::findcommand[]
 
 ==== Selecting an entry: `select`
@@ -630,12 +671,15 @@ image::ug-view/ReaderViewDark.png[width="720"]
 
 .A web page in reader view with black colour scheme
 image::ug-view/ReaderViewBlack.png[width="720"]
-
 // end::viewmode[]
 
-==== Refreshing an entry: `refresh` `[since v1.3]`
+// tag::refreshcommand[]
+==== Refreshing an entry: `refresh`
 
-Refreshes the specified entry to get the latest version of its content.
+If you added an entry a long time ago and you think that the saved page might be outdated,
+you can fetch the most updated version from the internet by using this command.
+This is helpful for pages such as Wikipedia, which may change often!
+See the xref:refreshallcommand[`refreshall` command] which may be useful to use if you need to refresh a large number of entries at the same time.
 
 [underline]#Format#: `refresh INDEX`
 
@@ -650,6 +694,46 @@ Refreshes the specified entry to get the latest version of its content.
 * Refresh the content of the 2nd entry in the reading list. +
 . `list` +
 . `refresh 2` +
+
+// end::refreshcommand[]
+
+// tag::refreshallcommand[]
+[[refreshallcommand]]
+==== Refreshing all displayed entries: `refreshall`
+
+Refreshes all currently displayed entries.
+
+[underline]#Format#: `refreshall`
+
+****
+* Refreshes only entries that are currently displayed.
+****
+
+[WARNING]
+====
+The application may be unresponsive for a short while when refreshing a large number of entries.
+====
+
+[TIP]
+====
+You may refer to the xref:archiveallcommand[`archiveall` command]
+for an example on how this command may be combined
+with other commands such as xref:findcommand[`find`] to be more useful.
+====
+
+[underline]#Examples#:
+
+* Refresh *all* entries in the reading list. (Will take a long time if you have a large reading list!)
+. `list` +
+. `refreshall`
+
+* Refresh all entries tagged “infoTheory”
+. `list` +
+. `find t/infoTheory` +
+. `refreshall` +
+. `list`
+
+// end::refreshallcommand[]
 
 ==== Marking an entry as read: `read` `[coming in v2.0]`
 
@@ -693,7 +777,8 @@ Shares the specified entry through connected social media.
 
 [underline]#Format#: `share INDEX`
 
-==== Archiving an entry: `archive` `[since v1.3]`
+// tag::archivecommand[]
+==== Archiving an entry: `archive`
 
 Moves the specified entry to the archive and removes its downloaded content.
 
@@ -717,8 +802,44 @@ image::ug-archive/ug-archivex-1.png[width="800"]
 
 .Entry is saved in the archives
 image::ug-archive/ug-archivex-2.png[width="350"]
+// end::archivecommand[]
 
-==== Deleting an entry: `delete` `[updated v1.3]`
+// tag::archiveallcommand[]
+[[archiveallcommand]]
+==== Archiving all displayed entries: `archiveall`
+
+If you want to archive many entries at the same time,
+you can make use of this command to move all the currently displayed entries to the archive,
+removing all entries' downloaded content at the same time.
+By using a xref:findcommand[`find` command] first before executing `archiveall`,
+you can archive parts of your reading list by a search criteria.
+
+[underline]#Format#: `archiveall`
+
+****
+* Archives only entries that are currently displayed.
+****
+
+[underline]#Examples#:
+
+* Archive *all* entries in the reading list
+. `list` +
+. `archiveall`
+
+* Archive all entries tagged “infoTheory” (you may refer to the figures below)
+. `list` +
+. `find t/infoTheory` +
+. `archiveall` +
+. `list`
+
+.Filtering then archiving all infoTheory entries (steps 1-3)
+image::find_archiveall.png[width="1200"]
+
+.Reading list now no longer has any infoTheory entries (step 4)
+image::find_archiveall_list.png[width="290"]
+// end::archiveallcommand[]
+
+==== Deleting an entry: `delete`
 
 Deletes the specified entry from the reading list and removes its downloaded content.
 
@@ -740,6 +861,44 @@ Deletes the specified entry from the reading list and removes its downloaded con
 . `find Trump` +
 . `delete 1` +
 
+// tag::deleteallcommand[]
+==== Deleting all displayed entries: `deleteall`
+
+Deletes all currently displayed entries from the reading list, and removes the entries' downloaded content.
+
+// tag::deleteallcommandcontents[]
+[underline]#Format#: `deleteall`
+
+****
+* Deletes only the entries that are currently displayed
+****
+
+[WARNING]
+====
+This operation is IRREVERSIBLE! Please take care not to accidentally delete entries you may wish to keep.
+====
+
+[TIP]
+====
+You may refer to the xref:archiveallcommand[`archiveall` command]
+for an example on how this command may be combined
+with other commands such as xref:findcommand[`find`] to be more useful.
+====
+
+[underline]#Examples#:
+
+* Delete all entries in the reading list.
+. `list` +
+. `deleteall`
+
+* Delete all entries whose titles contain “Trump”.
+. `list` +
+. `find ti/Trump` +
+. `deleteall`
+
+// end::deleteallcommandcontents[]
+// end::deleteallcommand[]
+
 ==== Clearing all entries : `clear`
 
 Clears all saved entries from the manager.
@@ -748,6 +907,44 @@ Clears all saved entries from the manager.
 
 [[Archives-Context]]
 === `Archives` Context Commands
+
+==== Finding entries by title: `find`
+
+Finds entries whose fields contain any of the given keyphrases. +
+This command behaves the same as the Reading List context `find` command equivalent. +
+
+[underline]#Format#: `find [a/SEARCH_PHRASE] [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
+
+****
+* At least one of the optional fields must be provided.
+* The search is case insensitive. e.g `hans` will match `Hans`
+* The search matches anywhere for title, description and link. e.g. `ans B` will match `Hans Bo`
+* The search matches exactly for tags. e.g. 'science' will match 'science', but not 'scienceandtech'
+* The search phrase with prefix `a/` will try to match with every field in the entry according to the above rules.
+** i.e. `find a/keyphrase` is equivalent to `find ti/keyphrase d/keyphrase l/keyphrase t/keyphrase`
+* Entries matching at least one field will be returned (i.e. `OR` search).
+** e.g. `find ti/aaa d/bbb l/ccc t/ddd` will match an entry with title `Aaawesome` and an entry with description `abbbA`
+****
+
+Refer to <<findcommand>> for examples!
+
+==== Selecting an entry: `select`
+
+Selects the entry identified by the index number used in the displayed entry list for reading.
+
+[underline]#Format#: `select INDEX`
+
+****
+- Selects the entry at the specified `INDEX` for reading.
+- The index refers to the index number shown in the displayed entry list.
+- The index *must be a positive integer* 1`, 2, 3, ...`
+****
+
+[underline]#Examples#:
+
+Select the 2nd archived entry.
+. `archives` +
+. `select 2` +
 
 ==== Unarchiving an entry: `unarchive` `[since v1.3]`
 
@@ -768,7 +965,7 @@ Moves the specified entry from the archives to the reading list.
 . `unarchive 2` +
 . `list`
 
-==== Deleting an entry: `delete` `[since v1.3]`
+==== Deleting an entry: `delete`
 
 Deletes the specified entry from the archives.
 
@@ -786,25 +983,16 @@ Deletes the specified entry from the archives.
 . `archives` +
 . `delete 2` +
 
-==== Selecting an entry: `select`
+// tag::archivesdeleteallcommand[]
+==== Deleting all displayed entries: `deleteall`
 
-Selects the entry identified by the index number used in the displayed entry list for reading.
+Deletes all currently displayed entries from the archives.
 
-[underline]#Format#: `select INDEX`
+include::./UserGuide.adoc[tag=deleteallcommandcontents]
 
-****
-- Selects the entry at the specified `INDEX` for reading.
-- The index refers to the index number shown in the displayed entry list.
-- The index *must be a positive integer* 1`, 2, 3, ...`
-****
+// end::archivesdeleteallcommand[]
 
-[underline]#Examples#:
-
-Select the 2nd archived entry.
-. `archives` +
-. `select 2` +
-
-==== Clearing all entries : `clear` `[coming in v2.0]`
+==== Clearing all entries : `clear`
 Clears all archived entries from the manager.
 
 [underline]#Format#: `clear`
@@ -812,16 +1000,13 @@ Clears all archived entries from the manager.
 [[Results-Context]]
 === `Search Results` Context Commands
 
-==== Adding entries: `addindex` `[since v1.3]`
+==== Adding entries: `addindex`
 
 Adds entries from results to the reading list. Content is automatically downloaded to disk.
 
 [underline]#Format#: `addindex INDEX`
 
 [underline]#Format#: `addindex INDEX [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...` `[coming in v2.0]`
-
-[underline]#Format#: `addindex all` `[coming in v2.0]`
-
 
 [underline]#Examples#:
 
@@ -830,7 +1015,43 @@ Adds entries from results to the reading list. Content is automatically download
 * Add the 1st entry with a description and tagged with “Business” `[coming in v2.0]` +
 . `addindex 1 d/explains why UX is important t/Business`
 
-==== Selecting an entry: `select` `[since v1.3]`
+// tag::addallcommand[]
+==== Adding all displayed entries: `addall`
+
+Adds all currently displayed entries from results to the reading list. Content is automatically downloaded to disk.
+
+[underline]#Format#: `addall`
+
+****
+* Adds only the entries that are currently displayed
+****
+
+[WARNING]
+====
+The application may be unresponsive for a short while when adding entries from a large search result.
+====
+
+[TIP]
+====
+You may refer to the xref:archiveallcommand[`archiveall` command]
+for an example on how this command may be combined
+with other commands such as xref:findcommand[`find`] to be more useful.
+====
+
+[underline]#Examples#:
+
+* Add all entries that result from searching "Lambda Calculus" on bing.
+. `bing Lambda Calculus` +
+. `addall`
+
+* Add all entries that result from searching "Lambda Calculus" on bing, but only those with a .org domain.
+. `bing Lambda Calculus` +
+. `find l/.org` +
+. `addall`
+
+// end::addallcommand[]
+
+==== Selecting an entry: `select`
 
 Selects the entry identified by the index number used in the displayed entry list for viewing.
 
@@ -867,7 +1088,7 @@ Changes the view mode between the original browser or a more comfortable reading
 
 To subscribe to a feed, please refer to [[Subscribe-Command]].
 
-==== Updating entries from feeds: `refresh` `[since v1.3]`
+==== Updating entries from feeds: `refresh`
 
 Refreshes a feed.
 
@@ -887,7 +1108,43 @@ Refreshes a feed.
 The application may be unresponsive for a short while when adding entries from a large feed.
 ====
 
-==== Selecting a feed: `select` `[since v1.3]`
+// tag::refreshallfeedscommand[]
+==== Updating entries from all currently displayed feeds: `refreshall`
+
+Refreshes all currently displayed feeds.
+
+[underline]#Format#: `refreshall`
+
+****
+* Refreshes only the feeds that are currently displayed
+****
+
+[WARNING]
+====
+The application may be unresponsive for a short while when adding entries from a large feed, or when refreshing many feeds.
+====
+
+[TIP]
+====
+You may refer to the xref:archiveallcommand[`archiveall` command]
+for an example on how this command may be combined
+with other commands such as xref:findcommand[`find`] to be more useful.
+====
+
+[underline]#Examples#:
+
+* Refresh all subscribed feeds
+. `feeds` +
+. `refreshall`
+
+* Refresh all news feeds
+. `feeds` +
+. `find ti/News` +
+. `refreshall`
+
+// end::refreshallfeedscommand[]
+
+==== Selecting a feed: `select`
 
 Selects the feed identified by the index number used in the displayed feed list and displays its entries.
 
@@ -926,7 +1183,7 @@ Edits an existing feed in the manager.
 * Clear all existing tags from the 2nd feed.
 . `edit 2 t/`
 
-==== Unsubscribing from a feed: `unsubscribe` `[since v1.3]`
+==== Unsubscribing from a feed: `unsubscribe`
 
 Deletes the specified feeds from the manager and unsubscribes from them, but existing entries obtained from that feed will not be deleted.
 
@@ -940,8 +1197,6 @@ Deletes the specified feeds from the manager and unsubscribes from them, but exi
 
 [underline]#Examples#:
 
-* Delete all feeds. `[coming in v2.0]`
-. `unsubscribeall`
 * Delete the 2nd shown feed.
 . `unsubscribe 2`
 
@@ -1009,8 +1264,73 @@ Selects the feed identified by the index number used in the displayed feed list.
 
 == Command Summary
 
-// TODO: fill this up
+=== Anywhere
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`add l/URL [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Adds a single entry.
+|`subscribe l/URL [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Subscribes to a single feed.
+|`history` | Lists all commands entered previously in reverse order.
+|`offline MODE(enable, disable)` | Enables or disables internet connectivity.
+|`help` | Opens the User Guide in a new window.
+|`exit` | Exits the application.
+|=======================================================================
 
+=== Reading List Context
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`list` | Switches to list context.
+|`edit i/INDEX [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Edits the entry specified by the index.
+|`find [l/URL] [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Finds entries matching the given arguments.
+|`select INDEX` | Selects the entry specified by the index for viewing.
+|`refresh INDEX` | Re-downloads the webpage content of the entry specified by the index.
+|`refreshall` | Re-downloads the webpage content of the entry specified by the index.
+|`archive INDEX` | Archives the entry specified by the index.
+|`archiveall` | Archives all displayed entries.
+|`delete INDEX` | Deletes the entry specified by the index.
+|`deleteall` | Deletes all displayed entries.
+|`clear` | Deletes all entries.
+|`view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]` | Changes the view mode of the browser panel.
+|=======================================================================
+
+=== Archives Context
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`archives` | Switches to archives context.
+|`find [l/URL] [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Finds entries matching the given arguments.
+|`select INDEX` | Selects the entry specified by the index for viewing.
+|`unarchive INDEX` | Unarchives the entry specified by the index, adding it back to the reading list.
+|`unarchiveall` | Unarchives all displayed entries, adding them back to the reading list.
+|`delete INDEX` | Deletes the entry specified by the index.
+|`deleteall` | Deletes all displayed entries.
+|`clear` | Deletes all entries.
+|=======================================================================
+
+=== Search Result Context
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`bing [KEYWORD]` | Searches Bing for entries that you can subsequently add.
+|`googlenews [KEYWORD]` | Searches Google News for entries that you can subsequently add.
+|`feed [FEED URL]` | Opens a web feed at the URL for previewing.
+|`addindex INDEX` | Adds the entry specified by the index to the reading list.
+|`addall` | Adds all displayed entries to the reading list.
+|`select INDEX` | Selects the entry specified by the index for viewing.
+|`view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]` | Changes the view mode of the browser panel.
+|=======================================================================
+
+=== Feeds Context
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`feeds` | Switches to feeds context.
+|`refresh INDEX` | Refreshes the feed specified by the index.
+|`refreshall` | Refreshes all feeds.
+|`select INDEX` | Selects the entry specified by the index for viewing.
+|`unsubscribe INDEX` | Unsubscribes and deletes the feed specified by the index.
+|=======================================================================
 ////
 * *Add* `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
 e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`

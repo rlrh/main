@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import seedu.address.logic.commands.DeleteAllCommand;
 import seedu.address.logic.commands.DeleteArchiveEntryCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
@@ -107,6 +108,13 @@ public class EntryBookArchivesParserTest {
         DeleteArchiveEntryCommand command = (DeleteArchiveEntryCommand) parser.parseCommand(
             DeleteArchiveEntryCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
         assertEquals(new DeleteArchiveEntryCommand(INDEX_FIRST_ENTRY), command);
+    }
+
+    @Test
+    public void parseCommand_deleteall() throws Exception {
+        DeleteAllCommand command = (DeleteAllCommand) parser.parseCommand(
+            DeleteAllCommand.COMMAND_WORD);
+        assertEquals(new DeleteAllCommand(), command);
     }
 
     @Test

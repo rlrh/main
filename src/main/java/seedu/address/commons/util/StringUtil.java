@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -98,19 +99,11 @@ public class StringUtil {
      * @return first given number of words of the given string, possibly with ellipsis at the end
      */
     public static String getFirstNWordsWithEllipsis(String string, int numOfWords) {
-        if (string == null || string.isEmpty()) {
+        if (string == null || string.isEmpty() || numOfWords <= 0) {
             return "";
         }
-        String [] stringArray = string.split("\\s+");
-        if (numOfWords >= stringArray.length) {
-            return string.trim();
-        }
-        StringBuilder firstNWords = new StringBuilder();
-        for (int i = 0; i < numOfWords; i++) {
-            firstNWords.append(stringArray[i]);
-            firstNWords.append(" ");
-        }
-        return firstNWords.toString().trim().concat("…");
+        return wordsOf(string).limit(numOfWords).collect(Collectors.joining(" "))
+                + (getNumberOfWords(string) > numOfWords ? "…" : "");
     }
 
     /**
@@ -119,9 +112,17 @@ public class StringUtil {
      * @return number of words in string, 0 if string is empty or null
      */
     public static long getNumberOfWords(String string) {
-        return Stream.ofNullable(string)
-                .flatMap(text -> Arrays.stream(text.split("\\s+")))
-                .count();
+        return wordsOf(string).count();
+    }
+
+    /**
+     * Gets words of a string, null-safe.
+     */
+    public static Stream<String> wordsOf(String string) {
+        if (string == null || string.trim().isEmpty()) {
+            return Stream.empty();
+        }
+        return Stream.of(string.trim().split("\\s+"));
     }
 
     /**
