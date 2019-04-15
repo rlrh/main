@@ -316,6 +316,8 @@ Content is automatically downloaded onto your personal computer.
 [underline]#Format#: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
 
 [TIP]
+The entry's URL must be unique. Duplicate entries with the same URL will not be added!
+[TIP]
 The `Title` and `Description` fields are automatically filled if you do not provide them.
 [TIP]
 A entry can have any number of tags (including 0).
