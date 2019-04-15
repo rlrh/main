@@ -130,8 +130,6 @@ include::../UserGuide.adoc[tag=archiveallcommand]
 
 include::../UserGuide.adoc[tag=refreshcommand]
 
-include::../UserGuide.adoc[tag=refreshallcommand]
-
 ---
 
 // include::../UserGuide.adoc[tag=offlinecommand]
