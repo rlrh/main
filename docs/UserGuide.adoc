@@ -321,10 +321,11 @@ A entry can have any number of tags (including 0).
 * Adds a single entry with a description and tagged with “Business”
 . `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
 
+// tag::subscribe-command[]
 [[Subscribe-command]]
 ==== Subscribing to a feed: `subscribe`
 
-Adds a feed to the manager and subscribes to updates. +
+Adds a feed and subscribes to its updates. +
 All entries in the subscribed feed will be added to the reading list. +
 
 [underline]#Format#: `subscribe l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]..`
@@ -347,15 +348,16 @@ Imported entries from the feed will also be tagged with the same tags as the fee
 `subscribe l/https://open.kattis.com/rss/new-problems t/programming` +
 
 .Subscribing to a feed will add it to the feeds list.
-image::ug-sub/ug-subx-1.png[width="1811"]
+image::ug-sub/ug-subx-1.png[width="906"]
 
 .The links present in the feed are automatically imported to the reading list.
-image::ug-sub/ug-subx-2.png[width="755"]
+image::ug-sub/ug-subx-2.png[width="400"]
 
 [WARNING]
 ====
 The application may be unresponsive for a short while when adding entries from a large feed.
 ====
+// end::subscribe-command[]
 
 ==== Listing entered commands : `history`
 
@@ -470,7 +472,7 @@ Refer to <<Results-Context>> for available commands in this context.
 .View the latest top news on google news using the `googlenews` command
 image::ug-context/ug-contextx-gnews.png[width="790"]
 
-==== Searching a web feed: `feed`
+==== Previewing a web feed: `feed`
 
 Opens a web feed at the URL for previewing.
 
