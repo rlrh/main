@@ -311,6 +311,11 @@ public interface Model {
     void refreshEntry(Entry entry, byte[] articleContent);
 
     /**
+     * Current offline mode setting.
+     */
+    ReadOnlyProperty<OfflineMode> getOfflineModeProperty();
+
+    /**
      * Enables or disables offline mode.
      */
     void setOfflineMode(OfflineMode isEnabled);

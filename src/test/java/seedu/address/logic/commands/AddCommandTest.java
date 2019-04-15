@@ -307,6 +307,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public ReadOnlyProperty<OfflineMode> getOfflineModeProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void setOfflineMode(OfflineMode isEnabled) {
             throw new AssertionError("This method should not be called.");
         }

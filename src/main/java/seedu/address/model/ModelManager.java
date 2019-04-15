@@ -259,6 +259,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public ReadOnlyProperty<OfflineMode> getOfflineModeProperty() {
+        return this.offlineMode;
+    }
+
+    @Override
     public void setOfflineMode(OfflineMode isEnabled) {
         this.offlineMode.set(isEnabled);
     }
