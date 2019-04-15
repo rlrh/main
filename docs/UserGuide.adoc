@@ -330,15 +330,27 @@ All entries in the subscribed feed will be added to the reading list. +
 [underline]#Format#: `subscribe l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]..`
 
 [TIP]
+====
 The `Title` and `Description` fields are automatically filled up if you do not provide them.
+If no tags were specified, the feed entry will automatically be tagged with the URL's (stripped) hostname, if possible.
+====
+
 [TIP]
+====
 A feed can have any number of tags (including 0). +
-Imported entries from the feed will also be tagged with the same tags as the feed
+Imported entries from the feed will also be tagged with the same tags as the feed.
+====
 
 [underline]#Examples#:
 
-* Adds a feed whose name is “Engadget”. +
-. `subscribe l/https://www.engadget.com/rss.xml ti/Engadget t/Tech` +
+* Adds a feed whose name is “Kattis”. +
+`subscribe l/https://open.kattis.com/rss/new-problems t/programming` +
+
+.Subscribing to a feed will add it to the feeds list.
+image::ug-sub/ug-subx-1.png[width="1811"]
+
+.The links present in the feed are automatically imported to the reading list.
+image::ug-sub/ug-subx-2.png[width="755"]
 
 [WARNING]
 ====
