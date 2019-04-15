@@ -126,6 +126,8 @@ Some enhancements are done over several pull requests, so all relevant ones are 
 
 ---
 
+include::../UserGuide.adoc[tag=archiveallcommand]
+
 include::../UserGuide.adoc[tag=refreshcommand]
 
 include::../UserGuide.adoc[tag=refreshallcommand]
@@ -142,5 +144,7 @@ include::../UserGuide.adoc[tag=refreshallcommand]
 |===
 
 ---
+
+include::../DeveloperGuide.adoc[tag=storagecomponent]
 
 include::../DeveloperGuide.adoc[tag=network-design]
