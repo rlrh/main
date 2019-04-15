@@ -822,16 +822,16 @@ you can archive parts of your reading list by a search criteria.
 . `list` +
 . `archiveall`
 
-* Archive all entries tagged “infoTheory”
+* Archive all entries tagged “infoTheory” (you may refer to the figures below)
 . `list` +
 . `find t/infoTheory` +
 . `archiveall` +
 . `list`
 
-.Filtering then archiving all infoTheory entries +
+.Filtering then archiving all infoTheory entries (steps 1-3)
 image::find_archiveall.png[width="1200"]
 
-.Reading list now no longer has any infoTheory entries
+.Reading list now no longer has any infoTheory entries (step 4)
 image::find_archiveall_list.png[width="290"]
 // end::archiveallcommand[]
 
