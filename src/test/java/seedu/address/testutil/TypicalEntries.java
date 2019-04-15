@@ -1,5 +1,6 @@
 package seedu.address.testutil;
 
+import static seedu.address.commons.util.FeedUtil.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_AMY;
@@ -8,6 +9,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_SCIENCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TITLE_BOB;
+import static seedu.address.testutil.TestUtil.toUrl;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -147,7 +149,7 @@ public class TypicalEntries {
     public static final String DUMMY_TITLE = "Dummy Title";
     public static final String DUMMY_DESCRIPTION = "Dummy description";
 
-    public static final URL STUB_LINK_URL = TestUtil.toUrl("http://www.description.test/title/title_test.html");
+    public static final URL STUB_LINK_URL = toUrl("http://www.description.test/title/title_test.html");
     public static final String STUB_LINK_TITLE = "Title Test";
     public static final String STUB_LINK_DESCRIPTION = "www.description.test";
 
@@ -304,6 +306,8 @@ public class TypicalEntries {
             .withDescription("Invalid file link")
             .withLink("file:///folder/file.type")
             .build();
+
+    public static final String NONEXISTENT_DOMAIN = "this.website.does.not.exist.definitely";
     public static final String FILE_TEST_CONTENTS = "<!DOCTYPE html>\n<html>\n</html>\n";
 
     // For BrowserPanelTest
@@ -327,45 +331,60 @@ public class TypicalEntries {
         .build();
 
     // bunch of RSS feeds
+    public static final URL KATTIS_FEED_BASE_URL = toUrl("https://open.kattis.com/rss/new-problems");
     public static final Entry KATTIS_FEED_ENTRY = new EntryBuilder()
             .withTitle("Kattis - new problems")
             .withDescription("kattis the kat")
-            .withLink("https://open.kattis.com/rss/new-problems")
+            .withLink(KATTIS_FEED_BASE_URL)
             .build();
 
+    public static final URL EMPTY_FEED_BASE_URL = MainApp.class.getResource("/RssFeedTest/emptyrss.xml");
     public static final Entry EMPTY_FEED_ENTRY = new EntryBuilder()
         .withTitle("An empty feed")
         .withDescription("Very empty feed")
-        .withLink(MainApp.class.getResource("/RssFeedTest/emptyrss.xml"))
+        .withLink(EMPTY_FEED_BASE_URL)
         .build();
 
+    public static final URL ONE_ITEM_FEED_BASE_URL = MainApp.class.getResource("/RssFeedTest/oneitemrss.xml");
     public static final Entry ONE_ITEM_FEED_ENTRY = new EntryBuilder()
         .withTitle("One item feed")
         .withDescription("Almost empty feed")
-        .withLink(MainApp.class.getResource("/RssFeedTest/oneitemrss.xml"))
+        .withLink(ONE_ITEM_FEED_BASE_URL)
         .build();
 
+    public static final URL LOCAL_FEED_BASE_URL = MainApp.class.getResource("/RssFeedTest/rss.xml");
     public static final Entry LOCAL_FEED_ENTRY = new EntryBuilder()
             .withTitle("Tsutsukakushi's anime reviews - local copy")
             .withDescription("anime reviews")
-            .withLink(MainApp.class.getResource("/RssFeedTest/rss.xml"))
+            .withLink(LOCAL_FEED_BASE_URL)
             .build();
 
+    public static final URL NOT_A_FEED_BASE_URL = MainApp.class.getResource("/RssFeedTest/notafeed.notxml");
     public static final Entry NOT_A_FEED_ENTRY = new EntryBuilder()
         .withTitle("Not a feed")
         .withDescription("Not a feed")
-        .withLink(MainApp.class.getResource("/RssFeedTest/notafeed.notxml"))
+        .withLink(NOT_A_FEED_BASE_URL)
         .build();
 
+    public static final URL BING_33_FEED_BASE_URL = MainApp.class.getResource("/RssFeedTest/badrss.xml");
+    public static final Entry BING_33_FEED_ENTRY = new EntryBuilder()
+            .withTitle("Search results of bing 33")
+            .withDescription("should not fail")
+            .withLink(BING_33_FEED_BASE_URL)
+            .build();
+
+    public static final URL ANIMEREVIEW_FEED_BASE_URL = toUrl(
+            "https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml");
     public static final Entry ANIMEREVIEW_FEED_ENTRY = new EntryBuilder()
             .withTitle("Tsutsukakushi's anime reviews - remote mirror")
             .withDescription("anime reviews!")
-            .withLink("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml")
+            .withLink(ANIMEREVIEW_FEED_BASE_URL)
             .build();
 
+    public static final URL ENGADGET_FEED_BASE_URL = toUrl("https://live.engadget.com/rss.xml");
     public static final Entry ENGADGET_FEED_ENTRY = new EntryBuilder()
             .withTitle("Engadget RSS")
-            .withLink("https://live.engadget.com/rss.xml")
+            .withLink(ENGADGET_FEED_BASE_URL)
             .build();
 
     private TypicalEntries() {} // prevents instantiation
@@ -411,5 +430,56 @@ public class TypicalEntries {
 
     public static List<Entry> getTypicalFeedsEntries() {
         return List.of(LOCAL_FEED_ENTRY, KATTIS_FEED_ENTRY);
+    }
+
+
+    /**
+     * Returns the EntryBook containing the contents of {@code ANIMEREVIEW_FEED_BASE_URL} which is the same as
+     * {@code LOCAL_FEED_BASE_URL}.
+     * It has to take in the url because we need it for the default description.
+     */
+    public static EntryBook getAnimeReviewEntryBook(URL url) {
+        return new EntryBookBuilder()
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Mahoujin Guru Guru")
+                        .withLink("https://blog.GNU.moe/anime/review/mahoujin-guru-guru.html")
+                        .withDescription("Anime review 1").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Gamers!")
+                        .withLink("https://blog.GNU.moe/anime/review/gamers.html")
+                        .withDescription("Anime review 2").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Made in Abyss")
+                        .withLink("https://blog.GNU.moe/anime/review/made-in-abyss.html")
+                        .withDescription("Anime review n").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Mob Psycho 100")
+                        .withLink("https://blog.GNU.moe/anime/review/mob-psycho.html")
+                        .withDescription("Anime review").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: New Game!!")
+                        .withLink("https://blog.GNU.moe/anime/review/new-game-2.html")
+                        .withDescription("Anime revieww").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Saiki Kusuo no Psi-nan")
+                        .withLink("https://blog.GNU.moe/anime/review/saiki-kusuo.html")
+                        .withDescription("sigh").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Durarara!!")
+                        .withLink("https://blog.GNU.moe/anime/review/durarara.html")
+                        .withDescription(String.format(DEFAULT_DESCRIPTION_TEXT, url)).build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Battle Programmer Shirase")
+                        .withLink("https://blog.GNU.moe/anime/review/bps.html")
+                        .withDescription("lol").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Re:Zero")
+                        .withLink("https://blog.GNU.moe/anime/review/re_zero.html")
+                        .withDescription("idk").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Youjo Senki")
+                        .withLink("https://blog.GNU.moe/anime/review/youjo_senki.html")
+                        .withDescription("I like this reviewer").build())
+                .build();
     }
 }

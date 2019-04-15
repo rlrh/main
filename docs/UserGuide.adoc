@@ -553,20 +553,14 @@ Finds entries whose fields contain any of the given keyphrases. +
 * Find entries with title containing the phrase `lambda`, or link containing the phrase `github`.
 . `find ti/lambda l/github` +
 
-.Before: Entering the find command with search terms
-image::ug-find/ug-fieldx-1.png[width="800"]
-
-.After: Only entries with title containing `lambda` (red) or link containing `github` (orange) shown
-image::ug-find/ug-fieldx-2.png[width="800"]
+.Only entries with title containing `lambda` (red) or link containing `github` (orange) shown after find command
+image::ug-find/ug-findfieldx.png[width="800"]
 
 * Find entries with the tag `infoTheory`.
 . `find t/infoTheory` +
 
-.Before: Entering the find command for specific tags
-image::ug-find/ug-tagx-1.png[width="800"]
-
-.After: Only entries with tag `infoTheory` shown
-image::ug-find/ug-tagx-2.png[width="800"]
+.Only entries with tag `infoTheory` shown after find command
+image::ug-find/ug-findtagx.png[width="800"]
 // end::findcommand[]
 
 ==== Selecting an entry: `select`
@@ -698,6 +692,7 @@ Shares the specified entry through connected social media.
 
 [underline]#Format#: `share INDEX`
 
+// tag::archivecommand[]
 ==== Archiving an entry: `archive` `[since v1.3]`
 
 Moves the specified entry to the archive and removes its downloaded content.
@@ -722,6 +717,7 @@ image::ug-archive/ug-archivex-1.png[width="800"]
 
 .Entry is saved in the archives
 image::ug-archive/ug-archivex-2.png[width="350"]
+// end::archivecommand[]
 
 ==== Deleting an entry: `delete` `[updated v1.3]`
 

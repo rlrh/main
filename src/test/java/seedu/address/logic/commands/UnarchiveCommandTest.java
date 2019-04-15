@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showEntryAtIndex;
+import static seedu.address.logic.commands.CommandTestUtil.showNoEntry;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_ENTRY;
 
@@ -112,14 +113,5 @@ public class UnarchiveCommandTest {
 
         // different entry -> returns false
         assertFalse(unarchiveFirstCommand.equals(unarchiveSecondCommand));
-    }
-
-    /**
-     * Updates {@code model}'s filtered list to show no one.
-     */
-    private void showNoEntry(Model model) {
-        model.updateFilteredEntryList(p -> false);
-
-        assertTrue(model.getFilteredEntryList().isEmpty());
     }
 }
