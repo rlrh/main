@@ -205,6 +205,7 @@ As a more OOP model, we can store a `Tag` list in `Address Book`, which `Entry` 
 image:ModelClassBetterOopDiagram.png[width="800"]
 
 [[Design-Storage]]
+// tag::storagecomponent[]
 === Storage component
 
 .Structure of the Storage Component
@@ -214,8 +215,16 @@ image::StorageClassDiagram.png[width="800"]
 
 The `Storage` component,
 
-* can save `UserPref` objects in json format and read it back.
-* can save the Address Book data in json format and read it back.
+* can save `UserPref` objects, and `EntryBook` data (for Reading List, Archives, and Feeds) in json format and read it back.
+* can save .html articles in a data directory as individual files. The article contents are only read when required by the user.
+
+Unlike the `UserPref` and `EntryBook` data, we don't store the articles in a flat file.
+This is because the file size of the article store is much larger than the file sizes of all the prefs and reading list/archives/etc. combined,
+so having it in a flat file would drastically slow down the application.
+
+Instead, the files are saved to disk and are not read until the user clicks on an entry and wants to view it offline.
+
+// end::storagecomponent[]
 
 [[Design-Commons]]
 === Common classes

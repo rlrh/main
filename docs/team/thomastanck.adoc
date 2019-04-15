@@ -145,4 +145,6 @@ include::../UserGuide.adoc[tag=refreshallcommand]
 
 ---
 
+include::../DeveloperGuide.adoc[tag=storagecomponent]
+
 include::../DeveloperGuide.adoc[tag=network-design]
