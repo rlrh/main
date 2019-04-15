@@ -22,9 +22,9 @@ public class OfflineModeCommandParser implements Parser<OfflineModeCommand> {
         requireNonNull(args);
 
         String trimmedArgs = args.trim();
-        if (trimmedArgs.equals("enable")) {
+        if ("enable".equals(trimmedArgs)) {
             return new OfflineModeCommand(OfflineMode.ENABLED);
-        } else if (trimmedArgs.equals("disable")) {
+        } else if ("disable".equals(trimmedArgs)) {
             return new OfflineModeCommand(OfflineMode.DISABLED);
         } else {
             throw new ParseException(
