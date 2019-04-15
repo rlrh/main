@@ -385,14 +385,45 @@ Available view types are specified in the `ViewType` enum, and available reader 
 The `ViewMode` object encapsulates a `ViewType` and `ReaderViewStyle` and represents a user setting.
 The `Model` exposes an observable `viewModeProperty`, which is set by `ViewModeCommand` and observed by `BrowserPanel`.
 
-The `BrowserPanel` keeps track of whether an original web page or a reader view version is loaded.
-If an original web page is loaded but the `reader` view mode is selected,
-the CSS stylesheet is changed accordingly and the reader view is generated and loaded,
-except when the currently loaded web page is the default blank page or error page.
+The `BrowserPanel` is a wrapper around the JavaFX `WebView` component, and is responsible for displaying web pages.
+It keeps track of whether an internal page, offline page, online page or HTML content is loaded,
+and reacts to events like changes in loading status, view mode and selected entry.
+
+.General state diagram for BrowserPanel.
+image::dg-readerview/BrowserStateDiagram.png[width="800"]
+
+There are two conditions which cause reader view to be generated and loaded:
+
+1. If an original web page has successfully loaded but the `reader` view mode is selected,
+the reader view is generated from the currently displayed page and loaded, then the CSS stylesheet is changed.
+This mechanism is used for online URLs, and was chosen because using the other mechanism below would cause a performance
+bottleneck due to having to download online web pages.
+
+.Sequence diagram for loading reader view from current page.
+image::dg-readerview/ReaderViewOfPageDiagram.png[width="800"]
+
+2. Alternatively, if the `reader` view mode is already selected and an offline URL is selected (most probably an entry),
+the reader view is generated from directly reading the file pointed to by the offline URL and loaded, then the CSS stylesheet is changed.
+This mechanism is used for offline URLs,
+and is a performance enhancement as it bypasses waiting for the original web page to load before reader view is loaded.
+
+.Sequence diagram for loading reader view from offline URL.
+image::dg-readerview/ReaderViewOfHtmlDiagram.png[width="800"]
 
 The Jsoup and Readability4J external libraries do the heavy lifting of parsing the raw HTML currently loaded in the `WebView` to extract useful metadata and content.
 Jsoup was chosen as it is a mature HTML parser library while Readability4J was chosen as it is a port of port of Mozilla's excellent Readability.js.
 These are combined into a new HTML document, which is styled using Bootstrap and then loaded in the `WebView`.
+
+.Activity diagram for generation of reader view.
+image::dg-readerview/ReaderViewGenerationActivityDiagram.png[width="400"]
+
+As Readability4J does not extract all available and useful metadata information, Jsoup is used to manually extract author information,
+as well as http://ogp.me[Open Graph metadata] like published datetime and section information if available.
+As Readability4J also does not provide the estimated reading time, Jsoup is used to extract text content from the HTML DOM
+Document Object, and reading time is estimated from the number of words present and the average human reading speed.
+
+.Activity diagram for insertion of metadata element.
+image::dg-readerview/InsertMetadataElementActivityDiagram.png[width="400"]
 
 ==== Design Considerations
 
@@ -419,9 +450,10 @@ Therefore, generating reader view on-the-fly will open up reader view to our app
 ** Cons: Difficult to implement, stylesheets still need to be based on Bootstrap.
 * **Why current choice:**
 * It is a case of diminishing returns.
-It is not difficult for us to add a few reader view styles for users to choose from, which gives them a lot more flexibility compared to not having any styles to choose from.
-but making the design support custom user stylesheets would require much more effort while not giving users a lot more benefit.
+It is not difficult to implement a design that allows us to add a few reader view styles for users to choose from, which gives them a lot more flexibility compared to not having any styles to choose from.
+However, making the design support custom user stylesheets would require much more effort while not giving users a lot more benefit.
 The current design makes it very simple for us to add another reader view style, in case many users demand a particular style.
+Nevertheless, this is a feature we can consider developing if there is demand for it.
 
 // end::readerview[]
 
