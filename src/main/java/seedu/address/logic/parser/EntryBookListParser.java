@@ -8,9 +8,9 @@ import seedu.address.logic.commands.ArchiveAllCommand;
 import seedu.address.logic.commands.ArchiveCommand;
 import seedu.address.logic.commands.ClearListCommand;
 import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.DeleteAllCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.RefreshAllEntriesCommand;
 import seedu.address.logic.commands.RefreshEntryCommand;
@@ -59,12 +59,11 @@ public class EntryBookListParser extends EntryBookParser {
         case DeleteCommand.COMMAND_WORD:
             return new DeleteCommandParser().parse(arguments);
 
+        case DeleteAllCommand.COMMAND_WORD:
+            return new DeleteAllCommand();
+
         case ClearListCommand.COMMAND_WORD:
             return new ClearListCommand();
-
-        case FindCommand.COMMAND_WORD:
-        case FindCommand.COMMAND_ALIAS:
-            return new FindCommandParser().parse(arguments);
 
         case RefreshEntryCommand.COMMAND_WORD:
         case RefreshEntryCommand.COMMAND_ALIAS:

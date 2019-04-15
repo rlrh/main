@@ -11,6 +11,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.Model;
 import seedu.address.model.ModelContext;
+import seedu.address.model.OfflineMode;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.entry.Entry;
@@ -139,6 +140,16 @@ public class ModelStub implements Model {
 
     @Override
     public void refreshEntry(Entry entry, byte[] articleContent) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public ReadOnlyProperty<OfflineMode> getOfflineModeProperty() {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public void setOfflineMode(OfflineMode isEnabled) {
         throw new AssertionError("This method should not be called.");
     }
 

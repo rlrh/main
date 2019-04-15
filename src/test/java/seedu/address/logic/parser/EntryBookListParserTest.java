@@ -19,6 +19,7 @@ import seedu.address.logic.commands.ArchiveCommand;
 import seedu.address.logic.commands.ArchivesCommand;
 import seedu.address.logic.commands.BingWebSearchCommand;
 import seedu.address.logic.commands.ClearListCommand;
+import seedu.address.logic.commands.DeleteAllCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditEntryDescriptor;
@@ -31,6 +32,7 @@ import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.OfflineModeCommand;
 import seedu.address.logic.commands.RefreshAllEntriesCommand;
 import seedu.address.logic.commands.RefreshEntryCommand;
 import seedu.address.logic.commands.SelectCommand;
@@ -105,6 +107,13 @@ public class EntryBookListParserTest {
     }
 
     @Test
+    public void parseCommand_deleteall() throws Exception {
+        DeleteAllCommand command = (DeleteAllCommand) parser.parseCommand(
+            DeleteAllCommand.COMMAND_WORD);
+        assertEquals(new DeleteAllCommand(), command);
+    }
+
+    @Test
     public void parseCommand_edit() throws Exception {
         Entry entry = new EntryBuilder().build();
         EditEntryDescriptor descriptor = new EditEntryDescriptorBuilder(entry).build();
@@ -120,6 +129,12 @@ public class EntryBookListParserTest {
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
+    }
+
+    @Test
+    public void parseCommand_offline() throws Exception {
+        assertTrue(parser.parseCommand(OfflineModeCommand.COMMAND_WORD + " enable") instanceof OfflineModeCommand);
+        assertTrue(parser.parseCommand(OfflineModeCommand.COMMAND_WORD + " disable") instanceof OfflineModeCommand);
     }
 
     @Test

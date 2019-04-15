@@ -22,7 +22,6 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyEntryBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.ArticleStorage;
 import seedu.address.storage.DataConversionAndIoExceptionsThrowingSupplier;
 import seedu.address.storage.DataDirectoryArticleStorage;
@@ -85,8 +84,8 @@ public class MainApp extends Application {
      */
     private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
 
-        ReadOnlyEntryBook initialListEntryBook = initEntryBook(storage::readListEntryBook,
-                SampleDataUtil::getSampleEntryBook, "reading list");
+        ReadOnlyEntryBook initialListEntryBook = initEntryBook(storage::readListEntryBook, EntryBook::new,
+                "reading list");
         ReadOnlyEntryBook initialArchivesEntryBook = initEntryBook(storage::readArchivesEntryBook, EntryBook::new,
                 "archives");
         ReadOnlyEntryBook initialFeedEntryBook = initEntryBook(storage::readFeedsEntryBook, EntryBook::new,

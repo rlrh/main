@@ -2,6 +2,7 @@ package seedu.address.commons.util;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -155,5 +156,126 @@ public class StringUtilTest {
         StringUtil.getDetails(null);
     }
 
+    //---------------- Tests for getFirstNWordsWithEllipsis --------------------------------------
+
+    /*
+     * Equivalence partitions for string:
+     *   - null
+     *   - empty
+     *   - multiple words
+     *   - multiple words with leading/trailing whitespaces
+     *
+     * Equivalence partitions for number of words:
+     *   - 0 or negative integer
+     *   - positive integer
+     *
+     * Equivalence partitions as a whole:
+     *   - String length longer than number of words
+     *   - String length shorter or equal to number of words
+     */
+
+    @Test
+    public void getFirstNWordsWithEllipsis_nullString_returnsEmptyString() {
+        assertEquals("", StringUtil.getFirstNWordsWithEllipsis(null, 1));
+    }
+
+    @Test
+    public void getFirstNWordsWithEllipsis_emptyString_returnsEmptyString() {
+        assertEquals("", StringUtil.getFirstNWordsWithEllipsis("", 1));
+    }
+
+    @Test
+    public void getFirstNWordsWithEllipsis_emptyWhitespaceString_returnsEmptyString() {
+        assertEquals("", StringUtil.getFirstNWordsWithEllipsis("   ", 1));
+    }
+
+    @Test
+    public void getFirstNWordsWithEllipsis_negativeNumOfWords_returnsEmptyString() {
+        assertEquals("", StringUtil.getFirstNWordsWithEllipsis("hello world", -1));
+    }
+
+    @Test
+    public void getFirstNWordsWithEllipsis_stringLengthLessThanNumOfWords_returnsOriginalString() {
+        assertEquals("hello world", StringUtil.getFirstNWordsWithEllipsis("hello world", 3));
+    }
+
+    @Test
+    public void getFirstNWordsWithEllipsis_stringLengthEqualToNumOfWords_returnsOriginalString() {
+        assertEquals("hello world", StringUtil.getFirstNWordsWithEllipsis("hello world", 2));
+    }
+
+    @Test
+    public void getFirstNWordsWithEllipsis_whitespaceStringLengthEqualToNumOfWords_returnsTrimmedString() {
+        assertEquals("hello world", StringUtil.getFirstNWordsWithEllipsis(" hello  world   ", 2));
+    }
+
+    @Test
+    public void getFirstNWordsWithEllipsis_stringLengthMoreThanNumOfWords_returnsFirstNWordsWithEllipsis() {
+        assertEquals("hello…", StringUtil.getFirstNWordsWithEllipsis("hello world", 1));
+    }
+
+    @Test
+    public void getFirstNWordsWithEllipsis_whitespaceStringLongerThanWords_returnsTrimmedFirstNWordsWithEllipsis() {
+        assertEquals("hello…", StringUtil.getFirstNWordsWithEllipsis("   hello world   ", 1));
+    }
+
+    //---------------- Tests for getNumberOfWords --------------------------------------
+
+    /*
+     * Equivalence partitions for string:
+     *   - null
+     *   - empty
+     *   - empty with leading/trailing whitespaces
+     *   - multiple words
+     *   - multiple words with leading/trailing whitespaces
+     */
+
+    @Test
+    public void getNumberOfWords_nullString_returns0() {
+        assertEquals(0, StringUtil.getNumberOfWords(null));
+    }
+
+    @Test
+    public void getNumberOfWords_emptyString_returns0() {
+        assertEquals(0, StringUtil.getNumberOfWords(""));
+    }
+
+    @Test
+    public void getNumberOfWords_emptyWhitespaceString_returns0() {
+        assertEquals(0, StringUtil.getNumberOfWords("    "));
+    }
+
+    @Test
+    public void getNumberOfWords_multipleWordsString_returnsNumOfWords() {
+        assertEquals(2, StringUtil.getNumberOfWords("hello world"));
+    }
+
+    @Test
+    public void getNumberOfWords_multipleWordsWhitespaceString_returnsNumOfWords() {
+        assertEquals(2, StringUtil.getNumberOfWords(" hello  world   "));
+    }
+
+    //---------------- Tests for nullSafeOf --------------------------------------
+
+    /*
+     * Equivalence partitions for string:
+     *   - null
+     *   - non-null
+     */
+
+    @Test
+    public void nullSafeOf_nullString_returnsEmptyString() {
+        assertEquals("", StringUtil.nullSafeOf(null));
+    }
+
+    @Test
+    public void nullSafeOf_emptyString_returnsEmptyString() {
+        assertEquals("", StringUtil.nullSafeOf(""));
+    }
+
+    @Test
+    public void nullSafeOf_multipleWordsWhitespaceString_returnsOriginalString() {
+        assertEquals(" hello  world   ", StringUtil.nullSafeOf(" hello  world   "));
+    }
 
 }
