@@ -15,6 +15,8 @@ import static seedu.address.testutil.TypicalEntries.KATTIS_FEED_ENTRY;
 import static seedu.address.testutil.TypicalEntries.WIKIPEDIA_ENTRY;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_ENTRY;
 
+import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -34,6 +36,7 @@ import seedu.address.model.entry.exceptions.EntryNotFoundException;
 import seedu.address.storage.Storage;
 import seedu.address.testutil.EntryBookBuilder;
 import seedu.address.testutil.EntryBuilder;
+import seedu.address.testutil.TestUtil;
 
 public class ModelManagerTest {
     @Rule
@@ -293,6 +296,24 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void offlineMode_offlineLinksFetchedIffOfflineModeEnabled() {
+        modelManager = new ModelManagerStub(new StorageStubReturnsFakeLink());
+        modelManager.setOfflineMode(OfflineMode.ENABLED);
+        assertTrue(modelManager.getOfflineLink(TestUtil.toUrl("https://some.url")).isPresent());
+        modelManager.setOfflineMode(OfflineMode.DISABLED);
+        assertFalse(modelManager.getOfflineLink(TestUtil.toUrl("https://some.url")).isPresent());
+    }
+
+    @Test
+    public void offlineMode_addArticleWorksIffOfflineModeEnabled() throws IOException {
+        modelManager = new ModelManagerStub(new StorageStubReturnsFakeLink());
+        modelManager.setOfflineMode(OfflineMode.ENABLED);
+        assertTrue(modelManager.addArticle(TestUtil.toUrl("https://some.url"), new byte[0]).isPresent());
+        modelManager.setOfflineMode(OfflineMode.DISABLED);
+        assertFalse(modelManager.addArticle(TestUtil.toUrl("https://some.url"), new byte[0]).isPresent());
+    }
+
+    @Test
     public void equals() {
         EntryBook listEntryBook = new EntryBookBuilder().withEntry(ALICE).withEntry(BENSON).build();
         EntryBook archivesEntryBook = new EntryBookBuilder().withEntry(CARL).withEntry(DANIEL).build();
@@ -372,4 +393,17 @@ public class ModelManagerTest {
     private Path getTempFilePath(String fileName) {
         return testFolder.getRoot().toPath().resolve(fileName);
     }
+
+    class StorageStubReturnsFakeLink extends StorageStub {
+        @Override
+        public Optional<Path> getOfflineLink(URL url) {
+            return Optional.of(TestUtil.getFilePathInSandboxFolder("fake"));
+        }
+
+        @Override
+        public Optional<Path> addArticle(URL url, byte[] content) {
+            return Optional.of(TestUtil.getFilePathInSandboxFolder("fake"));
+        }
+    }
+
 }

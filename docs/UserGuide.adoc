@@ -354,6 +354,28 @@ Lists all the commands that you have entered in reverse chronological order. +
 Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
 ====
 
+==== Enabling or disabling offline mode : `offline`
+
+Some web pages may not work with offline mode.
+In order to browse these web pages,
+you may temporarily disable offline mode with this command,
+or enable it after you wish to re-enter offline mode. +
+
+[underline]#Format#: `offline MODE(enable, disable)`
+
+[underline]#Examples#:
+
+* Disable offline mode
+. `offline disable`
+* Enable offline mode
+. `offline enable`
+
+[TIP]
+====
+Offline mode is enabled by default at the start of every session
+so you don't have to worry about forgetting to re-enable offline mode
+====
+
 ==== Viewing help : `help`
 
 [underline]#Format#: `help`
