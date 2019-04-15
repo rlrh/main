@@ -55,10 +55,11 @@ Otherwise, refer to the links below to relevant pull requests for each enhanceme
 * Project management:
 ** I managed the release of https://github.com/CS2103-AY1819S2-W10-1/main/releases/tag/v1.3.1[version 1.3.1] of our application.
 * Community:
-** Regularly review pull requests (PR). See https://github.com/CS2103-AY1819S2-W10-1/main/pulls?utf8=%E2%9C%93&q=is%3Apr+reviewed-by%3Aepicfailname[here] for the complete list.
-** Otherwise, look below for PRs with non-trivial comments!
+** Regularly review pull requests (PR). See https://github.com/CS2103-AY1819S2-W10-1/main/pulls?utf8=%E2%9C%93&q=is%3Apr+reviewed-by%3Aepicfailname[here] for the complete list!
+** Otherwise, look below for PRs with non-trivial comments:
 *** https://github.com/CS2103-AY1819S2-W10-1/main/pull/76[#76]
 *** https://github.com/CS2103-AY1819S2-W10-1/main/pull/107[#107]
+*** https://github.com/CS2103-AY1819S2-W10-1/main/pull/193[#107]
 ** Reported bugs and gave suggestions for another group's project, https://github.com/CS2103-AY1819S2-W11-3/main[TravelBuddy]:
 *** https://github.com/CS2103-AY1819S2-W11-3/main/issues/156[#156]
 *** https://github.com/CS2103-AY1819S2-W11-3/main/issues/158[#158]
@@ -71,11 +72,13 @@ Otherwise, refer to the links below to relevant pull requests for each enhanceme
 
 ---
 
-include::../UserGuide.adoc[tag=contextcommands]
+include::../UserGuide.adoc[tag=findcommand]
 
 ---
 
-include::../UserGuide.adoc[tag=findcommand]
+include::../UserGuide.adoc[tag=archivecommand]
+
+---
 
 == Contributions to the Developer Guide
 
@@ -90,3 +93,5 @@ include::../DeveloperGuide.adoc[tag=designlogic]
 ---
 
 include::../DeveloperGuide.adoc[tag=contextswitching]
+
+---
