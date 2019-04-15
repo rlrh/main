@@ -1065,7 +1065,7 @@ The application may be unresponsive for a short while when adding entries from a
 ====
 
 // tag::refreshallfeedscommand[]
-==== Updating entries from all currently displayed feeds: `addall`
+==== Updating entries from all currently displayed feeds: `refreshall`
 
 Refreshes all currently displayed feeds.
 
