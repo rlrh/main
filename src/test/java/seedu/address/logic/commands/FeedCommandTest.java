@@ -8,6 +8,11 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_NET_BASE_STRING;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_FAILURE_XML;
 import static seedu.address.logic.commands.FeedCommand.MESSAGE_SUCCESS;
+import static seedu.address.testutil.TypicalEntries.ANIMEREVIEW_FEED_BASE_URL;
+import static seedu.address.testutil.TypicalEntries.BING_33_FEED_BASE_URL;
+import static seedu.address.testutil.TypicalEntries.KATTIS_FEED_BASE_URL;
+import static seedu.address.testutil.TypicalEntries.LOCAL_FEED_BASE_URL;
+import static seedu.address.testutil.TypicalEntries.NOT_A_FEED_BASE_URL;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,7 +21,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import seedu.address.MainApp;
 import seedu.address.commons.util.FeedUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -28,14 +32,6 @@ import seedu.address.model.entry.Entry;
 import seedu.address.testutil.TestUtil;
 
 public class FeedCommandTest {
-    private static final URL TEST_URL =
-        TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/rss.xml");
-    private static final URL TEST_URL_LOCAL =
-        MainApp.class.getResource("/RssFeedTest/rss.xml");
-    private static final URL TEST_BAD_FEED_URL =
-        MainApp.class.getResource("/RssFeedTest/badrss.xml");
-    private static final URL NOTAFEED_URL =
-        TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/notafeed.notxml");
     private static final URL NOTAWEBSITE_URL =
         TestUtil.toUrl("https://this.website.does.not.exist.definitely/");
 
@@ -60,8 +56,8 @@ public class FeedCommandTest {
 
     @Test
     public void equals() throws MalformedURLException {
-        URL firstUrl = new URL("https://open.kattis.com/rss/new-problems");
-        URL secondUrl = new URL("https://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=rss");
+        URL firstUrl = KATTIS_FEED_BASE_URL;
+        URL secondUrl = ANIMEREVIEW_FEED_BASE_URL;
 
         FeedCommand feedFirstCommand = new FeedCommand(firstUrl);
         FeedCommand feedSecondCommand = new FeedCommand(secondUrl);
@@ -85,23 +81,23 @@ public class FeedCommandTest {
 
     @Test
     public void execute_localUrl_success() throws Exception {
-        assertFeedSuccessfullyLoaded(TEST_URL_LOCAL);
+        assertFeedSuccessfullyLoaded(LOCAL_FEED_BASE_URL);
     }
 
     @Test
     public void execute_badFeed_success() throws Exception {
-        assertFeedSuccessfullyLoaded(TEST_BAD_FEED_URL);
+        assertFeedSuccessfullyLoaded(BING_33_FEED_BASE_URL);
     }
 
     @Test
     public void execute_remoteUrl_success() throws Exception {
-        assertFeedSuccessfullyLoaded(TEST_URL);
+        assertFeedSuccessfullyLoaded(ANIMEREVIEW_FEED_BASE_URL);
     }
 
     @Test
     public void execute_urlIsNotAFeed_commandFails() {
-        String expectedMessage = String.format(MESSAGE_FAILURE_XML, NOTAFEED_URL);
-        FeedCommand command = new FeedCommand(NOTAFEED_URL);
+        String expectedMessage = String.format(MESSAGE_FAILURE_XML, NOT_A_FEED_BASE_URL);
+        FeedCommand command = new FeedCommand(NOT_A_FEED_BASE_URL);
 
         assertCommandFailure(command, model, commandHistory, expectedMessage);
     }
