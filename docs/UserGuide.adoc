@@ -100,6 +100,7 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 .  Refer to <<Commands>> for details of each command.
 
+// tag::features[]
 == Features
 
 === Overview
@@ -210,6 +211,7 @@ You can use Bing Web Search or Google News Search.
 Keep up to date with a website by having any new Entries added to your Reading List.
 . *Unsubscribe (from a website's Feed)* +
 Stop adding any new Entries from the website to your Reading List.
+// end::features[]
 
 [[Context]]
 == Contexts
@@ -590,6 +592,7 @@ Selects the entry identified by the index number used in the displayed entry lis
 . `find ti/Trump` +
 . `select 1` +
 
+// tag::viewmode[]
 ==== Changing the view mode: `view`
 
 Changes the view mode between the original browser view or the reader view for a more comfortable reading experience.
@@ -627,6 +630,8 @@ image::ug-view/ReaderViewDark.png[width="720"]
 
 .A web page in reader view with black colour scheme
 image::ug-view/ReaderViewBlack.png[width="720"]
+
+// end::viewmode[]
 
 ==== Refreshing an entry: `refresh` `[since v1.3]`
 
@@ -842,7 +847,7 @@ Selects the entry identified by the index number used in the displayed entry lis
 * Selects the 2nd entry from the search results.
 . `select 2`
 
-==== Changing the view mode: `view` `[since v1.2, updated v1.3]`
+==== Changing the view mode: `view`
 
 Changes the view mode between the original browser or a more comfortable reading experience.
 

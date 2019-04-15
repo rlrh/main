@@ -15,11 +15,11 @@ My team and I were tasked with enhancing a basic address book desktop applicatio
 We decided to morph it into an integrated bookmark manager and web feed aggregator called README.
 
 This product helps heavy web content consumers read more productively, efficiently and comfortably by keeping everything they want to read in one place,
-with powerful organization, offline support, web feed aggregation and a reading view mode as key features.
+with powerful organization options, offline support, web feed aggregation and a reading view mode as key features.
 
 Users interact with it using a command line interface (CLI), and it has a graphical user interface (GUI) created with JavaFX. It is written in Java, and has about 10,000 lines of code.
 
-My role was to design and implement the Reader View feature as well as the user interface (UI).
+My role was to design and implement the Reader View feature, which gives users a better reading experience, as well as the user interface (UI).
 The following sections illustrate these enhancements in more detail, as well as the relevant sections I have added to the user and developer guides in relation to these enhancements.
 
 == Summary of contributions
@@ -27,36 +27,39 @@ The following sections illustrate these enhancements in more detail, as well as 
 * *Major enhancement*: I added the *Reader View* feature
 ** What it does: The *Reader View* provides a clean, minimalist reading experience by stripping out all the visual clutter from web pages and presents content in a perfectly formatted, clean layout, with user-selectable colour schemes.
 ** Justification: This feature improves the user experience significantly because it lets users focus on consuming content without any unnecessary distractions and helps them read more comfortably, thus improving productivity.
-** Highlights: This enhancement required analysis of design alternatives to open it up for usage in as many scenarios as possible. The implementation was challenging as it required an in-depth understanding of the JavaFX WebView component, as well as knowledge of the HTML Document Object Model and CSS styling.
+** Highlights: This enhancement required analysis of design alternatives to open it up for usage in as many scenarios as possible. The implementation was challenging as it required managing complex state. It also required an in-depth understanding of the JavaFX WebView component, as well as knowledge of the HTML Document Object Model and CSS styling.
 ** Credits: The https://github.com/dankito/Readability4J[Readability4J] library does the heavy lifting of extracting a web page‘s relevant content and removing clutter from it. I used the https://jsoup.org/[Jsoup] library to extract additional useful metadata, and combined this with the results from Readability4J into a new web page, where I used the https://getbootstrap.com/[Bootstrap] framework to layout content and adapted the https://bootswatch.com/litera/[Bootswatch Litera] theme into different colour schemes for presenting content.
 
-* *Minor enhancement*: I added an autofill utility that lets users specify just a link when adding a new entry and have the title and description fields automatically filled. This makes adding links to our application very convenient for users.
+* *Minor enhancement*: I added a navigation sidebar UI component that helps users create a mental model of the app structure,
+and also offers convenient access to the major areas of the app.
+This required modifying the existing design to decouple displaying of command results from user-entered commands.
+It also supports asynchronous commands in future that can return an initial result first, do some long-running work, and then return another final result.
 
-* *Minor enhancement*: I modified the existing design from supporting only synchronous commands to supporting asynchronous commands that can return an initial result first, do some long-running work, and then return another final result. This keeps the user interface responsive while a command is in the progress of doing some work.
+* *Minor enhancement*: I added an autofill utility that lets users specify just a link when adding a new entry and have the title and description fields automatically filled.
+This makes adding links to our appvery convenient for users.
 
 * *Code contributed*:
 ** Reader View:  https://github.com/CS2103-AY1819S2-W10-1/main/pull/184[#184], https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111], https://github.com/CS2103-AY1819S2-W10-1/main/pull/98[#98], https://github.com/CS2103-AY1819S2-W10-1/main/pull/44[#44], https://github.com/CS2103-AY1819S2-W10-1/main/pull/32[#32]
+** Navigation sidebar UI component with design change: https://github.com/CS2103-AY1819S2-W10-1/main/pull/160[#160], https://github.com/CS2103-AY1819S2-W10-1/main/pull/31[#31]
 ** Autofill when adding new entry: https://github.com/CS2103-AY1819S2-W10-1/main/pull/116[#116], https://github.com/CS2103-AY1819S2-W10-1/main/pull/76[#76]
-** Design change: https://github.com/CS2103-AY1819S2-W10-1/main/pull/31[#31]
-** Navigation sidebar UI component: https://github.com/CS2103-AY1819S2-W10-1/main/pull/160[#160]
-** Status bar footer UI component: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101]
+** Status bar footer UI component enhancement: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101]
 
 * *Other contributions*:
 
 ** Project management:
 *** There were a total of 5 releases, from version `1.1` to `1.4`. I managed release `v1.2` on https://github.com/CS2103-AY1819S2-W10-1/main/releases/tag/v1.2[GitHub].
 ** Enhancements to existing features:
-*** Added the navigation sidebar UI component, and did minor UI restyling (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
+*** UI restyling (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
 *** Redesigned the status bar footer UI component to include context information (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
 *** Integrated Google News Search on top of RSS feed reading capability by team-mate https://cs2103-ay1819s2-w10-1.github.io/main/team/qjqqyy.html[Qiji] (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/121[#121])
 ** Documentation:
 *** Restructured the User Guide to be more reader-friendly: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#96], https://github.com/CS2103-AY1819S2-W10-1/main/pull/83[#83]
 *** Minor updates to documentation: https://github.com/CS2103-AY1819S2-W10-1/main/pull/197[#197], https://github.com/CS2103-AY1819S2-W10-1/main/pull/134[#134], https://github.com/CS2103-AY1819S2-W10-1/main/pull/12[#12], https://github.com/CS2103-AY1819S2-W10-1/main/pull/7[#7]
 ** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com/CS2103-AY1819S2-W10-1/main/pull/21[#21], https://github.com/CS2103-AY1819S2-W10-1/main/pull/33[#33], https://github.com/CS2103-AY1819S2-W10-1/main/pull/35[#35], https://github.com/CS2103-AY1819S2-W10-1/main/pull/80[#80],
+*** PRs reviewed (with non-trivial review comments): https://github.com/CS2103-AY1819S2-W10-1/main/pull/21[#21], https://github.com/CS2103-AY1819S2-W10-1/main/pull/33[#33], https://github.com/CS2103-AY1819S2-W10-1/main/pull/35[#35], https://github.com/CS2103-AY1819S2-W10-1/main/pull/80[#80], https://github.com/CS2103-AY1819S2-W10-1/main/pull/173[#173]
 *** Contributed to forum discussions (example:  https://github.com/nus-cs2103-AY1819S2/forum/issues/39[1], https://github.com/nus-cs2103-AY1819S2/forum/issues/43[2])
 ** Tools:
-*** Integrated a third party libraries Readability4J and FontAwesomeFX to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/160[#160], https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111])
+*** Integrated third party libraries Readability4J and FontAwesomeFX to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/160[#160], https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111])
 
 == Contributions to the User Guide
 
@@ -64,9 +67,9 @@ The following sections illustrate these enhancements in more detail, as well as 
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-// include::../UserGuide.adoc[tag=undoredo]
+include::../UserGuide.adoc[tag=viewmode]
 
-// include::../UserGuide.adoc[tag=dataencryption]
+include::../UserGuide.adoc[tag=features]
 
 == Contributions to the Developer Guide
 
@@ -74,6 +77,6 @@ The following sections illustrate these enhancements in more detail, as well as 
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-// include::../DeveloperGuide.adoc[tag=undoredo]
+include::../DeveloperGuide.adoc[tag=readerview]
 
-// include::../DeveloperGuide.adoc[tag=dataencryption]
+include::../DeveloperGuide.adoc[tag=autofill]
