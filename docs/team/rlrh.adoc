@@ -3,22 +3,19 @@
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: README
+Hello! I am Rayner Lim, a Computer Science student at the National University of Singapore.
+I design and code, and am passionate about building great products, services & systems.
+Here you can find my contributions to one of my projects.
 
----
+== PROJECT: README
 
 == Overview
 
-My team and I were tasked with enhancing a basic address book desktop application with a command line interface (CLI) for our Software Engineering project. We decided to morph it into an integrated bookmark manager and web feed aggregator called README.
+My team and I were tasked with enhancing a basic address book desktop application with a command line interface (CLI) for our Software Engineering project.
+We decided to morph it into an integrated bookmark manager and web feed aggregator called README.
 
-This product helps heavy web content consumers read more efficiently by keeping everything they want to read in one place.
-
-Feature highlights:
-
-* Powerful organization options enable users to effectively manage all their content
-* Offline support frees users to read anywhere and anytime
-* Web feed aggregation keeps users up to date with the all the content that matters to them
-* Clean, minimalist reading experience lets users focus on content without distractions
+This product helps heavy web content consumers read more productively, efficiently and comfortably by keeping everything they want to read in one place,
+with powerful organization, offline support, web feed aggregation and a reading view mode as key features.
 
 Users interact with it using a command line interface (CLI), and it has a graphical user interface (GUI) created with JavaFX. It is written in Java, and has about 10,000 lines of code.
 
@@ -38,27 +35,30 @@ The following sections illustrate these enhancements in more detail, as well as 
 * *Minor enhancement*: I modified the existing design from supporting only synchronous commands to supporting asynchronous commands that can return an initial result first, do some long-running work, and then return another final result. This keeps the user interface responsive while a command is in the progress of doing some work.
 
 * *Code contributed*:
-** Reader View: https://github.com/CS2103-AY1819S2-W10-1/main/pull/44[#44], https://github.com/CS2103-AY1819S2-W10-1/main/pull/98[#98], https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111]
-** Autofill Entry: https://github.com/CS2103-AY1819S2-W10-1/main/pull/76[#76], https://github.com/CS2103-AY1819S2-W10-1/main/pull/116[#116]
+** Reader View:  https://github.com/CS2103-AY1819S2-W10-1/main/pull/184[#184], https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111], https://github.com/CS2103-AY1819S2-W10-1/main/pull/98[#98], https://github.com/CS2103-AY1819S2-W10-1/main/pull/44[#44], https://github.com/CS2103-AY1819S2-W10-1/main/pull/32[#32]
+** Autofill when adding new entry: https://github.com/CS2103-AY1819S2-W10-1/main/pull/116[#116], https://github.com/CS2103-AY1819S2-W10-1/main/pull/76[#76]
 ** Design change: https://github.com/CS2103-AY1819S2-W10-1/main/pull/31[#31]
-** Status bar footer: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101]
+** Navigation sidebar UI component: https://github.com/CS2103-AY1819S2-W10-1/main/pull/160[#160]
+** Status bar footer UI component: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101]
 
 * *Other contributions*:
 
 ** Project management:
 *** There were a total of 5 releases, from version `1.1` to `1.4`. I managed release `v1.2` on https://github.com/CS2103-AY1819S2-W10-1/main/releases/tag/v1.2[GitHub].
 ** Enhancements to existing features:
-*** Redesigned the status bar footer to include context information (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
+*** Added the navigation sidebar UI component, and did minor UI restyling (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
+*** Redesigned the status bar footer UI component to include context information (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#101])
+*** Integrated Google News Search on top of RSS feed reading capability by team-mate https://cs2103-ay1819s2-w10-1.github.io/main/team/qjqqyy.html[Qiji] (Pull request https://github.com/CS2103-AY1819S2-W10-1/main/pull/121[#121])
 ** Documentation:
-*** Restructured the User Guide to be more reader-friendly: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#96]
+*** Restructured the User Guide to be more reader-friendly: https://github.com/CS2103-AY1819S2-W10-1/main/pull/101[#96], https://github.com/CS2103-AY1819S2-W10-1/main/pull/83[#83]
+*** Minor updates to documentation: https://github.com/CS2103-AY1819S2-W10-1/main/pull/197[#197], https://github.com/CS2103-AY1819S2-W10-1/main/pull/134[#134], https://github.com/CS2103-AY1819S2-W10-1/main/pull/12[#12], https://github.com/CS2103-AY1819S2-W10-1/main/pull/7[#7]
 ** Community:
 *** PRs reviewed (with non-trivial review comments): https://github.com/CS2103-AY1819S2-W10-1/main/pull/21[#21], https://github.com/CS2103-AY1819S2-W10-1/main/pull/33[#33], https://github.com/CS2103-AY1819S2-W10-1/main/pull/35[#35], https://github.com/CS2103-AY1819S2-W10-1/main/pull/80[#80],
 *** Contributed to forum discussions (example:  https://github.com/nus-cs2103-AY1819S2/forum/issues/39[1], https://github.com/nus-cs2103-AY1819S2/forum/issues/43[2])
 ** Tools:
-*** Integrated a third party library Readability4J to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111])
+*** Integrated a third party libraries Readability4J and FontAwesomeFX to the project (https://github.com/CS2103-AY1819S2-W10-1/main/pull/160[#160], https://github.com/CS2103-AY1819S2-W10-1/main/pull/111[#111])
 
 == Contributions to the User Guide
-
 
 |===
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
