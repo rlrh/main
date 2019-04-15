@@ -64,6 +64,8 @@ Otherwise, refer to the links below to relevant pull requests for each enhanceme
 *** https://github.com/CS2103-AY1819S2-W11-3/main/issues/156[#156]
 *** https://github.com/CS2103-AY1819S2-W11-3/main/issues/158[#158]
 
+<<<
+
 == Contributions to the User Guide
 
 |===
@@ -74,11 +76,13 @@ Otherwise, refer to the links below to relevant pull requests for each enhanceme
 
 include::../UserGuide.adoc[tag=findcommand]
 
+{nbsp} +
+
 ---
 
 include::../UserGuide.adoc[tag=archivecommand]
 
----
+<<<
 
 == Contributions to the Developer Guide
 
@@ -88,10 +92,4 @@ include::../UserGuide.adoc[tag=archivecommand]
 
 ---
 
-include::../DeveloperGuide.adoc[tag=designlogic]
-
----
-
 include::../DeveloperGuide.adoc[tag=contextswitching]
-
----
