@@ -31,6 +31,7 @@ import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RefreshAllEntriesCommand;
 import seedu.address.logic.commands.RefreshEntryCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.SubscribeCommand;
@@ -201,6 +202,13 @@ public class EntryBookListParserTest {
     }
 
     @Test
+    public void parseCommand_refreshall() throws Exception {
+        RefreshAllEntriesCommand command = (RefreshAllEntriesCommand) parser.parseCommand(
+            RefreshAllEntriesCommand.COMMAND_WORD);
+        assertEquals(new RefreshAllEntriesCommand(), command);
+    }
+
+    @Test
     public void parseCommand_select() throws Exception {
         SelectCommand command = (SelectCommand) parser.parseCommand(
                 SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_ENTRY.getOneBased());
@@ -222,7 +230,7 @@ public class EntryBookListParserTest {
 
     @Test
     public void parseCommand_subscribe() throws Exception {
-        Entry entry = new EntryBuilder().build();
+        Entry entry = new EntryBuilder().withTags("tag").build();
         SubscribeCommand command = (SubscribeCommand) parser.parseCommand(
             SubscribeCommand.COMMAND_WORD + " " + EntryUtil.getEntryDetails(entry));
         assertEquals(new SubscribeCommand(entry), command);

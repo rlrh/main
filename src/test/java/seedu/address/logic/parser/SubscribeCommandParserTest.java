@@ -67,14 +67,18 @@ public class SubscribeCommandParserTest {
                 .build();
         assertParseSuccess(parser, TITLE_DESC_BOB + DESCRIPTION_DESC_BOB + LINK_DESC_BOB
                 + TAG_DESC_SCIENCE + TAG_DESC_TECH, new SubscribeCommand(expectedEntryMultipleTags));
-    }
 
-    @Test
-    public void parse_optionalFieldsMissing_success() {
-        // zero tags
-        Entry expectedEntry = new EntryBuilder(AMY).withTags().build();
+        // no tags - host name used as tag
+        Entry expectedEntryNoTags = new EntryBuilder(AMY).withTags("amyexamplecom")
+            .build();
         assertParseSuccess(parser, TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY,
-                new SubscribeCommand(expectedEntry));
+            new SubscribeCommand(expectedEntryNoTags));
+
+        // empty tag - tags set to empty
+        Entry expectedEntryEmptyTag = new EntryBuilder(AMY).withTags()
+            .build();
+        assertParseSuccess(parser, TITLE_DESC_AMY + DESCRIPTION_DESC_AMY + LINK_DESC_AMY + " t/",
+            new SubscribeCommand(expectedEntryEmptyTag));
     }
 
     @Test

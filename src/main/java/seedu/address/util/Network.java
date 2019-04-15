@@ -2,20 +2,27 @@ package seedu.address.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.Dsl;
 import org.asynchttpclient.Response;
+
+import seedu.address.commons.core.LogsCenter;
 
 /**
  * Manager of Network component
  */
 public abstract class Network {
 
+    private static final Logger logger = LogsCenter.getLogger(Network.class);
+
+    private static final int DEFAULT_NUM_REDIRECTS = 15;
     private static final int CONNECTION_TIMEOUT_MILLIS = 1000 * 10; // 10 seconds
     private static final int READ_TIMEOUT_MILLIS = 1000 * 10; // 10 seconds
     private static final int REQUEST_TIMEOUT_MILLIS = 1000 * 60; // 60 seconds
@@ -26,23 +33,80 @@ public abstract class Network {
         .setRequestTimeout(REQUEST_TIMEOUT_MILLIS));
 
     /**
+     * Fetches the resource (i.e. webpage) at url asynchronously,
+     * redirecting at most maxRedirect times,
+     * returning it as a Response
+     */
+    private static CompletableFuture<Response> fetchAsResponseAsync(URL url, int maxRedirects) {
+        logger.info("Initiating network response to fetch: " + url + " with at most " + maxRedirects + " redirects");
+        return asyncHttpClient.prepareGet(url.toString())
+            .execute()
+            .toCompletableFuture()
+            .thenCompose(response -> {
+                if (maxRedirects > 0) {
+                    switch (response.getStatusCode()) {
+                    case 301:
+                    case 302:
+                    case 303:
+                    case 307:
+                    case 308:
+                        // HTTP Redirect
+                        try {
+                            URL newUrl = new URL(url, response.getHeader("Location"));
+                            logger.info("While fetching " + url + ", we got redirected to " + newUrl);
+                            return fetchAsResponseAsync(newUrl, maxRedirects - 1);
+                        } catch (MalformedURLException mue) {
+                            // If the redirect was invalid, just give up
+                            break;
+                        }
+                    default:
+                        break;
+                    }
+                }
+                logger.info("Successfully fetched " + url);
+                return CompletableFuture.completedFuture(response);
+            });
+    }
+
+    /**
+     * Fetches the resource (i.e. webpage) at url asynchronously, returning it as an InputStream.
+     */
+    public static CompletableFuture<InputStream> fetchAsStreamAsync(URL url, int maxRedirects) {
+        if (!url.getProtocol().equals("http")
+            && !url.getProtocol().equals("https")) {
+            // Fallback to direct java API
+            try {
+                return CompletableFuture.completedFuture(url.openStream());
+            } catch (IOException ioe) {
+                return CompletableFuture.failedFuture(ioe);
+            }
+        }
+        return fetchAsResponseAsync(url, maxRedirects).thenApply(Response::getResponseBodyAsStream);
+    }
+
+    /**
+     * Fetches the resource (i.e. webpage) at url asynchronously, returning it as an InputStream.
+     */
+    public static CompletableFuture<InputStream> fetchAsStreamAsync(URL url) {
+        return fetchAsStreamAsync(url, DEFAULT_NUM_REDIRECTS);
+    }
+
+    /**
      * Fetches the resource (i.e. webpage) at url, returning it as an InputStream.
      * @param url
      * @return The input stream containing the content fetched.
      * @throws IOException
      */
     public static InputStream fetchAsStream(URL url) throws IOException {
-        return url.openStream();
-    }
-
-    /**
-     * Fetches the resource (i.e. webpage) at url, returning it as a String.
-     * @param url
-     * @return The content fetched.
-     * @throws IOException
-     */
-    public static String fetchAsString(URL url) throws IOException {
-        return new String(url.openStream().readAllBytes(), StandardCharsets.UTF_8);
+        try {
+            return fetchAsStreamAsync(url).get();
+        } catch (ExecutionException | InterruptedException e) {
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            } else {
+                throw new IOException(e.getCause());
+            }
+        }
     }
 
     /**
@@ -52,7 +116,30 @@ public abstract class Network {
      * @throws IOException
      */
     public static byte[] fetchAsBytes(URL url) throws IOException {
-        return url.openStream().readAllBytes();
+        return fetchAsStream(url).readAllBytes();
+    }
+
+    /**
+     * Fetches the resource (i.e. webpage) at url, returning it as a String optional.
+     * @param url URL of resource to fetch
+     * @return Optional of HTML content if no exception, else empty Optional
+     */
+    public static Optional<String> fetchAsStringOptional(URL url) {
+        try {
+            return Optional.of(fetchAsString(url));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Fetches the resource (i.e. webpage) at url, returning it as a String
+     * @param url
+     * @return The content fetched.
+     * @throws IOException
+     */
+    public static String fetchAsString(URL url) throws IOException {
+        return new String(fetchAsBytes(url));
     }
 
     /**
@@ -61,21 +148,14 @@ public abstract class Network {
      * @return The CompleteableFuture that completes with the resource content
      */
     public static CompletableFuture<byte[]> fetchAsBytesAsync(URL url) {
-        if (url.getProtocol().equals("http")
-            || url.getProtocol().equals("https")) {
-            return asyncHttpClient
-                .prepareGet(url.toString())
-                .execute()
-                .toCompletableFuture()
-                .thenApply(Response::getResponseBody)
-                .thenApply(String::getBytes);
-        } else {
-            try {
-                return CompletableFuture.completedFuture(fetchAsBytes(url));
-            } catch (IOException ioe) {
-                return CompletableFuture.failedFuture(ioe);
-            }
-        }
+        return fetchAsStreamAsync(url)
+            .thenCompose(stream -> {
+                try {
+                    return CompletableFuture.completedFuture(stream.readAllBytes());
+                } catch (IOException ioe) {
+                    return CompletableFuture.failedFuture(ioe);
+                }
+            });
     }
 
     /**

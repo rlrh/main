@@ -2,6 +2,7 @@ package seedu.address.util;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static seedu.address.testutil.TypicalEntries.FILE_TEST_CONTENTS;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Rule;
@@ -26,9 +28,25 @@ public class NetworkTest {
     private static final URL HTTPS_TEST_URL = VALID_HTTPS_LINK.getLink().value;
     private static final URL HTTP_TEST_URL = VALID_HTTP_LINK.getLink().value;
     private static final URL FILE_TEST_URL = VALID_FILE_LINK.getLink().value;
+    private static final URL REDIRECTING_URL = TestUtil.toUrl("http://arxiv.org/abs/1904.02379");
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void fetchAsStream_followsRedirects() throws IOException, ExecutionException, InterruptedException {
+        // Ensure that the REDIRECTING_URL actually is a redirect
+        InputStream redirectingContent = Network.fetchAsStreamAsync(REDIRECTING_URL, 0).get();
+        byte[] redirectingContentBytes = redirectingContent.readAllBytes();
+        assertTrue(redirectingContentBytes.length > 0);
+        assertTrue(new String(redirectingContentBytes, StandardCharsets.UTF_8).contains("301 Moved Permanently"));
+
+        // Ensure that if we follow redirects, then we no longer see a redirect error in the content
+        InputStream redirectedContent = Network.fetchAsStreamAsync(REDIRECTING_URL).get();
+        byte[] redirectedContentBytes = redirectedContent.readAllBytes();
+        assertTrue(redirectedContentBytes.length > 0);
+        assertFalse(new String(redirectedContentBytes, StandardCharsets.UTF_8).contains("301 Moved Permanently"));
+    }
 
     @Test
     public void fetchAsStream_success() throws IOException {
@@ -69,11 +87,11 @@ public class NetworkTest {
             String httpContent = Network.fetchAsString(
                 TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
             assertTrue(httpContent.length() > 0);
+            assertTrue(httpsContent.contains("<p>It works!</p>"));
 
             String localContent = Network.fetchAsString(
                     MainApp.class.getResource("/NetworkTest/default.html"));
             assertTrue(localContent.length() > 0);
-
             assertEquals(localContent, FILE_TEST_CONTENTS);
         } catch (IOException e) {
             fail("Fetching valid URL failed.");
@@ -90,6 +108,35 @@ public class NetworkTest {
     public void fetchAsString_invalidWebsite_throwsIoexception() throws IOException {
         thrown.expect(IOException.class);
         Network.fetchAsString(TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely"));
+    }
+
+    @Test
+    public void fetchAsOptionalString_returnsStringOptional() {
+        Optional<String> httpsContent = Network.fetchAsStringOptional(
+                TestUtil.toUrl("https://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
+        assertTrue(httpsContent.isPresent());
+        assertTrue(httpsContent.get().contains("<p>It works!</p>"));
+
+        Optional<String> httpContent = Network.fetchAsStringOptional(
+                TestUtil.toUrl("http://cs2103-ay1819s2-w10-1.github.io/main/networktests/"));
+        assertTrue(httpContent.isPresent());
+        assertTrue(httpsContent.get().contains("<p>It works!</p>"));
+
+        Optional<String> localContent = Network.fetchAsStringOptional(
+                MainApp.class.getResource("/NetworkTest/default.html"));
+        assertTrue(localContent.isPresent());
+        assertEquals(localContent.get(), FILE_TEST_CONTENTS);
+    }
+
+    @Test
+    public void fetchAsOptionalString_invalidUrl_returnsEmptyOptional() {
+        assertFalse(Network.fetchAsStringOptional(TestUtil.toUrl("https://abc.``ILLEGAL_CHARS.com")).isPresent());
+    }
+
+    @Test
+    public void fetchAsOptionalString_invalidWebsite_returnsEmptyOptional() {
+        assertFalse(Network.fetchAsStringOptional(
+                TestUtil.toUrl("https://thiswebsite.does.not.exist.definitely")).isPresent());
     }
 
     @Test

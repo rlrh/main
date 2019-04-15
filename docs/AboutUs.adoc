@@ -40,7 +40,7 @@ Responsibilities: Web feed subscription feature, Model component
 
 === Jonathan Cheng
 image::epicfailname.png[width="150", align="left"]
-{empty}[https://github.com/epicfailname[github]] [<<jonathancheng#, portfolio>>]
+{empty}[https://github.com/epicfailname[github]] [<<epicfailname#, portfolio>>]
 
 Role: Technical Lead, Developer +
 Responsibilities: Entry management feature, Logic component
