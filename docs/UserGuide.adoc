@@ -557,6 +557,7 @@ Edits an existing entry in the reading list.
 . `edit 2 t/` +
 
 // tag::findcommand[]
+[[findcommand]]
 ==== Finding entries by title: `find`
 
 Finds entries whose fields contain any of the given keyphrases. +
@@ -651,7 +652,10 @@ image::ug-view/ReaderViewBlack.png[width="720"]
 // tag::refreshcommand[]
 ==== Refreshing an entry: `refresh`
 
-Refreshes the specified entry to get the latest version of its content.
+If you added an entry a long time ago and you think that the saved page might be outdated,
+you can fetch the most updated version from the internet by using this command.
+This is helpful for pages such as Wikipedia, which may change often!
+See the xref:refreshallcommand[`refreshall` command] which may be useful to use if you need to refresh a large number of entries at the same time.
 
 [underline]#Format#: `refresh INDEX`
 
@@ -670,6 +674,7 @@ Refreshes the specified entry to get the latest version of its content.
 // end::refreshcommand[]
 
 // tag::refreshallcommand[]
+[[refreshallcommand]]
 ==== Refreshing all displayed entries: `refreshall`
 
 Refreshes all currently displayed entries.
@@ -776,6 +781,7 @@ image::ug-archive/ug-archivex-2.png[width="350"]
 // end::archivecommand[]
 
 // tag::archiveallcommand[]
+[[archiveallcommand]]
 ==== Archiving all displayed entries: `archiveall`
 
 If you want to archive many entries at the same time,
