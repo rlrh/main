@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -101,23 +102,8 @@ public class StringUtil {
         if (string == null || string.isEmpty() || numOfWords <= 0) {
             return "";
         }
-
-        String[] stringArray = string.trim().split("\\s+");
-        for (int i = 0; i < stringArray.length; i++) {
-            stringArray[i] = stringArray[i].trim();
-        }
-
-        StringBuilder firstNWords = new StringBuilder();
-        for (int i = 0; i < (stringArray.length <= numOfWords ? stringArray.length : numOfWords); i++) {
-            firstNWords.append(stringArray[i].trim());
-            firstNWords.append(" ");
-        }
-
-        if (stringArray.length <= numOfWords) {
-            return firstNWords.toString().trim();
-        } else {
-            return firstNWords.toString().trim().concat("…");
-        }
+        return wordsOf(string).limit(numOfWords).collect(Collectors.joining(" "))
+                + (getNumberOfWords(string) > numOfWords ? "…" : "");
     }
 
     /**
@@ -126,11 +112,17 @@ public class StringUtil {
      * @return number of words in string, 0 if string is empty or null
      */
     public static long getNumberOfWords(String string) {
-        return Stream.ofNullable(string)
-                .map(text -> text.split("\\s+"))
-                .flatMap(Arrays::stream)
-                .filter(word -> word.length() > 0)
-                .count();
+        return wordsOf(string).count();
+    }
+
+    /**
+     * Gets words of a string, null-safe.
+     */
+    public static Stream<String> wordsOf(String string) {
+        if (string == null || string.trim().isEmpty()) {
+            return Stream.empty();
+        }
+        return Stream.of(string.trim().split("\\s+"));
     }
 
     /**
