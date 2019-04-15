@@ -628,6 +628,7 @@ image::ug-view/ReaderViewDark.png[width="720"]
 .A web page in reader view with black colour scheme
 image::ug-view/ReaderViewBlack.png[width="720"]
 
+// tag::refreshcommand[]
 ==== Refreshing an entry: `refresh` `[since v1.3]`
 
 Refreshes the specified entry to get the latest version of its content.
@@ -645,6 +646,15 @@ Refreshes the specified entry to get the latest version of its content.
 * Refresh the content of the 2nd entry in the reading list. +
 . `list` +
 . `refresh 2` +
+
+// end::refreshcommand[]
+
+// tag::refreshallcommand[]
+==== Refreshing all entries: `refreshall`
+
+Dummy content
+
+// end::refreshallcommand[]
 
 ==== Marking an entry as read: `read` `[coming in v2.0]`
 
