@@ -303,7 +303,7 @@ Imports the feeds, saved data, history, and other preferences from an export fil
 . `import C:\Users\Name\Desktop\export.jtjr` +
 
 [[Add-Command]]
-==== Adding a single entry: `add` `[updated v1.2]`
+==== Adding a single entry: `add`
 
 Adds a single entry from a link URL to your reading list.
 Content is automatically downloaded onto your personal computer.
@@ -321,7 +321,7 @@ A entry can have any number of tags (including 0).
 . `add l/https://www.theatlantic.com/magazine/archive/2019/03/ford-ceo-jim-hackett-ux-design-thinking/580438/ d/Explains why UX is important t/Business` +
 
 [[Subscribe-command]]
-==== Subscribing to a feed: `subscribe` `[since v1.3]`
+==== Subscribing to a feed: `subscribe`
 
 Adds a feed to the manager and subscribes to updates. +
 All entries in the subscribed feed will be added to the reading list. +
@@ -332,7 +332,7 @@ All entries in the subscribed feed will be added to the reading list. +
 The `Title` and `Description` fields are automatically filled up if you do not provide them.
 [TIP]
 A feed can have any number of tags (including 0). +
-Imported entries from the feed will also be tagged with the same tags as the feed `[since v1.4]`
+Imported entries from the feed will also be tagged with the same tags as the feed
 
 [underline]#Examples#:
 
@@ -406,7 +406,7 @@ Refer to <<List-Context>> for available commands in this context.
 .Switch to the list context to see all your saved entries
 image::ug-context/ug-contextx-list.png[width="790"]
 
-==== Showing your Archives: `archives` `[since v1.3]`
+==== Showing your Archives: `archives`
 
 Shows your Archives of all archived entries.
 
@@ -418,7 +418,7 @@ Refer to <<Archives-Context>> for available commands in this context.
 .Switch to the archives context to see all your archived entries
 image::ug-context/ug-contextx-archives.png[width="790"]
 
-==== Searching the web: `bing` `[since v1.3]`
+==== Searching the web: `bing`
 
 Searches https://www.bing.com[Bing] for entries that you can subsequently add.
 
@@ -435,7 +435,7 @@ Refer to <<Results-Context>> for available commands in this context.
 .Bing search for the phrase `Trump`
 image::ug-context/ug-contextx-bing.png[width="790"]
 
-==== Searching for news: `googlenews` `[since v1.3]`
+==== Searching for news: `googlenews`
 
 Searches https://news.google.com/[Google News] for entries that you can subsequently add.
 
@@ -454,7 +454,7 @@ Refer to <<Results-Context>> for available commands in this context.
 .View the latest top news on google news using the `googlenews` command
 image::ug-context/ug-contextx-gnews.png[width="790"]
 
-==== Searching a web feed: `feed` `[since v1.2]`
+==== Searching a web feed: `feed`
 
 Opens a web feed at the URL for previewing.
 
@@ -484,7 +484,7 @@ Refer to <<Results-Context>> for available commands in this context.
 - `links`
 - `links https://live.engadget.com/2019/02/08/microsoft-internet-explorer-technical-debt/` Shows all entries from this article
 
-==== Showing feeds: `feeds` `[since v1.3]`
+==== Showing feeds: `feeds`
 
 Shows a list of feeds being followed.
 
@@ -645,7 +645,7 @@ image::ug-view/ReaderViewDark.png[width="720"]
 image::ug-view/ReaderViewBlack.png[width="720"]
 
 // tag::refreshcommand[]
-==== Refreshing an entry: `refresh` `[since v1.3]`
+==== Refreshing an entry: `refresh`
 
 Refreshes the specified entry to get the latest version of its content.
 
@@ -715,7 +715,7 @@ Shares the specified entry through connected social media.
 [underline]#Format#: `share INDEX`
 
 // tag::archivecommand[]
-==== Archiving an entry: `archive` `[since v1.3]`
+==== Archiving an entry: `archive`
 
 Moves the specified entry to the archive and removes its downloaded content.
 
@@ -741,7 +741,7 @@ image::ug-archive/ug-archivex-1.png[width="800"]
 image::ug-archive/ug-archivex-2.png[width="350"]
 // end::archivecommand[]
 
-==== Deleting an entry: `delete` `[updated v1.3]`
+==== Deleting an entry: `delete`
 
 Deletes the specified entry from the reading list and removes its downloaded content.
 
@@ -772,7 +772,7 @@ Clears all saved entries from the manager.
 [[Archives-Context]]
 === `Archives` Context Commands
 
-==== Unarchiving an entry: `unarchive` `[since v1.3]`
+==== Unarchiving an entry: `unarchive`
 
 Moves the specified entry from the archives to the reading list.
 
@@ -791,7 +791,7 @@ Moves the specified entry from the archives to the reading list.
 . `unarchive 2` +
 . `list`
 
-==== Deleting an entry: `delete` `[since v1.3]`
+==== Deleting an entry: `delete`
 
 Deletes the specified entry from the archives.
 
@@ -835,7 +835,7 @@ Clears all archived entries from the manager.
 [[Results-Context]]
 === `Search Results` Context Commands
 
-==== Adding entries: `addindex` `[since v1.3]`
+==== Adding entries: `addindex`
 
 Adds entries from results to the reading list. Content is automatically downloaded to disk.
 
@@ -853,7 +853,7 @@ Adds entries from results to the reading list. Content is automatically download
 * Add the 1st entry with a description and tagged with “Business” `[coming in v2.0]` +
 . `addindex 1 d/explains why UX is important t/Business`
 
-==== Selecting an entry: `select` `[since v1.3]`
+==== Selecting an entry: `select`
 
 Selects the entry identified by the index number used in the displayed entry list for viewing.
 
@@ -870,7 +870,7 @@ Selects the entry identified by the index number used in the displayed entry lis
 * Selects the 2nd entry from the search results.
 . `select 2`
 
-==== Changing the view mode: `view` `[since v1.2, updated v1.3]`
+==== Changing the view mode: `view`
 
 Changes the view mode between the original browser or a more comfortable reading experience.
 
@@ -890,7 +890,7 @@ Changes the view mode between the original browser or a more comfortable reading
 
 To subscribe to a feed, please refer to [[Subscribe-Command]].
 
-==== Updating entries from feeds: `refresh` `[since v1.3]`
+==== Updating entries from feeds: `refresh`
 
 Refreshes a feed.
 
@@ -910,7 +910,7 @@ Refreshes a feed.
 The application may be unresponsive for a short while when adding entries from a large feed.
 ====
 
-==== Selecting a feed: `select` `[since v1.3]`
+==== Selecting a feed: `select`
 
 Selects the feed identified by the index number used in the displayed feed list and displays its entries.
 
@@ -949,7 +949,7 @@ Edits an existing feed in the manager.
 * Clear all existing tags from the 2nd feed.
 . `edit 2 t/`
 
-==== Unsubscribing from a feed: `unsubscribe` `[since v1.3]`
+==== Unsubscribing from a feed: `unsubscribe`
 
 Deletes the specified feeds from the manager and unsubscribes from them, but existing entries obtained from that feed will not be deleted.
 
