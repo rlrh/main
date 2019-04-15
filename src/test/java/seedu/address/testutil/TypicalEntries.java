@@ -1,5 +1,6 @@
 package seedu.address.testutil;
 
+import static seedu.address.commons.util.FeedUtil.DEFAULT_DESCRIPTION_TEXT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DESCRIPTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LINK_AMY;
@@ -429,5 +430,56 @@ public class TypicalEntries {
 
     public static List<Entry> getTypicalFeedsEntries() {
         return List.of(LOCAL_FEED_ENTRY, KATTIS_FEED_ENTRY);
+    }
+
+
+    /**
+     * Returns the EntryBook containing the contents of {@code ANIMEREVIEW_FEED_BASE_URL} which is the same as
+     * {@code LOCAL_FEED_BASE_URL}.
+     * It has to take in the url because we need it for the default description.
+     */
+    public static EntryBook getAnimeReviewEntryBook(URL url) {
+        return new EntryBookBuilder()
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Mahoujin Guru Guru")
+                        .withLink("https://blog.GNU.moe/anime/review/mahoujin-guru-guru.html")
+                        .withDescription("Anime review 1").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Gamers!")
+                        .withLink("https://blog.GNU.moe/anime/review/gamers.html")
+                        .withDescription("Anime review 2").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Made in Abyss")
+                        .withLink("https://blog.GNU.moe/anime/review/made-in-abyss.html")
+                        .withDescription("Anime review n").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Mob Psycho 100")
+                        .withLink("https://blog.GNU.moe/anime/review/mob-psycho.html")
+                        .withDescription("Anime review").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: New Game!!")
+                        .withLink("https://blog.GNU.moe/anime/review/new-game-2.html")
+                        .withDescription("Anime revieww").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Saiki Kusuo no Psi-nan")
+                        .withLink("https://blog.GNU.moe/anime/review/saiki-kusuo.html")
+                        .withDescription("sigh").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Durarara!!")
+                        .withLink("https://blog.GNU.moe/anime/review/durarara.html")
+                        .withDescription(String.format(DEFAULT_DESCRIPTION_TEXT, url)).build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Battle Programmer Shirase")
+                        .withLink("https://blog.GNU.moe/anime/review/bps.html")
+                        .withDescription("lol").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Re:Zero")
+                        .withLink("https://blog.GNU.moe/anime/review/re_zero.html")
+                        .withDescription("idk").build())
+                .withEntry(new EntryBuilder()
+                        .withTitle("Anime: Youjo Senki")
+                        .withLink("https://blog.GNU.moe/anime/review/youjo_senki.html")
+                        .withDescription("I like this reviewer").build())
+                .build();
     }
 }
