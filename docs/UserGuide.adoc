@@ -558,7 +558,7 @@ Edits an existing entry in the reading list.
 
 // tag::findcommand[]
 [[findcommand]]
-==== Finding entries by title: `find`
+==== Finding entries (by title, description, etc.): `find`
 
 Finds entries whose fields contain any of the given keyphrases. +
 
