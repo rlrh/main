@@ -50,6 +50,7 @@ public class ModelManager implements Model {
     private final SimpleObjectProperty<Exception> exception = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<CommandResult> commandResult = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<ModelContext> context = new SimpleObjectProperty<>(ModelContext.CONTEXT_LIST);
+    private final SimpleObjectProperty<OfflineMode> offlineMode = new SimpleObjectProperty<>(OfflineMode.ENABLED);
     private final Storage storage;
 
     /**
@@ -172,13 +173,17 @@ public class ModelManager implements Model {
 
     @Override
     public Optional<URL> getOfflineLink(URL url) {
-        return storage.getOfflineLink(url).flatMap(path -> {
-            try {
-                return Optional.of(path.toUri().toURL());
-            } catch (MalformedURLException e) {
-                return Optional.empty();
-            }
-        });
+        if (isOfflineModeEnabled()) {
+            return storage.getOfflineLink(url).flatMap(path -> {
+                try {
+                    return Optional.of(path.toUri().toURL());
+                } catch (MalformedURLException e) {
+                    return Optional.empty();
+                }
+            });
+        } else {
+            return Optional.empty();
+        }
     }
 
     //=========== EntryBook ================================================================================
@@ -251,6 +256,15 @@ public class ModelManager implements Model {
         } catch (IOException ioe) {
             // Do nothing if failed to save content to disk for now
         }
+    }
+
+    @Override
+    public void setOfflineMode(OfflineMode isEnabled) {
+        this.offlineMode.set(isEnabled);
+    }
+
+    private boolean isOfflineModeEnabled() {
+        return this.offlineMode.get() == OfflineMode.ENABLED;
     }
 
     //=========== Archives EntryBook ================================================================================
@@ -340,7 +354,11 @@ public class ModelManager implements Model {
 
     @Override
     public Optional<Path> addArticle(URL url, byte[] articleContent) throws IOException {
-        return storage.addArticle(url, articleContent);
+        if (isOfflineModeEnabled()) {
+            return storage.addArticle(url, articleContent);
+        } else {
+            return Optional.empty();
+        }
     }
 
     //=========== Displayed Entry List ================================================================================
@@ -394,7 +412,7 @@ public class ModelManager implements Model {
      * Ensures that we have a local copy of the article at the specified url.
      */
     private void ensureDownloaded(URL url) {
-        if (!hasOfflineCopy(url)) {
+        if (isOfflineModeEnabled() && !hasOfflineCopy(url)) {
             Network.fetchArticleAsync(url)
                 // Ensure model updates are run on JavaFX thread
                 .thenAccept(articleContent -> Platform.runLater(() -> {

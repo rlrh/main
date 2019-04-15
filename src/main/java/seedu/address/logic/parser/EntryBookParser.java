@@ -17,6 +17,7 @@ import seedu.address.logic.commands.GoogleNewsCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.OfflineModeCommand;
 import seedu.address.logic.commands.SubscribeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ModelContext;
@@ -91,6 +92,9 @@ public abstract class EntryBookParser {
         case HelpCommand.COMMAND_WORD:
         case HelpCommand.COMMAND_ALIAS:
             return new HelpCommand();
+
+        case OfflineModeCommand.COMMAND_WORD:
+            return new OfflineModeCommandParser().parse(arguments);
 
         // the following commands are actually context specific but accessible everywhere for convenience
 

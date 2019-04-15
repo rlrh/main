@@ -309,4 +309,9 @@ public interface Model {
      * The entry must exist in the entry book list.
      */
     void refreshEntry(Entry entry, byte[] articleContent);
+
+    /**
+     * Enables or disables offline mode.
+     */
+    void setOfflineMode(OfflineMode isEnabled);
 }
