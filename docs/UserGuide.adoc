@@ -70,16 +70,20 @@ Get started quickly by installing README, getting to know its user interface, an
 
 === User Interface
 
-image::Ui.png[width="790"]
+image::UiOverview.png[width="790"]
 
-// TODO: Describe UI sections
+This is how the application should look like!
+
+Enter your commands in the Command Box (B), and the execution result message will appear in the Result Display \(C). +
+
+Browse your saved entries from the List Panel (F), and select any one of them to view it in the Browser Panel (G). +
 
 === Quick Tour of Basic Features
 
-.  Type the command in the command box and press kbd:[Enter] to execute it. +
+.  Type the command in the Command Box and press kbd:[Enter] to execute it. +
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
-.  Try these commands in order!
 
+.  Try these commands in order!
 * *`list`* : shows your reading list of saved links
 * **`add`**`l/https://en.wikipedia.org/wiki/Special:Random` : adds a random Wikipedia page to your reading list
 * **`select`**`1` : selects the Wikipedia page for reading
@@ -311,6 +315,8 @@ Content is automatically downloaded onto your personal computer.
 
 [underline]#Format#: `add l/URL [ti/TITLE_OVERRIDE] [d/DESCRIPTION_OVERRIDE] [t/TAG]...`
 
+[TIP]
+The entry's URL must be unique. Duplicate entries with the same URL will not be added!
 [TIP]
 The `Title` and `Description` fields are automatically filled if you do not provide them.
 [TIP]
@@ -898,7 +904,45 @@ Clears all saved entries from the manager.
 [[Archives-Context]]
 === `Archives` Context Commands
 
-==== Unarchiving an entry: `unarchive`
+==== Finding entries by title: `find`
+
+Finds entries whose fields contain any of the given keyphrases. +
+This command behaves the same as the Reading List context `find` command equivalent. +
+
+[underline]#Format#: `find [a/SEARCH_PHRASE] [ti/TITLE_SEARCH_PHRASE] [d/DESCRIPTION_SEARCH_PHRASE] [l/LINK_SEARCH_PHRASE] [t/TAG_TO_SEARCH]...`
+
+****
+* At least one of the optional fields must be provided.
+* The search is case insensitive. e.g `hans` will match `Hans`
+* The search matches anywhere for title, description and link. e.g. `ans B` will match `Hans Bo`
+* The search matches exactly for tags. e.g. 'science' will match 'science', but not 'scienceandtech'
+* The search phrase with prefix `a/` will try to match with every field in the entry according to the above rules.
+** i.e. `find a/keyphrase` is equivalent to `find ti/keyphrase d/keyphrase l/keyphrase t/keyphrase`
+* Entries matching at least one field will be returned (i.e. `OR` search).
+** e.g. `find ti/aaa d/bbb l/ccc t/ddd` will match an entry with title `Aaawesome` and an entry with description `abbbA`
+****
+
+Refer to <<findcommand>> for examples!
+
+==== Selecting an entry: `select`
+
+Selects the entry identified by the index number used in the displayed entry list for reading.
+
+[underline]#Format#: `select INDEX`
+
+****
+- Selects the entry at the specified `INDEX` for reading.
+- The index refers to the index number shown in the displayed entry list.
+- The index *must be a positive integer* 1`, 2, 3, ...`
+****
+
+[underline]#Examples#:
+
+Select the 2nd archived entry.
+. `archives` +
+. `select 2` +
+
+==== Unarchiving an entry: `unarchive` `[since v1.3]`
 
 Moves the specified entry from the archives to the reading list.
 
@@ -943,24 +987,6 @@ Deletes all currently displayed entries from the archives.
 include::./UserGuide.adoc[tag=deleteallcommandcontents]
 
 // end::archivesdeleteallcommand[]
-
-==== Selecting an entry: `select`
-
-Selects the entry identified by the index number used in the displayed entry list for reading.
-
-[underline]#Format#: `select INDEX`
-
-****
-- Selects the entry at the specified `INDEX` for reading.
-- The index refers to the index number shown in the displayed entry list.
-- The index *must be a positive integer* 1`, 2, 3, ...`
-****
-
-[underline]#Examples#:
-
-Select the 2nd archived entry.
-. `archives` +
-. `select 2` +
 
 ==== Clearing all entries : `clear`
 Clears all archived entries from the manager.
@@ -1234,8 +1260,73 @@ Selects the feed identified by the index number used in the displayed feed list.
 
 == Command Summary
 
-// TODO: fill this up
+=== Anywhere
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`add l/URL [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Adds a single entry.
+|`subscribe l/URL [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Subscribes to a single feed.
+|`history` | Lists all commands entered previously in reverse order.
+|`offline MODE(enable, disable)` | Enables or disables internet connectivity.
+|`help` | Opens the User Guide in a new window.
+|`exit` | Exits the application.
+|=======================================================================
 
+=== Reading List Context
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`list` | Switches to list context.
+|`edit i/INDEX [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Edits the entry specified by the index.
+|`find [l/URL] [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Finds entries matching the given arguments.
+|`select INDEX` | Selects the entry specified by the index for viewing.
+|`refresh INDEX` | Re-downloads the webpage content of the entry specified by the index.
+|`refreshall` | Re-downloads the webpage content of the entry specified by the index.
+|`archive INDEX` | Archives the entry specified by the index.
+|`archiveall` | Archives all displayed entries.
+|`delete INDEX` | Deletes the entry specified by the index.
+|`deleteall` | Deletes all displayed entries.
+|`clear` | Deletes all entries.
+|`view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]` | Changes the view mode of the browser panel.
+|=======================================================================
+
+=== Archives Context
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`archives` | Switches to archives context.
+|`find [l/URL] [ti/TITLE] [d/DESCRIPTION] [t/TAG]...` | Finds entries matching the given arguments.
+|`select INDEX` | Selects the entry specified by the index for viewing.
+|`unarchive INDEX` | Unarchives the entry specified by the index, adding it back to the reading list.
+|`unarchiveall` | Unarchives all displayed entries, adding them back to the reading list.
+|`delete INDEX` | Deletes the entry specified by the index.
+|`deleteall` | Deletes all displayed entries.
+|`clear` | Deletes all entries.
+|=======================================================================
+
+=== Search Result Context
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`bing [KEYWORD]` | Searches Bing for entries that you can subsequently add.
+|`googlenews [KEYWORD]` | Searches Google News for entries that you can subsequently add.
+|`feed [FEED URL]` | Opens a web feed at the URL for previewing.
+|`addindex INDEX` | Adds the entry specified by the index to the reading list.
+|`addall` | Adds all displayed entries to the reading list.
+|`select INDEX` | Selects the entry specified by the index for viewing.
+|`view MODE(browser, reader) [s/STYLE(default, sepia, dark, black)]` | Changes the view mode of the browser panel.
+|=======================================================================
+
+=== Feeds Context
+[width="100%",cols="20%,<30%",options="header",]
+|=======================================================================
+|Command | Summary
+|`feeds` | Switches to feeds context.
+|`refresh INDEX` | Refreshes the feed specified by the index.
+|`refreshall` | Refreshes all feeds.
+|`select INDEX` | Selects the entry specified by the index for viewing.
+|`unsubscribe INDEX` | Unsubscribes and deletes the feed specified by the index.
+|=======================================================================
 ////
 * *Add* `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
 e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
