@@ -230,7 +230,7 @@ public class EntryBookListParserTest {
 
     @Test
     public void parseCommand_subscribe() throws Exception {
-        Entry entry = new EntryBuilder().build();
+        Entry entry = new EntryBuilder().withTags("tag").build();
         SubscribeCommand command = (SubscribeCommand) parser.parseCommand(
             SubscribeCommand.COMMAND_WORD + " " + EntryUtil.getEntryDetails(entry));
         assertEquals(new SubscribeCommand(entry), command);
