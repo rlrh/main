@@ -38,7 +38,7 @@ public class FeedCommandTest {
     private CommandHistory commandHistory = new CommandHistory();
 
     /** Asserts that executing a FeedCommand with the given url imports the Entry list. */
-    public void assertFeedSuccessfullyLoaded(URL feedUrl) throws Exception {
+    private static void assertFeedSuccessfullyLoaded(URL feedUrl) throws Exception {
         Model model = new ModelManagerStub();
         Model expectedModel = new ModelManagerStub();
         CommandHistory commandHistory = new CommandHistory();
