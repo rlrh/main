@@ -178,4 +178,12 @@ public class CommandTestUtil {
         model.deleteListEntry(firstEntry);
     }
 
+    /**
+     * Updates {@code model}'s filtered list to show no one.
+     */
+    public static void showNoEntry(Model model) {
+        model.updateFilteredEntryList(p -> false);
+
+        assertTrue(model.getFilteredEntryList().isEmpty());
+    }
 }
