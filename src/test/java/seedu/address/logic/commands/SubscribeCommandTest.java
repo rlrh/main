@@ -91,6 +91,7 @@ public class SubscribeCommandTest {
         assertFalse(firstSubCommand.equals(secondSubCommand));
     }
 
+    // tests for integration with ModelManager
     @Test
     public void execute_localUrl_imported() throws Exception {
         assertAllLinksImported(ONE_ITEM_FEED_ENTRY);
@@ -109,6 +110,7 @@ public class SubscribeCommandTest {
         assertTrue(model.getListEntryBook().getEntryList().stream().allMatch(containsAllTags));
     }
 
+    // unit tests
     @Test
     public void execute_entryAcceptedByModel_subscribeSuccessful() throws Exception {
         ModelStubAcceptingEntriesAndFeedsAdded modelStub = new ModelStubAcceptingEntriesAndFeedsAdded();
