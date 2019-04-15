@@ -105,6 +105,8 @@ public class FeedCommandTest {
     public void execute_urlIsNotAWebsite_commandFails() {
         FeedCommand command = new FeedCommand(NOTAWEBSITE_URL);
 
+        // we inline parts of CommandTestUtil#assertCommandFailure for now, due to a platform-dependent error message
+        // todo: dedup this
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
         EntryBook expectedEntryBook = new EntryBook(model.getListEntryBook());
