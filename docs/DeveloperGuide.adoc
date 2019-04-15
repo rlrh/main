@@ -160,6 +160,7 @@ The `UI` component,
 * Executes user commands using the `Logic` component.
 * Listens for changes to `Model` data so that the UI can be updated with the modified data.
 
+// tag::designlogic[]
 [[Design-Logic]]
 === Logic component
 
@@ -181,6 +182,7 @@ Given below is the Sequence Diagram for interactions within the `Logic` componen
 
 .Interactions Inside the Logic Component for the `delete 1` Command
 image::DeletePersonSdForLogic.png[width="800"]
+// end::designlogic[]
 
 [[Design-Model]]
 === Model component

@@ -476,6 +476,7 @@ Edits the title and description of the 1st entry to be `Software Design Patterns
 * `edit 2 t/` +
 Clears all existing tags from the 2nd entry.
 
+// tag::findcommand[]
 ==== Finding entries by title: `find`
 
 Finds entries whose fields contain any of the given keyphrases. +
@@ -499,6 +500,7 @@ Examples:
 Returns entries with titles containing the phrase `trump` such as `Donald Trump` or `CS average salary trumps again`
 * `find l/cnn t/science` +
 Returns any entries having links containing the phrase `cnn` and entries with the exact tag `science`.
+// end::findcommand[]
 
 ==== Selecting an entry: `select`
 
